@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-radix";
+@plugin "@tailwindcss/typography";
+
+:root {
+  color-scheme: light;
+  /* Base font size: all rem-based typography scales from here */
+  font-size: 16px;
+
+  /* Radius scale */
+  /* --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem; */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+  --radius-5xl: 0;
+  --radius-6xl: 0;
+  --radius-7xl: 0;
+  --radius-8xl: 0;
+  --radius-9xl: 0;
+  --radius-10xl: 0;
+  --radius-full: 9999px;
+
+  /* Backgrounds (light theme) */
+  --bg-app: #f8fafc; /* slate-50 */
+  --bg-surface: #ffffff;
+  --bg-elevated: #e5e7eb; /* gray-200 */
+  --bg-muted: #e5e7eb;
+  --surface-subtle: #fef2f2; /* subtle accent-tinted surface */
+
+  /* Text colors (light theme) */
+  --text-primary: #05070a; /* slate-950 */
+  --text-muted: #374151; /* slate-700 - stronger contrast for labels/help text */
+
+  /* Accent colors (light theme)
+     Chosen to meet WCAG contrast requirements against the light background. */
+  --accent: #b91c1c; /* deep red */
+  --accent-hover: #7f1d1d; /* darker red for hover */
+  --accent-soft: #fecaca; /* muted accent (brighter) for subtle states */
+
+  --secondary: #2563eb;
+  --secondary-muted: #dbeafe;
+
+  /* Link colors (light theme) */
+  /* Use a deep red that passes WCAG contrast on white while still feeling punchy. */
+  --link: #b91c1c; /* deep red for links */
+  --link-hover: #7f1d1d; /* darker red on hover */
+
+  /* Borders (light theme) */
+  --border-subtle: #e2e8f0; /* slate-200 */
+  --border-strong: rgba(107, 114, 128, 0.9);
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  /* Backgrounds (dark theme) */
+  --bg-app: #05070a; /* slate-950 */
+  --bg-surface: #05070a;
+  --bg-elevated: #05070a;
+  --bg-muted: #05070a;
+  --surface-subtle: #0f172a; /* subtle lifted surface for accent hovers */
+
+  /* Text colors (dark theme) */
+  --text-primary: #f9fafb; /* slate-50 */
+  --text-muted: #9ca3af; /* gray-400 */
+
+  --secondary: #60a5fa;
+  --secondary-muted: #1d4ed8;
+
+  /* Accent colors (dark theme) */
+  --accent: #ff4040; /* vivid red for dark background */
+  --accent-hover: #ff1f1f; /* deeper red for hover */
+  --accent-soft: #7f1d1d; /* subtle red for borders/backgrounds */
+
+  /* Link colors (dark theme) */
+  --link: var(--accent);
+  --link-hover: var(--accent-hover);
+
+  /* Borders (dark theme) */
+  --border-subtle: rgba(148, 163, 184, 0.3);
+  --border-strong: rgba(148, 163, 184, 0.6);
+}
+
+body {
+  @apply min-h-screen antialiased;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  background-image:
+    radial-gradient(circle at top, rgba(37, 99, 235, 0.14), transparent 55%),
+    radial-gradient(circle at bottom, rgba(59, 130, 246, 0.12), transparent 55%);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-4xl px-4;
+  }
+
+  .page-card {
+    @apply rounded-3xl p-6 sm:p-8 shadow-[0_18px_60px_rgba(15,23,42,0.9)] backdrop-blur;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .section-card {
+    @apply rounded-2xl p-4 sm:p-6 shadow-sm;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+  }
+}
+
+@layer base {
+  /* Headings */
+  h1 {
+    @apply text-4xl md:text-5xl font-semibold tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
+    color: var(--text-primary);
+  }
+
+  h4 {
+    @apply text-xl font-semibold;
+  }
+
+  h5 {
+    @apply text-lg font-semibold;
+  }
+
+  h6 {
+    @apply text-base font-semibold tracking-wide text-slate-400;
+  }
+
+  /* Body text */
+  p {
+    @apply text-sm leading-relaxed;
+    color: var(--text-primary);
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    @apply text-sm leading-relaxed;
+    color: var(--text-primary);
+  }
+
+  /* List markers */
+  ul li::marker,
+  ol li::marker {
+    color: var(--secondary);
+  }
+
+  /* Links */
+  a {
+    @apply underline-offset-4 hover:underline;
+    color: var(--link);
+  }
+
+  a:hover {
+    color: var(--link-hover);
+  }
+
+  /* Form placeholders */
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7280; /* slate-500 - higher contrast than default placeholder */
+  }
+
+  /* Inline code */
+  code {
+    @apply rounded-sm bg-slate-900/70 px-1 py-0.5 text-[0.78rem] font-mono text-slate-100;
+  }
+}

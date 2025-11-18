@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile || yarn install
+      - name: Lint
+        run: yarn lint
+      - name: Typecheck
+        run: yarn typecheck
+      - name: Unit tests
+        run: yarn test --runInBand || yarn test
+      - name: E2E tests
+        run: |
+          npx playwright install --with-deps
+          yarn test:e2e
