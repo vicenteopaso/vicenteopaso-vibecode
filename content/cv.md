@@ -34,11 +34,11 @@ slug: cv
 }
 ]
 },
-"summary": "I’m a Web Engineering Manager and Frontend Architect with 25+ years designing, scaling, and maintaining high-performance digital platforms across enterprise, e-commerce, and mission-critical environments. I specialize in composable architecture, Design Systems, and Developer Experience (DevEx)—aligning technology, design, and strategy to deliver accessible, performant, and maintainable products. I lead cross-functional teams, modernize CI/CD and code governance, and foster strong engineering culture through mentorship and Communities of Practice. My approach blends technical architecture with design empathy and operational discipline to unlock durable, business-aligned outcomes.",
+"summary": "I’m a Web Engineering Manager and Frontend Architect with 25+ years designing, scaling, and maintaining high-performance digital platforms across enterprise, e-commerce, and mission-critical environments. I specialize in composable architecture, Design Systems, and Developer Experience (DevEx)—aligning technology, design, and strategy to deliver accessible, performant, and maintainable products. I have led cross-functional teams, modernized CI/CD and code governance, and foster strong engineering culture through mentorship and Communities of Practice. My approach blends technical architecture with design empathy and operational discipline to unlock durable, business-aligned outcomes.",
 "highlights": [
 {
 "title": "Web Engineering Manager at Nexthink",
-"content": "Own the architecture and delivery of nexthink.com, a global composable corporate website, while leading a cross-functional team focused on performance, accessibility, localization, and strategic alignment."
+"content": "Led the architecture and delivery of nexthink.com, a global composable corporate website, while leading a cross-functional team focused on performance, accessibility, localization, and strategic alignment."
 },
 {
 "title": "Technical Application Owner at EUROCONTROL",
@@ -75,14 +75,14 @@ slug: cv
 "position": "Manager of Web Engineering",
 "startDate": "2025-07",
 "endDate": "2025-11",
-"summary": "Lead the team behind nexthink.com—Nexthink’s global, composable web platform supporting brand, marketing, and product strategy. Focus on team structure, DevEx, and design–engineering collaboration to deliver reliable, scalable, and localized experiences.",
+"summary": "Led the team behind nexthink.com—Nexthink’s global, composable web platform supporting brand, marketing, and product strategy. Focused on team structure, DevEx, and design–engineering collaboration to deliver reliable, scalable, and localized experiences.",
 "highlights": [
 "Own architecture and delivery of a composable stack: Next.js, GraphQL, Tailwind CSS, Hygraph CMS—deployed on Vercel and tightly integrated with GitHub.",
-"Implement guardrails and governance: CodeQL, Copilot, branch protections, PR templates, and automated checks to raise code quality and reliability.",
+"Implemented guardrails and governance: CodeQL, Copilot, branch protections, PR templates, and automated checks to raise code quality and reliability.",
 "Integrate Vercel–GitHub–Hygraph workflows for faster, safer releases; standardize pipelines with GitHub Actions (CI/CD).",
-"Manage a cross-functional team (3 developers, 1 UX designer) focused on performance, accessibility, maintainability, and content velocity.",
+"Managed a cross-functional team (3 developers, 1 UX designer) focused on performance, accessibility, maintainability, and content velocity.",
 "Improve design ↔ development feedback loops with shared components, design tokens, and documentation for tighter iteration.",
-"Coordinate localization and campaign delivery across six languages with brand, content, and demand-gen stakeholders."
+"Coordinated localization and campaign delivery across six languages with brand, content, and demand-gen stakeholders."
 ],
 "skills": [
 "Frontend Architecture",
