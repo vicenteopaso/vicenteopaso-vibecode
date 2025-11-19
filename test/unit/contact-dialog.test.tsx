@@ -1,6 +1,18 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: { sitekey: string; callback: (token: string) => void },
+      ) => void;
+      reset: () => void;
+    };
+  }
+}
 import { ContactDialog } from "../../app/components/ContactDialog";
 
 vi.mock("next/script", () => ({
@@ -16,6 +28,11 @@ function openDialog() {
 
 describe("ContactDialog", () => {
   beforeEach(() => {
+    window.turnstile = {
+      render: vi.fn(),
+      reset: vi.fn(),
+    };
+
     vi.spyOn(window, "fetch").mockResolvedValue({
       ok: true,
       json: async () => ({ ok: true }),
@@ -24,19 +41,18 @@ describe("ContactDialog", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    window.turnstile = undefined;
   });
 
   it("requires email and message", async () => {
     openDialog();
 
-    // Simulate a successful Turnstile verification so the submit button is enabled.
-    await act(async () => {
-      window.onTurnstileSuccess?.("test-token");
-    });
+    // Submit the form without filling any fields to trigger validation
+    const email = screen.getByLabelText(/email/i);
+    const form = email.closest("form");
+    expect(form).not.toBeNull();
 
-    const submit = screen.getByRole("button", { name: /send/i });
-    expect(submit).not.toBeDisabled();
-    fireEvent.click(submit);
+    fireEvent.submit(form as HTMLFormElement);
 
     expect(
       await screen.findByText("Please provide an email address."),
@@ -55,6 +71,7 @@ describe("ContactDialog", () => {
     fireEvent.change(email, { target: { value: "test@example.com" } });
     fireEvent.change(message, { target: { value: "Hello" } });
 
+    // Do NOT invoke the Turnstile callback here so the token remains null.
     // Submit the form programmatically without a Turnstile token to
     // exercise the verification check in the submit handler.
     const form = message.closest("form");
