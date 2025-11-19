@@ -5,7 +5,7 @@ export const siteConfig = {
   domain: "opa.so",
   url: "https://opa.so",
   description:
-    "Web Engineering Manager & Frontend Architect specializing in composable platforms, design systems and developer experience. View the CV, case studies and contact details for Vicente Opaso.",
+    "Web Engineering Manager & Frontend Architect specializing in composable platforms, design systems and developer experience. View the CV and contact details for Vicente Opaso.",
 };
 
 export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {

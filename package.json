@@ -16,8 +16,7 @@
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "content": "contentlayer build",
-    "clean:local": "node scripts/clean-local.mjs",
-    "prepare": "husky install"
+    "clean:local": "node scripts/clean-local.mjs"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
@@ -25,7 +24,9 @@
     "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/react-popover": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@vercel/analytics": "^1.5.0",
     "@vercel/og": "^0.6.5",
+    "@vercel/speed-insights": "^1.2.0",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -47,9 +48,9 @@
     "@playwright/test": "^1.48.2",
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.19",
+    "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.0.0",
-    "@testing-library/dom": "^10.0.0",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",

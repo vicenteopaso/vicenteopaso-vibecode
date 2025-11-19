@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: notify vercel
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: Vercel - vicenteopaso: ci
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
