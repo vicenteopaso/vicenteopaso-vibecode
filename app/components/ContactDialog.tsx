@@ -37,6 +37,7 @@ export function ContactDialog({
   const [message, setMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [domain, setDomain] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
@@ -45,6 +46,14 @@ export function ContactDialog({
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        setDomain(window.location.origin);
+      } catch {
+        // Ignore errors and keep fallback domain.
+      }
+    }
+
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
     if (!siteKey) {
@@ -63,11 +72,6 @@ export function ContactDialog({
       window.turnstile.render(turnstileContainerRef.current, {
         sitekey: siteKey,
         callback: (token: string) => {
-          // eslint-disable-next-line no-console
-          console.log(
-            "Turnstile success, token:",
-            token ? `${token.slice(0, 8)}…` : "<empty>",
-          );
           setTurnstileToken(token);
           setIsChallengeVisible(true);
         },
@@ -150,6 +154,10 @@ export function ContactDialog({
 
       setSuccess("Message sent. I'll get back to you as soon as I can.");
       setEmail("");
+      const phoneInput = event.currentTarget.elements.namedItem("phone");
+      if (phoneInput instanceof HTMLInputElement) {
+        phoneInput.value = "";
+      }
       setMessage("");
       setEmailError(null);
       setMessageError(null);
@@ -172,7 +180,7 @@ export function ContactDialog({
       {trigger ? (
         <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       ) : (
-        <Dialog.Trigger className="inline-flex items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)]/90 px-3.5 py-1.5 text-xs font-medium text-[color:var(--text-primary)] shadow-sm shadow-black/5 transition hover:border-[color:var(--accent)]/50 hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+        <Dialog.Trigger className="inline-flex items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)]/90 px-3.5 py-1.5 text-xs font-medium text-[color:var(--text-primary)] shadow-sm shadow-black/5 transition hover:border-[color:var(--accent)]/50 hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 cursor-pointer">
           {triggerLabel}
         </Dialog.Trigger>
       )}
@@ -279,11 +287,15 @@ export function ContactDialog({
                 id="contact-verification-help"
                 className="mt-1 text-[0.75rem] text-[color:var(--text-muted)]"
               >
-                This verification step helps protect this form from automated
-                spam.
+                This Cloudflare Turnstile verification helps protect this form
+                from automated spam.
               </p>
             ) : null}
-            <input type="hidden" name="domain" value="https://opa.so" />
+            <input
+              type="hidden"
+              name="domain"
+              value={domain ?? "https://opa.so"}
+            />
 
             <p
               id="contact-status"
@@ -303,14 +315,14 @@ export function ContactDialog({
 
             <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-[0.8rem]">
               <Dialog.Close
-                className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
                 disabled={submitting}
               >
                 Close
               </Dialog.Close>
               <button
                 type="submit"
-                className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
                 disabled={submitting || !turnstileToken}
               >
                 {submitting ? "Sending..." : "Send"}
