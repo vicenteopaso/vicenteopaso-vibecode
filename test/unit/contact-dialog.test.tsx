@@ -7,7 +7,11 @@ declare global {
     turnstile?: {
       render: (
         container: HTMLElement,
-        options: { sitekey: string; callback: (token: string) => void },
+        options: {
+          sitekey: string;
+          callback: (token: string) => void;
+          size?: "normal" | "flexible" | "compact" | string;
+        },
       ) => void;
       reset: () => void;
     };

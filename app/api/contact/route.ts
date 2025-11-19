@@ -9,13 +9,13 @@ const contactSchema = z.object({
     .string()
     .min(1, "Message cannot be empty.")
     .max(2000, "Message is a bit too long. Please shorten it."),
-  domain: z.string().url().optional(),
+  domain: z.string().min(1).optional(),
   turnstileToken: z.string().min(1, "Verification is required."),
   honeypot: z.string().optional(),
 });
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvolgybr";
-const ALLOWED_DOMAIN = "https://opa.so";
+const ALLOWED_DOMAIN = "opa.so";
 const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
