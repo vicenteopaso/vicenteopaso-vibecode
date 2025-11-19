@@ -36,4 +36,12 @@ yarn install
   yarn typecheck
   ```
 
+## CI, CodeQL, and auto-merge
+
+- CI and CodeQL run automatically on pushes and pull requests to `main`.
+- Dependabot opens weekly PRs for dependency and GitHub Actions updates; these are labeled `dependencies` (and `github-actions` for workflow updates).
+- Some PRs can be auto-merged when all required checks pass and branch protection allows it:
+  - Dependabot PRs with the `dependencies` label.
+  - PRs authored by `vicenteopaso` with the `copilot-automerge` label.
+
 Please prefer `yarn` over `npm` or `pnpm` when working in this repository.

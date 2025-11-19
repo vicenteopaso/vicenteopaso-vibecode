@@ -1,0 +1,14 @@
+# Support
+
+GitHub Issues are disabled for this repository.
+
+- For general questions or feedback: email **vicente@opa.so**.
+- For security reports: see `SECURITY.md` and email privately.
+- For contributions and fixes: open a **Pull Request** (PRs are welcome).
+
+## Expectations
+
+- This is a personal site; responses are best-effort, typically within a few days.
+- Please ensure PRs:
+  - Pass CI (`yarn lint`, `yarn typecheck`, `yarn test`, and `yarn test:e2e` where relevant).
+  - Follow the PR template in `.github/PULL_REQUEST_TEMPLATE.md`.

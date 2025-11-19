@@ -272,7 +272,7 @@ yarn prepare
 
 ---
 
-## CI
+## CI & automation
 
 GitHub Actions workflows in `.github/workflows/` include:
 
@@ -288,6 +288,59 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Runs `yarn lint` on PRs.
 - `accessibility.yml`:
   - Runs a placeholder accessibility audit script: `node scripts/audit-a11y.mjs`.
+- `codeql.yml`:
+  - Runs GitHub CodeQL analysis (JavaScript/TypeScript) on pushes, PRs targeting `main`, and a weekly schedule.
+- `release-drafter.yml` and `Release Drafter` workflow:
+  - Build a draft changelog and release notes based on PR labels (features, fixes, docs, maintenance).
+- `automerge.yml`:
+  - Listens for completed `CI` and `CodeQL` workflow runs.
+  - Automatically merges certain PRs when all required checks pass and branch protection allows it:
+    - Dependabot PRs authored by `dependabot[bot]` with the `dependencies` label.
+    - PRs authored by `vicenteopaso` with the `copilot-automerge` label (intended for safe Copilot-assisted changes).
+
+Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Yarn dependencies and GitHub Actions updates, labeling them as `dependencies` (and `github-actions` for workflow updates) and grouping minor/patch bumps.
+
+> Note: For auto-merge to work safely, branch protection on `main` should require the `CI` and `CodeQL` checks and allow auto-merge.
+
+---
+
+## Labels
+
+Common labels used in this repository include:
+
+- `dependencies` – Dependency update PRs (primarily from Dependabot), eligible for auto-merge when checks pass.
+- `github-actions` – Updates to GitHub Actions workflows (also opened by Dependabot).
+- `copilot-automerge` – Opt-in label for PRs authored by `vicenteopaso` that are safe to auto-merge when all required checks pass.
+- `enhancement`, `feature` – New features or improvements (used by Release Drafter).
+- `bug`, `fix` – Bug fixes.
+- `documentation`, `docs` – Documentation-only changes.
+- `chore`, `refactor` – Maintenance and refactoring changes.
+- `dependencies` (again) – Also used by Release Drafter to categorize maintenance changes.
+- `skip-changelog` – Exclude a PR from Release Drafter’s generated release notes.
+
+---
+
+## Maintainer guide: branch protection & auto-merge
+
+To get the most out of CI, CodeQL, Dependabot, and auto-merge:
+
+1. In **Settings → Branches**, add a branch protection rule for `main`:
+   - Require a pull request before merging.
+   - Require status checks to pass before merging, including at least:
+     - The main CI job from `ci.yml`.
+     - The `CodeQL` job from `codeql.yml`.
+   - Enable **Allow auto-merge**.
+2. Keep the following labels available in the repository:
+   - `dependencies`, `github-actions`, `copilot-automerge`, `enhancement`, `feature`, `bug`, `fix`, `documentation`, `docs`, `chore`, `refactor`, `skip-changelog`.
+3. When opening PRs:
+   - Dependabot will label its own PRs (`dependencies`, `github-actions`) automatically.
+   - For your own PRs that are safe for auto-merge, add the `copilot-automerge` label.
+
+With these rules in place, the `automerge.yml` workflow will only merge PRs that:
+
+- Come from trusted sources (Dependabot or `vicenteopaso` + `copilot-automerge`).
+- Have all required checks (CI and CodeQL) green.
+- Satisfy your branch protection requirements.
 
 ---
 
@@ -305,4 +358,7 @@ The app is designed for a standard **Next.js deployment**, and works well on pla
 
 ## License
 
-Add your preferred license here (e.g. MIT), or keep this private if the repository is not intended for open‑source distribution.
+This project is open-sourced under the [MIT License](./LICENSE).
+
+- See `SECURITY.md` for the security policy and reporting guidelines.
+- See `SUPPORT.md` for support, contact information, and expectations.
