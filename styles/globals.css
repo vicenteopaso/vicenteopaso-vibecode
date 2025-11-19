@@ -274,4 +274,9 @@ body {
   code {
     @apply rounded-sm bg-slate-900/70 px-1 py-0.5 text-[0.78rem] font-mono text-slate-100;
   }
+
+  /* Cloudflare Turnstile widget */
+  .cf-turnstile iframe {
+    width: 100% !important;
+  }
 }
