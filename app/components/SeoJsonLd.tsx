@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { getWebsiteJsonLd, getPersonJsonLd } from "../../lib/seo";

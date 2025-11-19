@@ -20,7 +20,8 @@ version-resolver:
   minor:
     labels: ["minor", "enhancement", "feature"]
   patch:
-    labels: ["patch", "bug", "fix", "chore", "documentation", "docs", "dependencies"]
+    labels:
+      ["patch", "bug", "fix", "chore", "documentation", "docs", "dependencies"]
 
 template: |
   ## What’s Changed

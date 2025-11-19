@@ -7,7 +7,8 @@ import { defineConfig } from "@playwright/test";
 // The base URL and dev server command are configurable so tests can
 // either reuse an existing dev server or start one automatically.
 const PORT = Number(process.env.PORT ?? 3000);
-const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORT}`;
+// Use localhost so the origin matches what Next.js expects in development.
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./test/e2e",
