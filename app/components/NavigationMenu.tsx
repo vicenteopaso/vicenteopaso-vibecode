@@ -13,7 +13,7 @@ const navLinkBase =
   "inline-flex h-8 items-center justify-center rounded-full px-3 text-sm font-medium leading-none text-[color:var(--text-primary)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
 
 const navLinkActive =
-  "bg-[color:var(--bg-elevated)] text-[color:var(--link)] hover:text-[color:var(--link)]";
+  "bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] hover:text-[color:var(--text-primary)] ring-1 ring-[color:var(--border-subtle)]";
 
 export function NavigationMenu() {
   const pathname = usePathname();

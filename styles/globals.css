@@ -91,6 +91,10 @@
   --border-strong: rgba(148, 163, 184, 0.6);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply min-h-screen antialiased;
   background-color: var(--bg-app);

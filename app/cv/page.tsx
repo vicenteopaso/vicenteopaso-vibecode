@@ -131,8 +131,30 @@ export default function CVPage() {
 
   const profileInitials = getInitials(profileName);
 
+  const sectionLinks = [
+    work.length > 0 ? { href: "#experience", label: "Experience" } : null,
+    cv.skills && cv.skills.length > 0
+      ? { href: "#skills", label: "Skills" }
+      : null,
+    cv.education && cv.education.length > 0
+      ? { href: "#education", label: "Education" }
+      : null,
+    cv.languages && cv.languages.length > 0
+      ? { href: "#languages", label: "Languages" }
+      : null,
+    cv.publications && cv.publications.length > 0
+      ? { href: "#publications", label: "Publications" }
+      : null,
+    cv.interests && cv.interests.length > 0
+      ? { href: "#interests", label: "Interests" }
+      : null,
+    cv.references && cv.references.length > 0
+      ? { href: "#references", label: "References" }
+      : null,
+  ].filter((link): link is { href: string; label: string } => link !== null);
+
   return (
-    <div className="space-y-6">
+    <div id="cv-top" className="space-y-6 scroll-mt-28">
       <header className="section-card">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <ProfileCard
@@ -144,6 +166,7 @@ export default function CVPage() {
             showAvatar={false}
             showSocialIcons
             showDownloadIcon
+            sectionLinks={sectionLinks}
           />
         </div>
         <div className="mt-4 flex justify-center sm:hidden">
@@ -156,7 +179,7 @@ export default function CVPage() {
         </div>
       </header>
 
-      <section className="section-card space-y-4">
+      <section id="summary" className="section-card space-y-4 scroll-mt-28">
         {cv.basics?.summary && <HtmlBlock html={cv.basics.summary} />}
         {normalizeHighlights(cv.basics?.highlights).length > 0 && (
           <div className="mt-3 mx-auto">
@@ -178,10 +201,22 @@ export default function CVPage() {
       </section>
 
       {work.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Experience
-          </h2>
+        <section
+          id="experience"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              Experience
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <div className="space-y-8 text-sm text-[color:var(--text-primary)]">
             {work.map((company) => (
               <article key={company.company} className="space-y-3">
@@ -251,10 +286,22 @@ export default function CVPage() {
       )}
 
       {cv.education && cv.education.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Education
-          </h2>
+        <section
+          id="education"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              Education
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
             {cv.education.map((ed) => (
               <div key={`${ed.institution}-${ed.area}`} className="space-y-1">
@@ -278,10 +325,22 @@ export default function CVPage() {
       )}
 
       {cv.languages && cv.languages.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Languages
-          </h2>
+        <section
+          id="languages"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              Languages
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <ul className="space-y-1 text-sm text-[color:var(--text-primary)] marker:text-[color:var(--secondary)]">
             {cv.languages.map((lang) => (
               <li key={lang.language}>
@@ -298,10 +357,22 @@ export default function CVPage() {
       )}
 
       {cv.skills && cv.skills.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Skills
-          </h2>
+        <section
+          id="skills"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              Skills
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
             {cv.skills.map((group) => (
               <div key={group.name} className="space-y-1">
@@ -328,10 +399,22 @@ export default function CVPage() {
       )}
 
       {cv.publications && cv.publications.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Publications
-          </h2>
+        <section
+          id="publications"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              Publications
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
             {cv.publications.map((pub) => (
               <li key={pub.name} className="space-y-1">
@@ -365,10 +448,22 @@ export default function CVPage() {
       )}
 
       {cv.interests && cv.interests.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Interests
-          </h2>
+        <section
+          id="interests"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              Interests
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
             {cv.interests.map((interest) => (
               <div key={interest.name} className="space-y-1">
@@ -387,10 +482,22 @@ export default function CVPage() {
       )}
 
       {cv.references && cv.references.length > 0 && (
-        <section className="section-card space-y-4">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            References
-          </h2>
+        <section
+          id="references"
+          className="section-card group space-y-4 scroll-mt-28"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+              References
+            </h2>
+            <a
+              href="#cv-top"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+          </div>
           <ReferencesCarousel references={cv.references} />
         </section>
       )}
