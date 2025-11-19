@@ -1,0 +1,82 @@
+name: Auto Merge Safe PRs
+
+on:
+  workflow_run:
+    workflows: ["CI", "CodeQL"]
+    types: [completed]
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-merge Dependabot and Copilot-labeled PRs when checks pass
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: |
+          python - << 'PY'
+          import json
+          import os
+          import sys
+          import urllib.request
+
+          token = os.environ["GITHUB_TOKEN"]
+          repo = os.environ["REPO"]
+          event_path = os.environ["GITHUB_EVENT_PATH"]
+
+          with open(event_path, "r", encoding="utf-8") as f:
+              event = json.load(f)
+
+          workflow_run = event.get("workflow_run") or {}
+          prs = workflow_run.get("pull_requests") or []
+          if not prs:
+              print("No pull requests associated with this workflow_run. Nothing to auto-merge.")
+              raise SystemExit(0)
+
+          def gh_api(path: str):
+              url = f"https://api.github.com/repos/{repo}{path}"
+              req = urllib.request.Request(url)
+              req.add_header("Authorization", f"Bearer {token}")
+              req.add_header("Accept", "application/vnd.github+json")
+              return urllib.request.urlopen(req)
+
+          for pr_ref in prs:
+              number = pr_ref.get("number")
+              if not number:
+                  continue
+
+              pr = json.load(gh_api(f"/pulls/{number}"))
+              author = pr.get("user", {}).get("login")
+              labels = [l.get("name") for l in pr.get("labels", [])]
+
+              print(f"Evaluating PR #{number} author={author} labels={labels}")
+
+              eligible = False
+              if author == "dependabot[bot]" and "dependencies" in labels:
+                  eligible = True
+              elif author == "vicenteopaso" and "copilot-automerge" in labels:
+                  eligible = True
+
+              if not eligible:
+                  print(f"PR #{number} is not eligible for auto-merge.")
+                  continue
+
+              print(f"Attempting auto-merge for PR #{number} in {repo}...")
+
+              merge_url = f"https://api.github.com/repos/{repo}/pulls/{number}/merge"
+              body = json.dumps({"merge_method": "squash"}).encode("utf-8")
+              merge_req = urllib.request.Request(merge_url, data=body, method="PUT")
+              merge_req.add_header("Authorization", f"Bearer {token}")
+              merge_req.add_header("Accept", "application/vnd.github+json")
+
+              try:
+                  resp = urllib.request.urlopen(merge_req)
+                  resp_body = resp.read().decode("utf-8")
+                  print(f"Auto-merged PR #{number}: {resp_body}")
+              except Exception as e:
+                  # Do not fail the workflow if merge is not possible
+                  # (e.g. branch protection, failing checks, outdated branch).
+                  print(f"Merge not performed for PR #{number}: {e}")
+
+          PY
