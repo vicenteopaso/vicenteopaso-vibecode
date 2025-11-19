@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("home page has title and navigation links", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
   await expect(page).toHaveTitle(/Vicente Opaso/);
 
