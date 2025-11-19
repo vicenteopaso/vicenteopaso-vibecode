@@ -3,13 +3,20 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { FormEvent, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ContactInfo } from "./ContactInfo";
 
 declare global {
   interface Window {
     onTurnstileSuccess?: (token: string) => void;
     turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          callback: (token: string) => void;
+        },
+      ) => void;
       reset: () => void;
     };
   }
@@ -35,39 +42,51 @@ export function ContactDialog({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
+  const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+    if (!siteKey) {
       // eslint-disable-next-line no-console
-      console.error("Turnstile site key is not configured.");
+      console.error(
+        "Turnstile site key is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY.",
+      );
+      return;
     }
 
-    window.onTurnstileSuccess = (token: string) => {
-      console.log("Turnstile success, token:", token.slice(0, 8) + "…"); // eslint-disable-line no-console
-      setTurnstileToken(token);
-      setIsChallengeVisible(false);
+    const tryRenderTurnstile = () => {
+      if (!turnstileContainerRef.current || !window.turnstile?.render) {
+        return false;
+      }
+
+      window.turnstile.render(turnstileContainerRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => {
+          // eslint-disable-next-line no-console
+          console.log(
+            "Turnstile success, token:",
+            token ? `${token.slice(0, 8)}…` : "<empty>",
+          );
+          setTurnstileToken(token);
+          setIsChallengeVisible(true);
+        },
+      });
+
+      return true;
     };
 
+    if (tryRenderTurnstile()) {
+      return;
+    }
+
     const intervalId = window.setInterval(() => {
-      const iframe = document.querySelector<HTMLIFrameElement>(
-        ".cf-turnstile iframe",
-      );
-
-      if (!iframe) {
-        return;
-      }
-
-      const rect = iframe.getBoundingClientRect();
-      const isVisible = rect.width > 0 && rect.height > 0;
-
-      if (isVisible) {
-        setIsChallengeVisible(true);
+      if (tryRenderTurnstile()) {
         window.clearInterval(intervalId);
       }
-    }, 500);
+    }, 200);
 
     return () => {
-      window.onTurnstileSuccess = undefined;
       window.clearInterval(intervalId);
     };
   }, []);
@@ -253,11 +272,7 @@ export function ContactDialog({
                   : "contact-status"
               }
             >
-              <div
-                className="cf-turnstile"
-                data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                data-callback="onTurnstileSuccess"
-              />
+              <div ref={turnstileContainerRef} className="cf-turnstile" />
             </div>
             {isChallengeVisible ? (
               <p
