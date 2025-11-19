@@ -37,6 +37,11 @@ export function ContactDialog({
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
 
   useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+      // eslint-disable-next-line no-console
+      console.error("Turnstile site key is not configured.");
+    }
+
     window.onTurnstileSuccess = (token: string) => {
       setTurnstileToken(token);
       setIsChallengeVisible(false);
@@ -290,7 +295,7 @@ export function ContactDialog({
               <button
                 type="submit"
                 className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60"
-                disabled={submitting}
+                disabled={submitting || !turnstileToken}
               >
                 {submitting ? "Sending..." : "Send"}
               </button>
