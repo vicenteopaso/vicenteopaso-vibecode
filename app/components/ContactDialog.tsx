@@ -15,6 +15,7 @@ declare global {
         options: {
           sitekey: string;
           callback: (token: string) => void;
+          size?: "normal" | "flexible" | "compact" | string;
         },
       ) => void;
       reset: () => void;
@@ -35,6 +36,7 @@ export function ContactDialog({
 }: ContactDialogProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [phone, setPhone] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [domain, setDomain] = useState<string | null>(null);
@@ -48,7 +50,8 @@ export function ContactDialog({
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
-        setDomain(window.location.origin);
+        const url = new URL(window.location.href);
+        setDomain(url.hostname);
       } catch {
         // Ignore errors and keep fallback domain.
       }
@@ -75,6 +78,8 @@ export function ContactDialog({
           setTurnstileToken(token);
           setIsChallengeVisible(true);
         },
+        // Let Turnstile auto-size responsively to the container width
+        size: "flexible",
       });
 
       return true;
@@ -104,6 +109,7 @@ export function ContactDialog({
 
     const trimmedEmail = email.trim();
     const trimmedMessage = message.trim();
+    const trimmedPhone = phone.trim();
 
     if (!trimmedEmail || !trimmedMessage) {
       if (!trimmedEmail) {
@@ -122,7 +128,6 @@ export function ContactDialog({
     }
 
     const formData = new FormData(event.currentTarget);
-    const phone = (formData.get("phone") ?? "").toString().trim();
     const domain = (formData.get("domain") ?? "").toString().trim();
     const honeypot = (formData.get("website") ?? "").toString().trim();
 
@@ -135,7 +140,7 @@ export function ContactDialog({
         },
         body: JSON.stringify({
           email: trimmedEmail,
-          phone: phone || undefined,
+          phone: trimmedPhone || undefined,
           message: trimmedMessage,
           domain: domain || undefined,
           turnstileToken,
@@ -154,10 +159,7 @@ export function ContactDialog({
 
       setSuccess("Message sent. I'll get back to you as soon as I can.");
       setEmail("");
-      const phoneInput = event.currentTarget.elements.namedItem("phone");
-      if (phoneInput instanceof HTMLInputElement) {
-        phoneInput.value = "";
-      }
+      setPhone("");
       setMessage("");
       setEmailError(null);
       setMessageError(null);
@@ -235,6 +237,8 @@ export function ContactDialog({
                 name="phone"
                 className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-[0.8rem] text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
                 placeholder="Phone number"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
               />
             </label>
             <label className="flex flex-col gap-1.5">
@@ -291,11 +295,7 @@ export function ContactDialog({
                 from automated spam.
               </p>
             ) : null}
-            <input
-              type="hidden"
-              name="domain"
-              value={domain ?? "https://opa.so"}
-            />
+            <input type="hidden" name="domain" value={domain ?? "opa.so"} />
 
             <p
               id="contact-status"
