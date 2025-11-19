@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { ContactDialog } from "../../app/components/ContactDialog";
 
 vi.mock("next/script", () => ({
@@ -29,7 +29,13 @@ describe("ContactDialog", () => {
   it("requires email and message", async () => {
     openDialog();
 
+    // Simulate a successful Turnstile verification so the submit button is enabled.
+    await act(async () => {
+      window.onTurnstileSuccess?.("test-token");
+    });
+
     const submit = screen.getByRole("button", { name: /send/i });
+    expect(submit).not.toBeDisabled();
     fireEvent.click(submit);
 
     expect(
@@ -49,8 +55,11 @@ describe("ContactDialog", () => {
     fireEvent.change(email, { target: { value: "test@example.com" } });
     fireEvent.change(message, { target: { value: "Hello" } });
 
-    const submit = screen.getByRole("button", { name: /send/i });
-    fireEvent.click(submit);
+    // Submit the form programmatically without a Turnstile token to
+    // exercise the verification check in the submit handler.
+    const form = message.closest("form");
+    expect(form).not.toBeNull();
+    fireEvent.submit(form as HTMLFormElement);
 
     expect(
       await screen.findByText("Please complete the verification."),
