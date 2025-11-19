@@ -10,7 +10,7 @@ I'm a Web Engineering Manager and Frontend Architect with over 25 years of exper
 
 My expertise lies in bridging frontend architecture, design systems, and business strategy—enabling fast delivery, consistent experiences, and empowered engineering teams. Whether designing composable web platforms, scaling design systems, or improving Developer Experience (DevEx), I focus on maintainability, clarity, and long-term alignment.
 
-At Nexthink, I lead the Web Engineering team behind nexthink.com—our global corporate marketing website. I oversee architecture and delivery of a composable stack built with Next.js, GraphQL, Tailwind CSS, and Hygraph CMS, deployed on Vercel. My focus is on performance, accessibility, and collaboration, managing a lean cross-functional team while strengthening developer experience through automation, guardrails, and Community-of-Practice (CoP)–driven knowledge sharing.
+At Nexthink, I led the Web Engineering team behind nexthink.com—the company’s global corporate marketing platform. I oversaw the architecture and delivery of a composable stack built with Next.js, GraphQL, Tailwind CSS, and Hygraph CMS, deployed on Vercel. My work focused on performance, accessibility, and cross‑functional collaboration, managing a lean distributed team while strengthening Developer Experience through automation, clear guardrails, and Community‑of‑Practice (CoP)–driven knowledge sharing.
 
 Previously, at EUROCONTROL, I led frontend governance and modernization for aviation-critical systems within the Network Manager Operations Centre (NMOC). I defined the vision for the EUROCONTROL Design System (EDS) and introduced developer experience improvements across CI/CD, documentation, and microfrontend frameworks—all while ensuring compliance with safety and regulatory standards.
 
@@ -50,7 +50,7 @@ I believe in building systems and teams that scale—architectures that enable a
 ### Professional Highlights
 
 - **Web Engineering Manager | Nexthink**  
-  I lead the team behind Nexthink’s corporate marketing website [nexthink.com](https://nexthink.com), owning its architecture and delivery on a modern, composable stack (Next.js, GraphQL, Tailwind CSS, Hygraph CMS, Vercel). I manage a distributed, cross-functional team, strengthen DevEx through CI/CD automation, CodeQL, Copilot, branch protections, and PR workflows, and partner closely with design and marketing to improve performance, accessibility, and SEO across six locales.
+  I led the team behind Nexthink’s corporate marketing website [nexthink.com](https://nexthink.com), owning its architecture and delivery on a modern, composable stack (Next.js, GraphQL, Tailwind CSS, Hygraph CMS, Vercel). I managed a distributed, cross-functional team, strengthen DevEx through CI/CD automation, CodeQL, Copilot, branch protections, and PR workflows, and partnered closely with design and marketing to improve performance, accessibility, and SEO across six locales.
 
 - **Design System & DevEx Lead | EUROCONTROL**  
   Defined the strategy and governance for the EUROCONTROL Design System (EDS) and led domain-wide Developer Experience initiatives—optimizing CI/CD, onboarding, and cross-platform architecture in a safety-critical aviation environment.

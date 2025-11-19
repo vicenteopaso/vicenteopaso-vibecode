@@ -43,6 +43,7 @@ export function ContactDialog({
     }
 
     window.onTurnstileSuccess = (token: string) => {
+      console.log("Turnstile success, token:", token.slice(0, 8) + "…"); // eslint-disable-line no-console
       setTurnstileToken(token);
       setIsChallengeVisible(false);
     };

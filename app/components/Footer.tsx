@@ -82,7 +82,7 @@ export function Footer() {
                   </h3>
                   <p className="mt-1">
                     Deployed on Vercel with GitHub as the source of truth, plus
-                    ESLint, Prettier, Vitest, and Playwright for quality—all
+                    ESLint, Prettier, Vitest, and Playwright for quality — all
                     built and iterated on in Warp and Cursor.
                   </p>
                 </div>
