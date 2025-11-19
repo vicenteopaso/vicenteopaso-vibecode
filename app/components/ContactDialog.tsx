@@ -295,7 +295,15 @@ export function ContactDialog({
                 from automated spam.
               </p>
             ) : null}
-            <input type="hidden" name="domain" value={domain ?? "opa.so"} />
+            <input
+              type="hidden"
+              name="domain"
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={domain ?? "https://opa.so"}
+            />
 
             <p
               id="contact-status"
