@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("contact dialog opens and shows required fields", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
   await page.getByRole("button", { name: "Contact", exact: true }).click();
 
@@ -11,7 +11,7 @@ test("contact dialog opens and shows required fields", async ({ page }) => {
 });
 
 test("CV page renders experience section", async ({ page }) => {
-  await page.goto("http://localhost:3000/cv");
+  await page.goto("/cv");
 
   await expect(
     page.getByRole("heading", { name: /experience/i }),

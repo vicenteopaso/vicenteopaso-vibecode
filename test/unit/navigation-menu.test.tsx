@@ -6,7 +6,6 @@ import { NavigationMenu } from "../../app/components/NavigationMenu";
 
 // JSDOM does not implement matchMedia; mock it for next-themes.
 if (!window.matchMedia) {
-  // @ts-expect-error - we are defining it for the test environment only
   window.matchMedia = () => ({
     matches: false,
     media: "",
@@ -73,13 +72,9 @@ describe("NavigationMenu", () => {
   it("renders CV link and Contact button", () => {
     renderWithTheme();
 
-    expect(
-      screen.getByRole("link", { name: "CV", exact: true }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "CV" })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("button", { name: "Contact", exact: true }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Contact" })).toBeInTheDocument();
   });
 
   it("renders theme toggle button with accessible label", () => {

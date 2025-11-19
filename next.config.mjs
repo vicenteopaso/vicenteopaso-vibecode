@@ -1,5 +1,7 @@
 import { withContentlayer } from "next-contentlayer";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const securityHeaders = [
   {
     key: "Content-Security-Policy",
@@ -65,7 +67,15 @@ const nextConfig = {
   reactStrictMode: true,
   typedRoutes: true,
   turbopack: {},
+  productionBrowserSourceMaps: true,
   async headers() {
+    if (!isProd) {
+      // In development, avoid setting CSP and other security headers so
+      // that tooling, extensions, and dev-only scripts don't trigger
+      // noisy console errors or interfere with DX.
+      return [];
+    }
+
     return [
       {
         source: "/(.*)",

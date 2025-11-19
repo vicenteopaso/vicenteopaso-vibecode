@@ -9,7 +9,7 @@ export function Footer() {
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
       <div className="shell flex flex-col items-center justify-between gap-3 py-6 text-[0.75rem] text-[color:var(--text-muted)] sm:flex-row">
         <p className="text-center sm:text-left">
-          © {year} Vicente Opaso. Made with ♥️, and vibecoded on{" "}
+          © {year} Vicente Opaso. Vibecoded with ♥️, and{" "}
           <a
             href="https://warp.dev"
             target="_blank"

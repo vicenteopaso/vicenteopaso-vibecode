@@ -12,8 +12,8 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
   const base: Metadata = {
     metadataBase: new URL(siteConfig.url),
     title: {
-      default: `${siteConfig.name} — Engineering Leadership & Vibecode`,
-      template: `%s — ${siteConfig.name}`,
+      default: `${siteConfig.name}  Software Engineering Leader & Frontend Architect`,
+      template: `%s  ${siteConfig.name}`,
     },
     description: siteConfig.description,
     openGraph: {
@@ -21,6 +21,14 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
       url: siteConfig.url,
       title: siteConfig.name,
       description: siteConfig.description,
+      siteName: siteConfig.name,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: siteConfig.name,
+      description: siteConfig.description,
+      site: "@vicenteopaso",
+      creator: "@vicenteopaso",
     },
   };
 
