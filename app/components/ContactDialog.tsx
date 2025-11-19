@@ -72,11 +72,6 @@ export function ContactDialog({
       window.turnstile.render(turnstileContainerRef.current, {
         sitekey: siteKey,
         callback: (token: string) => {
-          // eslint-disable-next-line no-console
-          console.log(
-            "Turnstile success, token:",
-            token ? `${token.slice(0, 8)}…` : "<empty>",
-          );
           setTurnstileToken(token);
           setIsChallengeVisible(true);
         },
