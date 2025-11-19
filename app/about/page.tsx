@@ -4,7 +4,7 @@ import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import { ProfileCard } from "../components/ProfileCard";
-import { ContactDialog } from "../components/ContactDialog";
+import { GetInTouchSection } from "../components/GetInTouchSection";
 
 const markdownComponents: Components = {
   ul: (props) => (
@@ -47,56 +47,7 @@ export default function AboutPage() {
         <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
       </main>
 
-      <section className="section-card space-y-4">
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Get in touch
-          </h2>
-          <ContactDialog
-            trigger={
-              <button
-                type="button"
-                className="text-sm font-medium text-[color:var(--accent)] hover:text-[color:var(--accent-hover)] hover:underline underline-offset-4 cursor-pointer"
-              >
-                Contact me
-              </button>
-            }
-          />
-        </div>
-        <p className="pt-2 text-sm text-[color:var(--text-primary)]">
-          Interested in collaborating, discussing engineering leadership, or
-          exploring new opportunities? I&apos;m open to thoughtful
-          conversations.
-        </p>
-        <div className="mt-2 flex flex-col items-center justify-center gap-1 text-sm text-[color:var(--text-primary)] sm:flex-row sm:flex-wrap sm:gap-2">
-          <a
-            href="https://www.google.es/maps/@36.5965239,-4.5176446,16z"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:underline underline-offset-4"
-          >
-            Malaga, Spain
-          </a>
-          <span className="hidden sm:inline" aria-hidden="true">
-            ·
-          </span>
-          <a
-            href="tel:+34684005262"
-            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-          >
-            +34 684 005 262
-          </a>
-          <span className="hidden sm:inline" aria-hidden="true">
-            ·
-          </span>
-          <a
-            href="mailto:vicente@opa.so"
-            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-          >
-            vicente@opa.so
-          </a>
-        </div>
-      </section>
+      <GetInTouchSection />
 
       <div className="flex items-center justify-center gap-2">
         <a

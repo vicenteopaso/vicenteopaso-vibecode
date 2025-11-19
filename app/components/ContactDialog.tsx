@@ -1,8 +1,10 @@
 "use client";
 
+import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { FormEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { ContactInfo } from "./ContactInfo";
 
 declare global {
   interface Window {
@@ -32,14 +34,35 @@ export function ContactDialog({
   const [success, setSuccess] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
+  const [isChallengeVisible, setIsChallengeVisible] = useState(false);
 
   useEffect(() => {
     window.onTurnstileSuccess = (token: string) => {
       setTurnstileToken(token);
+      setIsChallengeVisible(false);
     };
+
+    const intervalId = window.setInterval(() => {
+      const iframe = document.querySelector<HTMLIFrameElement>(
+        ".cf-turnstile iframe",
+      );
+
+      if (!iframe) {
+        return;
+      }
+
+      const rect = iframe.getBoundingClientRect();
+      const isVisible = rect.width > 0 && rect.height > 0;
+
+      if (isVisible) {
+        setIsChallengeVisible(true);
+        window.clearInterval(intervalId);
+      }
+    }, 500);
 
     return () => {
       window.onTurnstileSuccess = undefined;
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -218,7 +241,11 @@ export function ContactDialog({
             />
             <div
               className="pt-1"
-              aria-describedby="contact-verification-help contact-status"
+              aria-describedby={
+                isChallengeVisible
+                  ? "contact-verification-help contact-status"
+                  : "contact-status"
+              }
             >
               <div
                 className="cf-turnstile"
@@ -226,13 +253,15 @@ export function ContactDialog({
                 data-callback="onTurnstileSuccess"
               />
             </div>
-            <p
-              id="contact-verification-help"
-              className="mt-1 text-[0.75rem] text-[color:var(--text-muted)]"
-            >
-              This verification step helps protect this form from automated
-              spam.
-            </p>
+            {isChallengeVisible ? (
+              <p
+                id="contact-verification-help"
+                className="mt-1 text-[0.75rem] text-[color:var(--text-muted)]"
+              >
+                This verification step helps protect this form from automated
+                spam.
+              </p>
+            ) : null}
             <input type="hidden" name="domain" value="https://opa.so" />
 
             <p
@@ -249,34 +278,7 @@ export function ContactDialog({
 
             {children}
 
-            <div className="mt-4 flex flex-col items-center justify-center gap-1 border-t border-[color:var(--border-subtle)] pt-3 text-[0.75rem] text-[color:var(--text-muted)] sm:flex-row sm:flex-wrap sm:gap-2">
-              <a
-                href="https://www.google.es/maps/@36.5965239,-4.5176446,16z"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:underline underline-offset-4"
-              >
-                Malaga, Spain
-              </a>
-              <span className="hidden sm:inline" aria-hidden="true">
-                ·
-              </span>
-              <a
-                href="tel:+34684005262"
-                className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-              >
-                +34 684 005 262
-              </a>
-              <span className="hidden sm:inline" aria-hidden="true">
-                ·
-              </span>
-              <a
-                href="mailto:vicente@opa.so"
-                className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-              >
-                vicente@opa.so
-              </a>
-            </div>
+            <ContactInfo variant="dialog" />
 
             <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-[0.8rem]">
               <Dialog.Close

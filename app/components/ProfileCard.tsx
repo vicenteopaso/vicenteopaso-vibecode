@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { CV_PDF_PATH } from "../config/cv";
 
 interface ProfileCardProps {
   name: string;
@@ -144,7 +145,8 @@ export function ProfileCard({
             </div>
             {showDownloadIcon && (
               <a
-                href="/assets/vicente-opaso-cv.pdf"
+                href={CV_PDF_PATH}
+                download
                 className="hidden aspect-square h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex"
                 aria-label="Download CV (PDF)"
                 title="Download CV (PDF)"
@@ -188,10 +190,7 @@ export function ProfileCard({
                   Read CV
                 </Link>
                 <span className="px-2">|</span>
-                <a
-                  href="/assets/vicente-opaso-cv.pdf"
-                  className="cursor-pointer"
-                >
+                <a href={CV_PDF_PATH} download className="cursor-pointer">
                   Download CV
                 </a>
               </div>
@@ -357,7 +356,8 @@ export function ProfileCard({
 
                     {showDownloadIcon && (
                       <a
-                        href="/assets/vicenteopaso-cv.pdf"
+                        href={CV_PDF_PATH}
+                        download
                         className="hidden aspect-square h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex"
                         aria-label="Download CV (PDF)"
                         title="Download CV (PDF)"

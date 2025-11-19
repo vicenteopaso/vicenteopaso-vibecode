@@ -3,7 +3,8 @@ import path from "path";
 import matter from "gray-matter";
 import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";
-import { ContactDialog } from "../components/ContactDialog";
+import { GetInTouchSection } from "../components/GetInTouchSection";
+import { CV_PDF_PATH } from "../config/cv";
 
 type Highlight = {
   title?: string;
@@ -171,7 +172,8 @@ export default function CVPage() {
         </div>
         <div className="mt-4 flex justify-center sm:hidden">
           <a
-            href="/assets/vicente-opaso-cv.pdf"
+            href={CV_PDF_PATH}
+            download
             className="text-sm font-medium text-[color:var(--link)] hover:text-[color:var(--link-hover)]"
           >
             Download CV
@@ -211,7 +213,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -296,7 +298,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -335,7 +337,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -367,7 +369,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -409,7 +411,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -458,7 +460,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -492,7 +494,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -502,56 +504,7 @@ export default function CVPage() {
         </section>
       )}
 
-      <section className="section-card space-y-4">
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-            Get in touch
-          </h2>
-          <ContactDialog
-            trigger={
-              <button
-                type="button"
-                className="text-sm font-medium text-[color:var(--accent)] hover:text-[color:var(--accent-hover)] hover:underline underline-offset-4 cursor-pointer"
-              >
-                Contact me
-              </button>
-            }
-          />
-        </div>
-        <p className="pt-2 text-sm text-[color:var(--text-primary)]">
-          Interested in collaborating, discussing engineering leadership, or
-          exploring new opportunities? I&apos;m open to thoughtful
-          conversations.
-        </p>
-        <div className="mt-2 flex flex-col items-center justify-center gap-1 text-sm text-[color:var(--text-primary)] sm:flex-row sm:flex-wrap sm:gap-2">
-          <a
-            href="https://www.google.es/maps/@36.5965239,-4.5176446,16z"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:underline underline-offset-4"
-          >
-            Malaga, Spain
-          </a>
-          <span className="hidden sm:inline" aria-hidden="true">
-            ·
-          </span>
-          <a
-            href="tel:+34684005262"
-            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-          >
-            +34 684 005 262
-          </a>
-          <span className="hidden sm:inline" aria-hidden="true">
-            ·
-          </span>
-          <a
-            href="mailto:vicente@opa.so"
-            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-          >
-            vicente@opa.so
-          </a>
-        </div>
-      </section>
+      <GetInTouchSection />
 
       <div className="flex items-center justify-center gap-2">
         <a
