@@ -13,7 +13,10 @@ const contactSchema = z.object({
   honeypot: z.string().optional(),
 });
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwbyoep";
+const FORMSPREE_KEY = process.env.NEXT_PUBLIC_FORMSPREE_KEY;
+const FORMSPREE_ENDPOINT = FORMSPREE_KEY
+  ? `https://formspree.io/f/${FORMSPREE_KEY}`
+  : undefined;
 const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
@@ -23,6 +26,17 @@ export async function POST(request: NextRequest) {
       console.error("Turnstile secret key is not configured.");
       return NextResponse.json(
         { error: "Verification service is not configured." },
+        { status: 500 },
+      );
+    }
+
+    if (!FORMSPREE_ENDPOINT) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Formspree endpoint is not configured. Set NEXT_PUBLIC_FORMSPREE_KEY.",
+      );
+      return NextResponse.json(
+        { error: "Contact service is not configured." },
         { status: 500 },
       );
     }
