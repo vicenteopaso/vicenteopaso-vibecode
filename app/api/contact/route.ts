@@ -7,17 +7,13 @@ const contactSchema = z.object({
   phone: z.string().max(50).optional(),
   message: z
     .string()
-    .min(1, "Message cannot be empty.")
+    .min(5, "Message cannot be empty, or so short.")
     .max(2000, "Message is a bit too long. Please shorten it."),
-  domain: z.string().min(1).optional(),
-  // domain: z.string().url().optional(), // Full URL with protocol and hostname
   turnstileToken: z.string().min(1, "Verification is required."),
   honeypot: z.string().optional(),
 });
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvolgybr";
-const ALLOWED_DOMAIN = "opa.so";
-// const ALLOWED_DOMAIN = "https://opa.so"; // Full URL with protocol and hostname
 const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
@@ -37,13 +33,6 @@ export async function POST(request: NextRequest) {
     // Honeypot: if filled, likely a bot. Silently accept without forwarding.
     if (data.honeypot) {
       return NextResponse.json({ ok: true });
-    }
-
-    if (data.domain && data.domain !== ALLOWED_DOMAIN) {
-      return NextResponse.json(
-        { error: "Invalid submission origin." },
-        { status: 400 },
-      );
     }
 
     const ipFromHeader =
