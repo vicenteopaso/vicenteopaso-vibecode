@@ -1,7 +1,8 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { usePathname } from "next/navigation";
 import { NavigationMenu } from "../../app/components/NavigationMenu";
 
 // JSDOM does not implement matchMedia; mock it for next-themes.
@@ -17,6 +18,10 @@ if (!window.matchMedia) {
     dispatchEvent: () => false,
   });
 }
+
+vi.mock("next/navigation", () => ({
+  usePathname: vi.fn(),
+}));
 
 vi.mock("next/link", () => {
   return {
@@ -48,11 +53,14 @@ vi.mock("next/image", () => {
   };
 });
 
+let mockTheme: "light" | "dark" | undefined = "dark";
+const setTheme = vi.fn();
+
 vi.mock("next-themes", async () => {
   const actual = await vi.importActual("next-themes");
   return {
     ...actual,
-    useTheme: () => ({ resolvedTheme: "dark", setTheme: vi.fn() }),
+    useTheme: () => ({ resolvedTheme: mockTheme, setTheme }),
   };
 });
 
@@ -67,6 +75,8 @@ function renderWithTheme() {
 describe("NavigationMenu", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockTheme = "dark";
+    setTheme.mockClear();
   });
 
   it("renders CV link and Contact button", () => {
@@ -83,5 +93,36 @@ describe("NavigationMenu", () => {
     expect(
       screen.getByRole("button", { name: "Toggle color theme" }),
     ).toBeInTheDocument();
+  });
+
+  it("marks CV link as current when on /cv", () => {
+    vi.mocked(usePathname).mockReturnValue("/cv");
+
+    renderWithTheme();
+
+    const cvLink = screen.getByRole("link", { name: "CV" });
+    expect(cvLink).toHaveAttribute("aria-current", "page");
+  });
+
+  it("toggles theme from dark to light", () => {
+    mockTheme = "dark";
+
+    renderWithTheme();
+
+    const toggle = screen.getByRole("button", { name: "Toggle color theme" });
+    fireEvent.click(toggle);
+
+    expect(setTheme).toHaveBeenCalledWith("light");
+  });
+
+  it("toggles theme from light to dark", () => {
+    mockTheme = "light";
+
+    renderWithTheme();
+
+    const toggle = screen.getByRole("button", { name: "Toggle color theme" });
+    fireEvent.click(toggle);
+
+    expect(setTheme).toHaveBeenCalledWith("dark");
   });
 });

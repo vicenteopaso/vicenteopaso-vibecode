@@ -18,4 +18,5 @@ This project aims to be usable by as many people as possible.
 ## Tooling
 
 - Automated checks run in CI to flag obvious issues.
-- Manual audits should be run on key user flows periodically.
+- A dedicated script (`scripts/audit-a11y.mjs`) is wired into the `accessibility.yml` GitHub Actions workflow as a placeholder audit.
+- Manual audits should be run on key user flows periodically; automated checks do not replace human testing.

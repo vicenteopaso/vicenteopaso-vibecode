@@ -255,7 +255,12 @@ yarn test:watch
 
 # End-to-end tests (Playwright)
 yarn test:e2e
+
+# Generate unit test coverage reports
+yarn coverage
 ```
+
+Coverage reports are written to `coverage/unit` and enforced with minimum thresholds for lines, statements, branches, and functions.
 
 Before running Playwright tests locally, ensure:
 

@@ -1,3 +1,4 @@
+import React from "react";
 import { ContactDialog } from "./ContactDialog";
 import { ContactInfo } from "./ContactInfo";
 

@@ -16,6 +16,7 @@ Explain the change in a sentence or two.
 - [ ] yarn typecheck
 - [ ] yarn test
 - [ ] yarn test:e2e (if relevant)
+- [ ] yarn coverage
 - [ ] Updated README/docs if needed
 - [ ] No secrets or keys committed; env vars documented
 - [ ] Cross-browser/viewport checks for UI changes (if relevant)

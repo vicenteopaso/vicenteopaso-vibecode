@@ -1,3 +1,4 @@
+import React from "react";
 import { ImageResponse } from "next/og";
 import { siteConfig } from "../lib/seo";
 
