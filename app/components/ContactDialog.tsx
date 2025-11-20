@@ -51,9 +51,10 @@ export function ContactDialog({
     if (typeof window !== "undefined") {
       try {
         const url = new URL(window.location.href);
-        // Use the full origin (e.g., https://opa.so) so the server can
-        // validate it as a proper URL and compare against ALLOWED_DOMAIN.
-        setDomain(url.origin);
+        // Use the bare hostname (e.g., opa.so) to match Formspree's
+        // allowed domain configuration.
+        setDomain(url.hostname);
+        // setDomain(url.origin); // Full URL with protocol and hostname
       } catch {
         // Ignore errors and keep fallback domain.
       }
@@ -304,7 +305,8 @@ export function ContactDialog({
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
-              value={domain ?? "https://opa.so"}
+              value={domain ?? "opa.so"}
+              // value={domain ?? "https://opa.so"} // Full URL with protocol and hostname
             />
 
             <p
