@@ -113,7 +113,7 @@ This is a single Next.js App Router project using Yarn.
     - POSTs to `https://challenges.cloudflare.com/turnstile/v0/siteverify` with `secret`, `response` (token), and optional `remoteip`.
     - If verification fails, responds with `400` and a generic "Verification failed" message.
   - **Form forwarder**:
-    - Forwards `{ email, phone?, message, domain? }` to a Formspree endpoint (`FORMSPREE_ENDPOINT = "https://formspree.io/f/mvolgybr"`).
+    - Forwards `{ email, phone?, message, domain? }` to a Formspree endpoint (`FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwbyoep"`).
     - If Formspree responds with an error, attempts to parse `{ error?: string }` and returns `502` with an appropriate message.
     - On success, responds with `{ ok: true }`.
   - Logs unexpected errors server-side and returns a generic `500` JSON error to the client.
