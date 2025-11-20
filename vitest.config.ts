@@ -6,5 +6,10 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./test/setup-vitest.ts"],
     exclude: [...configDefaults.exclude, "test/e2e/**"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov", "html"],
+      reportsDirectory: "./coverage/unit",
+    },
   },
 });
