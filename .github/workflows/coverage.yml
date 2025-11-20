@@ -1,4 +1,4 @@
-name: Accessibility
+name: Code Coverage
 
 on:
   push:
@@ -6,15 +6,26 @@ on:
   pull_request:
 
 jobs:
-  a11y-audit:
+  coverage:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22.x"
           cache: "yarn"
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile || yarn install
-      - name: Run accessibility audit script
-        run: yarn node scripts/audit-a11y.mjs
+
+      - name: Run unit tests with coverage
+        run: yarn coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-coverage
+          path: coverage/unit
+          if-no-files-found: warn
