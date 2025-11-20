@@ -26,3 +26,35 @@ This document defines how this repository is run and maintained.
 1. Open an issue or write a short rationale in the PR description.
 2. Run linting, tests, and accessibility checks locally where possible.
 3. Use small, focused PRs that are easy to review.
+
+## Quality Gates & CI
+
+- `main` must always be in a deployable state.
+- All PRs are expected to keep the following checks green:
+  - `yarn lint`
+  - `yarn typecheck`
+  - `yarn test` (unit tests)
+  - `yarn test:e2e` when UI or routing changes are involved
+  - `yarn coverage` for unit test coverage
+- GitHub Actions CI mirrors these expectations and also runs accessibility and security checks (CodeQL).
+
+## Coverage & Testing Expectations
+
+- Unit tests are the default; new features should ship with tests and bug fixes should include regression tests.
+- Vitest coverage thresholds are set to a minimum of ~80% for lines, statements, branches, and functions.
+- Coverage reports live in `coverage/unit`; treat noticeable drops in coverage as a reason to add or improve tests.
+
+## Automation & Bots
+
+- Dependabot manages dependency and GitHub Actions updates.
+- Auto-merge is allowed only for:
+  - Dependabot PRs labeled `dependencies` (and `github-actions` where relevant) once required checks pass.
+  - PRs authored by `vicenteopaso` that are explicitly labeled `copilot-automerge`.
+- Release notes are drafted automatically based on PR labels (features, fixes, docs, dependencies, etc.).
+
+## Branch & PR Policy
+
+- `main` is protected and changes land via Pull Requests.
+- PRs should be small, focused, and easy to review.
+- Documentation should be updated alongside behavior or workflow changes (including CI, coverage, and scripts).
+- Secrets must never be committed; environment configuration is documented instead.

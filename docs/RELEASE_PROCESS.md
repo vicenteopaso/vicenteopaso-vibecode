@@ -10,11 +10,17 @@ This project uses a lightweight release process suitable for a personal site.
 ## Steps
 
 1. Open a PR with your changes.
-2. Ensure CI checks pass (lint, tests, accessibility).
+2. Ensure all CI checks pass, including at least:
+   - `yarn lint`
+   - `yarn typecheck`
+   - `yarn test`
+   - `yarn test:e2e` (when relevant)
+   - `yarn coverage`
+   - Accessibility and security checks (CodeQL) run in GitHub Actions.
 3. Merge into `main` once approvals/checks are green.
 4. Vercel automatically deploys `main`.
 
-## Versioning
+## Versioning & Release Notes
 
-- Track notable changes in `CHANGELOG.md`.
-- Use semantic versioning concepts informally (major/minor/patch).
+- Release notes are drafted automatically using Release Drafter, based on PR labels (features, fixes, docs, dependencies, etc.).
+- Semantic versioning concepts (major/minor/patch) are applied informally through PR labeling and generated release notes.

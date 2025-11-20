@@ -35,6 +35,21 @@ yarn install
   ```bash
   yarn typecheck
   ```
+- Generate unit test coverage:
+  ```bash
+  yarn coverage
+  ```
+
+## Before opening a PR
+
+- Make sure the code is formatted, linted, and type-safe:
+  - `yarn lint`
+  - `yarn typecheck`
+- Run tests locally:
+  - `yarn test`
+  - `yarn test:e2e` (when relevant)
+  - `yarn coverage` to verify coverage and generate reports.
+- Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
 
 ## CI, CodeQL, and auto-merge
 

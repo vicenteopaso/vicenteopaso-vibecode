@@ -1,5 +1,29 @@
 # Vicente Opaso – Personal Site & CV
 
+<!-- Stack -->
+
+[![Vercel](https://img.shields.io/website?url=https%3A%2F%2Fvicenteopaso.vercel.app&label=vercel)](https://vicenteopaso.vercel.app)
+![Node](https://img.shields.io/badge/Node-%3E%3D22%20%3C23-43853D?logo=node.js&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-18-20232A?logo=react&logoColor=61DAFB)
+![TS](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-v4-06B6D4?logo=tailwind-css&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=000)
+![yarn](https://img.shields.io/badge/yarn-2C8EBB?logo=yarn&logoColor=white)
+
+---
+
+<!-- CI -->
+
+[![CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml)
+[![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
+[![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
+[![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
+[![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
+[![Dependabot](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates)
+
 This repo contains the source for my personal site and CV, built with Next.js App Router and a content-first approach. It renders an “About” page and a structured CV from markdown/JSON content, and includes a spam‑protected contact flow using Cloudflare Turnstile and Formspree.
 
 The project is optimized for readability, accessibility, and maintainability, with a focus on composable UI, modern tooling, and strong Developer Experience.
@@ -231,7 +255,12 @@ yarn test:watch
 
 # End-to-end tests (Playwright)
 yarn test:e2e
+
+# Generate unit test coverage reports
+yarn coverage
 ```
+
+Coverage reports are written to `coverage/unit` and enforced with minimum thresholds for lines, statements, branches, and functions.
 
 Before running Playwright tests locally, ensure:
 

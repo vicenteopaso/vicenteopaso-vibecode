@@ -30,10 +30,27 @@ function openDialog() {
   fireEvent.click(trigger);
 }
 
+function fillForm() {
+  const email = screen.getByLabelText(/email/i);
+  const message = screen.getByLabelText(/message/i);
+
+  fireEvent.change(email, { target: { value: "test@example.com" } });
+  fireEvent.change(message, { target: { value: "Hello" } });
+}
 describe("ContactDialog", () => {
   beforeEach(() => {
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = "test-site-key";
+
+    type TurnstileRender = (
+      container: HTMLElement,
+      options: { callback: (token: string) => void },
+    ) => void;
+
     window.turnstile = {
-      render: vi.fn(),
+      render: vi.fn((_, options: { callback: (token: string) => void }) => {
+        // Simulate Turnstile immediately providing a token
+        options.callback("test-token");
+      }) as TurnstileRender,
       reset: vi.fn(),
     };
 
@@ -67,17 +84,16 @@ describe("ContactDialog", () => {
   });
 
   it("requires Turnstile token before submit", async () => {
+    // Override render to avoid calling the callback so token remains null
+    if (window.turnstile) {
+      window.turnstile.render = vi.fn();
+    }
+
     openDialog();
 
-    const email = screen.getByLabelText(/email/i);
+    fillForm();
+
     const message = screen.getByLabelText(/message/i);
-
-    fireEvent.change(email, { target: { value: "test@example.com" } });
-    fireEvent.change(message, { target: { value: "Hello" } });
-
-    // Do NOT invoke the Turnstile callback here so the token remains null.
-    // Submit the form programmatically without a Turnstile token to
-    // exercise the verification check in the submit handler.
     const form = message.closest("form");
     expect(form).not.toBeNull();
     fireEvent.submit(form as HTMLFormElement);

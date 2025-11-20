@@ -1,10 +1,10 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import Image from "next/image";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import { CV_PDF_PATH } from "../config/cv";
 
 interface ProfileCardProps {

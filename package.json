@@ -14,13 +14,15 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "test": "vitest",
+    "test": "vitest --run",
     "test:watch": "vitest --watch",
-    "coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "coverage": "mkdir -p coverage/unit/.tmp && vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "content": "node scripts/contentlayer-build.mjs",
-    "clean:local": "node scripts/clean-local.mjs"
+    "clean:local": "node scripts/clean-local.mjs",
+    "full:local": "yarn clean:local && yarn install && yarn build && yarn lint:fix && yarn format:fix && yarn test && yarn test:e2e && yarn typecheck && yarn coverage",
+    "partial:local": "yarn build && yarn lint:fix && yarn format:fix && yarn test && yarn test:e2e && yarn typecheck && yarn coverage"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
