@@ -51,7 +51,9 @@ export function ContactDialog({
     if (typeof window !== "undefined") {
       try {
         const url = new URL(window.location.href);
-        setDomain(url.hostname);
+        // Use the full origin (e.g., https://opa.so) so the server can
+        // validate it as a proper URL and compare against ALLOWED_DOMAIN.
+        setDomain(url.origin);
       } catch {
         // Ignore errors and keep fallback domain.
       }
