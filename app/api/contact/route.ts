@@ -98,21 +98,15 @@ export async function POST(request: NextRequest) {
 
     if (!formspreeResponse.ok) {
       let errorMessage = "Failed to submit contact form. Please try again.";
-
       try {
-        const rawText = await formspreeResponse.text();
-        // eslint-disable-next-line no-console
-        console.error("Formspree error response:", rawText);
-
-        const responseData = JSON.parse(rawText) as {
+        const responseData = (await formspreeResponse.json()) as {
           error?: string;
         };
-
         if (responseData?.error) {
           errorMessage = responseData.error;
         }
       } catch {
-        // Ignore parse/JSON errors and use the default message.
+        // Ignore JSON parse errors and use the default message.
       }
 
       return NextResponse.json({ error: errorMessage }, { status: 502 });
