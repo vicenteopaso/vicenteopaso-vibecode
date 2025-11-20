@@ -13,7 +13,10 @@ const contactSchema = z.object({
   honeypot: z.string().optional(),
 });
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpwbyoep";
+const FORMSPREE_KEY = process.env.NEXT_PUBLIC_FORMSPREE_KEY;
+const FORMSPREE_ENDPOINT = FORMSPREE_KEY
+  ? `https://formspree.io/f/${FORMSPREE_KEY}`
+  : undefined;
 const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
