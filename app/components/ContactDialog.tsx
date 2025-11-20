@@ -39,7 +39,6 @@ export function ContactDialog({
   const [phone, setPhone] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [domain, setDomain] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
@@ -48,18 +47,6 @@ export function ContactDialog({
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const url = new URL(window.location.href);
-        // Use the bare hostname (e.g., opa.so) to match Formspree's
-        // allowed domain configuration.
-        setDomain(url.hostname);
-        // setDomain(url.origin); // Full URL with protocol and hostname
-      } catch {
-        // Ignore errors and keep fallback domain.
-      }
-    }
-
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
     if (!siteKey) {
@@ -131,7 +118,6 @@ export function ContactDialog({
     }
 
     const formData = new FormData(event.currentTarget);
-    const domain = (formData.get("domain") ?? "").toString().trim();
     const honeypot = (formData.get("website") ?? "").toString().trim();
 
     setSubmitting(true);
@@ -145,7 +131,6 @@ export function ContactDialog({
           email: trimmedEmail,
           phone: trimmedPhone || undefined,
           message: trimmedMessage,
-          domain: domain || undefined,
           turnstileToken,
           honeypot: honeypot || undefined,
         }),
@@ -298,16 +283,6 @@ export function ContactDialog({
                 from automated spam.
               </p>
             ) : null}
-            <input
-              type="hidden"
-              name="domain"
-              className="hidden"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              value={domain ?? "opa.so"}
-              // value={domain ?? "https://opa.so"} // Full URL with protocol and hostname
-            />
 
             <p
               id="contact-status"
