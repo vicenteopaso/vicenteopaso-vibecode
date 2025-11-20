@@ -30,6 +30,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!FORMSPREE_ENDPOINT) {
+      // eslint-disable-next-line no-console
+      console.error(
+        "Formspree endpoint is not configured. Set NEXT_PUBLIC_FORMSPREE_KEY.",
+      );
+      return NextResponse.json(
+        { error: "Contact service is not configured." },
+        { status: 500 },
+      );
+    }
+
     const json = await request.json();
     const data = contactSchema.parse(json);
 
