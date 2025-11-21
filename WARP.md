@@ -34,10 +34,9 @@ This is a single Next.js App Router project using Yarn.
   - Husky pre-commit runs `yarn lint-staged` (see `package.json` and `.husky/pre-commit`).
 - **Cleaning local artifacts**
   - `node scripts/clean-local.mjs` removes `.next`, `.turbo`, `.contentlayer`, `.vercel`, coverage reports, Playwright artifacts, test result folders, and `node_modules/`. Run this only when you intentionally want a full local reset.
-- **Placeholder scripts** (currently just log messages, but wired into CI or future workflows)
-  - Accessibility audit: `node scripts/audit-a11y.mjs` (called from `.github/workflows/accessibility.yml`)
-  - Link validation: `node scripts/validate-links.mjs`
-  - OG image generation: `node scripts/generate-og.mjs`
+- **Auxiliary scripts**
+  - Accessibility audit: `node scripts/audit-a11y.mjs` (basic but enforced; called from `.github/workflows/accessibility.yml` and exits non-zero when it finds potential `<Image />` `alt` issues).
+  - Link validation: `node scripts/validate-links.mjs` (run in the main `ci.yml` workflow via `yarn validate:links`; fails CI on broken internal markdown links).
 
 > CI (`.github/workflows/ci.yml`) runs `yarn lint`, `yarn typecheck`, `yarn test` (with `--runInBand` fallback), and `yarn test:e2e`. PRs are expected to keep these green.
 
@@ -140,7 +139,7 @@ This is a single Next.js App Router project using Yarn.
   - Extends `next/core-web-vitals`, `plugin:@typescript-eslint/recommended`, `plugin:jsx-a11y/recommended`, and `prettier`.
   - Uses `@typescript-eslint/parser` and plugins `@typescript-eslint` and `jsx-a11y`.
   - Notable custom rule: `@typescript-eslint/consistent-type-imports: "error"` (prefer `import type` for types).
-- **Prettier**: `.prettierrc` and `.prettierignore` exist (currently empty), with `prettier` invoked via scripts and `lint-staged`.
+- **Prettier**: `.prettierrc` and `.prettierignore` exist (with `scripts/validate-links.mjs` ignored to avoid parser issues), with `prettier` invoked via scripts and `lint-staged`.
 - **Lint-staged & Husky**:
   - `lint-staged` in `package.json`:
     - `*.{ts,tsx,js,jsx}` → `eslint --max-warnings=0` then `prettier --write`.
@@ -153,7 +152,7 @@ This is a single Next.js App Router project using Yarn.
     - `yarn test --runInBand || yarn test`
     - `npx playwright install --with-deps` and `yarn test:e2e`
   - `lint.yml`: On PRs, runs `yarn lint` in isolation.
-  - `accessibility.yml`: On PRs, runs the placeholder accessibility audit script (`yarn node scripts/audit-a11y.mjs`).
+  - `accessibility.yml`: On PRs, runs the accessibility audit script (`yarn node scripts/audit-a11y.mjs`).
 - **PR template** (`.github/PULL_REQUEST_TEMPLATE.md`):
   - The checklist explicitly calls out running `yarn lint`, `yarn test`, and `yarn test:e2e` before marking a PR as ready.
 

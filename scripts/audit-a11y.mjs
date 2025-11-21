@@ -1,19 +1,20 @@
 #!/usr/bin/env node
 
 /**
- * Lightweight accessibility audit script.
+ * Lightweight but real accessibility audit script.
  *
- * This is intentionally basic and non-blocking:
- * - It walks a subset of the repo (app/ and app/components/).
- * - It looks for usages of `next/image`'s `Image` component.
- * - It reports any `<Image />` usages that appear to be missing an `alt` prop.
+ * What it does today:
+ * - Walks a subset of the repo (app/ and nested components).
+ * - Looks for usages of `next/image`'s `Image` component.
+ * - Reports any `<Image />` usages that appear to be missing an `alt` prop.
  *
- * The script currently only logs warnings and always exits with code 0
- * so it won't break CI, but it provides a concrete, grep-like a11y signal.
+ * If any issues are found, the script exits with code 1 so it can be used as
+ * a proper CI gate. The heuristics are intentionally simple and conservative
+ * so they should not generate a lot of false positives.
  *
- * When you're ready to harden this, you can:
- * - Change the final exit code to 1 if any issues are found.
- * - Expand checks to cover landmarks, color contrast (via axe-core), etc.
+ * Future enhancements might include:
+ * - Additional checks for landmarks, focus handling, etc.
+ * - Integrating axe-core with Playwright for richer audits.
  */
 
 import fs from "node:fs";
@@ -113,18 +114,21 @@ function main() {
       "✅ No obvious <Image /> alt attribute issues found (heuristic check).\n",
     );
     console.log(
-      "Note: this is a very limited audit. Consider integrating axe-core with Playwright for deeper coverage.",
+      "Note: this is a limited audit. Consider integrating axe-core with Playwright for deeper coverage.",
     );
     process.exit(0);
   }
 
   console.log(
-    "⚠️ Potential accessibility issues detected with next/image <Image /> alt attributes:\n",
+    "❌ Accessibility audit failed: potential issues detected with next/image <Image /> alt attributes:\n",
   );
+
+  let totalIssues = 0;
 
   for (const { file, issues } of allIssues) {
     console.log(`- ${path.relative(ROOT_DIR, file)}`);
     for (const issue of issues) {
+      totalIssues += 1;
       console.log(`  • Line ${issue.line}: possibly missing alt attribute`);
       console.log(`    Snippet: ${issue.snippet}`);
     }
@@ -132,11 +136,11 @@ function main() {
   }
 
   console.log(
-    "This audit is non-blocking and always exits with code 0. " +
-      "When you're comfortable, you can update scripts/audit-a11y.mjs to fail CI if issues are found.",
+    `Found ${totalIssues} potential <Image /> alt issue(s). ` +
+      "This script now exits with code 1 so that accessibility regressions can break CI.",
   );
 
-  process.exit(0);
+  process.exit(1);
 }
 
 main();
