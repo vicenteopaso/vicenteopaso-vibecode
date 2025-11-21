@@ -21,6 +21,8 @@ jobs:
         run: yarn lint
       - name: Typecheck
         run: yarn typecheck
+      - name: Validate internal links
+        run: yarn validate:links
       - name: Unit tests
         run: yarn test --runInBand || yarn test
       - name: E2E tests

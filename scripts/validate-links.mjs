@@ -6,7 +6,7 @@
  * What it does (for now):
  * - Scans markdown files in 'content/' for markdown links like '[text](/path)'.
  * - Treats links starting with '/' as internal routes.
- * - Derives valid routes from 'app/**/page.tsx' (e.g. 'app/cv/page.tsx' -> '/cv').
+ * - Derives valid routes from routes like 'app/cv/page.tsx' which map to '/cv'.
  * - Reports any internal links that do not map to a known route.
  *
  * This is intentionally lightweight and fast so it can be run locally or in CI.

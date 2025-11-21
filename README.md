@@ -79,7 +79,8 @@ High‑level layout:
 - `scripts/`
   - `build.mjs` – Contentlayer + Next.js build orchestration.
   - `clean-local.mjs` – Cleans local artifacts (`.next`, `.turbo`, `.contentlayer`, `.vercel`, coverage, Playwright artifacts, etc.).
-  - `audit-a11y.mjs`, `validate-links.mjs`, `generate-og.mjs` – Placeholder scripts wired into CI for future workflows.
+  - `audit-a11y.mjs` – Lightweight, non-blocking accessibility audit (run via the `accessibility.yml` workflow).
+  - `validate-links.mjs` – Validates internal markdown links against known app routes (run in the main `ci.yml` workflow).
 - Config:
   - `next.config.js` – Next.js config wrapped in `withContentlayer`.
   - `tailwind.config.js` – Tailwind content globs for `app/`, `components/`, and `content/`.
@@ -238,6 +239,13 @@ yarn format
 yarn format:fix
 ```
 
+### Content & quality checks
+
+```bash
+# Validate internal markdown links against known app routes
+yarn validate:links
+```
+
 ### Type checking
 
 ```bash
@@ -310,13 +318,14 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Installs dependencies, then runs:
     - `yarn lint`
     - `yarn typecheck`
+    - `yarn validate:links` (fails CI on broken internal markdown links)
     - `yarn test --runInBand || yarn test`
     - `npx playwright install --with-deps`
     - `yarn test:e2e`
 - `lint.yml`:
   - Runs `yarn lint` on PRs.
 - `accessibility.yml`:
-  - Runs a placeholder accessibility audit script: `node scripts/audit-a11y.mjs`.
+  - Runs a basic accessibility audit: `yarn node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
 - `codeql.yml`:
   - Runs GitHub CodeQL analysis (JavaScript/TypeScript) on pushes, PRs targeting `main`, and a weekly schedule.
 - `release-drafter.yml` and `Release Drafter` workflow:
