@@ -7,6 +7,8 @@ import type { Components } from "react-markdown";
 import { ProfileCard } from "../components/ProfileCard";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 
+export const dynamic = "force-static";
+
 const markdownComponents: Components = {
   ul: (props) => (
     <ul

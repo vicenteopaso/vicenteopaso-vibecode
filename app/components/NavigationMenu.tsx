@@ -15,6 +15,8 @@ const navLinkBase =
 const navLinkActive =
   "bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] hover:text-[color:var(--text-primary)] ring-1 ring-[color:var(--border-subtle)]";
 
+const imageCacheVersion = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "1";
+
 export function NavigationMenu() {
   const pathname = usePathname();
   const isOnCvPage = pathname?.startsWith("/cv") ?? false;
@@ -34,8 +36,8 @@ export function NavigationMenu() {
 
   const logoSrc =
     displayTheme === "dark"
-      ? "/assets/images/logo_dark.png"
-      : "/assets/images/logo.png";
+      ? `/assets/images/logo_dark.png?v=${imageCacheVersion}`
+      : `/assets/images/logo.png?v=${imageCacheVersion}`;
 
   const toggleTheme = () => {
     const nextTheme = displayTheme === "dark" ? "light" : "dark";
