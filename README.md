@@ -11,7 +11,7 @@
 ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=000)
-![yarn](https://img.shields.io/badge/yarn-2C8EBB?logo=yarn&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-4B3F72?logo=pnpm&logoColor=white)
 
 ---
 
@@ -93,23 +93,23 @@ High‑level layout:
 
 ## Getting started
 
-> For contribution-specific details (Yarn usage, common commands, and workflow expectations), see `CONTRIBUTING.md`.
+> For contribution-specific details (pnpm usage, common commands, and workflow expectations), see `CONTRIBUTING.md`.
 
 ### Prerequisites
 
 - Node.js (LTS recommended)
-- Yarn (preferred package manager for this project)
+- pnpm (preferred package manager for this project)
 
 ### Installation
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ### Running the dev server
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 Then open `http://localhost:3000` in your browser.
@@ -198,26 +198,26 @@ The Formspree endpoint is hard‑coded in the route handler; update it there if 
 
 ## Scripts
 
-All scripts are defined in `package.json` and intended to be run via Yarn.
+All scripts are defined in `package.json` and intended to be run via pnpm.
 
 ### Core scripts
 
 ```bash
 # Dev server (Next.js, port 3000)
-yarn dev
+pnpm dev
 
 # Production build
-yarn build
+pnpm build
 
-# Start production server (after `yarn build`)
-yarn start
+# Start production server (after `pnpm build`)
+pnpm start
 ```
 
 ### Content & build
 
 ```bash
 # Build Contentlayer output into `.contentlayer/generated`
-yarn content
+pnpm content
 
 # Full content + app build (via custom script)
 node scripts/build.mjs
@@ -227,52 +227,52 @@ node scripts/build.mjs
 
 ```bash
 # Lint TypeScript/JavaScript
-yarn lint
+pnpm lint
 
 # Lint and auto-fix
-yarn lint:fix
+pnpm lint:fix
 
 # Check formatting with Prettier
-yarn format
+pnpm format
 
 # Auto-fix formatting
-yarn format:fix
+pnpm format:fix
 ```
 
 ### Content & quality checks
 
 ```bash
 # Validate internal markdown links against known app routes
-yarn validate:links
+pnpm validate:links
 ```
 
 ### Type checking
 
 ```bash
-yarn typecheck
+pnpm typecheck
 ```
 
 ### Testing
 
 ```bash
 # Unit tests (Vitest, jsdom)
-yarn test
+pnpm test
 
 # Watch mode for unit tests
-yarn test:watch
+pnpm test:watch
 
 # End-to-end tests (Playwright)
-yarn test:e2e
+pnpm test:e2e
 
 # Generate unit test coverage reports
-yarn coverage
+pnpm coverage
 ```
 
 Coverage reports are written to `coverage/unit` and enforced with minimum thresholds for lines, statements, branches, and functions.
 
 Before running Playwright tests locally, ensure:
 
-1. The dev server is running (`yarn dev` on `http://localhost:3000`).
+1. The dev server is running (`pnpm dev` on `http://localhost:3000`).
 2. Playwright browsers are installed at least once:
 
 ```bash
@@ -283,10 +283,10 @@ npx playwright install --with-deps
 
 ```bash
 # Clean local artifacts (.next, .turbo, .contentlayer, .vercel, coverage, etc.)
-yarn clean:local
+pnpm clean:local
 
 # Install Husky git hooks
-yarn prepare
+pnpm prepare
 ```
 
 ---
@@ -305,7 +305,7 @@ yarn prepare
   - On staged markdown/JSON/CSS:
     - Runs Prettier (`--write`).
 - **Husky**:
-  - Pre‑commit hook runs `yarn lint-staged`, so commits must pass linting/formatting.
+  - Pre‑commit hook runs `pnpm lint-staged`, so commits must pass linting/formatting.
 
 ---
 
@@ -315,17 +315,17 @@ GitHub Actions workflows in `.github/workflows/` include:
 
 - `ci.yml`:
   - Runs on pushes to `main` and all PRs.
-  - Installs dependencies, then runs:
-    - `yarn lint`
-    - `yarn typecheck`
-    - `yarn validate:links` (fails CI on broken internal markdown links)
-    - `yarn test --runInBand || yarn test`
+  - Installs dependencies with pnpm, then runs:
+    - `pnpm lint`
+    - `pnpm typecheck`
+    - `pnpm validate:links` (fails CI on broken internal markdown links)
+    - `pnpm test --runInBand || pnpm test`
     - `npx playwright install --with-deps`
-    - `yarn test:e2e`
+    - `pnpm test:e2e`
 - `lint.yml`:
-  - Runs `yarn lint` on PRs.
+  - Runs `pnpm lint` on PRs.
 - `accessibility.yml`:
-  - Runs a basic accessibility audit: `yarn node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
+  - Runs a basic accessibility audit: `pnpm node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
 - `codeql.yml`:
   - Runs GitHub CodeQL analysis (JavaScript/TypeScript) on pushes, PRs targeting `main`, and a weekly schedule.
 - `release-drafter.yml` and `Release Drafter` workflow:
@@ -336,7 +336,7 @@ GitHub Actions workflows in `.github/workflows/` include:
     - Dependabot PRs authored by `dependabot[bot]` with the `dependencies` label.
     - PRs authored by `vicenteopaso` with the `copilot-automerge` label (intended for safe Copilot-assisted changes).
 
-Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Yarn dependencies and GitHub Actions updates, labeling them as `dependencies` (and `github-actions` for workflow updates) and grouping minor/patch bumps.
+Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Node dependencies (via pnpm) and GitHub Actions updates, labeling them as `dependencies` (and `github-actions` for workflow updates) and grouping minor/patch bumps.
 
 > Note: For auto-merge to work safely, branch protection on `main` should require the `CI` and `CodeQL` checks and allow auto-merge.
 
@@ -386,7 +386,7 @@ With these rules in place, the `automerge.yml` workflow will only merge PRs that
 
 The app is designed for a standard **Next.js deployment**, and works well on platforms like **Vercel**:
 
-- Build command: `yarn build` (or `node scripts/build.mjs` if you want to ensure Contentlayer runs first).
+- Build command: `pnpm build` (or `node scripts/build.mjs` if you want to ensure Contentlayer runs first).
 - Output: Standard Next.js output (`.next`).
 - Environment:
   - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider’s environment settings.

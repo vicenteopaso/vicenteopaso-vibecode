@@ -1,54 +1,54 @@
 # Contributing
 
-This project uses **Yarn** for package management.
+This project uses **pnpm** for package management.
 
 ## Prerequisites
 
 - Node.js (LTS recommended)
-- Yarn 1.x (currently `1.22.22`)
+- pnpm (see `packageManager` in `package.json` for the expected version)
 
 ## Installing dependencies
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ## Common commands
 
 - Start dev server:
   ```bash
-  yarn dev
+  pnpm dev
   ```
 - Run tests:
   ```bash
-  yarn test
+  pnpm test
   ```
 - Run end-to-end tests (requires dev server running on `http://localhost:3000`):
   ```bash
-  yarn test:e2e
+  pnpm test:e2e
   ```
 - Lint:
   ```bash
-  yarn lint
+  pnpm lint
   ```
 - Type check:
   ```bash
-  yarn typecheck
+  pnpm typecheck
   ```
 - Generate unit test coverage:
   ```bash
-  yarn coverage
+  pnpm coverage
   ```
 
 ## Before opening a PR
 
 - Make sure the code is formatted, linted, and type-safe:
-  - `yarn lint`
-  - `yarn typecheck`
+- - `pnpm lint`
+- - `pnpm typecheck`
 - Run tests locally:
-  - `yarn test`
-  - `yarn test:e2e` (when relevant)
-  - `yarn coverage` to verify coverage and generate reports.
+- - `pnpm test`
+- - `pnpm test:e2e` (when relevant)
+- - `pnpm coverage` to verify coverage and generate reports.
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
 
 ## CI, CodeQL, and auto-merge
@@ -59,4 +59,4 @@ yarn install
   - Dependabot PRs with the `dependencies` label.
   - PRs authored by `vicenteopaso` with the `copilot-automerge` label.
 
-Please prefer `yarn` over `npm` or `pnpm` when working in this repository.
+Please prefer `pnpm` over `npm` or `yarn` when working in this repository.

@@ -31,11 +31,11 @@ This document defines how this repository is run and maintained.
 
 - `main` must always be in a deployable state.
 - All PRs are expected to keep the following checks green:
-  - `yarn lint`
-  - `yarn typecheck`
-  - `yarn test` (unit tests)
-  - `yarn test:e2e` when UI or routing changes are involved
-  - `yarn coverage` for unit test coverage
+- - `pnpm lint`
+- - `pnpm typecheck`
+- - `pnpm test` (unit tests)
+- - `pnpm test:e2e` when UI or routing changes are involved
+- - `pnpm coverage` for unit test coverage
 - GitHub Actions CI mirrors these expectations and also runs accessibility and security checks (CodeQL).
 
 ## Coverage & Testing Expectations

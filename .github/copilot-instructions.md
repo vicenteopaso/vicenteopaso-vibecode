@@ -4,7 +4,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 ## Project context and goals
 
-- Framework/runtime: **Next.js (App Router) on Node.js LTS**, managed with **Yarn**.
+- Framework/runtime: **Next.js (App Router) on Node.js LTS**, managed with **pnpm**.
 - Language: **TypeScript** with React 18.
 - Content model: markdown files under `content/` plus a JSON CV object embedded in `content/cv.md`.
   - Do not break the JSON CV parsing semantics; preserve existing error handling and graceful fallbacks.
@@ -14,11 +14,11 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 ## Do
 
-- Use **Yarn** scripts (do not switch to npm or pnpm):
-  - `yarn dev`, `yarn build`, `yarn start`
-  - `yarn lint`, `yarn lint:fix`, `yarn format`, `yarn format:fix`
-  - `yarn typecheck`
-  - `yarn test`, `yarn test:e2e`
+- Use **pnpm** scripts:
+- - `pnpm dev`, `pnpm build`, `pnpm start`
+- - `pnpm lint`, `pnpm lint:fix`, `pnpm format`, `pnpm format:fix`
+- - `pnpm typecheck`
+- - `pnpm test`, `pnpm test:e2e`
 - Write **TypeScript** (TS/TSX) and prefer `import type` for type-only imports to satisfy ESLint rules (notably `@typescript-eslint/consistent-type-imports`).
 - Keep to the **App Router** structure under `app/`, colocating shared components under `app/components/` where appropriate.
 - Maintain accessibility:
@@ -43,11 +43,11 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 ## Don’t
 
 - Do not:
-  - Switch package managers or convert the app to the legacy `pages/` router.
-  - Bypass or remove Turnstile verification or other spam protections in the contact flow.
-  - Hard-code secrets, API keys, or credentials.
-  - Introduce changes that obviously regress accessibility, SEO, or performance without justification and tests.
-  - Add Issue templates (Issues are intentionally disabled in this repo).
+- - Switch package managers again or convert the app to the legacy `pages/` router.
+- Bypass or remove Turnstile verification or other spam protections in the contact flow.
+- Hard-code secrets, API keys, or credentials.
+- Introduce changes that obviously regress accessibility, SEO, or performance without justification and tests.
+- Add Issue templates (Issues are intentionally disabled in this repo).
 
 ## Files and directories overview
 
@@ -67,13 +67,13 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 ## Commands cheat sheet
 
-- Dev: `yarn dev`
-- Build: `yarn build` (or full content + app build: `node scripts/build.mjs`)
-- Contentlayer: `yarn content`
-- Lint/format: `yarn lint`, `yarn lint:fix`, `yarn format`, `yarn format:fix`
-- Types: `yarn typecheck`
-- Unit tests: `yarn test` (Vitest)
-- E2E tests: `yarn test:e2e` (Playwright; ensure a dev server is running and run `npx playwright install --with-deps` at least once)
+- Dev: `pnpm dev`
+- Build: `pnpm build` (or full content + app build: `node scripts/build.mjs`)
+- Contentlayer: `pnpm content`
+- Lint/format: `pnpm lint`, `pnpm lint:fix`, `pnpm format`, `pnpm format:fix`
+- Types: `pnpm typecheck`
+- Unit tests: `pnpm test` (Vitest)
+- E2E tests: `pnpm test:e2e` (Playwright; ensure a dev server is running and run `npx playwright install --with-deps` at least once)
 
 ## PR expectations
 

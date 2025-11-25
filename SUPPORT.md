@@ -10,5 +10,5 @@ GitHub Issues are disabled for this repository.
 
 - This is a personal site; responses are best-effort, typically within a few days.
 - Please ensure PRs:
-  - Pass CI (`yarn lint`, `yarn typecheck`, `yarn test`, and `yarn test:e2e` where relevant).
-  - Follow the PR template in `.github/PULL_REQUEST_TEMPLATE.md`.
+- - Pass CI (`pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm test:e2e` where relevant).
+- Follow the PR template in `.github/PULL_REQUEST_TEMPLATE.md`.

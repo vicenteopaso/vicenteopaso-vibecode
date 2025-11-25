@@ -26,5 +26,5 @@ for (const rel of targets) {
 }
 
 console.log(
-  "Local clean complete. You may want to reinstall deps with `yarn install`.",
+  "Local clean complete. You may want to reinstall deps with `pnpm install`.",
 );
