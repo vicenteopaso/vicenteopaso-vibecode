@@ -7,6 +7,8 @@ import { ReferencesCarousel } from "../components/ReferencesCarousel";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { CV_PDF_PATH } from "../config/cv";
 
+export const dynamic = "force-static";
+
 type Highlight = {
   title?: string;
   content: string;

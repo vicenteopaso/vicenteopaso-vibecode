@@ -19,16 +19,18 @@ interface ProfileCardProps {
   sectionLinks?: Array<{ href: string; label: string }>;
 }
 
+const imageCacheVersion = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "1";
+
 const DARK_PORTRAITS = [
-  "/assets/images/portrait_dark_01.png",
-  "/assets/images/portrait_dark_02.png",
-  "/assets/images/portrait_dark_03.png",
+  `/assets/images/portrait_dark_01.png?v=${imageCacheVersion}`,
+  `/assets/images/portrait_dark_02.png?v=${imageCacheVersion}`,
+  `/assets/images/portrait_dark_03.png?v=${imageCacheVersion}`,
 ];
 
 const LIGHT_PORTRAITS = [
-  "/assets/images/portrait_light_01.png",
-  "/assets/images/portrait_light_02.png",
-  "/assets/images/portrait_light_03.png",
+  `/assets/images/portrait_light_01.png?v=${imageCacheVersion}`,
+  `/assets/images/portrait_light_02.png?v=${imageCacheVersion}`,
+  `/assets/images/portrait_light_03.png?v=${imageCacheVersion}`,
 ];
 
 export function ProfileCard({

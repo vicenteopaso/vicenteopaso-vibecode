@@ -10,23 +10,25 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { SeoJsonLd } from "./components/SeoJsonLd";
 import { baseMetadata } from "../lib/seo";
 
+const iconsCacheVersion = process.env.NEXT_PUBLIC_ICONS_CACHE_DATE ?? "1";
+
 export const metadata: Metadata = baseMetadata({
   icons: {
     icon: [
       {
-        url: "/assets/images/favicon-32x32.png",
+        url: `/assets/images/favicon-32x32.png?v=${iconsCacheVersion}`,
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/assets/images/favicon-16x16.png",
+        url: `/assets/images/favicon-16x16.png?v=${iconsCacheVersion}`,
         sizes: "16x16",
         type: "image/png",
       },
-      { url: "/assets/images/favicon.ico" },
+      { url: `/assets/images/favicon.ico?v=${iconsCacheVersion}` },
     ],
-    apple: "/assets/images/apple-touch-icon.png",
-    shortcut: "/assets/images/favicon.ico",
+    apple: `/assets/images/apple-touch-icon.png?v=${iconsCacheVersion}`,
+    shortcut: `/assets/images/favicon.ico?v=${iconsCacheVersion}`,
   },
   manifest: "/site.webmanifest",
 });

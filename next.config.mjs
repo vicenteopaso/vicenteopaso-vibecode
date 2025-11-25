@@ -75,10 +75,46 @@ const nextConfig = {
       return [];
     }
 
+    const oneDaySeconds = 60 * 60 * 24;
+
     return [
+      // Global security headers
       {
         source: "/(.*)",
         headers: securityHeaders,
+      },
+
+      // CV PDF: strong edge cache, 1-day browser cache
+      {
+        source: "/assets/vicente-opaso-cv-2025.pdf",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: `public, max-age=${oneDaySeconds}, s-maxage=31536000, stale-while-revalidate=60`,
+          },
+        ],
+      },
+
+      // Other static assets: long-lived, immutable
+      {
+        source: "/assets/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+
+      // Fonts: long-lived, immutable
+      {
+        source: "/fonts/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
       },
     ];
   },

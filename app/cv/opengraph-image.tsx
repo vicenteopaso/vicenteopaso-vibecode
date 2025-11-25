@@ -1,6 +1,9 @@
 import { ImageResponse } from "next/og";
 import { siteConfig } from "../../lib/seo";
 
+export const runtime = "edge";
+export const revalidate = 60 * 60; // 1 hour
+
 export const size = {
   width: 1200,
   height: 630,
