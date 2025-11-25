@@ -19,6 +19,7 @@ node_modules
 
 # debug
 npm-debug.log*
+# legacy Yarn debug logs (kept for reference if present)
 yarn-debug.log*
 yarn-error.log*
 

@@ -5,5 +5,5 @@ function run(cmd) {
   execSync(cmd, { stdio: "inherit" });
 }
 
-run("yarn content");
-run("yarn build");
+run("pnpm content");
+run("pnpm build");

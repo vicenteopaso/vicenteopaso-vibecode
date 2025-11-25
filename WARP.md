@@ -4,41 +4,41 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Tooling & common commands
 
-This is a single Next.js App Router project using Yarn.
+This is a single Next.js App Router project using pnpm.
 
 - **Install dependencies**
-  - `yarn install`
+  - `pnpm install`
 - **Start dev server (Next.js, port 3000)**
-  - `yarn dev`
+  - `pnpm dev`
 - **Build**
-  - Standard Next.js production build: `yarn build`
+  - Standard Next.js production build: `pnpm build`
   - Full content + app build (runs Contentlayer, then Next): `node scripts/build.mjs`
 - **Contentlayer generation**
-  - `yarn content` (builds `.contentlayer/generated` from files in `content/`)
+  - `pnpm content` (builds `.contentlayer/generated` from files in `content/`)
 - **Linting & formatting**
-  - Lint all: `yarn lint`
-  - Lint and auto-fix: `yarn lint:fix`
-  - Check formatting: `yarn format`
-  - Auto-format: `yarn format:fix`
+  - Lint all: `pnpm lint`
+  - Lint and auto-fix: `pnpm lint:fix`
+  - Check formatting: `pnpm format`
+  - Auto-format: `pnpm format:fix`
 - **Type-checking**
-  - `yarn typecheck`
+  - `pnpm typecheck`
 - **Unit tests (Vitest, jsdom)**
-  - Run all unit tests: `yarn test`
-  - Watch mode: `yarn test:watch`
-  - Run a single test file (example): `yarn test test/unit/components.test.ts`
+  - Run all unit tests: `pnpm test`
+  - Watch mode: `pnpm test:watch`
+  - Run a single test file (example): `pnpm test test/unit/components.test.ts`
 - **End-to-end tests (Playwright)**
   - One-time (or CI) browser install: `npx playwright install --with-deps`
-  - Ensure the app is running locally on `http://localhost:3000` (e.g. `yarn dev`)
-  - Run E2E suite: `yarn test:e2e`
+  - Ensure the app is running locally on `http://localhost:3000` (e.g. `pnpm dev`)
+  - Run E2E suite: `pnpm test:e2e`
 - **Pre-commit hooks & lint-staged**
-  - Husky pre-commit runs `yarn lint-staged` (see `package.json` and `.husky/pre-commit`).
+  - Husky pre-commit runs `pnpm lint-staged` (see `package.json` and `.husky/pre-commit`).
 - **Cleaning local artifacts**
   - `node scripts/clean-local.mjs` removes `.next`, `.turbo`, `.contentlayer`, `.vercel`, coverage reports, Playwright artifacts, test result folders, and `node_modules/`. Run this only when you intentionally want a full local reset.
 - **Auxiliary scripts**
   - Accessibility audit: `node scripts/audit-a11y.mjs` (basic but enforced; called from `.github/workflows/accessibility.yml` and exits non-zero when it finds potential `<Image />` `alt` issues).
-  - Link validation: `node scripts/validate-links.mjs` (run in the main `ci.yml` workflow via `yarn validate:links`; fails CI on broken internal markdown links).
+  - Link validation: `node scripts/validate-links.mjs` (run in the main `ci.yml` workflow via `pnpm validate:links`; fails CI on broken internal markdown links).
 
-> CI (`.github/workflows/ci.yml`) runs `yarn lint`, `yarn typecheck`, `yarn test` (with `--runInBand` fallback), and `yarn test:e2e`. PRs are expected to keep these green.
+> CI (`.github/workflows/ci.yml`) runs `pnpm lint`, `pnpm typecheck`, `pnpm test` (with `--runInBand` fallback), and `pnpm test:e2e`. PRs are expected to keep these green.
 
 ## High-level architecture
 
@@ -131,7 +131,7 @@ This is a single Next.js App Router project using Yarn.
 - **End-to-end tests (Playwright)**
   - Config: `playwright.config.ts` sets `testDir: "./test/e2e"` so only files under `test/e2e/` are picked up.
   - Example test: `test/e2e/basic-navigation.spec.ts` visits `http://localhost:3000/` and asserts the page title and visibility of the `CV` and `Contact` links.
-  - When running locally, ensure a dev server is running before invoking `yarn test:e2e`.
+  - When running locally, ensure a dev server is running before invoking `pnpm test:e2e` (or using the configured Playwright web server command).
 
 ### 6. Linting, formatting, and CI expectations
 
@@ -144,20 +144,21 @@ This is a single Next.js App Router project using Yarn.
   - `lint-staged` in `package.json`:
     - `*.{ts,tsx,js,jsx}` → `eslint --max-warnings=0` then `prettier --write`.
     - `*.{md,mdx,json,css}` → `prettier --write`.
-  - `.husky/pre-commit` executes `yarn lint-staged`, so staged changes must pass linting/formatting before commits.
+  - `.husky/pre-commit` executes `pnpm lint-staged`, so staged changes must pass linting/formatting before commits.
 - **CI workflows** (`.github/workflows/`):
-  - `ci.yml`: On `push` to `main` and all PRs, runs Node LTS with Yarn, installs dependencies, then:
-    - `yarn lint`
-    - `yarn typecheck`
-    - `yarn test --runInBand || yarn test`
-    - `npx playwright install --with-deps` and `yarn test:e2e`
-  - `lint.yml`: On PRs, runs `yarn lint` in isolation.
-  - `accessibility.yml`: On PRs, runs the accessibility audit script (`yarn node scripts/audit-a11y.mjs`).
+  - `ci.yml`: On `push` to `main` and all PRs, runs Node LTS with pnpm, installs dependencies, then:
+    - `pnpm lint`
+    - `pnpm typecheck`
+    - `pnpm test --runInBand || pnpm test`
+    - `pnpm validate:links` (fails CI on broken internal markdown links)
+    - `npx playwright install --with-deps` and `pnpm test:e2e`
+  - `lint.yml`: On PRs, runs `pnpm lint` in isolation.
+  - `accessibility.yml`: On PRs, runs the accessibility audit script (`pnpm node scripts/audit-a11y.mjs`).
 - **PR template** (`.github/PULL_REQUEST_TEMPLATE.md`):
-  - The checklist explicitly calls out running `yarn lint`, `yarn test`, and `yarn test:e2e` before marking a PR as ready.
+  - The checklist calls out running `pnpm lint`, `pnpm test`, `pnpm test:e2e`, and `pnpm coverage` before marking a PR as ready.
 
 ### 7. Other notes
 
 - `CODEOWNERS` assigns all paths (`*`) to `@vicenteopaso`.
 - `README.md` provides the primary human-facing documentation for this project (overview, architecture, flows).
-- `CONTRIBUTING.md` documents Yarn usage and common commands; prefer `yarn` over `npm`/`pnpm` when running scripts.
+- `CONTRIBUTING.md` documents pnpm usage and common commands; prefer `pnpm` over `npm` when running scripts.

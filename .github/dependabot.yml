@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "yarn" # See documentation for possible values
+  - package-ecosystem: "npm" # pnpm uses package.json + pnpm-lock.yaml; Dependabot treats this as npm
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
