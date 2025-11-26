@@ -170,4 +170,37 @@ describe("app/api/contact/route POST", () => {
     const json = (await res.json()) as { error: string };
     expect(json.error.toLowerCase()).toContain("valid email");
   });
+
+  it("returns 429 when rate limit is exceeded", async () => {
+    // Ensure env vars are present so we don't fail earlier in the handler.
+    process.env.TURNSTILE_SECRET_KEY = "secret-key";
+    process.env.NEXT_PUBLIC_FORMSPREE_KEY = "forms-key";
+
+    // Pre-exhaust the real rate limiter for this IP so the handler immediately
+    // returns 429 without calling external services.
+    const { checkRateLimitForKey } = await import("../../lib/rate-limit");
+    const ip = "198.51.100.10";
+    for (let i = 0; i < 5; i += 1) {
+      const result = checkRateLimitForKey(ip);
+      expect(result.allowed).toBe(true);
+    }
+    const blocked = checkRateLimitForKey(ip);
+    expect(blocked.allowed).toBe(false);
+
+    const { POST } = await import("../../app/api/contact/route");
+
+    const fetchSpy = vi.fn();
+    global.fetch = fetchSpy as unknown as typeof fetch;
+
+    const req = createRequest(basePayload, {
+      "x-forwarded-for": ip,
+    });
+
+    const res = await POST(req);
+    expect(res.status).toBe(429);
+    expect(res.headers.get("Retry-After")).toBeDefined();
+    const json = (await res.json()) as { error: string };
+    expect(json.error.toLowerCase()).toContain("too many requests");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
 });

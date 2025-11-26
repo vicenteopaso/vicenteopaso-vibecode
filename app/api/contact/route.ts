@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { checkRateLimitForKey } from "../../../lib/rate-limit";
 
 const contactSchema = z.object({
   email: z.string().email("Please provide a valid email address."),
@@ -54,6 +55,28 @@ export async function POST(request: NextRequest) {
       request.headers.get("cf-connecting-ip") ||
       undefined;
     const clientIp = ipFromHeader?.split(",")[0].trim();
+
+    // Basic per-IP rate limiting to guard against abuse. This is best-effort
+    // only and scoped to the current runtime instance.
+    const rateLimitKey = clientIp ?? "unknown";
+    const rateLimitResult = checkRateLimitForKey(rateLimitKey);
+
+    if (!rateLimitResult.allowed) {
+      const { retryAfterSeconds } = rateLimitResult;
+      return new NextResponse(
+        JSON.stringify({
+          error:
+            "Too many requests. Please wait a bit before submitting again.",
+        }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(retryAfterSeconds),
+          },
+        },
+      );
+    }
 
     const { turnstileToken, ...formspreePayload } = data;
 
