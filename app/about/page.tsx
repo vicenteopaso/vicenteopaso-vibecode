@@ -95,49 +95,91 @@ export default function AboutPage() {
 
       {/* Placeholder for dynamically displayed static content that will come after the intro */}
 
-      {otherSections.map((section, index) => {
-        const isImpactCardsSection = section
-          .toLowerCase()
-          .startsWith("### impact cards");
+      {(() => {
+        const renderedSections: React.ReactNode[] = [];
 
-        if (isImpactCardsSection) {
-          const lines = section.split("\n");
-          const headingLineIndex = lines.findIndex((line) =>
-            line.trim().toLowerCase().startsWith("### impact cards"),
-          );
+        for (let index = 0; index < otherSections.length; index += 1) {
+          const section = otherSections[index];
+          const trimmedLower = section.trim().toLowerCase();
 
-          const headingLine =
-            headingLineIndex >= 0
-              ? lines[headingLineIndex]
-              : "### Impact Cards";
+          const isImpactCardsSection =
+            trimmedLower.startsWith("### impact cards");
 
-          const restMarkdown = lines
-            .slice(headingLineIndex + 1)
-            .join("\n")
-            .trim();
+          if (isImpactCardsSection) {
+            const lines = section.split("\n");
+            const headingLineIndex = lines.findIndex((line) =>
+              line.trim().toLowerCase().startsWith("### impact cards"),
+            );
 
-          const cardBlocks = restMarkdown
-            .split(/^\*\*\*$/m)
-            .map((block) => block.trim())
-            .filter(Boolean);
+            const headingLine =
+              headingLineIndex >= 0
+                ? lines[headingLineIndex]
+                : "### Impact Cards";
 
-          const headingText = headingLine.replace(/^###\s*/i, "");
+            const firstCardBody = lines
+              .slice(headingLineIndex + 1)
+              .join("\n")
+              .trim();
 
-          return (
-            <section key={index} aria-label={headingText} className="space-y-4">
-              <ImpactCards cards={cardBlocks} />
-            </section>
+            let cardBlocks: string[] = [];
+
+            if (firstCardBody) {
+              cardBlocks.push(firstCardBody);
+            }
+
+            // Collect subsequent non-heading sections as additional cards.
+            let nextIndex = index + 1;
+            while (nextIndex < otherSections.length) {
+              const candidate = otherSections[nextIndex];
+              const candidateTrimmed = candidate.trimStart();
+
+              if (candidateTrimmed.toLowerCase().startsWith("### ")) {
+                break;
+              }
+
+              if (candidateTrimmed) {
+                cardBlocks.push(candidateTrimmed);
+              }
+
+              nextIndex += 1;
+            }
+
+            // Fallback: support legacy "***" separators within a single block.
+            if (cardBlocks.length === 1 && cardBlocks[0].includes("***")) {
+              cardBlocks = cardBlocks[0]
+                .split(/^\*\*\*$/m)
+                .map((block) => block.trim())
+                .filter(Boolean);
+            }
+
+            const headingText = headingLine.replace(/^###\s*/i, "");
+
+            renderedSections.push(
+              <section
+                key={`impact-${index}`}
+                aria-label={headingText}
+                className="space-y-4"
+              >
+                <ImpactCards cards={cardBlocks} />
+              </section>,
+            );
+
+            // Skip the card sections we just consumed.
+            index = nextIndex - 1;
+            continue;
+          }
+
+          renderedSections.push(
+            <section key={index} className="section-card space-y-4">
+              <ReactMarkdown components={markdownComponents}>
+                {section}
+              </ReactMarkdown>
+            </section>,
           );
         }
 
-        return (
-          <section key={index} className="section-card space-y-4">
-            <ReactMarkdown components={markdownComponents}>
-              {section}
-            </ReactMarkdown>
-          </section>
-        );
-      })}
+        return renderedSections;
+      })()}
 
       <GetInTouchSection />
 
