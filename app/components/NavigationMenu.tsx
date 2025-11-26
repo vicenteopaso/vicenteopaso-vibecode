@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { useTheme } from "next-themes";
 import { ContactDialog } from "./ContactDialog";
+import { SunIcon, MoonIcon } from "./icons";
 
 const navLinkBase =
   "inline-flex h-8 items-center justify-center rounded-full px-3 text-sm font-medium leading-none text-[color:var(--text-primary)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
@@ -91,7 +92,7 @@ export function NavigationMenu() {
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             aria-label="Toggle color theme"
           >
-            <span aria-hidden>{displayTheme === "dark" ? "☼" : "☾"}</span>
+            {displayTheme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
         </NavigationMenuPrimitive.Item>
       </NavigationMenuPrimitive.List>

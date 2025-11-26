@@ -60,21 +60,31 @@ The project is optimized for readability, accessibility, and maintainability, wi
 High‑level layout:
 
 - `app/`
-  - `layout.tsx` – HTML shell, global styles, SEO metadata, theme provider, header/footer.
+  - `layout.tsx` – HTML shell, global styles, SEO metadata, theme provider, header/footer, and skip link to main content.
   - `page.tsx` – Home route, implemented as the About page.
-  - `about/page.tsx` – Reads `content/about.md` and renders it via `react-markdown`, plus a profile card and contact section.
+  - `about/page.tsx` – Reads `content/about.md` and renders it via `react-markdown`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
   - `cv/page.tsx` – Reads `content/cv.md`, parses the JSON CV body, and renders experience, skills, education, languages, interests, publications, and references.
+  - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page.
+  - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page.
   - `components/`
     - `Header.tsx`, `Footer.tsx` – Layout chrome.
     - `NavigationMenu.tsx` – Radix navigation menu with theme toggle, logo, and contact trigger.
     - `ProfileCard.tsx` – Hero/profile card, with stable portraits by theme and initials fallback.
-    - `ContactDialog.tsx` – Radix dialog implementing the contact form UI and Turnstile integration.
+    - `Modal.tsx` – Shared Radix dialog wrapper with consistent styling and optional Vercel Analytics tracking on open.
+    - `ContactDialog.tsx` – Contact form dialog implemented on top of `Modal`, including Turnstile integration.
+    - `CookiePolicyModal.tsx`, `PrivacyPolicyModal.tsx`, `TechStackModal.tsx` – Footer modals that fetch markdown content via `/api/content/[slug]` and render with `react-markdown`.
+    - `ImpactCards.tsx` – Rotating impact cards for the About page, rendering markdown snippets with subtle animations.
     - `ReferencesCarousel.tsx` – Auto‑rotating carousel for CV references.
     - `ThemeProvider.tsx` – Wraps `next-themes` configuration.
+    - `icons.tsx` – Shared icon primitives (GitHub, LinkedIn, X, download, and small glyph icons).
   - `api/contact/route.ts` – Validates and forwards contact form submissions (Turnstile verification + Formspree).
+  - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by modals and pages.
 - `content/`
   - `about.md` – Frontmatter + markdown body for the About page.
   - `cv.md` – Frontmatter + JSON object in the markdown body for the CV.
+  - `cookie-policy.md` – Markdown source for the cookie policy.
+  - `privacy-policy.md` – Markdown source for the privacy policy.
+  - `tech-stack.md` – Markdown source for the tech stack content used in the footer modal.
 - `styles/globals.css` – Tailwind CSS v4 setup, design tokens, global typography, layout utilities.
 - `scripts/`
   - `build.mjs` – Contentlayer + Next.js build orchestration.
@@ -118,7 +128,10 @@ The main routes are:
 
 - `/` and `/about` – About page (markdown‑driven)
 - `/cv` – JSON CV page
+- `/cookie-policy` – Cookie policy page (markdown‑backed)
+- `/privacy-policy` – Privacy policy page (markdown‑backed)
 - `/api/contact` – Contact form API route
+- `/api/content/[slug]` – Content API for policy/tech markdown (cookie policy, privacy policy, tech stack)
 
 ---
 
@@ -133,7 +146,16 @@ The main routes are:
   - `slug` – Should be `about`
   - `tagline` – One‑line descriptor used in the profile card
   - `initials` – Used for avatar fallback
-- Body: Standard markdown rendered via `react-markdown` with custom list and separator styling.
+- Body structure:
+  - The markdown body is split into sections using horizontal rules (`---`).
+  - The first section is treated as an **Introduction**:
+    - An optional `### Introduction` heading is stripped.
+    - The remaining copy is rendered with larger, cardless typography.
+  - Remaining sections are rendered as:
+    - Standard markdown sections with `react-markdown` and list/separator styling.
+    - A special **Impact Cards** section, when a section starts with `### Impact Cards`:
+      - Individual cards are separated by `***` lines.
+      - Each card block is rendered by `ImpactCards` as a rotating impact card on the About page.
 
 ### CV page (`/cv`)
 
@@ -269,6 +291,12 @@ pnpm coverage
 ```
 
 Coverage reports are written to `coverage/unit` and enforced with minimum thresholds for lines, statements, branches, and functions.
+
+Some low-level infrastructure and static content wrappers are intentionally excluded from coverage (see `vitest.config.ts`), including:
+
+- Build artifacts, scripts, and config files.
+- Static content pages and their modals for cookie policy, privacy policy, and tech stack (`app/api/content/**`, `app/cookie-policy/**`, `app/privacy-policy/**`, and the corresponding footer modals).
+- Visual-only components such as `ImpactCards` where behavior is also validated via higher-level tests.
 
 Before running Playwright tests locally, ensure:
 

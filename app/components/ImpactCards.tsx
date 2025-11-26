@@ -1,0 +1,194 @@
+"use client";
+
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
+
+interface ImpactCardsProps {
+  cards: string[];
+  /** How many cards to show at once. */
+  visibleCount?: number;
+  /** Interval between card changes, in milliseconds. */
+  intervalMs?: number;
+}
+
+const impactCardComponents: Components = {
+  p: (props) => (
+    <p
+      className="text-xs leading-relaxed text-[color:var(--text-primary)] text-center"
+      {...props}
+    />
+  ),
+  strong: (props) => (
+    <strong
+      className="block text-xl font-semibold leading-tight text-[color:var(--secondary)] text-center py-1"
+      {...props}
+    />
+  ),
+  em: (props) => (
+    <em
+      className="block text-lg font-semibold tracking-wide text-[color:var(--text-primary)] text-center not-italic"
+      {...props}
+    />
+  ),
+  br: () => null,
+};
+
+export function ImpactCards({
+  cards,
+  visibleCount = 3,
+  intervalMs = 15000,
+}: ImpactCardsProps) {
+  const total = cards.length;
+
+  const safeVisibleCount = Math.min(Math.max(1, visibleCount), total);
+
+  const [visibleIndices, setVisibleIndices] = React.useState<number[]>(() =>
+    Array.from({ length: safeVisibleCount }, (_, i) => i),
+  );
+
+  // Track which logical slot is currently fading out
+  const [exitingSlot, setExitingSlot] = React.useState<number | null>(null);
+
+  // Track tallest card height to avoid layout shifts when cards rotate
+  const cardRefs = React.useRef<Array<HTMLDivElement | null>>([]);
+  const [maxHeight, setMaxHeight] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (!total) return;
+
+    const heights = cardRefs.current.map((el) => el?.offsetHeight ?? 0);
+    const nextMax = heights.length ? Math.max(...heights) : 0;
+
+    if (nextMax > 0 && Number.isFinite(nextMax)) {
+      setMaxHeight(nextMax);
+    }
+  }, [total, cards]);
+
+  // Keep visible indices array in sync with card count / visible count
+  React.useEffect(() => {
+    if (!total) {
+      setVisibleIndices([]);
+      return;
+    }
+
+    const count = Math.min(safeVisibleCount, total);
+
+    setVisibleIndices((current) => {
+      if (
+        current.length === count &&
+        current.every((i) => i >= 0 && i < total)
+      ) {
+        return current;
+      }
+
+      return Array.from({ length: count }, (_, i) => i);
+    });
+  }, [total, safeVisibleCount]);
+
+  // Rotate exactly one card every interval
+  React.useEffect(() => {
+    if (!total || !visibleIndices.length) return;
+
+    let timeoutId: number | undefined;
+
+    const id = window.setInterval(() => {
+      setVisibleIndices((current) => {
+        if (!total || !current.length) return current;
+        if (total <= current.length) return current;
+
+        const slotToChange = Math.floor(Math.random() * current.length);
+        const used = new Set(current);
+
+        let candidate = current[slotToChange];
+        let attempts = 0;
+
+        while (used.has(candidate) && attempts < total * 4) {
+          candidate = Math.floor(Math.random() * total);
+          attempts += 1;
+        }
+
+        if (used.has(candidate)) return current;
+
+        // Trigger a quick fade-out on this logical slot
+        setExitingSlot(slotToChange);
+
+        timeoutId = window.setTimeout(() => {
+          setVisibleIndices((innerCurrent) => {
+            if (!innerCurrent.length || total <= innerCurrent.length) {
+              setExitingSlot(null);
+              return innerCurrent;
+            }
+
+            if (slotToChange >= innerCurrent.length) {
+              setExitingSlot(null);
+              return innerCurrent;
+            }
+
+            const next = [...innerCurrent];
+            next[slotToChange] = candidate;
+            setExitingSlot(null);
+            return next;
+          });
+        }, 90); // quick, subtle fade-out before swap
+
+        return current;
+      });
+    }, intervalMs);
+
+    return () => {
+      window.clearInterval(id);
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [total, intervalMs, visibleIndices.length]);
+
+  const visibleCards = visibleIndices
+    .filter((i) => i >= 0 && i < total)
+    .map((i, slot) => ({ slot, content: cards[i] }));
+
+  if (!visibleCards.length) return null;
+
+  return (
+    <>
+      {/* Hidden measurement grid to determine tallest card height without affecting layout */}
+      <div className="pointer-events-none fixed inset-0 -z-50 opacity-0">
+        <div className="grid gap-4 md:grid-cols-3 auto-rows-[minmax(0,1fr)]">
+          {cards.map((content, i) => (
+            <div
+              key={`measure-${i}`}
+              ref={(el) => {
+                cardRefs.current[i] = el;
+              }}
+              className="flex h-full flex-col items-center justify-center px-6 py-4 text-center"
+            >
+              <ReactMarkdown components={impactCardComponents}>
+                {content}
+              </ReactMarkdown>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3 auto-rows-[minmax(0,1fr)]">
+        {visibleCards.map(({ slot, content }) => {
+          const isExiting = exitingSlot === slot;
+          const stateClass = isExiting ? "impact-card--out" : "impact-card--in";
+
+          return (
+            <div
+              key={slot}
+              className={`impact-card ${stateClass} flex h-full flex-col items-center justify-center rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-6 py-4 text-center shadow-sm`}
+              style={maxHeight ? { minHeight: maxHeight } : undefined}
+            >
+              <ReactMarkdown components={impactCardComponents}>
+                {content}
+              </ReactMarkdown>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
