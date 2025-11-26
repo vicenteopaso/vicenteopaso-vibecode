@@ -56,8 +56,10 @@ describe("ProfileCard", () => {
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
     expect(screen.getByText("Engineering leader")).toBeInTheDocument();
 
-    expect(screen.getByText("Read CV")).toBeInTheDocument();
-    expect(screen.getByText("Download CV")).toBeInTheDocument();
+    // Both mobile and desktop variants render "Read CV" / "Download CV";
+    // in tests, we just assert that at least one instance is present.
+    expect(screen.getAllByText("Read CV")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("Download CV")[0]).toBeInTheDocument();
 
     expect(
       screen.getAllByRole("link", { name: "GitHub profile" })[0],

@@ -49,6 +49,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         <ThemeProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
           <Script
             id="cf-turnstile"
             src="https://challenges.cloudflare.com/turnstile/v0/api.js"
@@ -56,7 +59,10 @@ export default function RootLayout({
           />
           <SeoJsonLd />
           <Header />
-          <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-8">
+          <main
+            id="main-content"
+            className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-8"
+          >
             {children}
           </main>
           <Footer />
