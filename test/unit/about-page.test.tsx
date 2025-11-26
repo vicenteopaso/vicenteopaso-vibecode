@@ -110,11 +110,11 @@ describe("AboutPage", () => {
       "**Card One**",
       "First impact.",
       "",
-      "***",
+      "---",
       "**Card Two**",
       "Second impact.",
       "",
-      "***",
+      "---",
       "**Card Three**",
       "Third impact.",
     ].join("\n");
