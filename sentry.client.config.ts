@@ -10,5 +10,6 @@ Sentry.init({
   integrations: [
     // Capture console output with Sentry without touching your existing console usage
     Sentry.consoleIntegration(),
+    Sentry.replayIntegration(),
   ],
 });
