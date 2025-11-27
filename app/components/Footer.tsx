@@ -11,7 +11,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
-      <div className="shell flex flex-col items-center justify-between gap-3 py-6 text-[0.75rem] text-[color:var(--text-muted)] lg:flex-row">
+      <div className="shell flex flex-col items-center justify-between gap-3 py-6 text-sm text-[color:var(--text-muted)] lg:flex-row">
         <p className="text-center lg:text-left">
           © {year} Vicente Opaso. Vibecoded with ♥️ and{" "}
           <a
@@ -38,14 +38,14 @@ export function Footer() {
           <PrivacyPolicyModal />
           <span
             aria-hidden="true"
-            className="text-[color:var(--border-subtle)]"
+            className="text-[color:var(--text-muted)]"
           >
             |
           </span>
           <CookiePolicyModal />
           <span
             aria-hidden="true"
-            className="text-[color:var(--border-subtle)]"
+            className="text-[color:var(--text-muted)]"
           >
             |
           </span>
@@ -57,7 +57,7 @@ export function Footer() {
           </Link>
           <span
             aria-hidden="true"
-            className="text-[color:var(--border-subtle)]"
+            className="text-[color:var(--text-muted)]"
           >
             |
           </span>
