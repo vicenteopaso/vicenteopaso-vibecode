@@ -21,6 +21,7 @@
 [![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
 [![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
 [![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
+[![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
 [![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
 [![Dependabot](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates)
 
@@ -32,7 +33,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
 
 ## Tech stack
 
-- **Framework**: Next.js (App Router, `app/` directory, typed routes, Turbopack)
+- **Framework**: Next.js (App Router, `app/` directory, typed routes)
 - **Language**: TypeScript, React 18
 - **Styling**: Tailwind CSS v4, custom design tokens, utility classes (e.g. `shell`, `section-card`)
 - **UI primitives**: Radix UI (`@radix-ui/react-*`) for navigation, dialogs, avatars
