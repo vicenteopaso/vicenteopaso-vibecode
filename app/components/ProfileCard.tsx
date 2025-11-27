@@ -216,7 +216,7 @@ export function ProfileCard({
                     {sectionLinks && sectionLinks.length > 0 && (
                       <nav
                         aria-label="CV sections"
-                        className="flex flex-wrap items-center justify-center text-xs text-[color:var(--text-muted)] sm:justify-start"
+                        className="flex flex-wrap items-center justify-center text-xs text-[color:var(--text-primary)] sm:justify-start"
                       >
                         {sectionLinks.map((link, idx) => (
                           <span

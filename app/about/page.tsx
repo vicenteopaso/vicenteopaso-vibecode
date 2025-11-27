@@ -14,6 +14,13 @@ export const dynamic = "force-static";
 
 // Default markdown rendering for most sections
 const markdownComponents: Components = {
+  h3: (props) => (
+    // eslint-disable-next-line jsx-a11y/heading-has-content
+    <h2
+      className="text-xl font-semibold text-[color:var(--text-primary)]"
+      {...props}
+    />
+  ),
   ul: (props) => (
     <ul
       className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"

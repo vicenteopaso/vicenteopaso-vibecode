@@ -51,7 +51,7 @@ export function ReferencesCarousel({
       <div className="space-y-3">
         <HtmlBlock html={current.reference} />
         <div
-          className="text-right text-xs text-[color:var(--text-muted)]"
+          className="text-right text-xs text-[color:var(--text-primary)]"
           dangerouslySetInnerHTML={{
             __html: sanitizeRichText(current.name),
           }}
