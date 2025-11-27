@@ -135,6 +135,22 @@ The main routes are:
 
 ---
 
+## SEO and sitemaps
+
+The site includes sitemap generation via `next-sitemap`. The configuration is in `next-sitemap.config.js` and uses the canonical site URL from `lib/seo.ts`.
+
+- Generate the sitemap:
+  ```bash
+  pnpm build  # Build is required first
+  pnpm sitemap
+  ```
+- Output files:
+  - `public/sitemap.xml` – Main sitemap index.
+  - `public/sitemap-0.xml` – Sitemap containing all routes.
+- `public/robots.txt` references the sitemap URL, pointing search engines to the XML.
+
+---
+
 ## Editing content
 
 ### About page (`/about`)
@@ -168,6 +184,7 @@ The main routes are:
   - `education`, `skills`, `languages`, `interests`, `publications`, `references`.
 
 - Some fields contain HTML strings (e.g. `references[*].reference`), which are injected with `dangerouslySetInnerHTML` in both `CVPage` and `ReferencesCarousel`.
+  - These HTML strings are sanitized via a whitelist-based sanitizer in `lib/sanitize-html.ts` before rendering to guard against XSS.
 
 If the JSON is invalid, the CV page will:
 
@@ -237,6 +254,9 @@ pnpm build
 
 # Start production server (after `pnpm build`)
 pnpm start
+
+# Generate sitemap (requires `pnpm build` first)
+pnpm sitemap
 ```
 
 ### Content & build

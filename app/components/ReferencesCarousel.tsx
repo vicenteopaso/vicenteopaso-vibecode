@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { sanitizeRichText } from "../../lib/sanitize-html";
 
 type Reference = {
   name: string;
@@ -13,11 +14,12 @@ interface ReferencesCarouselProps {
 }
 
 function HtmlBlock({ html }: { html?: string }) {
-  if (!html) return null;
+  const safeHtml = sanitizeRichText(html);
+  if (!safeHtml) return null;
   return (
     <div
       className="space-y-2 text-sm text-[color:var(--text-primary)]"
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: safeHtml }}
     />
   );
 }
@@ -49,7 +51,9 @@ export function ReferencesCarousel({
         <HtmlBlock html={current.reference} />
         <div
           className="text-right text-xs text-[color:var(--text-muted)]"
-          dangerouslySetInnerHTML={{ __html: current.name }}
+          dangerouslySetInnerHTML={{
+            __html: sanitizeRichText(current.name),
+          }}
         />
       </div>
 

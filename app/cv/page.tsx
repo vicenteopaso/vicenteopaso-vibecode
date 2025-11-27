@@ -6,6 +6,7 @@ import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { CV_PDF_PATH } from "../config/cv";
+import { sanitizeRichText } from "../../lib/sanitize-html";
 
 export const dynamic = "force-static";
 
@@ -68,11 +69,12 @@ type CvJson = {
 };
 
 function HtmlBlock({ html }: { html?: string }) {
-  if (!html) return null;
+  const safeHtml = sanitizeRichText(html);
+  if (!safeHtml) return null;
   return (
     <div
       className="space-y-2 text-sm leading-relaxed text-[color:var(--text-primary)] sm:text-[0.95rem]"
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: safeHtml }}
     />
   );
 }
@@ -194,7 +196,9 @@ export default function CVPage() {
                   {h.title && (
                     <div
                       className="font-semibold text-[color:var(--text-primary)]"
-                      dangerouslySetInnerHTML={{ __html: h.title }}
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeRichText(h.title),
+                      }}
                     />
                   )}
                   {h.content && <HtmlBlock html={h.content} />}

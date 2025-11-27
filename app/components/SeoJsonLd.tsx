@@ -16,19 +16,17 @@ export function SeoJsonLd() {
         id="website-json-ld"
         type="application/ld+json"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getWebsiteJsonLd()),
-        }}
-      />
+      >
+        {JSON.stringify(getWebsiteJsonLd())}
+      </Script>
       {includePerson ? (
         <Script
           id="person-json-ld"
           type="application/ld+json"
           strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(getPersonJsonLd()),
-          }}
-        />
+        >
+          {JSON.stringify(getPersonJsonLd())}
+        </Script>
       ) : null}
     </>
   );
