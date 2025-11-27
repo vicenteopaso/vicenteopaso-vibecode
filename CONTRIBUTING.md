@@ -39,6 +39,11 @@ pnpm install
   ```bash
   pnpm coverage
   ```
+- Generate sitemap (requires build first):
+  ```bash
+  pnpm build
+  pnpm sitemap
+  ```
 
 ## Before opening a PR
 
