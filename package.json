@@ -16,6 +16,8 @@
     "format:fix": "prettier --write .",
     "validate:links": "node scripts/validate-links.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
+    "audit:security": "pnpm audit --audit-level=moderate || true",
+    "audit:security:fix": "pnpm audit --fix",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
@@ -23,8 +25,8 @@
     "typecheck": "tsc --noEmit",
     "content": "node scripts/contentlayer-build.mjs",
     "clean:local": "node scripts/clean-local.mjs",
-    "full:local": "pnpm clean:local && pnpm install && pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm typecheck && pnpm coverage && pnpm audit:a11y",
-    "partial:local": "pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm typecheck && pnpm coverage && pnpm audit:a11y",
+    "full:local": "pnpm clean:local && pnpm install && pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm typecheck && pnpm coverage && pnpm audit:a11y && pnpm audit:security:fix",
+    "partial:local": "pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm typecheck && pnpm coverage && pnpm audit:a11y && pnpm audit:security:fix",
     "sitemap": "next-sitemap --config next-sitemap.config.js"
   },
   "dependencies": {
