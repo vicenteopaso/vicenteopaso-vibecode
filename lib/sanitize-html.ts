@@ -37,9 +37,13 @@ export function sanitizeRichText(html: string | undefined | null): string {
       a: (tagName, attribs) => {
         const next = { ...attribs };
         if (next.href && typeof next.href === "string") {
-          // Best-effort guard against javascript: URLs.
+          // Best-effort guard against executable URL schemes.
           const trimmed = next.href.trim().toLowerCase();
-          if (trimmed.startsWith("javascript:")) {
+          if (
+            trimmed.startsWith("javascript:") ||
+            trimmed.startsWith("data:") ||
+            trimmed.startsWith("vbscript:")
+          ) {
             delete next.href;
           }
         }
