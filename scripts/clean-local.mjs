@@ -58,7 +58,7 @@ for (const target of targets) {
         ? root
         : path.join(root, path.dirname(target));
     const pattern = path.basename(target);
-    const regex = new RegExp("^" + pattern.replace("*", ".*") + "$");
+    const regex = new RegExp("^" + pattern.replace(/\*/g, ".*") + "$");
 
     try {
       const files = fs.readdirSync(dir);
