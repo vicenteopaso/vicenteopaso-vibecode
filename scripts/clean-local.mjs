@@ -60,8 +60,8 @@ for (const target of targets) {
     const regex = new RegExp(
       "^" +
         pattern
-          .replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // Escape regex metacharacters
-          .replace(/\\\*/g, ".*") + // Replace escaped * with .*
+          .replace(/[.+^${}()|[\]\\]/g, "\\$&") // Escape regex metacharacters except *
+          .replace(/\*/g, ".*") + // Replace * with .*
         "$"
     );
 
