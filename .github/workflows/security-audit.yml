@@ -50,7 +50,7 @@ jobs:
         if: env.AUDIT_FAILED == 'true'
         run: |
           echo "::warning::Security vulnerabilities detected. Review pnpm audit output above."
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "::error::PR contains vulnerable dependencies. Please update or review before merging."
             exit 1
           fi
