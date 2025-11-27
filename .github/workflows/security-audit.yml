@@ -67,8 +67,8 @@ jobs:
 
             Please review the audit results and update vulnerable dependencies:
             \`\`\`bash
-            pnpm audit
-            pnpm audit --fix
+            pnpm audit:security
+            pnpm audit:security:fix
             \`\`\`
 
             This issue was automatically created by the Security Audit workflow.`;
