@@ -5,7 +5,11 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./test/setup-vitest.ts"],
-    exclude: [...configDefaults.exclude, "test/e2e/**"],
+    exclude: [
+      ...configDefaults.exclude,
+      "test/e2e/**",
+      "next-sitemap.config.*",
+    ],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov", "html"],
@@ -14,6 +18,7 @@ export default defineConfig({
         "test/**",
         "playwright.config.*",
         "next.config.*",
+        "next-sitemap.config.*",
         "tailwind.config.*",
         "contentlayer.config.*",
         "**/*.d.ts",
