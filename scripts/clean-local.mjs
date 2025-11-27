@@ -39,7 +39,6 @@ const targets = [
   ".pnp.js",
 
   // pnpm specific
-  "node_modules/.cache",
 
   // Editor/OS artifacts
   ".DS_Store",
