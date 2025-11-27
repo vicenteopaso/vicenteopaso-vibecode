@@ -45,6 +45,7 @@ export default defineConfig({
         "lib/analytics.*",
         "postcss.config.*",
         "vitest.config.*",
+        "sentry.*.config.*",
       ],
       thresholds: {
         // Adjust these to your desired minimum coverage percentages
