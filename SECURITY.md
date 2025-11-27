@@ -8,7 +8,7 @@ This repository uses automated security audits to detect vulnerable dependencies
 
 - **Weekly scans**: Runs every Monday at 9 AM UTC via GitHub Actions
 - **PR checks**: Automatically scans when `pnpm-lock.yaml` or `package.json` changes
-- **Audit level**: Focuses on moderate+ severity vulnerabilities to reduce noise
+- **Audit level**: Moderate+ severity vulnerabilities only to reduce noise
 - **Issue tracking**: Automatically creates GitHub issues when vulnerabilities are detected in scheduled scans
 
 To run security audits locally:
