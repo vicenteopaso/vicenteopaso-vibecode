@@ -130,7 +130,7 @@ We aim to respond within 2 business days and will work to resolve reported issue
 
 This website is operated by Vicente Opaso. If you wish to make a formal complaint about accessibility:
 
-1. Contact us via the email above with details of the issue
+1. Contact us via the contact form with details of the issue
 2. We will acknowledge your complaint within 2 business days
 3. We will investigate and respond within 10 business days with our findings and proposed solution
 
