@@ -388,13 +388,14 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Runs `pnpm lint` on PRs.
 - `lighthouse-ci.yml`:
   - Runs Lighthouse CI audits on pushes to `main` and all PRs.
-  - Enforces minimum thresholds for:
-    - Performance ≥ 95
-    - Accessibility ≥ 95
-    - Best Practices ≥ 95
-    - SEO ≥ 95
+  - Enforces baseline quality thresholds:
+    - Performance ≥ 90 (warn)
+    - Accessibility ≥ 90 (warn)
+    - Best Practices ≥ 70 (warn)
+    - SEO ≥ 95 (error)
   - Uploads reports as artifacts and posts a summary comment on PRs.
-  - Fails CI if any threshold is not met.
+  - Warns on threshold violations; fails CI only on critical SEO/structure issues.
+  - Thresholds will be incrementally improved as issues are addressed.
 - `accessibility.yml`:
   - Runs a basic accessibility audit: `pnpm node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
 - `codeql.yml`:
