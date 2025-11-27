@@ -1,13 +1,14 @@
-import React from "react";
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
-import ReactMarkdown from "react-markdown";
+import path from "path";
+import React from "react";
 import type { Components } from "react-markdown";
-import { ProfileCard } from "../components/ProfileCard";
+import ReactMarkdown from "react-markdown";
+
 import { GetInTouchSection } from "../components/GetInTouchSection";
-import { ImpactCards } from "../components/ImpactCards";
 import { GitHubIcon, LinkedInIcon, XIcon } from "../components/icons";
+import { ImpactCards } from "../components/ImpactCards";
+import { ProfileCard } from "../components/ProfileCard";
 
 export const dynamic = "force-static";
 
@@ -24,9 +25,6 @@ const markdownComponents: Components = {
       className="list-decimal marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"
       {...props}
     />
-  ),
-  hr: () => (
-    <hr className="my-8 border-t border-[color:var(--border-subtle)]" />
   ),
 };
 

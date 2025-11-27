@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
+import ReactMarkdown from "react-markdown";
 
 interface ImpactCardsProps {
   cards: string[];

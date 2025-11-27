@@ -1,7 +1,7 @@
 "use client";
 
-import { PrivacyPolicyModal } from "./PrivacyPolicyModal";
 import { CookiePolicyModal } from "./CookiePolicyModal";
+import { PrivacyPolicyModal } from "./PrivacyPolicyModal";
 import { TechStackModal } from "./TechStackModal";
 
 export function Footer() {

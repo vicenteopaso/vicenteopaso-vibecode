@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { NextRequest } from "next/server";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 interface MockRequestInit {
   json: () => Promise<unknown>;

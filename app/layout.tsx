@@ -1,14 +1,16 @@
-import React from "react";
-import type { Metadata, Viewport } from "next";
-import Script from "next/script";
+import "../styles/globals.css";
+
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import "../styles/globals.css";
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
-import { ThemeProvider } from "./components/ThemeProvider";
-import { SeoJsonLd } from "./components/SeoJsonLd";
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import React from "react";
+
 import { baseMetadata } from "../lib/seo";
+import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
+import { SeoJsonLd } from "./components/SeoJsonLd";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const iconsCacheVersion = process.env.NEXT_PUBLIC_ICONS_CACHE_DATE ?? "1";
 

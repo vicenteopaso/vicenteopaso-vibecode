@@ -1,7 +1,8 @@
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
 import { usePathname } from "next/navigation";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { SeoJsonLd } from "../../app/components/SeoJsonLd";
 
 vi.mock("next/navigation", () => ({

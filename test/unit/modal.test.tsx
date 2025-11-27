@@ -1,6 +1,7 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { Modal } from "../../app/components/Modal";
 
 const trackSpy = vi.fn();
@@ -43,5 +44,32 @@ describe("Modal component", () => {
     expect(trackSpy).toHaveBeenCalledWith("test_modal_open", {
       location: "test",
     });
+  });
+
+  it("does not send analytics when analyticsEventName is not provided", () => {
+    render(
+      <Modal trigger={<button type="button">Open modal</button>}>
+        <p>Modal body</p>
+      </Modal>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Open modal" }));
+
+    expect(trackSpy).not.toHaveBeenCalled();
+  });
+
+  it("renders and opens modal dialog", () => {
+    render(
+      <Modal trigger={<button type="button">Open modal</button>}>
+        <p>Modal content</p>
+      </Modal>,
+    );
+
+    const button = screen.getByRole("button", { name: "Open modal" });
+    fireEvent.click(button);
+
+    // Modal should open and show content
+    expect(screen.getByText("Modal content")).toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 });

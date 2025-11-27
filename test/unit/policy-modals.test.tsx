@@ -1,6 +1,7 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { CookiePolicyModal } from "../../app/components/CookiePolicyModal";
 import { PrivacyPolicyModal } from "../../app/components/PrivacyPolicyModal";
 import { TechStackModal } from "../../app/components/TechStackModal";

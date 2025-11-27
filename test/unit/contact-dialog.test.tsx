@@ -1,6 +1,6 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 declare global {
   interface Window {
@@ -101,5 +101,14 @@ describe("ContactDialog", () => {
     expect(
       await screen.findByText("Please complete the verification."),
     ).toBeInTheDocument();
+  });
+
+  it("renders all form fields correctly", async () => {
+    openDialog();
+
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /send/i })).toBeInTheDocument();
   });
 });

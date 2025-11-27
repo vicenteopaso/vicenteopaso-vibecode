@@ -1,7 +1,8 @@
-import React from "react";
-import fs from "fs";
-import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import fs from "fs";
+import React from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
 import CVPage from "../../app/cv/page";
 
 afterEach(() => {
@@ -227,5 +228,116 @@ describe("CVPage", () => {
 
     // Publications without URL render as plain text, not a link
     expect(screen.getByText("Offline Article").closest("a")).toBeNull();
+  });
+
+  it("handles CV with all optional fields missing", () => {
+    const cvJson = {
+      basics: {},
+      work: [],
+      education: [],
+      skills: [],
+      languages: [],
+      interests: [],
+      publications: [],
+      references: [],
+    };
+
+    const raw = [
+      "---",
+      "name: Test",
+      "title: CV",
+      "slug: cv",
+      "---",
+      JSON.stringify(cvJson),
+    ].join("\n");
+
+    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+
+    render(<CVPage />);
+
+    // Should still render without crashing - check for name heading
+    expect(screen.getByRole("heading", { name: "Test" })).toBeInTheDocument();
+  });
+
+  it("renders work experience with multiple positions", () => {
+    const cvJson = {
+      basics: {
+        name: "Test User",
+      },
+      work: [
+        {
+          company: "Tech Corp",
+          location: "San Francisco",
+          positions: [
+            {
+              position: "Senior Engineer",
+              startDate: "2022",
+              endDate: "2024",
+              summary: "<p>Current role</p>",
+              highlights: ["<p>Built systems</p>"],
+              skills: ["React", "Node.js"],
+            },
+            {
+              position: "Engineer",
+              startDate: "2020",
+              endDate: "2022",
+              summary: "<p>Previous role</p>",
+              highlights: [],
+              skills: [],
+            },
+          ],
+        },
+      ],
+    };
+
+    const raw = [
+      "---",
+      "name: Test",
+      "title: CV",
+      "slug: cv",
+      "---",
+      JSON.stringify(cvJson),
+    ].join("\n");
+
+    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+
+    render(<CVPage />);
+
+    expect(screen.getByText("Tech Corp")).toBeInTheDocument();
+    expect(screen.getByText("Senior Engineer")).toBeInTheDocument();
+    expect(screen.getByText("Engineer")).toBeInTheDocument();
+    expect(screen.getByText("San Francisco")).toBeInTheDocument();
+  });
+
+  it("renders highlights with title when provided", () => {
+    const cvJson = {
+      basics: {
+        name: "Test User",
+        highlights: [
+          "Simple highlight",
+          {
+            title: "Complex Highlight",
+            content: "<p>With structured content</p>",
+          },
+        ],
+      },
+    };
+
+    const raw = [
+      "---",
+      "name: Test",
+      "title: CV",
+      "slug: cv",
+      "---",
+      JSON.stringify(cvJson),
+    ].join("\n");
+
+    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+
+    render(<CVPage />);
+
+    expect(screen.getByText("Simple highlight")).toBeInTheDocument();
+    expect(screen.getByText("Complex Highlight")).toBeInTheDocument();
+    expect(screen.getByText("With structured content")).toBeInTheDocument();
   });
 });

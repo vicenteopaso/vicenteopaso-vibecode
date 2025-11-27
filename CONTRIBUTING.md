@@ -48,13 +48,19 @@ pnpm install
 ## Before opening a PR
 
 - Make sure the code is formatted, linted, and type-safe:
-- - `pnpm lint`
+- - `pnpm lint` (or `pnpm lint:fix` to auto-fix import ordering and other auto-fixable issues)
 - - `pnpm typecheck`
 - Run tests locally:
 - - `pnpm test`
 - - `pnpm test:e2e` (when relevant)
 - - `pnpm coverage` to verify coverage and generate reports.
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
+
+### Linting guidelines
+
+- **Import ordering**: Imports are automatically sorted by `eslint-plugin-simple-import-sort`. Run `pnpm lint:fix` to auto-sort imports.
+- **Security**: The security plugin will warn about potential security issues. Most checks are errors, but some are warnings to avoid noise. Review and address security warnings appropriately.
+- **Type imports**: Use `import type` for type-only imports to satisfy `@typescript-eslint/consistent-type-imports`.
 
 ## CI, CodeQL, and auto-merge
 

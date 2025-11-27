@@ -348,6 +348,11 @@ pnpm prepare
 - **ESLint**:
   - Extends `next/core-web-vitals`, `plugin:@typescript-eslint/recommended`, `plugin:jsx-a11y/recommended`, `prettier`.
   - Enforces `@typescript-eslint/consistent-type-imports` (use `import type` for types).
+  - **Import ordering**: Uses `eslint-plugin-simple-import-sort` to enforce consistent import/export order (auto-fixable with `pnpm lint:fix`).
+  - **Security checks**: Uses `eslint-plugin-security` to detect common security issues:
+    - Detects unsafe regex, eval usage, insecure buffer operations, and other security anti-patterns.
+    - Some rules tuned to avoid noise (e.g., `detect-object-injection` and `detect-non-literal-fs-filename` are disabled).
+    - Script and config files have relaxed security rules to allow necessary filesystem and child process operations.
 - **Prettier**:
   - Used for `.ts`, `.tsx`, `.js`, `.jsx`, `.md`, `.mdx`, `.json`, `.css`.
 - **lint-staged**:

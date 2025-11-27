@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+
 import { siteConfig } from "../../lib/seo";
 
 export const runtime = "edge";

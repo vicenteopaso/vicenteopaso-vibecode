@@ -1,12 +1,13 @@
-import React from "react";
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
+import path from "path";
+import React from "react";
+
+import { sanitizeRichText } from "../../lib/sanitize-html";
+import { GetInTouchSection } from "../components/GetInTouchSection";
 import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";
-import { GetInTouchSection } from "../components/GetInTouchSection";
 import { CV_PDF_PATH } from "../config/cv";
-import { sanitizeRichText } from "../../lib/sanitize-html";
 
 export const dynamic = "force-static";
 

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "fs";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 async function createGetHandler() {
   vi.resetModules();
