@@ -5,12 +5,12 @@ ignoredBuiltDependencies:
   - unrs-resolver
 
 onlyBuiltDependencies:
-  - '@sentry/cli'
-  - '@vercel/speed-insights'
+  - "@sentry/cli"
+  - "@vercel/speed-insights"
   - contentlayer
 
 overrides:
-  cookie@<0.7.0: '>=0.7.0'
-  esbuild@<=0.24.2: '>=0.25.0'
-  estree-util-value-to-estree@<3.3.3: '>=3.3.3'
-  tmp@<=0.2.3: '>=0.2.4'
+  cookie@<0.7.0: ">=0.7.0"
+  esbuild@<=0.24.2: ">=0.25.0"
+  estree-util-value-to-estree@<3.3.3: ">=3.3.3"
+  tmp@<=0.2.3: ">=0.2.4"
