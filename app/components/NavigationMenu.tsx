@@ -17,8 +17,9 @@ const navLinkBase =
 const navLinkActive =
   "bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] hover:text-[color:var(--text-primary)] ring-1 ring-[color:var(--border-subtle)]";
 
-const DARK_LOGO = `/assets/images/logo_dark.png`;
-const LIGHT_LOGO = `/assets/images/logo.png`;
+const imageCacheVersion = "1"; // Increment this when logo images are updated
+const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
+const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
 
 export function NavigationMenu() {
   const pathname = usePathname();
