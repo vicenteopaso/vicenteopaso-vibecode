@@ -18,7 +18,7 @@ const navLinkActive =
   "bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] hover:text-[color:var(--text-primary)] ring-1 ring-[color:var(--border-subtle)]";
 
 const DARK_LOGO = `/assets/images/logo_dark.png`;
-const LIGHT_LOGO = `/assets/images/logo_light.png`;
+const LIGHT_LOGO = `/assets/images/logo.png`;
 
 export function NavigationMenu() {
   const pathname = usePathname();
