@@ -5,7 +5,7 @@ This policy covers vulnerabilities and security concerns for this personal websi
 ## Reporting a Vulnerability
 
 - Please report privately via email to: **vicente@opa.so** (preferred).
-- Do not open public Issues or PRs for undisclosed vulnerabilities. Issues are disabled in this repository by design.
+- Do **not** open public Issues or PRs for **new, undisclosed vulnerabilities**. GitHub Issues are available for general bugs and feature requests, but initial security reports should always go through private email.
 
 When reporting, include (if possible):
 
