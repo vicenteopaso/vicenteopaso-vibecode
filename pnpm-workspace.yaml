@@ -1,0 +1,14 @@
+ignoredBuiltDependencies:
+  - esbuild
+  - protobufjs
+  - sharp
+  - unrs-resolver
+
+onlyBuiltDependencies:
+  - "@sentry/cli"
+  - "@vercel/speed-insights"
+  - contentlayer
+
+overrides:
+  esbuild@<=0.24.2: ">=0.25.0"
+  estree-util-value-to-estree@<3.3.3: ">=3.3.3"

@@ -6,20 +6,48 @@
     "plugin:jsx-a11y/recommended",
     "prettier"
   ],
-  "plugins": ["@typescript-eslint", "jsx-a11y"],
+  "plugins": [
+    "@typescript-eslint",
+    "jsx-a11y",
+    "simple-import-sort",
+    "security"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module"
   },
   "rules": {
     "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "security/detect-unsafe-regex": "error",
+    "security/detect-buffer-noassert": "error",
+    "security/detect-child-process": "warn",
+    "security/detect-disable-mustache-escape": "error",
+    "security/detect-eval-with-expression": "error",
+    "security/detect-new-buffer": "error",
+    "security/detect-no-csrf-before-method-override": "error",
+    "security/detect-non-literal-regexp": "warn",
+    "security/detect-non-literal-require": "warn",
+    "security/detect-pseudoRandomBytes": "error",
+    "security/detect-possible-timing-attacks": "warn",
+    "security/detect-object-injection": "off",
+    "security/detect-non-literal-fs-filename": "off"
   },
   "overrides": [
     {
       "files": ["next-env.d.ts"],
       "rules": {
         "@typescript-eslint/triple-slash-reference": "off"
+      }
+    },
+    {
+      "files": ["scripts/**/*.mjs", "*.config.{js,mjs,ts}"],
+      "rules": {
+        "security/detect-non-literal-require": "off",
+        "security/detect-child-process": "off",
+        "security/detect-non-literal-fs-filename": "off"
       }
     }
   ]

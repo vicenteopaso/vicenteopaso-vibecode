@@ -1,6 +1,7 @@
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { ReferencesCarousel } from "../../app/components/ReferencesCarousel";
 
 beforeEach(() => {
@@ -73,7 +74,9 @@ describe("ReferencesCarousel", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Show reference 2" }));
+    act(() => {
+      fireEvent.click(screen.getByRole("button", { name: "Show reference 2" }));
+    });
 
     expect(screen.getByText(/Ref 2/i)).toBeInTheDocument();
   });

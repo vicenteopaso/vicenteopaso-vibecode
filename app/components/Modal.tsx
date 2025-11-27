@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import type { ReactNode } from "react";
 import { track } from "@vercel/analytics";
+import type { ReactNode } from "react";
+import React from "react";
 
 export type ModalSize = "sm" | "md" | "lg";
 

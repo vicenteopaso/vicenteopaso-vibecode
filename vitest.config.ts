@@ -1,4 +1,4 @@
-import { defineConfig, configDefaults } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -45,13 +45,14 @@ export default defineConfig({
         "lib/analytics.*",
         "postcss.config.*",
         "vitest.config.*",
+        "sentry.*.config.*",
       ],
       thresholds: {
         // Adjust these to your desired minimum coverage percentages
-        lines: 80,
-        statements: 80,
-        branches: 80,
-        functions: 80,
+        lines: 90,
+        statements: 90,
+        branches: 85,
+        functions: 90,
       },
     },
   },

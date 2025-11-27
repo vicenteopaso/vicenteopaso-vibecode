@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+
 import { sanitizeRichText } from "../../lib/sanitize-html";
 describe("sanitizeRichText", () => {
   it("returns empty string for falsy input", () => {

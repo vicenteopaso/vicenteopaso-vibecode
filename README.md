@@ -21,6 +21,7 @@
 [![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
 [![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
 [![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
+[![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
 [![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
 [![Dependabot](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates)
 
@@ -32,7 +33,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
 
 ## Tech stack
 
-- **Framework**: Next.js (App Router, `app/` directory, typed routes, Turbopack)
+- **Framework**: Next.js (App Router, `app/` directory, typed routes)
 - **Language**: TypeScript, React 18
 - **Styling**: Tailwind CSS v4, custom design tokens, utility classes (e.g. `shell`, `section-card`)
 - **UI primitives**: Radix UI (`@radix-ui/react-*`) for navigation, dialogs, avatars
@@ -92,7 +93,7 @@ High‑level layout:
   - `audit-a11y.mjs` – Lightweight, non-blocking accessibility audit (run via the `accessibility.yml` workflow).
   - `validate-links.mjs` – Validates internal markdown links against known app routes (run in the main `ci.yml` workflow).
 - Config:
-  - `next.config.js` – Next.js config wrapped in `withContentlayer`.
+  - `next.config.mjs` – Next.js config wrapped in `withContentlayer`.
   - `tailwind.config.js` – Tailwind content globs for `app/`, `components/`, and `content/`.
   - `tsconfig.json` – Strict TS config with path mapping for `@/*` and `contentlayer/generated`.
   - `.eslintrc.json`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
@@ -348,6 +349,11 @@ pnpm prepare
 - **ESLint**:
   - Extends `next/core-web-vitals`, `plugin:@typescript-eslint/recommended`, `plugin:jsx-a11y/recommended`, `prettier`.
   - Enforces `@typescript-eslint/consistent-type-imports` (use `import type` for types).
+  - **Import ordering**: Uses `eslint-plugin-simple-import-sort` to enforce consistent import/export order (auto-fixable with `pnpm lint:fix`).
+  - **Security checks**: Uses `eslint-plugin-security` to detect common security issues:
+    - Detects unsafe regex, eval usage, insecure buffer operations, and other security anti-patterns.
+    - Some rules tuned to avoid noise (e.g., `detect-object-injection` and `detect-non-literal-fs-filename` are disabled).
+    - Script and config files have relaxed security rules to allow necessary filesystem and child process operations.
 - **Prettier**:
   - Used for `.ts`, `.tsx`, `.js`, `.jsx`, `.md`, `.mdx`, `.json`, `.css`.
 - **lint-staged**:
@@ -441,7 +447,8 @@ The app is designed for a standard **Next.js deployment**, and works well on pla
 - Build command: `pnpm build` (or `node scripts/build.mjs` if you want to ensure Contentlayer runs first).
 - Output: Standard Next.js output (`.next`).
 - Environment:
-  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider’s environment settings.
+  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider’s environment settings for the contact form.
+  - Provide `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, and `SENTRY_ENVIRONMENT` so Sentry can capture client/server errors, traces, and replay.
   - Configure any analytics, sitemap, or custom domains as needed.
 
 ---

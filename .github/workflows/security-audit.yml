@@ -1,0 +1,103 @@
+name: Security Audit
+
+on:
+  # Run weekly on Mondays at 9 AM UTC
+  schedule:
+    - cron: "0 9 * * 1"
+  # Run on PRs that modify dependencies
+  pull_request:
+    paths:
+      - "pnpm-lock.yaml"
+      - "package.json"
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run security audit
+        id: audit
+        run: |
+          echo "Running pnpm audit..."
+          # Use --audit-level=high to focus on high+ vulnerabilities
+          # Exit code 0 = no vulnerabilities, >0 = vulnerabilities found
+          if ! pnpm audit --audit-level=high; then
+            echo "AUDIT_FAILED=true" >> $GITHUB_ENV
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              exit 0
+            else
+              exit 1
+            fi
+          fi
+
+      - name: Report audit results
+        if: env.AUDIT_FAILED == 'true'
+        run: |
+          echo "::warning::Security vulnerabilities detected. Review pnpm audit output above."
+
+      - name: Create issue on scheduled audit failure
+        if: env.AUDIT_FAILED == 'true' && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🔒 Security Audit: Vulnerable dependencies detected';
+            const body = `A scheduled security audit has detected vulnerable dependencies.
+
+            **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Please review the audit results and update vulnerable dependencies:
+            \`\`\`bash
+            pnpm audit:security
+            pnpm audit:security:fix
+            \`\`\`
+
+            This issue was automatically created by the Security Audit workflow.`;
+
+            // Check if an issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'security,dependencies',
+              per_page: 100
+            });
+
+            const existingIssue = issues.data.find(issue => 
+              issue.title === title
+            );
+
+            if (!existingIssue) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['security', 'dependencies']
+              });
+              console.log('Created new security audit issue');
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `🔄 Security audit still detecting vulnerabilities as of ${new Date().toISOString()}\n\n**Latest run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`
+              });
+              console.log(`Updated existing issue #${existingIssue.number}`);
+            }

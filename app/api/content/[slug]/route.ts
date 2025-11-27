@@ -1,7 +1,7 @@
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
 import { NextResponse } from "next/server";
+import path from "path";
 
 const ALLOWED_SLUGS = new Set([
   "privacy-policy",

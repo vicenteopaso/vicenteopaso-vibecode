@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
-import Script from "next/script";
 import { usePathname } from "next/navigation";
-import { getWebsiteJsonLd, getPersonJsonLd } from "../../lib/seo";
+import Script from "next/script";
+import React from "react";
+
+import { getPersonJsonLd, getWebsiteJsonLd } from "../../lib/seo";
 
 export function SeoJsonLd() {
   const pathname = usePathname();

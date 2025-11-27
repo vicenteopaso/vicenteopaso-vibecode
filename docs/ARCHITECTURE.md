@@ -17,6 +17,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 - **Styling**: Tailwind CSS + Radix UI primitives
 - **Deployment**: Vercel
 - **Testing**: Unit (Vitest) + E2E (Playwright)
+- **Observability**: Vercel Analytics/Speed Insights + Sentry (sampled traces, replay, alerts)
 
 ## High-Level Design
 
@@ -60,3 +61,31 @@ introduced only where interactivity is required.
 - Playwright handles end-to-end tests under `test/e2e`, targeting `http://localhost:3000`.
 - Coverage is collected via Vitest with thresholds set around 80% for lines, statements, branches, and functions.
 - CI runs linting, typechecking, unit tests, coverage, E2E tests, accessibility checks, and CodeQL analysis on PRs and pushes to `main`.
+
+## Observability & Error Handling
+
+**Current approach**: Vercel's observability is complemented by Sentry for aggregation, replay, and alerts.
+
+- **Vercel Analytics**: Page views, user interactions
+- **Vercel Speed Insights**: Core Web Vitals, performance metrics
+- **Vercel Logs**: Server-side error logs (all `console.error()` output)
+- **Production source maps**: Stack traces show original TypeScript line numbers
+- **Sentry (Next.js SDK)**: Client/server exception tracking, issue grouping, breadcrumbs, session replay, and alerting
+
+Sentry is configured via `sentry.client.config.ts`, `sentry.server.config.ts`, and `sentry.edge.config.ts`, with structured logging wired through `lib/error-logging.ts` and a `GlobalErrorHandler` client component.
+
+**Why this stack?** For a low-traffic personal portfolio, Vercel's observability provides a solid baseline, while Sentry adds aggregation, replay, and alerting with minimal complexity. Sampling keeps overhead reasonable while still surfacing meaningful issues.
+
+**When to tune**: If traffic exceeds ~10k users/month or error volume grows, revisit Sentry sampling and alert rules rather than adding new tooling.
+
+See **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** for full error handling patterns and debugging workflows.
+
+## Related Documentation
+
+- **[WARP.md](../WARP.md)** — High-level project overview and structure
+- **[README.md](../README.md)** — Setup instructions and quick start
+- **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** — Accessibility strategy
+- **[SEO_GUIDE.md](./SEO_GUIDE.md)** — SEO implementation
+- **[SECURITY_POLICY.md](./SECURITY_POLICY.md)** — Security headers and defense-in-depth
+- **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** — Error handling and observability
+- **[CONTRIBUTING.md](../CONTRIBUTING.md)** — Development workflow and standards

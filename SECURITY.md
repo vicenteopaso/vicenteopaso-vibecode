@@ -1,6 +1,27 @@
 # Security Policy
 
-This policy covers vulnerabilities and security concerns for this personal website’s repository.
+This policy covers vulnerabilities and security concerns for this personal website's repository.
+
+## Automated Security Audits
+
+This repository uses automated security audits to detect vulnerable dependencies:
+
+- **Weekly scans**: Runs every Monday at 9 AM UTC via GitHub Actions
+- **PR checks**: Automatically scans when `pnpm-lock.yaml` or `package.json` changes
+- **Audit level**: Focuses on **high and critical** severity vulnerabilities
+- **Issue tracking**: Automatically creates GitHub issues when vulnerabilities are detected in scheduled scans
+
+To run security audits locally:
+
+```bash
+# Check for vulnerabilities (high and critical only)
+pnpm audit:security
+
+# Attempt to auto-fix vulnerabilities
+pnpm audit:security:fix
+```
+
+**Note**: PRs with high or critical severity vulnerabilities will be blocked from merging until vulnerabilities are resolved or explicitly reviewed. Moderate and low severity vulnerabilities are reported but do not block merges.
 
 ## Reporting a Vulnerability
 

@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { FormEvent, ReactNode } from "react";
+import React from "react";
 import { useEffect, useRef, useState } from "react";
+
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
 
