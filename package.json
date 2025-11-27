@@ -17,7 +17,7 @@
     "validate:links": "node scripts/validate-links.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "audit:security": "pnpm audit --audit-level=moderate",
-    "audit:security:fix": "pnpm audit --fix",
+    "audit:security:fix": "pnpm audit --fix --audit-level=moderate",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
