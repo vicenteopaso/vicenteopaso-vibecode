@@ -84,7 +84,7 @@ jobs:
             });
 
             const existingIssue = issues.data.find(issue => 
-              issue.title.includes('Security Audit: Vulnerable dependencies')
+              issue.title === title
             );
 
             if (!existingIssue) {
