@@ -459,6 +459,7 @@ For deeper context, see:
 
 - **[WARP.md](./WARP.md)** — Higher-level explanations and architecture overview
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Design decisions, tech stack justifications, and constraints
+- **[docs/ENGINEERING_STANDARDS.md](./docs/ENGINEERING_STANDARDS.md)** — Cross-cutting architecture, quality, a11y, security, and governance intent
 - **[docs/ACCESSIBILITY.md](./docs/ACCESSIBILITY.md)** — Accessibility (a11y) strategy and checklist
 - **[docs/SEO_GUIDE.md](./docs/SEO_GUIDE.md)** — SEO best practices and implementation
 - **[docs/SECURITY_POLICY.md](./docs/SECURITY_POLICY.md)** — Threat model, security headers, and defense-in-depth

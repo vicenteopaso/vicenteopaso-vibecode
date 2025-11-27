@@ -15,6 +15,7 @@ This document defines how this repository is run and maintained.
 3. **Accessibility First** — Features must be keyboard- and screen-reader friendly.
 4. **SEO as a Feature** — Structured data, metadata, and performance are first-class.
 5. **Continuous Improvement** — Small, frequent improvements beat big rewrites.
+6. **Standards-Driven Engineering** — Architecture, testing, a11y, performance, and governance follow the intent captured in `docs/ENGINEERING_STANDARDS.md`.
 
 ## Decision-Making
 

@@ -12,11 +12,9 @@ Explain the change in a sentence or two.
 
 ### Checklist
 
-- [ ] pnpm lint
-- [ ] pnpm typecheck
-- [ ] pnpm test
-- [ ] pnpm test:e2e (if relevant)
-- [ ] pnpm coverage
+- [ ] pnpm partial:local
+- [ ] pnpm full:local
 - [ ] Updated README/docs if needed
 - [ ] No secrets or keys committed; env vars documented
 - [ ] Cross-browser/viewport checks for UI changes (if relevant)
+- [ ] Changes are consistent with [ENGINEERING_STANDARDS.md](../docs/ENGINEERING_STANDARDS.md) (or the doc has been updated to reflect new intent)

@@ -10,7 +10,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
   - Do not break the JSON CV parsing semantics; preserve existing error handling and graceful fallbacks.
 - Styling/components: **Tailwind CSS v4**, **Radix UI**, theming via **next-themes**.
 - Deployment: **Vercel** (standard Next.js deployment).
-- Quality goals: strong **SEO**, **accessibility (a11y)**, and **code quality**.
+- Quality goals: strong **SEO**, **accessibility (a11y)**, **performance**, and **code quality**, aligned with `docs/ENGINEERING_STANDARDS.md`.
 
 ## Do
 
