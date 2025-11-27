@@ -90,7 +90,10 @@ test.describe("Error Handling", () => {
     await page.goto("/");
 
     // Open contact dialog - use exact button name from navigation
-    const contactButton = page.getByRole("button", { name: "Contact", exact: true });
+    const contactButton = page.getByRole("button", {
+      name: "Contact",
+      exact: true,
+    });
     await contactButton.click();
 
     // Wait for dialog to open

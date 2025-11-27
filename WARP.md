@@ -88,7 +88,7 @@ This is a single Next.js App Router project using pnpm.
 - Contentlayer configuration:
   - `contentlayer.config.ts` defines a `Page` document type over `content/*.md` with required fields `name`, `title`, `slug` and optional `tagline`, `initials`.
   - It also defines a computed `cv` field that attempts to parse `doc.body.raw` as JSON for the `slug === "cv"` document.
-  - `next.config.js` wraps the Next config with `withContentlayer`, and `tsconfig.json` maps `"contentlayer/generated"` to `"./.contentlayer/generated"`.
+  - `next.config.mjs` wraps the Next config with `withContentlayer`, and `tsconfig.json` maps `"contentlayer/generated"` to `"./.contentlayer/generated"`.
   - **Important**: the current pages (`app/about/page.tsx`, `app/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
 
 ### 4. Contact flow: client dialog → API route → Turnstile → Formspree

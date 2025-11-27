@@ -119,14 +119,14 @@ All error handling code is covered by comprehensive unit and E2E tests.
 ✅ **Well-tested** - 20 unit tests + E2E tests covering error scenarios  
 ✅ **Documented** - Comprehensive docs for maintainers and contributors
 
-## What's Still Missing (Intentionally)
+## Sentry-Powered Capabilities
 
-❌ **Error aggregation/grouping** - Would require external service (Sentry)  
-❌ **Session replay** - Would require external service (LogRocket/Sentry)  
-❌ **Error alerts** - Would require external service or custom alerting  
-❌ **User breadcrumbs** - Would require external service
+✅ **Error aggregation/grouping** – Provided by Sentry issue grouping and dashboards.  
+✅ **Session replay** – Provided by Sentry Replay, sampled via `replaysSessionSampleRate` / `replaysOnErrorSampleRate`.  
+✅ **Error alerts** – Provided by Sentry alert rules (email/Slack/etc.) configured in the Sentry UI.  
+✅ **User breadcrumbs** – Provided by Sentry breadcrumbs and the structured logging utilities.
 
-**Rationale:** For a low-traffic personal portfolio, Vercel observability + local error handling provides adequate visibility without complexity or cost. These features can be added later if needed.
+**Rationale:** Sentry augments Vercel observability with aggregation, replay, and alerting, while sampling keeps overhead reasonable for a low-traffic personal portfolio.
 
 ## Future Considerations
 
@@ -173,5 +173,5 @@ All changes verified:
 ---
 
 **Implementation Date:** 2025-11-27  
-**Decision:** Vercel observability + local error handling is sufficient for current scale  
-**Review Trigger:** Traffic exceeds 10k users/month
+**Decision:** Vercel observability + Sentry-backed error tracking is the baseline stack for current scale  
+**Review Trigger:** Traffic exceeds 10k users/month (to revisit Sentry sampling/alerting configuration)

@@ -93,7 +93,7 @@ High‑level layout:
   - `audit-a11y.mjs` – Lightweight, non-blocking accessibility audit (run via the `accessibility.yml` workflow).
   - `validate-links.mjs` – Validates internal markdown links against known app routes (run in the main `ci.yml` workflow).
 - Config:
-  - `next.config.js` – Next.js config wrapped in `withContentlayer`.
+  - `next.config.mjs` – Next.js config wrapped in `withContentlayer`.
   - `tailwind.config.js` – Tailwind content globs for `app/`, `components/`, and `content/`.
   - `tsconfig.json` – Strict TS config with path mapping for `@/*` and `contentlayer/generated`.
   - `.eslintrc.json`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
@@ -447,7 +447,8 @@ The app is designed for a standard **Next.js deployment**, and works well on pla
 - Build command: `pnpm build` (or `node scripts/build.mjs` if you want to ensure Contentlayer runs first).
 - Output: Standard Next.js output (`.next`).
 - Environment:
-  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider’s environment settings.
+  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider’s environment settings for the contact form.
+  - Provide `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, and `SENTRY_ENVIRONMENT` so Sentry can capture client/server errors, traces, and replay.
   - Configure any analytics, sitemap, or custom domains as needed.
 
 ---

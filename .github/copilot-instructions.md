@@ -32,7 +32,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 - Handle errors gracefully:
   - Use `ErrorBoundary` for component errors with user-friendly fallback UI.
   - Use `logError()` and `logWarning()` from `lib/error-logging` for structured logging.
-  - All errors are captured by Vercel logs in production; no external error tracking service is used.
+  - Errors are captured by Vercel logs in production and forwarded to Sentry for aggregation, replay, and alerting.
   - Client-side errors should fail gracefully without exposing internal details.
   - Preserve user context and avoid losing form data on errors.
 - Preserve content behavior:

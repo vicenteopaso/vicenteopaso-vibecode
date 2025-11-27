@@ -2,8 +2,11 @@
  * Error logging utilities for client and server-side error tracking.
  *
  * This module provides a centralized way to log errors with context.
- * In production, these logs are captured by Vercel's logging infrastructure.
+ * In production, these logs are captured by Vercel's logging infrastructure
+ * and, when configured, forwarded to Sentry for aggregation and alerting.
  */
+
+import * as Sentry from "@sentry/nextjs";
 
 export interface ErrorContext {
   component?: string;
@@ -32,6 +35,27 @@ export function logError(error: Error | unknown, context?: ErrorContext): void {
     ...context,
   };
 
+  // Forward to Sentry for aggregation, grouping, and alerts (no-op if DSN/env not set)
+  Sentry.withScope((scope) => {
+    if (context?.component) {
+      scope.setTag("component", context.component);
+    }
+    if (context?.action) {
+      scope.setTag("action", context.action);
+    }
+    if (context?.userId) {
+      scope.setUser({ id: context.userId });
+    }
+    if (context?.metadata) {
+      scope.setContext("metadata", context.metadata as Record<string, unknown>);
+    }
+    scope.setExtra("timestamp", logEntry.timestamp);
+
+    Sentry.captureException(
+      error instanceof Error ? error : new Error(errorMessage),
+    );
+  });
+
   // Log to console (captured by Vercel in production)
   // eslint-disable-next-line no-console
   console.error("Application Error:", JSON.stringify(logEntry, null, 2));
@@ -50,6 +74,17 @@ export function logWarning(message: string, context?: ErrorContext): void {
     message,
     ...context,
   };
+
+  // Send structured breadcrumbs to Sentry to enrich subsequent errors
+  Sentry.addBreadcrumb({
+    level: "warning",
+    category: context?.component ?? "application",
+    message,
+    data: {
+      action: context?.action,
+      metadata: context?.metadata,
+    },
+  });
 
   // eslint-disable-next-line no-console
   console.warn("Application Warning:", JSON.stringify(logEntry, null, 2));

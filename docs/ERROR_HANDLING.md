@@ -221,21 +221,38 @@ const [hasImageError, setHasImageError] = useState(false);
 )}
 ```
 
-### Missing Client-Side Tracking
+### Sentry-Powered Client-Side Tracking
 
-The following features provide **basic error visibility** without third-party tools:
+The following features now provide **full-stack error visibility** using Vercel + Sentry:
 
-- ✅ **Error Boundary** - Catches React component errors and displays fallback UI
-- ✅ **Global error listeners** - Captures unhandled errors and promise rejections
-- ✅ **Structured error logging** - Centralized logging with context
-- ❌ Error aggregation and grouping (would require external service)
-- ❌ User session context/breadcrumbs (would require external service)
-- ❌ Session replay (would require external service)
-- ❌ Client-side error alerts (would require external service)
+- ✅ **Error Boundary** – Catches React component errors and displays fallback UI.
+- ✅ **Global error listeners** – Capture unhandled errors and promise rejections.
+- ✅ **Structured error logging** – Centralized logging with context via `logError` / `logWarning`.
+- ✅ **Error aggregation and grouping** – Sentry groups errors, de-duplicates noise, and surfaces top issues.
+- ✅ **User session context/breadcrumbs** – Sentry scope tags, user context, and breadcrumbs add rich context around failures.
+- ✅ **Session replay** – Sentry Replay records sampled sessions (`replaysSessionSampleRate` / `replaysOnErrorSampleRate`) when enabled in the Sentry project.
+- ✅ **Client-side error alerts** – Sentry alerts can be configured in the Sentry UI (email/Slack/etc.) based on captured errors.
 
-**Implementation**: Basic client-side error tracking is implemented using React Error Boundaries and global error listeners. All errors are logged to the console in a structured format, which Vercel captures in production logs.
+**Implementation**: Client-side error tracking is implemented using React Error Boundaries, global error listeners, and centralized logging utilities that both log to the console (for Vercel logs) and forward errors/warnings to Sentry.
 
-**Why this approach?** For a low-traffic personal portfolio, local error handling + Vercel logs provide adequate visibility without the complexity of external error tracking services. More sophisticated features (aggregation, session replay, alerts) can be added later if traffic scales significantly.
+**Why this approach?** For a low-traffic personal portfolio, Vercel logs remain a solid baseline, while Sentry adds aggregation, replay, and alerting with minimal code overhead. Sampling in `sentry.client.config.ts` keeps volume and cost under control.
+
+#### Sentry production checklist
+
+To ensure Sentry is fully active in production:
+
+1. **Environment variables**
+   - `SENTRY_DSN` and `SENTRY_ENVIRONMENT` set for server/edge (for `sentry.server.config.ts` and `sentry.edge.config.ts`).
+   - `NEXT_PUBLIC_SENTRY_DSN` set with the public DSN for the client bundle (for `sentry.client.config.ts`).
+2. **Sentry project settings**
+   - Replay enabled with sampling consistent with the code:
+     - `replaysSessionSampleRate: 0.1`
+     - `replaysOnErrorSampleRate: 1.0`
+   - Performance monitoring turned on so `tracesSampleRate: 0.1` is honored.
+   - Alert rules created for your `production` environment (for example, notify on new issues or error rate spikes).
+3. **Deployment**
+   - Env vars configured for all relevant environments (Preview/Production).
+   - A fresh deployment completed after changing env vars so Sentry picks up the configuration.
 
 ## Server-Side Errors
 
@@ -465,5 +482,5 @@ Consider adding **Sentry** (or similar) if:
 ---
 
 **Last updated**: 2025-11-27  
-**Decision**: Use Vercel observability (sufficient for current scale)  
-**Revisit when**: Traffic exceeds 10k users/month or complex features require better error visibility
+**Decision**: Use Vercel observability + Sentry (sampled traces/replay) as the default stack  
+**Revisit when**: Traffic exceeds 10k users/month or complex features require adjusting Sentry sampling/alerting strategy
