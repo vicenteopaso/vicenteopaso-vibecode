@@ -1,5 +1,6 @@
-import React from "react";
 import { ImageResponse } from "next/og";
+import React from "react";
+
 import { siteConfig } from "../lib/seo";
 
 export const size = {

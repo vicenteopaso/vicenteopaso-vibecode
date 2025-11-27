@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import React, { useEffect, useState } from "react";
+
 import { ContactDialog } from "./ContactDialog";
-import { SunIcon, MoonIcon } from "./icons";
+import { MoonIcon, SunIcon } from "./icons";
 
 const navLinkBase =
   "inline-flex h-8 items-center justify-center rounded-full px-3 text-sm font-medium leading-none text-[color:var(--text-primary)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
@@ -16,7 +17,9 @@ const navLinkBase =
 const navLinkActive =
   "bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] hover:text-[color:var(--text-primary)] ring-1 ring-[color:var(--border-subtle)]";
 
-const imageCacheVersion = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "1";
+const imageCacheVersion = "1"; // Increment this when logo images are updated
+const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
+const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
 
 export function NavigationMenu() {
   const pathname = usePathname();
@@ -35,10 +38,7 @@ export function NavigationMenu() {
       ? resolvedTheme
       : "dark";
 
-  const logoSrc =
-    displayTheme === "dark"
-      ? `/assets/images/logo_dark.png?v=${imageCacheVersion}`
-      : `/assets/images/logo.png?v=${imageCacheVersion}`;
+  const logoSrc = displayTheme === "dark" ? DARK_LOGO : LIGHT_LOGO;
 
   const toggleTheme = () => {
     const nextTheme = displayTheme === "dark" ? "light" : "dark";

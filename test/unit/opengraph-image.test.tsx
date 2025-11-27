@@ -1,5 +1,5 @@
 import type React from "react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/og", () => ({
   ImageResponse: vi.fn(
@@ -11,7 +11,8 @@ vi.mock("next/og", () => ({
 }));
 
 import { ImageResponse } from "next/og";
-import OgImage, { size, contentType } from "../../app/opengraph-image";
+
+import OgImage, { contentType, size } from "../../app/opengraph-image";
 import { siteConfig } from "../../lib/seo";
 
 describe("Root OG image route", () => {

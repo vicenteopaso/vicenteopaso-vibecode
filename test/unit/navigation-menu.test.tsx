@@ -1,8 +1,9 @@
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { usePathname } from "next/navigation";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { NavigationMenu } from "../../app/components/NavigationMenu";
 
 // JSDOM does not implement matchMedia; mock it for next-themes.

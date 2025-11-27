@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test("contact dialog opens and shows required fields", async ({ page }) => {
   await page.goto("/");
