@@ -29,6 +29,12 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 - Maintain SEO:
   - Keep or update `metadata` exports, title/description, and canonical URLs as needed.
   - Use descriptive link text and alt text on images.
+- Handle errors gracefully:
+  - Use `ErrorBoundary` for component errors with user-friendly fallback UI.
+  - Use `logError()` and `logWarning()` from `lib/error-logging` for structured logging.
+  - All errors are captured by Vercel logs in production; no external error tracking service is used.
+  - Client-side errors should fail gracefully without exposing internal details.
+  - Preserve user context and avoid losing form data on errors.
 - Preserve content behavior:
   - `app/about/page.tsx` and `app/cv/page.tsx` read from the filesystem (`content/about.md`, `content/cv.md`) at runtime.
   - If migrating to Contentlayer, ensure **feature parity** and preserve error handling for invalid CV JSON.

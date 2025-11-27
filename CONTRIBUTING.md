@@ -65,6 +65,14 @@ pnpm install
 - **Security**: The security plugin will warn about potential security issues. Most checks are errors, but some are warnings to avoid noise. Review and address security warnings appropriately.
 - **Type imports**: Use `import type` for type-only imports to satisfy `@typescript-eslint/consistent-type-imports`.
 
+### Error handling guidelines
+
+- **Client-side errors**: Use `ErrorBoundary` component for React errors and `logError()` from `lib/error-logging` for explicit error logging.
+- **Server-side errors**: Use `console.error()` in API routes and server components; Vercel logs capture these in production.
+- **Structured logging**: Use `logError()` and `logWarning()` from `lib/error-logging` to include context (component, action, metadata).
+- **User-friendly fallbacks**: Never expose stack traces or internal details to users; always show graceful error messages.
+- See `docs/ERROR_HANDLING.md` for comprehensive error handling patterns and debugging workflows.
+
 ## CI, CodeQL, and auto-merge
 
 - CI and CodeQL run automatically on pushes and pull requests to `main`.

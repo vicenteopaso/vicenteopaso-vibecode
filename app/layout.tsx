@@ -7,7 +7,9 @@ import Script from "next/script";
 import React from "react";
 
 import { baseMetadata } from "../lib/seo";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Footer } from "./components/Footer";
+import { GlobalErrorHandler } from "./components/GlobalErrorHandler";
 import { Header } from "./components/Header";
 import { SeoJsonLd } from "./components/SeoJsonLd";
 import { ThemeProvider } from "./components/ThemeProvider";
@@ -51,6 +53,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         <ThemeProvider>
+          <GlobalErrorHandler />
           <a href="#main-content" className="skip-link">
             Skip to main content
           </a>
@@ -61,12 +64,14 @@ export default function RootLayout({
           />
           <SeoJsonLd />
           <Header />
-          <main
-            id="main-content"
-            className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-8"
-          >
-            {children}
-          </main>
+          <ErrorBoundary>
+            <main
+              id="main-content"
+              className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-8"
+            >
+              {children}
+            </main>
+          </ErrorBoundary>
           <Footer />
           <Analytics />
           <SpeedInsights />

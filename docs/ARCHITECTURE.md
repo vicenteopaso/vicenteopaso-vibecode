@@ -60,3 +60,34 @@ introduced only where interactivity is required.
 - Playwright handles end-to-end tests under `test/e2e`, targeting `http://localhost:3000`.
 - Coverage is collected via Vitest with thresholds set around 80% for lines, statements, branches, and functions.
 - CI runs linting, typechecking, unit tests, coverage, E2E tests, accessibility checks, and CodeQL analysis on PRs and pushes to `main`.
+
+## Observability & Error Handling
+
+**Current approach**: Vercel's built-in observability is sufficient for this site's scale and complexity.
+
+- **Vercel Analytics**: Page views, user interactions
+- **Vercel Speed Insights**: Core Web Vitals, performance metrics
+- **Vercel Logs**: Server-side error logs (all `console.error()` output)
+- **Production source maps**: Stack traces show original TypeScript line numbers
+
+**What's not included** (intentionally):
+
+- No automatic client-side exception tracking (e.g., Sentry)
+- No session replay
+- No error alerting/aggregation
+
+**Why?** For a low-traffic personal portfolio, Vercel's observability provides adequate error visibility without adding complexity or cost. Client-side errors are rare and caught during development.
+
+**When to reconsider**: If traffic exceeds 10k users/month, or if complex user flows require session replay for debugging.
+
+See **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** for full error handling patterns and debugging workflows.
+
+## Related Documentation
+
+- **[WARP.md](../WARP.md)** — High-level project overview and structure
+- **[README.md](../README.md)** — Setup instructions and quick start
+- **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** — Accessibility strategy
+- **[SEO_GUIDE.md](./SEO_GUIDE.md)** — SEO implementation
+- **[SECURITY_POLICY.md](./SECURITY_POLICY.md)** — Security headers and defense-in-depth
+- **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** — Error handling and observability
+- **[CONTRIBUTING.md](../CONTRIBUTING.md)** — Development workflow and standards
