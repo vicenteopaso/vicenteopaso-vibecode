@@ -38,7 +38,8 @@ describe("CVPage", () => {
       basics: {
         name: "Vicente Opaso",
         label: "Engineering leader",
-        summary: "<p>Summary HTML</p>",
+        summary:
+          "<p>Summary HTML</p><script>window.evilSummary = true;</script>",
         highlights: [
           "Led teams",
           {
@@ -154,6 +155,11 @@ describe("CVPage", () => {
     expect(
       screen.getByText(/Vicente is great to work with/i),
     ).toBeInTheDocument();
+
+    // Sanitizer should remove script tags from the rendered output.
+    expect(document.querySelector("script")).toBeNull();
+    // And should keep the visible summary text.
+    expect(screen.getByText("Summary HTML")).toBeInTheDocument();
   });
 
   it("handles minimal CV JSON and optional branches", () => {

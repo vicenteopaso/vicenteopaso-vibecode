@@ -168,6 +168,7 @@ The main routes are:
   - `education`, `skills`, `languages`, `interests`, `publications`, `references`.
 
 - Some fields contain HTML strings (e.g. `references[*].reference`), which are injected with `dangerouslySetInnerHTML` in both `CVPage` and `ReferencesCarousel`.
+  - These HTML strings are sanitized via a whitelist-based sanitizer in `lib/sanitize-html.ts` before rendering to guard against XSS.
 
 If the JSON is invalid, the CV page will:
 

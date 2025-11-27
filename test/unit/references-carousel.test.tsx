@@ -22,7 +22,10 @@ describe("ReferencesCarousel", () => {
     render(
       <ReferencesCarousel
         references={[
-          { name: "<strong>Someone</strong>", reference: "<p>Ref one</p>" },
+          {
+            name: "<strong>Someone</strong><script>window.bad=1;</script>",
+            reference: "<p>Ref one</p><img src=x onerror=alert(1) />",
+          },
         ]}
       />,
     );
@@ -31,6 +34,11 @@ describe("ReferencesCarousel", () => {
     expect(
       screen.queryByRole("button", { name: /Show reference/i }),
     ).toBeNull();
+
+    // Sanitizer should strip script tags and dangerous attributes.
+    expect(document.querySelector("script")).toBeNull();
+    const img = document.querySelector("img");
+    expect(img).toBeNull();
   });
 
   // Flaky under JSDOM with fake timers; keeping for reference but disabled for now.
