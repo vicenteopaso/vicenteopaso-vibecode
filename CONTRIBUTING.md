@@ -55,7 +55,7 @@ pnpm install
 - - `pnpm test:e2e` (when relevant)
 - - `pnpm coverage` to verify coverage and generate reports.
 - Check for security vulnerabilities in dependencies:
-- - `pnpm audit:security` to check for moderate+ vulnerabilities
+- - `pnpm audit:security` to check for high+ vulnerabilities
 - - `pnpm audit:security:fix` to attempt automatic fixes if needed
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
 
