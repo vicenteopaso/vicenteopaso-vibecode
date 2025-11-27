@@ -112,7 +112,7 @@ export default function AccessibilityPage() {
   return (
     <article className="section-card space-y-6">
       <header>
-        <h1 className="text-3xl font-bold text-[color:var(--text-primary)] sm:text-4xl">
+        <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
           {title}
         </h1>
         {data.description && (
