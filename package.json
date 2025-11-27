@@ -16,7 +16,7 @@
     "format:fix": "prettier --write .",
     "validate:links": "node scripts/validate-links.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
-    "audit:security": "pnpm audit --audit-level=moderate || true",
+    "audit:security": "pnpm audit --audit-level=moderate",
     "audit:security:fix": "pnpm audit --fix",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
