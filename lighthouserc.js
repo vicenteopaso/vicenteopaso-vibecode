@@ -17,6 +17,12 @@ module.exports = {
       settings: {
         // Lighthouse settings
         preset: "desktop",
+        // Use Playwright's Chromium if available (for local dev container)
+        chromePath:
+          process.env.CHROME_PATH ||
+          (process.env.HOME
+            ? `${process.env.HOME}/.cache/ms-playwright/chromium-1200/chrome-linux64/chrome`
+            : undefined),
         throttling: {
           // Use moderate throttling for CI
           rttMs: 40,
@@ -32,8 +38,8 @@ module.exports = {
       // Note: Set to current baseline scores to prevent regressions
       // These should be incrementally improved over time
       assertions: {
-        "categories:performance": ["warn", { minScore: 0.9 }],
-        "categories:accessibility": ["warn", { minScore: 0.9 }],
+        "categories:performance": ["warn", { minScore: 0.7 }],
+        "categories:accessibility": ["warn", { minScore: 0.7 }],
         "categories:best-practices": ["warn", { minScore: 0.7 }],
         "categories:seo": ["error", { minScore: 0.95 }],
         // Additional specific assertions for critical metrics

@@ -293,7 +293,9 @@ pnpm format:fix
 # Validate internal markdown links against known app routes
 pnpm validate:links
 
-# Run Lighthouse CI audit (performance, a11y, best-practices, SEO)
+# Run Lighthouse CI audit
+# ⚠️  This command is designed for CI and will fail locally
+# For local Lighthouse testing: Run `pnpm dev`, open Chrome DevTools → Lighthouse tab
 pnpm audit:lighthouse
 ```
 
