@@ -202,6 +202,10 @@ The contact flow is:
      - Requires `TURNSTILE_SECRET_KEY` in the environment.
      - Reads client IP from `x-forwarded-for` or `cf-connecting-ip` if present.
      - Calls `https://challenges.cloudflare.com/turnstile/v0/siteverify`.
+   - **Basic rate limiting**:
+     - Uses a simple in-memory counter (`lib/rate-limit.ts`) keyed by client IP.
+     - Allows a small number of requests per minute and then responds with `429 Too Many Requests`.
+     - Includes a `Retry-After` header and a user-friendly error message, and does **not** call external services when the limit is exceeded.
    - On success:
      - Forwards the payload to a Formspree endpoint.
    - On failure:
