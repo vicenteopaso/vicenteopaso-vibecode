@@ -21,6 +21,7 @@ export default defineConfig({
         "next-sitemap.config.*",
         "tailwind.config.*",
         "contentlayer.config.*",
+        "lighthouserc.*",
         "**/*.d.ts",
         // Build artifacts and generated content
         ".next/**",

@@ -70,7 +70,13 @@ This document captures the engineering intent for this repository. It is a **nor
 
 - Accessibility linting via `eslint-plugin-jsx-a11y`.
 - A11y checks in CI (custom scripts, axe, or equivalent) for key flows.
-- Lighthouse accessibility target ≥ 95 on core pages (tracked periodically or via CI when feasible).
+- Lighthouse accessibility target ≥ 95 on core pages, **enforced in CI** via the `lighthouse-ci.yml` workflow.
+- Additional accessibility-specific assertions enforced in `lighthouserc.js`:
+  - Color contrast
+  - HTML language attribute
+  - Meta viewport
+  - Document title
+  - Link text clarity
 
 ## 4. Security Hardening _(partially implemented; see SECURITY_POLICY and CI security workflows)_
 
@@ -99,7 +105,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - Sensitive values provided via encrypted environment variables (e.g., Vercel env).
 - API routes protected as appropriate (rate limits, basic origin checks, edge protections).
 
-## 5. Performance & Web Vitals _(targets; monitored via Vercel and periodic Lighthouse checks)_
+## 5. Performance & Web Vitals _(enforced in CI via Lighthouse CI)_
 
 ### 5.1 Core Web Vitals Targets
 
@@ -123,6 +129,15 @@ This document captures the engineering intent for this repository. It is a **nor
   - Accessibility
   - Best Practices
   - SEO
+- **Enforced in CI**: The `lighthouse-ci.yml` workflow runs Lighthouse audits on every push and PR, failing the build if any score drops below 95.
+- Additional performance budget assertions are configured in `lighthouserc.js` for:
+  - First Contentful Paint (FCP) ≤ 2000ms
+  - Largest Contentful Paint (LCP) ≤ 2500ms
+  - Cumulative Layout Shift (CLS) ≤ 0.1
+  - Total Blocking Time (TBT) ≤ 300ms
+  - Speed Index ≤ 3000ms
+- Reports are uploaded as GitHub Actions artifacts and to temporary public storage for easy review.
+- PRs automatically receive a comment with Lighthouse scores for all audited pages.
 
 ## 6. SEO & Discoverability _(implemented for current routes)_
 

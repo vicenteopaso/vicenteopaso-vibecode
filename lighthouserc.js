@@ -1,0 +1,64 @@
+module.exports = {
+  ci: {
+    collect: {
+      // Start the dev server before running Lighthouse
+      startServerCommand: "pnpm build && pnpm start",
+      startServerReadyPattern: "Ready",
+      startServerReadyTimeout: 60000,
+      // URLs to audit
+      url: [
+        "http://localhost:3000",
+        "http://localhost:3000/about",
+        "http://localhost:3000/cv",
+        "http://localhost:3000/privacy-policy",
+        "http://localhost:3000/cookie-policy",
+      ],
+      numberOfRuns: 3, // Run Lighthouse multiple times and average the results
+      settings: {
+        // Lighthouse settings
+        preset: "desktop",
+        throttling: {
+          // Use moderate throttling for CI
+          rttMs: 40,
+          throughputKbps: 10240,
+          cpuSlowdownMultiplier: 1,
+        },
+        // Skip certain audits that may be flaky in CI
+        skipAudits: ["uses-http2"],
+      },
+    },
+    assert: {
+      // Define thresholds for each category
+      assertions: {
+        "categories:performance": ["error", { minScore: 0.95 }],
+        "categories:accessibility": ["error", { minScore: 0.95 }],
+        "categories:best-practices": ["error", { minScore: 0.95 }],
+        "categories:seo": ["error", { minScore: 0.95 }],
+        // Additional specific assertions for critical metrics
+        "first-contentful-paint": ["warn", { maxNumericValue: 2000 }],
+        "largest-contentful-paint": ["warn", { maxNumericValue: 2500 }],
+        "cumulative-layout-shift": ["warn", { maxNumericValue: 0.1 }],
+        "total-blocking-time": ["warn", { maxNumericValue: 300 }],
+        "speed-index": ["warn", { maxNumericValue: 3000 }],
+        // Accessibility-specific assertions
+        "color-contrast": "error",
+        "html-has-lang": "error",
+        "meta-viewport": "error",
+        "document-title": "error",
+        // SEO-specific assertions
+        "meta-description": "error",
+        "link-text": "error",
+        "is-crawlable": "error",
+        "robots-txt": "warn",
+      },
+    },
+    upload: {
+      // Store results for comparison (can be extended with LHCI server)
+      target: "temporary-public-storage",
+      // If you set up a Lighthouse CI server, configure it here:
+      // target: 'lhci',
+      // serverBaseUrl: 'https://your-lhci-server.com',
+      // token: process.env.LHCI_TOKEN,
+    },
+  },
+};

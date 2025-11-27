@@ -20,6 +20,7 @@
 [![CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml)
 [![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
 [![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
+[![Lighthouse CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml)
 [![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
 [![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
 [![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
@@ -291,6 +292,9 @@ pnpm format:fix
 ```bash
 # Validate internal markdown links against known app routes
 pnpm validate:links
+
+# Run Lighthouse CI audit (performance, a11y, best-practices, SEO)
+pnpm audit:lighthouse
 ```
 
 ### Type checking
@@ -382,6 +386,15 @@ GitHub Actions workflows in `.github/workflows/` include:
     - `pnpm test:e2e`
 - `lint.yml`:
   - Runs `pnpm lint` on PRs.
+- `lighthouse-ci.yml`:
+  - Runs Lighthouse CI audits on pushes to `main` and all PRs.
+  - Enforces minimum thresholds for:
+    - Performance ≥ 95
+    - Accessibility ≥ 95
+    - Best Practices ≥ 95
+    - SEO ≥ 95
+  - Uploads reports as artifacts and posts a summary comment on PRs.
+  - Fails CI if any threshold is not met.
 - `accessibility.yml`:
   - Runs a basic accessibility audit: `pnpm node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
 - `codeql.yml`:

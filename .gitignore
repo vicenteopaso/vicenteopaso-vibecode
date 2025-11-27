@@ -45,6 +45,9 @@ playwright-report
 test-results
 blob-report
 
+# Lighthouse CI artifacts
+.lighthouseci
+
 # Editor settings (optional)
 .vscode
 .idea
