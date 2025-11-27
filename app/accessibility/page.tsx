@@ -15,7 +15,7 @@ export const metadata: Metadata = baseMetadata({
   description:
     "Our commitment to web accessibility and WCAG 2.1 AA conformance. Learn about accessibility features, testing practices, and how to report issues.",
   openGraph: {
-    title: "Accessibility Statement  Vicente Opaso",
+    title: "Accessibility Statement Vicente Opaso",
     description:
       "Our commitment to web accessibility and WCAG 2.1 AA conformance.",
   },
