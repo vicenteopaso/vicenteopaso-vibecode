@@ -62,7 +62,7 @@ for (const target of targets) {
         pattern
           .replace(/[.+^${}()|[\\\]]/g, "\\$&") // Escape regex metacharacters except *
           .replace(/\*/g, ".*") + // Replace * with .*
-        "$"
+        "$",
     );
 
     try {
