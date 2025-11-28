@@ -440,11 +440,25 @@ Consider adding **Sentry** (or similar) if:
 3. **Set environment variables**:
 
    ```env
+   # Server and Edge runtime DSN (secret)
    SENTRY_DSN=https://...ingest.sentry.io/...
-   SENTRY_ORG=your-org
-   SENTRY_PROJECT=your-project
-   SENTRY_AUTH_TOKEN=... # For uploading source maps
+
+   # Client-side DSN (public, safe to expose)
+   NEXT_PUBLIC_SENTRY_DSN=https://...ingest.sentry.io/...
+
+   # Environment label (development | preview | production)
+   SENTRY_ENVIRONMENT=production
+
+   # For uploading source maps during build
+   SENTRY_AUTH_TOKEN=sntrys_...
+   SENTRY_ORG=your-org-slug
+   SENTRY_PROJECT=your-project-slug
+
+   # Performance sampling rate (optional, defaults to 0.1)
+   SENTRY_TRACES_SAMPLE_RATE=0.1
    ```
+
+   For detailed instructions on obtaining these values, see [`docs/SENTRY_SETUP.md`](./SENTRY_SETUP.md).
 
 4. **Update privacy policy**:
    - Add Sentry to `content/privacy-policy.md` (third-party data processor)

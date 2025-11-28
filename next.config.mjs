@@ -18,8 +18,8 @@ const securityHeaders = [
       "font-src 'self' data:",
       // Allow Turnstile frames
       "frame-src https://challenges.cloudflare.com",
-      // XHR/fetch endpoints
-      "connect-src 'self' https://challenges.cloudflare.com https://formspree.io",
+      // XHR/fetch endpoints (includes Sentry error reporting)
+      "connect-src 'self' https://challenges.cloudflare.com https://formspree.io https://*.ingest.sentry.io",
       // Where forms can POST to
       "form-action 'self' https://formspree.io",
       // Disallow changing base URL
@@ -121,4 +121,42 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(withContentlayer(nextConfig));
+// Sentry configuration options
+// See: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+const sentryWebpackPluginOptions = {
+  // Suppress all Sentry warnings and errors during the build
+  silent: true,
+
+  // Organization and project for uploading source maps
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+
+  // Auth token is required for uploading source maps
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+
+  // Source maps configuration
+  sourcemaps: {
+    // Automatically delete source maps after upload to avoid exposing them to users
+    // (default since @sentry/nextjs v8.0.0)
+    deleteSourcemapsAfterUpload: true,
+
+    // Disable source map generation if no auth token is provided
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+
+  // Additional configuration options
+  widenClientFileUpload: true,
+  tunnelRoute: "/monitoring",
+  hideSourceMaps: true,
+  disableLogger: true,
+};
+
+// Only apply Sentry config if the minimum required env vars are set
+// This prevents build warnings when Sentry is not configured
+const shouldUseSentry =
+  (process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN) ||
+  (process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_ORG && process.env.SENTRY_PROJECT);
+
+export default shouldUseSentry
+  ? withSentryConfig(withContentlayer(nextConfig), sentryWebpackPluginOptions)
+  : withContentlayer(nextConfig);

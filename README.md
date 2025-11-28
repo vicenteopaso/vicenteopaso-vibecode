@@ -464,8 +464,8 @@ The app is designed for a standard **Next.js deployment**, and works well on pla
 - Build command: `pnpm build` (or `node scripts/build.mjs` if you want to ensure Contentlayer runs first).
 - Output: Standard Next.js output (`.next`).
 - Environment:
-  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider’s environment settings for the contact form.
-  - Provide `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, and `SENTRY_ENVIRONMENT` so Sentry can capture client/server errors, traces, and replay.
+  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider's environment settings for the contact form.
+  - Provide Sentry environment variables for error tracking and source map uploads. See **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)** for detailed setup instructions.
   - Configure any analytics, sitemap, or custom domains as needed.
 
 ---
@@ -481,6 +481,7 @@ For deeper context, see:
 - **[docs/SEO_GUIDE.md](./docs/SEO_GUIDE.md)** — SEO best practices and implementation
 - **[docs/SECURITY_POLICY.md](./docs/SECURITY_POLICY.md)** — Threat model, security headers, and defense-in-depth
 - **[docs/ERROR_HANDLING.md](./docs/ERROR_HANDLING.md)** — Error handling patterns and observability stack
+- **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)** — Comprehensive Sentry configuration and setup guide
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** — Code style, linting, commit guidelines, and PR process
 - **[docs/RELEASE_PROCESS.md](./docs/RELEASE_PROCESS.md)** — Versioning, changelog, and release workflow
 

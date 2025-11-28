@@ -319,8 +319,15 @@ Live at opa.so
 - `NEXT_PUBLIC_FORMSPREE_KEY` - Formspree form ID
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` - Cloudflare Turnstile site key
 - `TURNSTILE_SECRET_KEY` - Cloudflare Turnstile secret (server-side)
-- `SENTRY_DSN` - Sentry error tracking DSN
-- `SENTRY_AUTH_TOKEN` - Sentry auth token for source maps
+- `SENTRY_DSN` - Sentry DSN for server/edge runtime
+- `NEXT_PUBLIC_SENTRY_DSN` - Sentry DSN for client-side (public)
+- `SENTRY_ENVIRONMENT` - Environment label (development/preview/production)
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for source map uploads
+- `SENTRY_ORG` - Sentry organization slug
+- `SENTRY_PROJECT` - Sentry project slug
+- `SENTRY_TRACES_SAMPLE_RATE` - Performance sampling rate (optional, defaults to 0.1)
+
+See [`docs/SENTRY_SETUP.md`](./SENTRY_SETUP.md) for detailed Sentry configuration instructions.
 
 ## Directory Structure
 
