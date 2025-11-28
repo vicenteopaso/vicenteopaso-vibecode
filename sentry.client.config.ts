@@ -38,8 +38,9 @@ if (!dsn) {
     tracesSampleRate: 0.1,
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
-    // Use default integrations; Replay is enabled via replayIntegration when
-    // available in this SDK version. If needed, we can add it back with the
-    // correct import once the SDK surface is stable.
+    integrations: (integrations) => [
+      ...integrations,
+      Sentry.replayIntegration(),
+    ],
   });
 }
