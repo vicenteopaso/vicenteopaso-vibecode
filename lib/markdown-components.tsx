@@ -97,6 +97,14 @@ export const markdownComponents: Components = {
  */
 export const aboutPageComponents: Components = {
   ...markdownComponents,
+  // Tighten top spacing for section headings within About page cards
+  h2: (props) => (
+    // eslint-disable-next-line jsx-a11y/heading-has-content
+    <h2
+      className="mb-4 text-2xl font-semibold text-[color:var(--text-primary)]"
+      {...props}
+    />
+  ),
   h3: (props) => (
     // eslint-disable-next-line jsx-a11y/heading-has-content
     <h2
