@@ -70,7 +70,16 @@ This document captures the engineering intent for this repository. It is a **nor
 
 - Accessibility linting via `eslint-plugin-jsx-a11y`.
 - A11y checks in CI (custom scripts, axe, or equivalent) for key flows.
-- Lighthouse accessibility target ≥ 95 on core pages (tracked periodically or via CI when feasible).
+- Lighthouse accessibility baseline ≥ 90 on core pages, **enforced in CI** via the `lighthouse-ci.yml` workflow (target: ≥ 95).
+- Additional accessibility-specific assertions enforced in `lighthouserc.js`:
+  - Color contrast (currently warning - needs improvement)
+  - HTML language attribute (error)
+  - Meta viewport (error)
+  - Document title (error)
+  - Link text clarity (error)
+- **Known accessibility issues**:
+  - Color contrast ratios need improvement in some UI components
+  - This is tracked via Lighthouse warnings and will be addressed incrementally
 
 ## 4. Security Hardening _(partially implemented; see SECURITY_POLICY and CI security workflows)_
 
@@ -99,7 +108,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - Sensitive values provided via encrypted environment variables (e.g., Vercel env).
 - API routes protected as appropriate (rate limits, basic origin checks, edge protections).
 
-## 5. Performance & Web Vitals _(targets; monitored via Vercel and periodic Lighthouse checks)_
+## 5. Performance & Web Vitals _(enforced in CI via Lighthouse CI)_
 
 ### 5.1 Core Web Vitals Targets
 
@@ -118,11 +127,28 @@ This document captures the engineering intent for this repository. It is a **nor
 
 ### 5.3 Lighthouse
 
-- Target Lighthouse scores of ≥ 95 for:
-  - Performance
-  - Accessibility
-  - Best Practices
-  - SEO
+- **Long-term target** Lighthouse scores of ≥ 95 for all categories
+- **Current baseline thresholds** (enforced in CI as warnings):
+  - Performance ≥ 90
+  - Accessibility ≥ 90
+  - Best Practices ≥ 70
+  - SEO ≥ 95 (enforced as error)
+- **Enforced in CI**: The `lighthouse-ci.yml` workflow runs Lighthouse audits on every push and PR.
+  - Warnings are generated for performance, accessibility, and best practices issues
+  - Builds fail only on critical SEO and structural issues
+  - Thresholds will be incrementally raised as improvements are made
+- **Known issues to address**:
+  - Color contrast ratios need improvement across the site
+  - Best practices score impacted by third-party scripts (analytics, error tracking)
+  - Performance optimizations for policy pages needed
+- Additional performance budget assertions are configured in `lighthouserc.js` for:
+  - First Contentful Paint (FCP) ≤ 2000ms
+  - Largest Contentful Paint (LCP) ≤ 2500ms
+  - Cumulative Layout Shift (CLS) ≤ 0.1
+  - Total Blocking Time (TBT) ≤ 300ms
+  - Speed Index ≤ 3000ms
+- Reports are uploaded as GitHub Actions artifacts and to temporary public storage for easy review.
+- PRs automatically receive a comment with Lighthouse scores for all audited pages.
 
 ## 6. SEO & Discoverability _(implemented for current routes)_
 

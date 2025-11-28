@@ -1,0 +1,112 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js app
+        run: pnpm build
+        env:
+          # Add any required environment variables for build
+          NODE_ENV: production
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: "./lighthouserc.js"
+          uploadArtifacts: true # Uploads to GitHub Actions artifacts as "lighthouse-results"
+          temporaryPublicStorage: true # Upload results to temporary public storage
+        env:
+          NODE_ENV: production
+
+      - name: Comment PR with Lighthouse results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const manifestPath = '.lighthouseci/manifest.json';
+            if (!fs.existsSync(manifestPath)) {
+              core.warning('Lighthouse manifest not found, skipping PR comment');
+              return;
+            }
+
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+            // Group by unique URLs (remove duplicates)
+            const uniqueUrls = new Map();
+            manifest.forEach(result => {
+              const url = result.url.replace('http://localhost:3000', '');
+              const summary = result.summary || {};
+              if (!uniqueUrls.has(url)) {
+                uniqueUrls.set(url, summary);
+              }
+            });
+
+            // Build summary table
+            let comment = '## 🔦 Lighthouse CI Summary\n\n';
+            comment += '| Page | Perf | A11y | Best | SEO |\n';
+            comment += '|------|------|------|------|-----|\n';
+
+            uniqueUrls.forEach((summary, url) => {
+              const page = url || '/';
+              const perf = summary.performance ? Math.round(summary.performance * 100) : '-';
+              const a11y = summary.accessibility ? Math.round(summary.accessibility * 100) : '-';
+              const best = summary['best-practices'] ? Math.round(summary['best-practices'] * 100) : '-';
+              const seo = summary.seo ? Math.round(summary.seo * 100) : '-';
+              comment += `| \`${page}\` | ${perf} | ${a11y} | ${best} | ${seo} |\n`;
+            });
+
+            comment += '\n**Thresholds:** Perf ≥90, A11y ≥90, Best ≥70, SEO ≥95\n\n';
+            comment += `📊 [View full Lighthouse reports](${context.payload.pull_request.html_url}/checks)`;
+
+            // Find and update existing comment or create new one
+            const botComment = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            }).then(({ data }) => 
+              data.find(c => c.user.type === 'Bot' && c.body.includes('🔦 Lighthouse CI Summary'))
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }

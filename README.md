@@ -20,6 +20,7 @@
 [![CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml)
 [![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
 [![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
+[![Lighthouse CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml)
 [![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
 [![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
 [![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
@@ -291,6 +292,11 @@ pnpm format:fix
 ```bash
 # Validate internal markdown links against known app routes
 pnpm validate:links
+
+# Run Lighthouse CI audit
+# ⚠️  This command is designed for CI and will fail locally
+# For local Lighthouse testing: Run `pnpm dev`, open Chrome DevTools → Lighthouse tab
+pnpm audit:lighthouse
 ```
 
 ### Type checking
@@ -382,6 +388,16 @@ GitHub Actions workflows in `.github/workflows/` include:
     - `pnpm test:e2e`
 - `lint.yml`:
   - Runs `pnpm lint` on PRs.
+- `lighthouse-ci.yml`:
+  - Runs Lighthouse CI audits on pushes to `main` and all PRs.
+  - Enforces baseline quality thresholds:
+    - Performance ≥ 90 (warn)
+    - Accessibility ≥ 90 (warn)
+    - Best Practices ≥ 70 (warn)
+    - SEO ≥ 95 (error)
+  - Uploads reports as artifacts and posts a summary comment on PRs.
+  - Warns on threshold violations; fails CI only on critical SEO/structure issues.
+  - Thresholds will be incrementally improved as issues are addressed.
 - `accessibility.yml`:
   - Runs a basic accessibility audit: `pnpm node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
 - `codeql.yml`:
