@@ -38,12 +38,43 @@ export function ReferencesCarousel({
   useEffect(() => {
     if (!references.length) return;
 
-    const heights = referenceRefs.current.map((el) => el?.offsetHeight ?? 0);
-    const nextMax = heights.length ? Math.max(...heights) : 0;
+    const elements = referenceRefs.current.filter(
+      (el): el is HTMLDivElement => el !== null,
+    );
 
-    if (nextMax > 0 && Number.isFinite(nextMax)) {
-      setMaxHeight(nextMax);
+    if (!elements.length) return;
+
+    const measure = () => {
+      const heights = elements.map((el) => el.offsetHeight ?? 0);
+      const nextMax = heights.length ? Math.max(...heights) : 0;
+
+      if (nextMax > 0 && Number.isFinite(nextMax)) {
+        setMaxHeight((current) =>
+          current === null ? nextMax : Math.max(current, nextMax),
+        );
+      }
+    };
+
+    measure();
+
+    if (typeof window !== "undefined" && "ResizeObserver" in window) {
+      const ResizeObserverConstructor = window.ResizeObserver;
+      const observer = new ResizeObserverConstructor(() => {
+        measure();
+      });
+
+      elements.forEach((el) => observer.observe(el));
+
+      return () => {
+        observer.disconnect();
+      };
     }
+
+    const timeoutId = window.setTimeout(measure, 250);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [references]);
 
   useEffect(() => {
