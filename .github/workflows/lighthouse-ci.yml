@@ -39,20 +39,10 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: "./lighthouserc.js"
-          uploadArtifacts: true # Save results as artifacts
+          uploadArtifacts: true # Uploads to GitHub Actions artifacts as "lighthouse-results"
           temporaryPublicStorage: true # Upload results to temporary public storage
         env:
-          # Optional: Add LHCI_GITHUB_APP_TOKEN for GitHub status checks
-          # LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           NODE_ENV: production
-
-      - name: Upload Lighthouse reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-reports
-          path: ".lighthouseci"
-          retention-days: 30
 
       - name: Comment PR with Lighthouse results
         if: github.event_name == 'pull_request'
