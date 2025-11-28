@@ -82,9 +82,9 @@ This is a single Next.js App Router project using pnpm.
     - `basics`, `work`, `education`, `skills`, `languages`, `interests`, `references`, and `publications`.
     - Many fields (e.g., `references[*].reference`) contain HTML strings, which are rendered via `dangerouslySetInnerHTML` in `app/cv/page.tsx` and `ReferencesCarousel.tsx`.
 - Page implementations:
-  - `app/about/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and render the markdown content via `react-markdown` inside a styled `section-card`.
-  - `app/cv/page.tsx` similarly reads `content/cv.md`, parses frontmatter with `gray-matter`, and then `JSON.parse`s the body as a `CvJson` structure. It then renders sections for experience, skills, education, languages, interests, publications, and references.
-    - If the JSON is invalid, the page gracefully falls back to a simple error message and instructs the user to check `content/cv.md`.
+- - `app/about/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
+- - `app/cv/page.tsx` similarly reads `content/cv.md`, parses frontmatter with `gray-matter`, and then `JSON.parse`s the body as a `CvJson` structure. It then renders sections for experience, skills, education, languages, interests, publications, and references.
+  - If the JSON is invalid, the page gracefully falls back to a simple error message and instructs the user to check `content/cv.md`.
 - Contentlayer configuration:
   - `contentlayer.config.ts` defines a `Page` document type over `content/*.md` with required fields `name`, `title`, `slug` and optional `tagline`, `initials`.
   - It also defines a computed `cv` field that attempts to parse `doc.body.raw` as JSON for the `slug === "cv"` document.

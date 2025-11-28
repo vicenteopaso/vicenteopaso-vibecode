@@ -2,7 +2,7 @@
 
 /**
  * Lighthouse CI local execution guide
- * 
+ *
  * Lighthouse CI is designed to run in GitHub Actions CI environment.
  * For local performance testing, use browser DevTools which provides
  * a more comprehensive and reliable experience.

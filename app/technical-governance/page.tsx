@@ -11,25 +11,27 @@ import { baseMetadata } from "../../lib/seo";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = baseMetadata({
-  title: "Accessibility Statement",
+  title: "Technical Governance",
   description:
-    "Our commitment to web accessibility and WCAG 2.1 AA conformance. Learn about accessibility features, testing practices, and how to report issues.",
+    "How Spec-Driven Development (SDD) and documentation-first engineering shaped this project, enabling AI-assisted development with governance-driven architecture.",
   openGraph: {
-    title: "Accessibility Statement Vicente Opaso",
+    title: "Technical Governance Vicente Opaso",
     description:
-      "Our commitment to web accessibility and WCAG 2.1 AA conformance.",
+      "How Spec-Driven Development and documentation-first engineering enabled AI-assisted development.",
   },
 });
 
-export default function AccessibilityPage() {
-  const filePath = path.join(process.cwd(), "content", "accessibility.md");
+export default function TechnicalGovernancePage() {
+  const filePath = path.join(
+    process.cwd(),
+    "content",
+    "technical-governance.md",
+  );
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 
   const title =
-    (data.title as string) ||
-    (data.name as string) ||
-    "Accessibility Statement";
+    (data.title as string) || (data.name as string) || "Technical Governance";
 
   return (
     <article className="section-card space-y-6">

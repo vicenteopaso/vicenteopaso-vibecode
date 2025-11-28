@@ -38,9 +38,8 @@ if (!dsn) {
     tracesSampleRate: 0.1,
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
-    integrations: [
-      // Capture console output with Sentry without touching your existing console usage
-      Sentry.consoleIntegration(),
+    integrations: (integrations) => [
+      ...integrations,
       Sentry.replayIntegration(),
     ],
   });

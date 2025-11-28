@@ -2,16 +2,12 @@
 
 import Link from "next/link";
 
-import { CookiePolicyModal } from "./CookiePolicyModal";
-import { PrivacyPolicyModal } from "./PrivacyPolicyModal";
-import { TechStackModal } from "./TechStackModal";
-
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
-      <div className="shell flex flex-col items-center justify-between gap-3 py-6 text-sm text-[color:var(--text-muted)] lg:flex-row">
+      <div className="shell flex flex-col items-center justify-center gap-3 py-6 text-sm text-[color:var(--text-muted)]">
         <p className="text-center lg:text-left">
           © {year} Vicente Opaso. Vibecoded with ♥️ and{" "}
           <a
@@ -35,18 +31,22 @@ export function Footer() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-end">
-          <PrivacyPolicyModal />
-          <span
-            aria-hidden="true"
-            className="text-[color:var(--text-muted)]"
+          <Link
+            href="/privacy-policy"
+            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
+            Privacy Policy
+          </Link>
+          <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
           </span>
-          <CookiePolicyModal />
-          <span
-            aria-hidden="true"
-            className="text-[color:var(--text-muted)]"
+          <Link
+            href="/cookie-policy"
+            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
+            Cookie Policy
+          </Link>
+          <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
           </span>
           <Link
@@ -55,13 +55,24 @@ export function Footer() {
           >
             Accessibility
           </Link>
-          <span
-            aria-hidden="true"
-            className="text-[color:var(--text-muted)]"
-          >
+          <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
           </span>
-          <TechStackModal />
+          <Link
+            href="/technical-governance"
+            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
+          >
+            Technical Governance
+          </Link>
+          <span aria-hidden="true" className="text-[color:var(--text-muted)]">
+            |
+          </span>
+          <Link
+            href="/tech-stack"
+            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
+          >
+            Tech Stack
+          </Link>
         </div>
       </div>
     </footer>

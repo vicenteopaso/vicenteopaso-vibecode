@@ -333,6 +333,12 @@ body {
       sans-serif;
   }
 
+  /* CV summary heading tweaks */
+  #summary h2,
+  #summary h3 {
+    @apply text-lg md:text-xl;
+  }
+
   /* Body text */
   p {
     @apply text-sm leading-relaxed;

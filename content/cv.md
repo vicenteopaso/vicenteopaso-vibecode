@@ -82,32 +82,31 @@ slug: cv
 "Integrated Vercel + GitHub + Hygraph pipelines, cutting release times by 40%.",
 "Elevated Core Web Vitals across six localized markets by 25%.",
 "Introduced governance (CodeQL, PR templates, branch protections) reducing production defects by 30%+.",
-
-            "Own architecture and delivery of a composable stack: Next.js, GraphQL, Tailwind CSS, Hygraph CMS—deployed on Vercel and tightly integrated with GitHub.",
-            "Implemented guardrails and governance: CodeQL, Copilot, branch protections, PR templates, and automated checks to raise code quality and reliability.",
-            "Integrate Vercel–GitHub–Hygraph workflows for faster, safer releases; standardize pipelines with GitHub Actions (CI/CD).",
-            "Managed a cross-functional team (3 developers, 1 UX designer) focused on performance, accessibility, maintainability, and content velocity.",
-            "Improve design ↔ development feedback loops with shared components, design tokens, and documentation for tighter iteration.",
-            "Coordinated localization and campaign delivery across six languages with brand, content, and demand-gen stakeholders."
-          ],
-          "skills": [
-            "Frontend Architecture",
-            "Composable Web Platforms",
-            "Developer Experience",
-            "CI/CD Automation",
-            "Web Performance Optimization",
-            "Team Leadership",
-            "Next.js",
-            "GraphQL",
-            "Tailwind CSS",
-            "Hygraph CMS",
-            "Vercel",
-            "CodeQL",
-            "GitHub Actions"
-          ]
-        }
-      ]
-    },
+"Own architecture and delivery of a composable stack: Next.js, GraphQL, Tailwind CSS, Hygraph CMS—deployed on Vercel and tightly integrated with GitHub.",
+"Implemented guardrails and governance: CodeQL, Copilot, branch protections, PR templates, and automated checks to raise code quality and reliability.",
+"Integrate Vercel–GitHub–Hygraph workflows for faster, safer releases; standardize pipelines with GitHub Actions (CI/CD).",
+"Managed a cross-functional team (3 developers, 1 UX designer) focused on performance, accessibility, maintainability, and content velocity.",
+"Improve design ↔ development feedback loops with shared components, design tokens, and documentation for tighter iteration.",
+"Coordinated localization and campaign delivery across six languages with brand, content, and demand-gen stakeholders."
+],
+"skills": [
+"Frontend Architecture",
+"Composable Web Platforms",
+"Developer Experience",
+"CI/CD Automation",
+"Web Performance Optimization",
+"Team Leadership",
+"Next.js",
+"GraphQL",
+"Tailwind CSS",
+"Hygraph CMS",
+"Vercel",
+"CodeQL",
+"GitHub Actions"
+]
+}
+]
+},
 
     {
       "company": "EUROCONTROL",
@@ -122,7 +121,6 @@ slug: cv
             "Modernized frontend stack used by 5,000+ aviation stakeholders across Europe.",
             "Reduced page payloads by 40%, improving load times in low-bandwidth regions.",
             "Re-architected legacy flows into modular components, reducing maintenance overhead by 30%.",
-
             "Maintain the Formal Thread of documentation to meet safety, regulatory, and engineering standards across components.",
             "Provide technical leadership for NMUI (microfrontend framework) enabling multitasking and interoperability across mission-critical apps.",
             "Guide the strategy and implementation of the EUROCONTROL Design System (EDS) for accessible, consistent UI/UX.",
@@ -159,7 +157,6 @@ slug: cv
             "Defined component architecture powering multiple brand sites across Western Europe.",
             "Established DevEx workflows reducing onboarding time for new engineers by 50%.",
             "Introduced accessibility frameworks ensuring AA baseline across products.",
-
             "Architected web platforms supporting €1B+ annual turnover across regions; improved performance, reliability, and accessibility.",
             "Modernized CI/CD with GitHub Actions and feature toggles to reduce deployment friction and improve release cadence.",
             "Defined documentation and onboarding workflows to increase transparency and consistency across distributed teams.",
@@ -403,7 +400,12 @@ slug: cv
 {
 "name": "JavaScript",
 "level": "Master",
-"keywords": ["TypeScript", "Node.js", "ECMAScript", "Micro Frontends"]
+"keywords": [
+"TypeScript",
+"Node.js",
+"ECMAScript",
+"Micro Frontends"
+]
 },
 {
 "name": "Frontend Development",
@@ -427,7 +429,13 @@ slug: cv
 {
 "name": "Design Systems",
 "level": "Master",
-"keywords": ["Figma", "Storybook", "Design Tokens", "Inner-sourcing", "Governance"]
+"keywords": [
+"Figma",
+"Storybook",
+"Design Tokens",
+"Inner-sourcing",
+"Governance"
+]
 },
 {
 "name": "Developer Experience",
@@ -444,27 +452,54 @@ slug: cv
 {
 "name": "AWS",
 "level": "Advanced",
-"keywords": ["S3", "CloudFront", "Lambda", "CloudWatch", "Amplify"]
+"keywords": [
+"S3",
+"CloudFront",
+"Lambda",
+"CloudWatch",
+"Amplify"
+]
 },
 {
 "name": "GitHub",
 "level": "Advanced",
-"keywords": ["GitHub Actions", "Pages", "Packages", "GHAS", "Branch Protections"]
+"keywords": [
+"GitHub Actions",
+"Pages",
+"Packages",
+"GHAS",
+"Branch Protections"
+]
 },
 {
 "name": "HTML",
 "level": "Master",
-"keywords": ["HTML5", "Web Components", "HTML Modules", "Canvas", "Semantic HTML"]
+"keywords": [
+"HTML5",
+"Web Components",
+"HTML Modules",
+"Canvas",
+"Semantic HTML"
+]
 },
 {
 "name": "CSS",
 "level": "Master",
-"keywords": ["Tailwind CSS", "Sass", "Less", "CSS-in-JS"]
+"keywords": [
+"Tailwind CSS",
+"Sass",
+"Less",
+"CSS-in-JS"
+]
 },
 {
 "name": "Testing",
 "level": "Basic",
-"keywords": ["Jest", "Cypress", "React Testing Library"]
+"keywords": [
+"Jest",
+"Cypress",
+"React Testing Library"
+]
 }
 ],
 
@@ -507,38 +542,58 @@ slug: cv
 "interests": [
 {
 "name": "Saltwater Aquariums",
-"keywords": ["Coral", "Reef", "Marine", "Invertebrates", "Fishkeeping", "Clownfish"]
+"keywords": [
+"Coral",
+"Reef",
+"Marine",
+"Invertebrates",
+"Fishkeeping",
+"Clownfish"
+]
 },
 {
 "name": "DIY IoT Maker",
-"keywords": ["Raspberry Pi", "Arduino", "Magic Mirror", "OpenHAB", "Home Automation", "Homebridge"]
+"keywords": [
+"Raspberry Pi",
+"Arduino",
+"Magic Mirror",
+"OpenHAB",
+"Home Automation",
+"Homebridge"
+]
 },
 {
 "name": "Crypto",
-"keywords": ["Bitcoin", "Ethereum", "NFT", "BCube", "Web3"]
+"keywords": [
+"Bitcoin",
+"Ethereum",
+"NFT",
+"BCube",
+"Web3"
+]
 }
 ],
 
 "references": [
 {
 "name": "<a href='https://www.linkedin.com/in/peterbirkholmbuch'>Peter Birkholm-Buch</a> | Director of Software Engineering in Growth Products & Data @ Carlsberg Group",
-"reference": "<p>It has been a privilege to have Vicente as part of my Leadership Team at Carlsberg Group... </p>"
+"reference": "It has been a privilege to have Vicente as part of my Leadership Team at Carlsberg Group. As our Frontend Solutions Architect, Vicente played a critical role in shaping our frontend strategy, notably through the development of the Malty Design System, which has transformed how we approach global frontend solutions.<br /><br />His technical expertise in JavaScript, TypeScript, React, and Frontend technologies, combined with his leadership in establishing a Community of Practice, has greatly improved the developer experience and code quality across the organization. Vicente's contributions were instrumental in driving our e-commerce growth to over €1 billion annually.<br /><br />I highly recommend Vicente for his leadership, creativity, and exceptional technical skills. He would be a tremendous asset to any team."
 },
 {
 "name": "<a href='https://www.linkedin.com/in/razvan-mihai-margauan'>Razvan Margauan</a> | iNM Programme Director @ EUROCONTROL",
-"reference": "<p>I had the chance to work closely with Vicente Opaso during my time leading the USER Domain at EUROCONTROL... </p>"
+"reference": "I had the chance to work closely with Vicente Opaso during my time leading the USER Domain at EUROCONTROL. Vicente played a key role in shaping the technical direction of both the NMUI framework and the Eurocontrol Design System (EDS), two major initiatives that supported our operational platforms.<br /><br />He approached his responsibilities with clarity and consistency - whether it was aligning architectural work with regulatory requirements or improving developer workflows across teams. I particularly appreciated Vicente's ability to foster cross-functional collaboration, which made him a reliable contributor.<br /><br />His work had a noticeable impact on the stability and scalability of our systems, and I appreciated his pragmatic, steady approach to solving technical challenges."
 },
 {
 "name": "<a href='https://www.linkedin.com/in/samuel-silva-olv'>Samuel Silva</a> | Senior Frontend Developer @ Carlsberg Group",
-"reference": "<p>Working alongside Vicente on various projects over the past two years has been an absolute pleasure... </p>"
+"reference": "Working alongside Vicente on various projects over the past two years has been an absolute pleasure. As a Solutions Architect, he consistently shows dedication in delivering excellent solutions that meet our business needs while valuing the team's expertise every step of the way.<br /><br />Besides his technical skills, Vicente is a team player who creates a positive and collaborative work environment. He consistently goes above and beyond to support colleagues and shares his expertise within our company's internal community.<br /><br />I highly recommend Vicente for any project in need of a talented and dedicated Solutions Architect. He brings abundant expertise, professionalism, and enthusiasm to every project."
 },
 {
 "name": "<a href='https://www.linkedin.com/in/tmota-design'>Thiago Mota</a> | Senior Product Designer @ Carlsberg Group",
-"reference": "<p>Collaborating with Vicente Opaso... was a testament to his extensive expertise and professionalism... </p>"
+"reference": "Collaborating with Vicente Opaso, the Solutions Architect and Lead Developer for the Malty Design System at Carlsberg Group, was a testament to his extensive expertise and professionalism. Vicente brought a wealth of knowledge to our work on the Malty Design System. His deep expertise and unwavering professionalism were evident throughout our collaboration. Vicente's collaborative approach and ability to align technical intricacies with design aspirations made a significant impact, ensuring the scalability and success of the project. His commitment to excellence and adeptness in fostering collaboration make him a valuable asset in delivering robust solutions."
 },
 {
 "name": "<a href='https://www.linkedin.com/in/brunomptorres'>Bruno Torres</a> | Senior Frontend Developer @ Carlsberg Group",
-"reference": "<p>It's with genuine pleasure that I share my admiration for Vicente... </p>"
+"reference": "It's with genuine pleasure that I share my admiration for Vicente, the incredibly talented Frontend Solutions Architect I had the chance to work with at Carlsberg. Working alongside him has been more than just a professional experience; it's been a journey of growth and camaraderie.<br /><br />Vicente stands out for his technical prowess and his genuine commitment to building a tight-knit Frontend Community. Under his guidance, I've felt a sense of trust and support beyond the usual workplace dynamic. Vicente's efforts to create a collaborative environment have made our team feel like a family, fostering an atmosphere where everyone's contributions are valued.<br /><br />As a Frontend Developer, I've greatly appreciated Vicente's approach to problem-solving and his emphasis on sharing knowledge. His mentorship has elevated my technical skills and made our workplace a positive and uplifting space.<br /><br />I wholeheartedly recommend Vicente Opaso to anyone looking for more than just a leader – someone who values humanity and teamwork as much as technical excellence."
 }
 ]
 }

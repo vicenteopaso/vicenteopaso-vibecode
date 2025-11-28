@@ -43,6 +43,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
   - Markdown in `content/about.md`
   - Markdown + JSON CV in `content/cv.md`
   - Contentlayer integration (`contentlayer.config.ts`, `next-contentlayer`) for structured content
+  - Shared ReactMarkdown components config in `lib/markdown-components.tsx` for consistent typography on policy/governance docs
 - **Forms / backend**:
   - Cloudflare Turnstile for bot protection
   - Next.js Route Handler (`app/api/contact/route.ts`) for contact form
@@ -64,17 +65,17 @@ High‑level layout:
 - `app/`
   - `layout.tsx` – HTML shell, global styles, SEO metadata, theme provider, header/footer, and skip link to main content.
   - `page.tsx` – Home route, implemented as the About page.
-  - `about/page.tsx` – Reads `content/about.md` and renders it via `react-markdown`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
+  - `about/page.tsx` – Reads `content/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
   - `cv/page.tsx` – Reads `content/cv.md`, parses the JSON CV body, and renders experience, skills, education, languages, interests, publications, and references.
-  - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page.
-  - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page.
+  - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page rendered with shared `markdownComponents`.
+  - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page rendered with shared `markdownComponents`.
   - `components/`
     - `Header.tsx`, `Footer.tsx` – Layout chrome.
     - `NavigationMenu.tsx` – Radix navigation menu with theme toggle, logo, and contact trigger.
     - `ProfileCard.tsx` – Hero/profile card, with stable portraits by theme and initials fallback.
     - `Modal.tsx` – Shared Radix dialog wrapper with consistent styling and optional Vercel Analytics tracking on open.
     - `ContactDialog.tsx` – Contact form dialog implemented on top of `Modal`, including Turnstile integration.
-    - `CookiePolicyModal.tsx`, `PrivacyPolicyModal.tsx`, `TechStackModal.tsx` – Footer modals that fetch markdown content via `/api/content/[slug]` and render with `react-markdown`.
+    - `CookiePolicyModal.tsx`, `PrivacyPolicyModal.tsx`, `TechStackModal.tsx` – Footer modals that fetch markdown content via `/api/content/[slug]` and render with `react-markdown` using shared `markdownComponents` from `lib/markdown-components.tsx`.
     - `ImpactCards.tsx` – Rotating impact cards for the About page, rendering markdown snippets with subtle animations.
     - `ReferencesCarousel.tsx` – Auto‑rotating carousel for CV references.
     - `ThemeProvider.tsx` – Wraps `next-themes` configuration.
@@ -170,7 +171,7 @@ The site includes sitemap generation via `next-sitemap`. The configuration is in
     - An optional `### Introduction` heading is stripped.
     - The remaining copy is rendered with larger, cardless typography.
   - Remaining sections are rendered as:
-    - Standard markdown sections with `react-markdown` and list/separator styling.
+    - Standard markdown sections with `react-markdown` and the shared `aboutPageComponents` mapping from `lib/markdown-components.tsx` (headings, lists, links, inline code, separators).
     - A special **Impact Cards** section, when a section starts with `### Impact Cards`:
       - Individual cards are separated by `***` lines.
       - Each card block is rendered by `ImpactCards` as a rotating impact card on the About page.

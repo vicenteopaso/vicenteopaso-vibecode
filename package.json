@@ -59,6 +59,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.14.0",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.19",
@@ -79,7 +80,6 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.6",
     "jsdom": "^27.2.0",
-    "@lhci/cli": "^0.14.0",
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
@@ -100,7 +100,9 @@
   "pnpm": {
     "overrides": {
       "esbuild@<=0.24.2": ">=0.25.0",
-      "estree-util-value-to-estree@<3.3.3": ">=3.3.3"
+      "estree-util-value-to-estree@<3.3.3": ">=3.3.3",
+      "cookie@<0.7.0": ">=0.7.0",
+      "tmp@<=0.2.3": ">=0.2.4"
     }
   }
 }

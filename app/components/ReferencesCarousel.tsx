@@ -70,10 +70,10 @@ export function ReferencesCarousel({
       };
     }
 
-    const timeoutId = window.setTimeout(measure, 250);
+    const timeoutId = setTimeout(measure, 250);
 
     return () => {
-      window.clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
     };
   }, [references]);
 

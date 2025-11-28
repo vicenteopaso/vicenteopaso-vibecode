@@ -11,32 +11,35 @@ import { baseMetadata } from "../../lib/seo";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = baseMetadata({
-  title: "Cookie Policy",
+  title: "Tech Stack",
   description:
-    "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them in compliance with GDPR.",
+    "Complete technology stack and tooling overview for opa.so. Built with Next.js 15, React 18, TypeScript, Tailwind CSS v4, and modern development tools.",
   openGraph: {
-    title: "Cookie Policy Vicente Opaso",
-    description:
-      "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them.",
+    title: "Tech Stack Vicente Opaso",
+    description: "Complete technology stack and tooling overview for opa.so.",
   },
 });
 
-export default function CookiePolicyPage() {
-  const filePath = path.join(process.cwd(), "content", "cookie-policy.md");
+export default function TechStackPage() {
+  const filePath = path.join(process.cwd(), "content", "tech-stack.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 
-  const title =
-    (data.title as string) || (data.name as string) || "Cookie Policy";
+  const title = (data.title as string) || (data.name as string) || "Tech Stack";
 
   return (
-    <article className="section-card space-y-4">
+    <article className="section-card space-y-6">
       <header>
         <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
           {title}
         </h1>
+        {data.description && (
+          <p className="mt-2 text-base text-[color:var(--text-muted)]">
+            {data.description as string}
+          </p>
+        )}
       </header>
-      <div className="prose prose-invert prose-sm max-w-none sm:prose-base">
+      <div className="prose prose-sm max-w-none sm:prose-base">
         <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
       </div>
     </article>

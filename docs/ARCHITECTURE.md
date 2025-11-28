@@ -85,7 +85,7 @@ Parse frontmatter with gray-matter
   ↓
 For CV: extract and parse JSON object from body
   ↓
-Render with ReactMarkdown or custom components
+Render with ReactMarkdown using shared component mappings from `lib/markdown-components.tsx` (intro/about variants on `/about`, standard `markdownComponents` on policy/governance pages)
   ↓
 Apply sanitization (sanitize-html) for rich content
   ↓
