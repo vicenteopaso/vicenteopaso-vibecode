@@ -90,15 +90,8 @@ jobs:
               comment += `| \`${page}\` | ${perf} | ${a11y} | ${best} | ${seo} |\n`;
             });
             
-            comment += '\n**Thresholds:** Perf ≥90, A11y ≥90, Best ≥70, SEO ≥95\n';
-            comment += '<details><summary>📊 View detailed reports</summary>\n\n';
-            manifest.forEach(result => {
-              if (result.reportUrl) {
-                const url = result.url.replace('http://localhost:3000', '') || '/';
-                comment += `- [${url}](${result.reportUrl})\n`;
-              }
-            });
-            comment += '</details>';
+            comment += '\n**Thresholds:** Perf ≥90, A11y ≥90, Best ≥70, SEO ≥95\n\n';
+            comment += `📊 [View full Lighthouse reports](${context.payload.pull_request.html_url}/checks)`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
