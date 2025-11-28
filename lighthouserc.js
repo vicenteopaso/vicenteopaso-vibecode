@@ -32,8 +32,8 @@ module.exports = {
       // Note: Set to current baseline scores to prevent regressions
       // These should be incrementally improved over time
       assertions: {
-        "categories:performance": ["warn", { minScore: 0.7 }],
-        "categories:accessibility": ["warn", { minScore: 0.7 }],
+        "categories:performance": ["warn", { minScore: 0.9 }],
+        "categories:accessibility": ["warn", { minScore: 0.9 }],
         "categories:best-practices": ["warn", { minScore: 0.7 }],
         "categories:seo": ["error", { minScore: 0.95 }],
         // Additional specific assertions for critical metrics
