@@ -121,7 +121,7 @@ export default function AccessibilityPage() {
           </p>
         )}
       </header>
-      <div className="prose prose-invert prose-sm max-w-none sm:prose-base">
+      <div className="prose prose-sm max-w-none sm:prose-base">
         <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
       </div>
     </article>
