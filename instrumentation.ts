@@ -7,10 +7,10 @@ import * as Sentry from "@sentry/nextjs";
  * is responsible for initializing Sentry for those environments.
  */
 export async function register() {
-  // Touch the Sentry import so bundlers and the Sentry Next.js integration
-  // keep this module wired up, even though all concrete initialization
-  // happens inside the environment-specific config files.
-  void Sentry;
+  // Touch the Sentry import by calling a no-op function to ensure bundlers
+  // and the Sentry Next.js integration keep this module wired up, even though
+  // all concrete initialization happens inside the environment-specific config files.
+  Sentry.getCurrentHub(); // Ensures Sentry is included in the bundle
 
   // Ensure the Sentry SDK is loaded and initialized for the appropriate
   // runtime. The client-side configuration is handled via
