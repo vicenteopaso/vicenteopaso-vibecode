@@ -8,10 +8,7 @@ module.exports = {
       // URLs to audit
       url: [
         "http://localhost:3000",
-        "http://localhost:3000/about",
         "http://localhost:3000/cv",
-        "http://localhost:3000/privacy-policy",
-        "http://localhost:3000/cookie-policy",
       ],
       numberOfRuns: 3, // Run Lighthouse multiple times and average the results
       settings: {
