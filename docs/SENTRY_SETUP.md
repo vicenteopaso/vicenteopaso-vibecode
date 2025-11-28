@@ -84,9 +84,9 @@ Example: If your project URL is `https://sentry.io/organizations/my-org/projects
 
 The auth token is used to authenticate source map uploads during the build process.
 
-1. Navigate to your **User Settings** (click your avatar → Settings)
-2. In the left sidebar, click **Auth Tokens**
-3. Click **Create New Token**
+1. Navigate to **Settings** (click your avatar → Settings)
+2. In the left sidebar, click **Account**
+3. Under **API Keys**, select **Auth Tokens** and click **Create New Token**
 4. Configure the token:
    - **Name**: `vicenteopaso-vibecode-sourcemaps` (or any descriptive name)
    - **Scopes**: Select the following:
