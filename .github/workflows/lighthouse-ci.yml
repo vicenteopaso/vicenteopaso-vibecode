@@ -52,7 +52,10 @@ jobs:
             const fs = require('fs');
 
             const manifestPath = '.lighthouseci/manifest.json';
-            if (!fs.existsSync(manifestPath)) return;
+            if (!fs.existsSync(manifestPath)) {
+              core.warning('Lighthouse manifest not found, skipping PR comment');
+              return;
+            }
 
             const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
             
