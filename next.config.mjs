@@ -121,4 +121,43 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(withContentlayer(nextConfig));
+// Sentry configuration options
+// See: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+const sentryWebpackPluginOptions = {
+  // Suppress all Sentry warnings and errors during the build
+  silent: true,
+
+  // Organization and project for uploading source maps
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+
+  // Auth token is required for uploading source maps
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+
+  // Source maps configuration
+  sourcemaps: {
+    // Automatically delete source maps after upload to avoid exposing them to users
+    // This will default to true in future SDK versions
+    deleteSourcemapsAfterUpload: true,
+
+    // Disable source map generation if no auth token is provided
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+
+  // Additional configuration options
+  widenClientFileUpload: true,
+  tunnelRoute: "/monitoring",
+  hideSourceMaps: true,
+  disableLogger: true,
+};
+
+// Only apply Sentry config if the minimum required env vars are set
+// This prevents build warnings when Sentry is not configured
+const shouldUseSentry =
+  process.env.SENTRY_DSN ||
+  process.env.NEXT_PUBLIC_SENTRY_DSN ||
+  process.env.SENTRY_AUTH_TOKEN;
+
+export default shouldUseSentry
+  ? withSentryConfig(withContentlayer(nextConfig), sentryWebpackPluginOptions)
+  : withContentlayer(nextConfig);
