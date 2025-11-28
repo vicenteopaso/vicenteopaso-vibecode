@@ -196,7 +196,7 @@ export default function CVPage() {
                 <li key={idx} className="space-y-1">
                   {h.title && (
                     <div
-                      className="font-semibold text-[color:var(--text-primary)]"
+                      className="font-semibold text-base sm:text-lg text-[color:var(--text-primary)]"
                       dangerouslySetInnerHTML={{
                         __html: sanitizeRichText(h.title),
                       }}

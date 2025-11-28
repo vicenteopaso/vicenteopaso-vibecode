@@ -1,4 +1,5 @@
 import { withContentlayer } from "next-contentlayer";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -120,4 +121,4 @@ const nextConfig = {
   },
 };
 
-export default withContentlayer(nextConfig);
+export default withSentryConfig(withContentlayer(nextConfig));
