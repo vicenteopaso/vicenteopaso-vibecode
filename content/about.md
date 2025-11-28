@@ -9,7 +9,7 @@ initials: VO
 
 ## Introduction
 
-I lead engineering teams and architect frontend platforms that combine composposable architectures, modern frameworks, design systems and Developer Experience (DevEx) workflows. My work focuses on scalable frontend architectures, accessible user experiences, CI/CD automation and cross-functional engineering leadership.
+I lead engineering teams and architect frontend platforms that combine composable architectures, modern frameworks, design systems and Developer Experience (DevEx) workflows. My work focuses on scalable frontend architectures, accessible user experiences, CI/CD automation and cross-functional engineering leadership.
 
 ---
 
