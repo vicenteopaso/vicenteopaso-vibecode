@@ -9,7 +9,8 @@ function isLikelyPublicDSN(dsn: string | undefined): boolean {
   if (!dsn) return false;
   // Public DSNs have a key of 32 hex chars, no colons, and an '@' before the host.
   // Example: https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
-  const publicDsnPattern = /^https:\/\/[0-9a-f]{32}@o\d+\.ingest\.sentry\.io\/\d+$/;
+  const publicDsnPattern =
+    /^https:\/\/[0-9a-f]{32}@o\d+\.ingest\.sentry\.io\/\d+$/;
   return publicDsnPattern.test(dsn);
 }
 
@@ -19,7 +20,7 @@ if (!dsn) {
     // Only warn in non-prod to avoid leaking info in prod.
     // eslint-disable-next-line no-console
     console.warn(
-      "[Sentry] No NEXT_PUBLIC_SENTRY_DSN provided; client-side error tracking is disabled."
+      "[Sentry] No NEXT_PUBLIC_SENTRY_DSN provided; client-side error tracking is disabled.",
     );
   }
 } else if (!isLikelyPublicDSN(dsn)) {
@@ -27,7 +28,7 @@ if (!dsn) {
   // eslint-disable-next-line no-console
   console.warn(
     "[Sentry] The DSN provided in NEXT_PUBLIC_SENTRY_DSN does not look like a public client key. " +
-    "Do not expose secret auth tokens in the client bundle. Sentry client initialization skipped."
+      "Do not expose secret auth tokens in the client bundle. Sentry client initialization skipped.",
   );
 } else {
   Sentry.init({
