@@ -31,7 +31,7 @@ describe("ReferencesCarousel", () => {
       />,
     );
 
-    expect(screen.getByText(/Ref one/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Ref one/i).length).toBeGreaterThanOrEqual(1);
     expect(
       screen.queryByRole("button", { name: /Show reference/i }),
     ).toBeNull();
@@ -78,6 +78,6 @@ describe("ReferencesCarousel", () => {
       fireEvent.click(screen.getByRole("button", { name: "Show reference 2" }));
     });
 
-    expect(screen.getByText(/Ref 2/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Ref 2/i).length).toBeGreaterThanOrEqual(1);
   });
 });

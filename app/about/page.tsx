@@ -76,7 +76,7 @@ export default function AboutPage() {
   // Strip the "### Introduction" heading from the intro section so the
   // copy is titleless and can be rendered as plain body text.
   const introBody = introSection
-    ? introSection.replace(/^###\s+[^\n]+\n*/i, "").trim()
+    ? introSection.replace(/^#{1,6}\s+[^\n]+\n*/i, "").trim()
     : "";
 
   return (
@@ -138,7 +138,7 @@ export default function AboutPage() {
               const candidate = otherSections[nextIndex];
               const candidateTrimmed = candidate.trimStart();
 
-              if (candidateTrimmed.toLowerCase().startsWith("### ")) {
+              if (/^#{1,6}\s/.test(candidateTrimmed)) {
                 break;
               }
 

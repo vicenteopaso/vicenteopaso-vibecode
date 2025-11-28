@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { sanitizeRichText } from "../../lib/sanitize-html";
 
@@ -31,6 +31,21 @@ export function ReferencesCarousel({
 }: ReferencesCarouselProps) {
   const [index, setIndex] = useState(0);
 
+  // Track tallest reference block height to avoid layout shift between slides
+  const referenceRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [maxHeight, setMaxHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!references.length) return;
+
+    const heights = referenceRefs.current.map((el) => el?.offsetHeight ?? 0);
+    const nextMax = heights.length ? Math.max(...heights) : 0;
+
+    if (nextMax > 0 && Number.isFinite(nextMax)) {
+      setMaxHeight(nextMax);
+    }
+  }, [references]);
+
   useEffect(() => {
     if (!references.length) return;
 
@@ -47,8 +62,36 @@ export function ReferencesCarousel({
 
   return (
     <div className="space-y-4">
+      {/* Hidden measurement blocks to compute tallest reference without
+          affecting layout. */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-50 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
+        {references.map((ref, i) => (
+          <div
+            key={`measure-ref-${i}`}
+            ref={(el) => {
+              referenceRefs.current[i] = el;
+            }}
+            className="space-y-3"
+          >
+            <HtmlBlock html={ref.reference} />
+            <div
+              className="text-right text-xs text-[color:var(--text-primary)]"
+              dangerouslySetInnerHTML={{
+                __html: sanitizeRichText(ref.name),
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
       {/* Reference content (no inner card) */}
-      <div className="space-y-3">
+      <div
+        className="space-y-3"
+        style={maxHeight ? { minHeight: maxHeight } : undefined}
+      >
         <HtmlBlock html={current.reference} />
         <div
           className="text-right text-xs text-[color:var(--text-primary)]"

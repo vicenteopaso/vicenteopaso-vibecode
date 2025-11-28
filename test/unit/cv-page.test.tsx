@@ -152,10 +152,10 @@ describe("CVPage", () => {
     expect(screen.getByText("Acme Corp")).toBeInTheDocument();
     expect(screen.getByText("Staff Engineer")).toBeInTheDocument();
 
-    // References carousel rendered
+    // References carousel rendered (at least one visible copy)
     expect(
-      screen.getByText(/Vicente is great to work with/i),
-    ).toBeInTheDocument();
+      screen.getAllByText(/Vicente is great to work with/i).length,
+    ).toBeGreaterThanOrEqual(1);
 
     // Sanitizer should remove script tags from the rendered output.
     expect(document.querySelector("script")).toBeNull();

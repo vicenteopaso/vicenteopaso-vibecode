@@ -50,12 +50,12 @@ export function ImpactCards({
   // Track which logical slot is currently fading out
   const [exitingSlot, setExitingSlot] = React.useState<number | null>(null);
 
-  // Track tallest card height to avoid layout shifts when cards rotate
+  // Track tallest card height across all impact cards to avoid content shift
   const cardRefs = React.useRef<Array<HTMLDivElement | null>>([]);
   const [maxHeight, setMaxHeight] = React.useState<number | null>(null);
 
   React.useEffect(() => {
-    if (!total) return;
+    if (!cards.length) return;
 
     const heights = cardRefs.current.map((el) => el?.offsetHeight ?? 0);
     const nextMax = heights.length ? Math.max(...heights) : 0;
@@ -63,7 +63,7 @@ export function ImpactCards({
     if (nextMax > 0 && Number.isFinite(nextMax)) {
       setMaxHeight(nextMax);
     }
-  }, [total, cards]);
+  }, [cards]);
 
   // Keep visible indices array in sync with card count / visible count
   React.useEffect(() => {
@@ -152,16 +152,21 @@ export function ImpactCards({
 
   return (
     <>
-      {/* Hidden measurement grid to determine tallest card height without affecting layout */}
-      <div className="pointer-events-none fixed inset-0 -z-50 opacity-0">
-        <div className="grid gap-4 md:grid-cols-3 auto-rows-[minmax(0,1fr)]">
+      {/* Hidden measurement grid to compute tallest card without affecting layout.
+          Use the exact same card chrome as the visible cards so measurements
+          match what is actually rendered. */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-50 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
+        <div className="grid gap-4 md:grid-cols-3">
           {cards.map((content, i) => (
             <div
               key={`measure-${i}`}
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
-              className="flex h-full flex-col items-center justify-center px-6 py-4 text-center"
+              className="impact-card flex flex-col items-center justify-center rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-6 py-4 text-center shadow-sm"
             >
               <ReactMarkdown components={impactCardComponents}>
                 {content}
@@ -171,7 +176,7 @@ export function ImpactCards({
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3 auto-rows-[minmax(0,1fr)]">
+      <div className="grid gap-4 md:grid-cols-3">
         {visibleCards.map(({ slot, content }) => {
           const isExiting = exitingSlot === slot;
           const stateClass = isExiting ? "impact-card--out" : "impact-card--in";
@@ -179,7 +184,7 @@ export function ImpactCards({
           return (
             <div
               key={slot}
-              className={`impact-card ${stateClass} flex h-full flex-col items-center justify-center rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-6 py-4 text-center shadow-sm`}
+              className={`impact-card ${stateClass} flex flex-col items-center justify-center rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-6 py-4 text-center shadow-sm`}
               style={maxHeight ? { minHeight: maxHeight } : undefined}
             >
               <ReactMarkdown components={impactCardComponents}>
