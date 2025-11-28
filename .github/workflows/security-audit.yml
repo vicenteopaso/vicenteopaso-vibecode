@@ -9,6 +9,13 @@ on:
     paths:
       - "pnpm-lock.yaml"
       - "package.json"
+  # Also run on pushes to main when dependencies change
+  push:
+    branches:
+      - main
+    paths:
+      - "pnpm-lock.yaml"
+      - "package.json"
   # Allow manual trigger
   workflow_dispatch:
 
