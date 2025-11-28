@@ -137,7 +137,7 @@ const sentryWebpackPluginOptions = {
   // Source maps configuration
   sourcemaps: {
     // Automatically delete source maps after upload to avoid exposing them to users
-    // This will default to true in future SDK versions
+    // (default since @sentry/nextjs v8.0.0)
     deleteSourcemapsAfterUpload: true,
 
     // Disable source map generation if no auth token is provided
