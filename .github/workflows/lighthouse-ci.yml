@@ -83,9 +83,27 @@ jobs:
             comment += '\n**Thresholds:** Perf ≥90, A11y ≥90, Best ≥70, SEO ≥95\n\n';
             comment += `📊 [View full Lighthouse reports](${context.payload.pull_request.html_url}/checks)`;
             
-            github.rest.issues.createComment({
+            // Find and update existing comment or create new one
+            const botComment = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: comment
-            });
+            }).then(({ data }) => 
+              data.find(c => c.user.type === 'Bot' && c.body.includes('🔦 Lighthouse CI Summary'))
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
