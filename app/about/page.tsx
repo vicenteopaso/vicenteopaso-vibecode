@@ -2,60 +2,18 @@ import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
 import React from "react";
-import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
+import {
+  aboutPageComponents,
+  introComponents,
+} from "../../lib/markdown-components";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { GitHubIcon, LinkedInIcon, XIcon } from "../components/icons";
 import { ImpactCards } from "../components/ImpactCards";
 import { ProfileCard } from "../components/ProfileCard";
 
 export const dynamic = "force-static";
-
-// Default markdown rendering for most sections
-const markdownComponents: Components = {
-  h3: (props) => (
-    // eslint-disable-next-line jsx-a11y/heading-has-content
-    <h2
-      className="text-xl font-semibold text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-  ul: (props) => (
-    <ul
-      className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-  ol: (props) => (
-    <ol
-      className="list-decimal marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-};
-
-// Slightly larger, cardless typography for the Introduction copy
-const introComponents: Components = {
-  p: (props) => (
-    <p
-      className="text-base sm:text-lg leading-relaxed text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-  ul: (props) => (
-    <ul
-      className="list-disc marker:text-[color:var(--secondary)] space-y-2 pl-5 text-base sm:text-lg leading-relaxed text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-  ol: (props) => (
-    <ol
-      className="list-decimal marker:text-[color:var(--secondary)] space-y-2 pl-5 text-base sm:text-lg leading-relaxed text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-};
 
 export default function AboutPage() {
   const filePath = path.join(process.cwd(), "content", "about.md");
@@ -176,7 +134,7 @@ export default function AboutPage() {
 
           renderedSections.push(
             <section key={index} className="section-card space-y-4">
-              <ReactMarkdown components={markdownComponents}>
+              <ReactMarkdown components={aboutPageComponents}>
                 {section}
               </ReactMarkdown>
             </section>,

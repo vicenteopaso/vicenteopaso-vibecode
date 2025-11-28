@@ -271,6 +271,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - `docs/CONSTITUTION.md` for engineering governance.
 - `SECURITY` policy document.
 - Additional docs for SEO, accessibility, error handling, release process, etc.
+- Public-facing governance and policy pages (`/accessibility`, `/tech-stack`, `/technical-governance`, `/cookie-policy`, `/privacy-policy`) render markdown via a shared ReactMarkdown components map in `lib/markdown-components.tsx` to keep typography and semantics consistent.
 
 ### 11.2 Architecture Documentation
 

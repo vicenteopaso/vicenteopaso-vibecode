@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
+import { markdownComponents } from "../../lib/markdown-components";
 import { Modal } from "./Modal";
 
 interface ContentResponse {
@@ -67,7 +68,9 @@ export function TechStackModal() {
           {error ? (
             <p className="text-red-400">{error}</p>
           ) : content ? (
-            <ReactMarkdown>{content.body}</ReactMarkdown>
+            <ReactMarkdown components={markdownComponents}>
+              {content.body}
+            </ReactMarkdown>
           ) : (
             <p className="text-[color:var(--text-muted)]">Loading…</p>
           )}

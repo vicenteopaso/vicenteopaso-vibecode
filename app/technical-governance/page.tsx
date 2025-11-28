@@ -3,9 +3,9 @@ import matter from "gray-matter";
 import type { Metadata } from "next";
 import path from "path";
 import React from "react";
-import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
+import { markdownComponents } from "../../lib/markdown-components";
 import { baseMetadata } from "../../lib/seo";
 
 export const dynamic = "force-static";
@@ -20,84 +20,6 @@ export const metadata: Metadata = baseMetadata({
       "How Spec-Driven Development and documentation-first engineering enabled AI-assisted development.",
   },
 });
-
-const markdownComponents: Components = {
-  h2: ({ children, ...props }) => (
-    <h2
-      className="mt-8 mb-4 text-2xl font-semibold text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </h2>
-  ),
-  h3: ({ children, ...props }) => (
-    <h3
-      className="mt-6 mb-3 text-xl font-semibold text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </h3>
-  ),
-  h4: ({ children, ...props }) => (
-    <h4
-      className="mt-4 mb-2 text-lg font-semibold text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </h4>
-  ),
-  p: ({ children, ...props }) => (
-    <p
-      className="mb-4 text-sm leading-relaxed text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </p>
-  ),
-  ul: ({ children, ...props }) => (
-    <ul
-      className="list-disc marker:text-[color:var(--secondary)] mb-4 space-y-2 pl-5 text-sm text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </ul>
-  ),
-  ol: ({ children, ...props }) => (
-    <ol
-      className="list-decimal marker:text-[color:var(--secondary)] mb-4 space-y-2 pl-5 text-sm text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </ol>
-  ),
-  hr: () => (
-    <hr className="my-8 border-t border-[color:var(--border-subtle)]" />
-  ),
-  a: ({ children, ...props }) => (
-    <a
-      className="font-medium text-[color:var(--link)] underline underline-offset-4 hover:text-[color:var(--link-hover)]"
-      {...props}
-    >
-      {children}
-    </a>
-  ),
-  strong: ({ children, ...props }) => (
-    <strong
-      className="font-semibold text-[color:var(--text-primary)]"
-      {...props}
-    >
-      {children}
-    </strong>
-  ),
-  code: ({ children, ...props }) => (
-    <code
-      className="rounded-sm bg-[color:var(--code-bg)] px-1 py-0.5 font-mono text-xs text-[color:var(--code-text)]"
-      {...props}
-    >
-      {children}
-    </code>
-  ),
-};
 
 export default function TechnicalGovernancePage() {
   const filePath = path.join(

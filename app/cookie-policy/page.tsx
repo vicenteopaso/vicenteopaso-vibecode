@@ -3,9 +3,9 @@ import matter from "gray-matter";
 import type { Metadata } from "next";
 import path from "path";
 import React from "react";
-import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
+import { markdownComponents } from "../../lib/markdown-components";
 import { baseMetadata } from "../../lib/seo";
 
 export const dynamic = "force-static";
@@ -20,24 +20,6 @@ export const metadata: Metadata = baseMetadata({
       "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them.",
   },
 });
-
-const markdownComponents: Components = {
-  ul: (props) => (
-    <ul
-      className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-  ol: (props) => (
-    <ol
-      className="list-decimal marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"
-      {...props}
-    />
-  ),
-  hr: () => (
-    <hr className="my-8 border-t border-[color:var(--border-subtle)]" />
-  ),
-};
 
 export default function CookiePolicyPage() {
   const filePath = path.join(process.cwd(), "content", "cookie-policy.md");
