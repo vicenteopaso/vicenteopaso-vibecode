@@ -275,16 +275,15 @@ The project uses the following default sampling rates:
 
 ### CSP Configuration
 
-If you need to add Sentry to your Content Security Policy headers:
+**Important:** The Content Security Policy (CSP) headers are already configured to allow Sentry connections in production. The CSP includes:
 
-1. Open `next.config.mjs`
-2. Add Sentry domains to the CSP directives:
-   ```javascript
-   "connect-src 'self' https://*.ingest.sentry.io https://challenges.cloudflare.com https://formspree.io",
-   "script-src 'self' https://browser.sentry-cdn.com https://challenges.cloudflare.com 'unsafe-inline'",
-   ```
+```javascript
+"connect-src 'self' https://*.ingest.sentry.io https://challenges.cloudflare.com https://formspree.io",
+```
 
-**Note:** The current CSP configuration in development mode is relaxed to avoid interfering with dev tooling.
+This allows the browser to send error reports to Sentry's ingest endpoints. The configuration is in `next.config.mjs` and is automatically applied in production environments.
+
+**Note:** The CSP configuration in development mode is relaxed to avoid interfering with dev tooling.
 
 ## Privacy Considerations
 
