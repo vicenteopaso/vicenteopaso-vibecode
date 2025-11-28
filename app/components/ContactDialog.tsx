@@ -186,11 +186,11 @@ export function ContactDialog({
       <Dialog.Title className="flex items-center gap-2 text-base font-semibold tracking-tight text-[color:var(--text-primary)]">
         Contact me
       </Dialog.Title>
-      <Dialog.Description className="mt-1 text-[0.8rem] text-[color:var(--text-muted)]">
+      <Dialog.Description className="mt-1 text-sm text-[color:var(--text-muted)]">
         Reach out with a short note about what you&apos;d like to explore.
       </Dialog.Description>
       <form
-        className="mt-4 space-y-3 text-[0.8rem]"
+        className="mt-4 space-y-3 text-sm"
         onSubmit={handleSubmit}
         noValidate
         aria-describedby="contact-status"
@@ -200,7 +200,7 @@ export function ContactDialog({
           <input
             type="email"
             name="email"
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-[0.8rem] text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
             placeholder="you@example.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
@@ -226,7 +226,7 @@ export function ContactDialog({
           <input
             type="tel"
             name="phone"
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-[0.8rem] text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
             placeholder="Phone number"
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
@@ -236,7 +236,7 @@ export function ContactDialog({
           <span className="text-[color:var(--text-primary)]">Message</span>
           <textarea
             name="message"
-            className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-[0.8rem] text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
             placeholder="A few words about your project or question"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
@@ -277,7 +277,7 @@ export function ContactDialog({
         {isChallengeVisible ? (
           <p
             id="contact-verification-help"
-            className="mt-1 text-[0.75rem] text-[color:var(--text-muted)]"
+            className="mt-1 text-sm text-[color:var(--text-muted)]"
           >
             This Cloudflare Turnstile verification helps protect this form from
             automated spam.
@@ -300,7 +300,7 @@ export function ContactDialog({
 
         <ContactInfo variant="dialog" />
 
-        <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-[0.8rem]">
+        <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-sm">
           <Dialog.Close
             className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
             disabled={submitting}

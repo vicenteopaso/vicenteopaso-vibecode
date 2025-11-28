@@ -7,9 +7,9 @@ underhero: 25 + years of driving scalable, high-performance web platforms in ent
 initials: VO
 ---
 
-### Introduction
+## Introduction
 
-I lead engineering teams and architect frontend platforms that combine composposable architectures, modern frameworks, design systems and Developer Experience (DevEx) workflows. My work focuses on scalable frontend architectures, accessible user experiences, CI/CD automation and cross-functional engineering leadership.
+I lead engineering teams and architect frontend platforms that combine composable architectures, modern frameworks, design systems and Developer Experience (DevEx) workflows. My work focuses on scalable frontend architectures, accessible user experiences, CI/CD automation and cross-functional engineering leadership.
 
 ---
 
@@ -66,7 +66,7 @@ Frontend Development Team
 
 ---
 
-### Professional Summary
+## Professional Summary
 
 At Nexthink I led the global corporate marketing platform built on Next.js, GraphQL, Tailwind CSS and Hygraph on Vercel—driving performance, accessibility and DevEx automation across a distributed engineering team operating in six locales.
 

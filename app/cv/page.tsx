@@ -221,7 +221,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -236,7 +236,7 @@ export default function CVPage() {
                       {company.company}
                     </p>
                     {company.location && (
-                      <p className="text-xs text-[color:var(--text-muted)] sm:text-sm">
+                      <p className="text-xs text-[color:var(--text-primary)] sm:text-sm">
                         {company.location}
                       </p>
                     )}
@@ -254,7 +254,7 @@ export default function CVPage() {
                           {role.position}
                         </p>
                         {(role.startDate || role.endDate) && (
-                          <p className="text-xs uppercase tracking-wide text-[color:var(--text-muted)]">
+                          <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
                             {role.startDate}
                             {role.startDate || role.endDate ? " – " : ""}
                             {role.endDate || "Present"}
@@ -306,7 +306,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -322,7 +322,7 @@ export default function CVPage() {
                   {[ed.studyType, ed.area].filter(Boolean).join(" in ")}
                 </p>
                 {(ed.startDate || ed.endDate) && (
-                  <p className="text-xs uppercase tracking-wide text-[color:var(--text-muted)]">
+                  <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
                     {ed.startDate}
                     {ed.startDate || ed.endDate ? " – " : ""}
                     {ed.endDate}
@@ -345,7 +345,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -377,7 +377,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -419,7 +419,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -468,7 +468,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑
@@ -502,7 +502,7 @@ export default function CVPage() {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[0.7rem] text-[color:var(--text-muted)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               aria-label="Back to top"
             >
               ↑

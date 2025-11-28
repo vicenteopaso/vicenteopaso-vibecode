@@ -16,7 +16,7 @@ export const ContactInfo: FC<ContactInfoProps> = ({ variant = "inline" }) => {
   const variantClasses =
     variant === "inline"
       ? "mt-2 text-sm text-[color:var(--text-primary)]"
-      : "mt-4 border-t border-[color:var(--border-subtle)] pt-3 text-[0.75rem] text-[color:var(--text-muted)]";
+      : "mt-4 border-t border-[color:var(--border-subtle)] pt-3 text-sm text-[color:var(--text-muted)]";
 
   return (
     <div className={`${baseClasses} ${variantClasses}`}>
