@@ -278,7 +278,7 @@ The project uses the following default sampling rates:
 **Important:** The Content Security Policy (CSP) headers are already configured to allow Sentry connections in production. The CSP includes:
 
 ```javascript
-"connect-src 'self' https://*.ingest.sentry.io https://challenges.cloudflare.com https://formspree.io",
+"connect-src 'self' https://challenges.cloudflare.com https://formspree.io https://*.ingest.sentry.io",
 ```
 
 This allows the browser to send error reports to Sentry's ingest endpoints. The configuration is in `next.config.mjs` and is automatically applied in production environments.
