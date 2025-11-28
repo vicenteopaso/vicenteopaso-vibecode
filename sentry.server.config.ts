@@ -9,5 +9,6 @@ Sentry.init({
     const parsedRate = parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || "");
     return !isNaN(parsedRate) ? parsedRate : 0.1;
   })(),
-  integrations: [Sentry.consoleIntegration()],
+  // Use default server integrations; console capture is handled by our
+  // structured logging and Vercel logs.
 });

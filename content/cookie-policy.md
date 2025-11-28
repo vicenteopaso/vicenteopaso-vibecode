@@ -4,8 +4,6 @@ title: Cookie Policy
 slug: cookie-policy
 ---
 
-# Cookie Policy for opa.so
-
 ## What Are Cookies?
 
 Cookies are small text files stored on your device. Some are essential for security or website functionality; others (not used here) track behavior for analytics or advertising.

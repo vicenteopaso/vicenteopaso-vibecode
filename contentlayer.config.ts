@@ -10,6 +10,8 @@ export const Page = defineDocumentType(() => ({
     slug: { type: "string", required: true },
     tagline: { type: "string", required: false },
     initials: { type: "string", required: false },
+    underhero: { type: "string", required: false },
+    description: { type: "string", required: false },
   },
   computedFields: {
     // For the CV page (slug === "cv"), parse the markdown body as JSON

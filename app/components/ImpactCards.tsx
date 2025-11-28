@@ -90,10 +90,10 @@ export function ImpactCards({
     }
 
     // Fallback: re-measure once after a short delay (e.g., after fonts load)
-    const timeoutId = window.setTimeout(measure, 250);
+    const timeoutId = setTimeout(measure, 250);
 
     return () => {
-      window.clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
     };
   }, [cards]);
 

@@ -4,8 +4,6 @@ title: Privacy Policy
 slug: privacy-policy
 ---
 
-# Privacy Policy for opa.so
-
 ## Introduction
 
 This Privacy Policy explains how opa.so ("we", "us", or "our") collects, uses, discloses, and protects your personal data when you visit https://opa.so/. We comply with the EU GDPR, the Spanish AEPD (“Agencia Española de Protección de Datos”), and applicable data-protection regulations.

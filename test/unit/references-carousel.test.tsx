@@ -42,6 +42,73 @@ describe("ReferencesCarousel", () => {
     expect(img).toBeNull();
   });
 
+  it("uses ResizeObserver path and computes maxHeight when available", () => {
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+
+    class MockResizeObserver {
+      private callback: ResizeObserverCallback;
+
+      constructor(cb: ResizeObserverCallback) {
+        this.callback = cb;
+      }
+
+      observe(element: Element) {
+        observe(element);
+        // Immediately invoke the callback to simulate a resize.
+        this.callback([], this as unknown as ResizeObserver);
+      }
+
+      disconnect() {
+        disconnect();
+      }
+    }
+
+    // Install mock ResizeObserver
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).ResizeObserver = MockResizeObserver;
+
+    const originalOffsetHeight = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      "offsetHeight",
+    );
+
+    Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+      configurable: true,
+      get() {
+        return 100;
+      },
+    });
+
+    const { unmount } = render(
+      <ReferencesCarousel
+        references={[{ name: "A", reference: "<p>Ref 1</p>" }]}
+      />,
+    );
+
+    // Flush any pending effects/timers
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
+
+    expect(observe).toHaveBeenCalled();
+
+    // The ResizeObserver branch should be taken and cleaned up.
+    unmount();
+    expect(disconnect).toHaveBeenCalled();
+
+    // Cleanup
+    if (originalOffsetHeight) {
+      Object.defineProperty(
+        HTMLElement.prototype,
+        "offsetHeight",
+        originalOffsetHeight,
+      );
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (window as any).ResizeObserver;
+  });
+
   // Flaky under JSDOM with fake timers; keeping for reference but disabled for now.
   // it("auto-advances references over time", () => {
   //   render(

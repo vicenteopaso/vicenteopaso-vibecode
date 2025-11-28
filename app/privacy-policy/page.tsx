@@ -1,11 +1,25 @@
 import fs from "fs";
 import matter from "gray-matter";
+import type { Metadata } from "next";
 import path from "path";
 import React from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
+import { baseMetadata } from "../../lib/seo";
+
 export const dynamic = "force-static";
+
+export const metadata: Metadata = baseMetadata({
+  title: "Privacy Policy",
+  description:
+    "Privacy Policy for opa.so. Learn how we collect, use, and protect your personal data in compliance with GDPR and Spanish data protection regulations.",
+  openGraph: {
+    title: "Privacy Policy Vicente Opaso",
+    description:
+      "Privacy Policy for opa.so. Learn how we collect, use, and protect your personal data.",
+  },
+});
 
 const markdownComponents: Components = {
   ul: (props) => (

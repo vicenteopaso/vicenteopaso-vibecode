@@ -1,11 +1,25 @@
 import fs from "fs";
 import matter from "gray-matter";
+import type { Metadata } from "next";
 import path from "path";
 import React from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 
+import { baseMetadata } from "../../lib/seo";
+
 export const dynamic = "force-static";
+
+export const metadata: Metadata = baseMetadata({
+  title: "Cookie Policy",
+  description:
+    "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them in compliance with GDPR.",
+  openGraph: {
+    title: "Cookie Policy Vicente Opaso",
+    description:
+      "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them.",
+  },
+});
 
 const markdownComponents: Components = {
   ul: (props) => (
