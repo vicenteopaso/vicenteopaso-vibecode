@@ -99,9 +99,7 @@
   },
   "pnpm": {
     "overrides": {
-      // Security fix for esbuild vulnerability (CVE-2024-23647 and others)
       "esbuild@<=0.24.2": ">=0.25.0",
-      // Compatibility requirement for contentlayer and unified ecosystem
       "estree-util-value-to-estree@<3.3.3": ">=3.3.3"
     }
   }
