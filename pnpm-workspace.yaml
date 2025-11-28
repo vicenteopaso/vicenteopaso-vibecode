@@ -8,4 +8,3 @@ onlyBuiltDependencies:
   - "@sentry/cli"
   - "@vercel/speed-insights"
   - contentlayer
-

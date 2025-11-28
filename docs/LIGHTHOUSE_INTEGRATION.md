@@ -3,6 +3,7 @@
 ## Current Setup
 
 The project currently uses:
+
 - **GitHub Actions** workflow (`lighthouse-ci.yml`) to run Lighthouse audits on PRs
 - **Temporary public storage** for detailed HTML reports (via `temporaryPublicStorage: true`)
 - **GitHub Actions artifacts** for raw JSON results (artifact name: `lighthouse-results`)
@@ -13,6 +14,7 @@ The project currently uses:
 ### 1. Vercel Speed Insights (Recommended)
 
 **What it provides:**
+
 - Real User Monitoring (RUM) - actual user experience data, not synthetic
 - Core Web Vitals tracking (LCP, FID, CLS)
 - Performance analytics over time
@@ -40,18 +42,21 @@ export default function RootLayout({ children }) {
 **View reports:** Vercel Dashboard → Project → Speed Insights tab
 
 **Pros:**
+
 - Real user data (better than synthetic tests)
 - No CI setup needed
 - Integrated with Vercel deployments
 - Free tier sufficient for this project
 
 **Cons:**
+
 - Only tracks production traffic
 - Doesn't replace PR-level Lighthouse audits
 
 ### 2. Sentry Performance Monitoring
 
 **What it provides:**
+
 - Performance transaction tracking
 - Web Vitals monitoring
 - Frontend performance insights
@@ -81,17 +86,20 @@ Sentry.init({
 **View reports:** Sentry Dashboard → Performance tab
 
 **Pros:**
+
 - Already using Sentry for error tracking
 - Correlates errors with performance issues
 - Powerful filtering and aggregation
 
 **Cons:**
+
 - Costs scale with traffic (free tier: 10k events/month)
 - Doesn't replace PR-level audits
 
 ### 3. Official Lighthouse CI Server (Self-hosted)
 
 **What it provides:**
+
 - Historical Lighthouse score tracking
 - Comparison between builds
 - Custom dashboards
@@ -122,11 +130,13 @@ upload: {
 ```
 
 **Pros:**
+
 - Full control over data
 - Historical trend analysis
 - PR blocking on regressions
 
 **Cons:**
+
 - Requires hosting infrastructure
 - Maintenance overhead
 - Overkill for small projects
@@ -134,6 +144,7 @@ upload: {
 ### 4. Google Cloud Storage + BigQuery (Advanced)
 
 **What it provides:**
+
 - Long-term storage of Lighthouse JSON
 - SQL queries for trend analysis
 - Custom dashboarding (Looker Studio)
@@ -142,11 +153,13 @@ upload: {
 Export Lighthouse results to GCS bucket, then load into BigQuery for analysis.
 
 **Pros:**
+
 - Unlimited historical data
 - Powerful querying capabilities
 - Can correlate with other metrics
 
 **Cons:**
+
 - Complex setup
 - Requires GCP account
 - Not cost-effective for small projects
@@ -160,6 +173,7 @@ Export Lighthouse results to GCS bucket, then load into BigQuery for analysis.
 3. **Configure Sentry Performance Monitoring** to correlate performance with errors (already have Sentry)
 
 **Why this combination:**
+
 - ✅ PR-level synthetic testing (Lighthouse CI)
 - ✅ Real user monitoring (Vercel Speed Insights)
 - ✅ Error correlation (Sentry Performance)
@@ -169,11 +183,13 @@ Export Lighthouse results to GCS bucket, then load into BigQuery for analysis.
 ## Current Lighthouse Reports Access
 
 **Temporary public reports:**
+
 - Available in PR comments as inline links
 - Expire after ~7 days
 - Example: `https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/[id].report.html`
 
 **GitHub Actions artifacts:**
+
 - Artifact name: `lighthouse-results`
 - Available from PR checks tab → Lighthouse CI workflow → Artifacts
 - Retention: 90 days (GitHub default)
@@ -182,6 +198,7 @@ Export Lighthouse results to GCS bucket, then load into BigQuery for analysis.
 ## Future Enhancements
 
 If the project scales:
+
 1. Consider self-hosted LHCI server for historical tracking
 2. Implement budget alerts via GitHub status checks
 3. Add custom performance budgets per route

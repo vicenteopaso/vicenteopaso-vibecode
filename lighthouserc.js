@@ -6,10 +6,7 @@ module.exports = {
       startServerReadyPattern: "Ready",
       startServerReadyTimeout: 60000,
       // URLs to audit
-      url: [
-        "http://localhost:3000",
-        "http://localhost:3000/cv",
-      ],
+      url: ["http://localhost:3000", "http://localhost:3000/cv"],
       numberOfRuns: 3, // Run Lighthouse multiple times and average the results
       settings: {
         // Lighthouse settings

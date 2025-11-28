@@ -58,7 +58,7 @@ jobs:
             }
 
             const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-            
+
             // Group by unique URLs (remove duplicates)
             const uniqueUrls = new Map();
             manifest.forEach(result => {
@@ -68,12 +68,12 @@ jobs:
                 uniqueUrls.set(url, summary);
               }
             });
-            
+
             // Build summary table
             let comment = '## 🔦 Lighthouse CI Summary\n\n';
             comment += '| Page | Perf | A11y | Best | SEO |\n';
             comment += '|------|------|------|------|-----|\n';
-            
+
             uniqueUrls.forEach((summary, url) => {
               const page = url || '/';
               const perf = summary.performance ? Math.round(summary.performance * 100) : '-';
@@ -82,10 +82,10 @@ jobs:
               const seo = summary.seo ? Math.round(summary.seo * 100) : '-';
               comment += `| \`${page}\` | ${perf} | ${a11y} | ${best} | ${seo} |\n`;
             });
-            
+
             comment += '\n**Thresholds:** Perf ≥90, A11y ≥90, Best ≥70, SEO ≥95\n\n';
             comment += `📊 [View full Lighthouse reports](${context.payload.pull_request.html_url}/checks)`;
-            
+
             // Find and update existing comment or create new one
             const botComment = await github.rest.issues.listComments({
               issue_number: context.issue.number,
@@ -94,7 +94,7 @@ jobs:
             }).then(({ data }) => 
               data.find(c => c.user.type === 'Bot' && c.body.includes('🔦 Lighthouse CI Summary'))
             );
-            
+
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
