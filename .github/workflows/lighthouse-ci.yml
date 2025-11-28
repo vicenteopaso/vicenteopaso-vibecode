@@ -60,40 +60,49 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const path = require('path');
 
-            // Read the manifest file to get report URLs
             const manifestPath = '.lighthouseci/manifest.json';
-            if (fs.existsSync(manifestPath)) {
-              const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-              
-              let comment = '## 🔦 Lighthouse CI Results\n\n';
-              comment += 'Lighthouse audits completed! View detailed reports:\n\n';
-              
-              manifest.forEach((result, index) => {
-                const url = result.url || `URL ${index + 1}`;
-                const summary = result.summary || {};
-                
-                comment += `### ${url}\n`;
-                comment += '| Category | Score |\n';
-                comment += '|----------|-------|\n';
-                comment += `| Performance | ${summary.performance ? Math.round(summary.performance * 100) : 'N/A'} |\n`;
-                comment += `| Accessibility | ${summary.accessibility ? Math.round(summary.accessibility * 100) : 'N/A'} |\n`;
-                comment += `| Best Practices | ${summary['best-practices'] ? Math.round(summary['best-practices'] * 100) : 'N/A'} |\n`;
-                comment += `| SEO | ${summary.seo ? Math.round(summary.seo * 100) : 'N/A'} |\n\n`;
-                
-                if (result.reportUrl) {
-                  comment += `[📊 View Full Report](${result.reportUrl})\n\n`;
-                }
-              });
-              
-              comment += '\n---\n*Baseline thresholds: Performance ≥90, Accessibility ≥90, Best Practices ≥70, SEO ≥95*';
-              
-              // Post comment to PR
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: comment
-              });
-            }
+            if (!fs.existsSync(manifestPath)) return;
+
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+            
+            // Group by unique URLs (remove duplicates)
+            const uniqueUrls = new Map();
+            manifest.forEach(result => {
+              const url = result.url.replace('http://localhost:3000', '');
+              const summary = result.summary || {};
+              if (!uniqueUrls.has(url)) {
+                uniqueUrls.set(url, summary);
+              }
+            });
+            
+            // Build summary table
+            let comment = '## 🔦 Lighthouse CI Summary\n\n';
+            comment += '| Page | Perf | A11y | Best | SEO |\n';
+            comment += '|------|------|------|------|-----|\n';
+            
+            uniqueUrls.forEach((summary, url) => {
+              const page = url || '/';
+              const perf = summary.performance ? Math.round(summary.performance * 100) : '-';
+              const a11y = summary.accessibility ? Math.round(summary.accessibility * 100) : '-';
+              const best = summary['best-practices'] ? Math.round(summary['best-practices'] * 100) : '-';
+              const seo = summary.seo ? Math.round(summary.seo * 100) : '-';
+              comment += `| \`${page}\` | ${perf} | ${a11y} | ${best} | ${seo} |\n`;
+            });
+            
+            comment += '\n**Thresholds:** Perf ≥90, A11y ≥90, Best ≥70, SEO ≥95\n';
+            comment += '<details><summary>📊 View detailed reports</summary>\n\n';
+            manifest.forEach(result => {
+              if (result.reportUrl) {
+                const url = result.url.replace('http://localhost:3000', '') || '/';
+                comment += `- [${url}](${result.reportUrl})\n`;
+              }
+            });
+            comment += '</details>';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
