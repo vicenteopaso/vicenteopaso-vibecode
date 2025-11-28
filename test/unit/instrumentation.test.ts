@@ -24,6 +24,9 @@ describe("instrumentation register()", () => {
     process.env = { ...originalEnv };
   });
 
+  afterEach(() => {
+    process.env = originalEnv;
+  });
   it("imports server Sentry config when NEXT_RUNTIME is nodejs", async () => {
     process.env.NEXT_RUNTIME = "nodejs";
 
