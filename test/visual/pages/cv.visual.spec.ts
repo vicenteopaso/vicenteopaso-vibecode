@@ -4,10 +4,13 @@ test.describe("CV Page Visual Regression", () => {
   test("renders CV page in light mode", async ({ page }) => {
     await page.goto("/cv");
     await page.waitForLoadState("networkidle");
+    // Wait for images and fonts to fully load
+    await page.waitForTimeout(1000);
 
     await expect(page).toHaveScreenshot("cv-light.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
     });
   });
 
@@ -19,6 +22,19 @@ test.describe("CV Page Visual Regression", () => {
     await expect(page).toHaveScreenshot("cv-dark.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
+    });
+  });
+
+  test("renders CV page on mobile viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/cv");
+    await page.waitForLoadState("networkidle");
+
+    await expect(page).toHaveScreenshot("cv-mobile.png", {
+      fullPage: true,
+      animations: "disabled",
+      timeout: 15000,
     });
   });
 });

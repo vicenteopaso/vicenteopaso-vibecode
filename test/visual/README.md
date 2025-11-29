@@ -7,9 +7,9 @@ This directory contains Playwright-based visual regression tests for the portfol
 ```
 test/visual/
 ├── pages/              # Full-page screenshots
-│   ├── home.visual.spec.ts
-│   ├── about.visual.spec.ts
-│   ├── cv.visual.spec.ts
+│   ├── home.visual.spec.ts      # Homepage (light, dark, mobile)
+│   ├── about.visual.spec.ts     # About page (light, dark, mobile)
+│   ├── cv.visual.spec.ts        # CV page (light, dark, mobile)
 │   └── policies.visual.spec.ts  # Planned
 ├── components/         # Component-level screenshots (planned)
 │   ├── navigation.visual.spec.ts

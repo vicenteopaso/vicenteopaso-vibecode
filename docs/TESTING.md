@@ -214,6 +214,7 @@ test("homepage renders correctly in light mode", async ({ page }) => {
   await expect(page).toHaveScreenshot("homepage-light.png", {
     fullPage: true,
     animations: "disabled",
+    timeout: 15000,
   });
 });
 
@@ -225,16 +226,29 @@ test("homepage renders correctly in dark mode", async ({ page }) => {
   await expect(page).toHaveScreenshot("homepage-dark.png", {
     fullPage: true,
     animations: "disabled",
+    timeout: 15000,
+  });
+});
+
+test("homepage renders correctly on mobile viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+
+  await expect(page).toHaveScreenshot("homepage-mobile.png", {
+    fullPage: true,
+    animations: "disabled",
+    timeout: 15000,
   });
 });
 ```
 
 **When to write**:
 
-- Critical pages (homepage, CV, about)
+- Critical pages (homepage, CV, about) - test in light mode, dark mode, and mobile viewport
 - Component visual variations
 - Theme switching
-- Responsive breakpoints
+- Responsive breakpoints (especially mobile 375×667px)
 
 See [Visual Regression Testing Guide](./VISUAL_REGRESSION_TESTING.md) for detailed documentation.
 

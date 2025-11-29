@@ -44,10 +44,10 @@ Create targeted visual regression tests for critical UI surfaces:
 
 #### Critical Pages
 
-- Homepage (`/`)
-- About page (`/about`)
-- CV page (`/cv`)
-- Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`)
+- Homepage (`/`) - Light, dark, and mobile viewport (375×667px)
+- About page (`/about`) - Light, dark, and mobile viewport (375×667px)
+- CV page (`/cv`) - Light, dark, and mobile viewport (375×667px)
+- Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`) - Planned
 
 #### Critical Components
 
@@ -63,17 +63,17 @@ Create targeted visual regression tests for critical UI surfaces:
 ```
 test/visual/
 ├── pages/
-│   ├── home.visual.spec.ts
-│   ├── about.visual.spec.ts
-│   ├── cv.visual.spec.ts
-│   └── policies.visual.spec.ts
+│   ├── home.visual.spec.ts          # ✅ Light, dark, mobile (375×667px)
+│   ├── about.visual.spec.ts         # ✅ Light, dark, mobile (375×667px)
+│   ├── cv.visual.spec.ts            # ✅ Light, dark, mobile (375×667px)
+│   └── policies.visual.spec.ts      # 🔜 Planned
 ├── components/
-│   ├── navigation.visual.spec.ts
-│   ├── profile-card.visual.spec.ts
-│   ├── contact-dialog.visual.spec.ts
-│   └── footer.visual.spec.ts
+│   ├── navigation.visual.spec.ts    # 🔜 Planned
+│   ├── profile-card.visual.spec.ts  # 🔜 Planned
+│   ├── contact-dialog.visual.spec.ts # 🔜 Planned
+│   └── footer.visual.spec.ts        # 🔜 Planned
 └── themes/
-    └── theme-switching.visual.spec.ts
+    └── theme-switching.visual.spec.ts # 🔜 Planned
 ```
 
 ### 3. Baseline Management
@@ -220,15 +220,43 @@ Name screenshots descriptively:
 
 ### 5. Test Multiple Viewports
 
-Test responsive design across viewports:
+Test responsive design across viewports for comprehensive coverage:
 
 ```typescript
+// Desktop/default viewport (light mode)
+test("homepage light mode", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  await expect(page).toHaveScreenshot("homepage-light.png", {
+    fullPage: true,
+    timeout: 15000,
+  });
+});
+
+// Desktop/default viewport (dark mode)
+test("homepage dark mode", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  await expect(page).toHaveScreenshot("homepage-dark.png", {
+    fullPage: true,
+    timeout: 15000,
+  });
+});
+
+// Mobile viewport (iPhone SE dimensions)
 test("homepage mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
-  await expect(page).toHaveScreenshot("homepage-mobile.png");
+  await page.waitForLoadState("networkidle");
+  await expect(page).toHaveScreenshot("homepage-mobile.png", {
+    fullPage: true,
+    timeout: 15000,
+  });
 });
 ```
+
+**Best practice**: All primary pages should include light mode, dark mode, and mobile viewport tests to ensure comprehensive responsive design coverage.
 
 ## Reviewing Changes
 
@@ -272,10 +300,7 @@ export default defineConfig({
     },
   },
   // Generate HTML report with visual diffs
-  reporter: [
-    ["html", { outputFolder: "playwright-report" }],
-    ["list"],
-  ],
+  reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
 });
 ```
 

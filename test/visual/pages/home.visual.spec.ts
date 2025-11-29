@@ -9,6 +9,7 @@ test.describe("Homepage Visual Regression", () => {
     await expect(page).toHaveScreenshot("homepage-light.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
     });
   });
 
@@ -20,6 +21,7 @@ test.describe("Homepage Visual Regression", () => {
     await expect(page).toHaveScreenshot("homepage-dark.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
     });
   });
 
@@ -31,6 +33,7 @@ test.describe("Homepage Visual Regression", () => {
     await expect(page).toHaveScreenshot("homepage-mobile.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
     });
   });
 });

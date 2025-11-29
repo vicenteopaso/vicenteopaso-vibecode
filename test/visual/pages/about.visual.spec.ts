@@ -8,6 +8,7 @@ test.describe("About Page Visual Regression", () => {
     await expect(page).toHaveScreenshot("about-light.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
     });
   });
 
@@ -19,6 +20,19 @@ test.describe("About Page Visual Regression", () => {
     await expect(page).toHaveScreenshot("about-dark.png", {
       fullPage: true,
       animations: "disabled",
+      timeout: 15000,
+    });
+  });
+
+  test("renders about page on mobile viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/about");
+    await page.waitForLoadState("networkidle");
+
+    await expect(page).toHaveScreenshot("about-mobile.png", {
+      fullPage: true,
+      animations: "disabled",
+      timeout: 15000,
     });
   });
 });

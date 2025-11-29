@@ -155,9 +155,10 @@ This document captures the engineering intent for this repository. It is a **nor
 
 - **Strategy**: Playwright-based screenshot comparison (no Storybook required)
 - **Rationale**: Lightweight, no additional services, works with existing infrastructure
-- **Coverage**: Homepage, About, CV, policy pages, key components in light/dark themes
+- **Coverage**: All primary pages (Homepage, About, CV, policy pages) tested in light mode, dark mode, and mobile viewport (375×667px); key components tested across themes
 - **Baseline management**: Screenshots stored in git, updated with `--update-snapshots`
 - **CI integration**: Visual tests run on all PRs, diffs uploaded as artifacts
+- **Responsive testing**: Mobile viewport tests ensure consistent responsive design across all pages
 
 See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRESSION_TESTING.md) for detailed documentation.
 
