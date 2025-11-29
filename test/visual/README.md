@@ -11,11 +11,11 @@ test/visual/
 │   ├── about.visual.spec.ts
 │   ├── cv.visual.spec.ts
 │   └── policies.visual.spec.ts
-├── components/         # Component-level screenshots
+├── components/         # Component-level screenshots (planned)
 │   ├── navigation.visual.spec.ts
 │   ├── profile-card.visual.spec.ts
 │   └── footer.visual.spec.ts
-└── themes/            # Theme-specific tests
+└── themes/            # Theme-specific tests (planned)
     └── theme-switching.visual.spec.ts
 ```
 
