@@ -72,7 +72,7 @@ const nextConfig = {
     localPatterns: [
       {
         pathname: "/assets/images/**",
-        search: "",
+        // Omit 'search' to allow any query string (e.g., ?v=1 for cache busting)
       },
     ],
   },
