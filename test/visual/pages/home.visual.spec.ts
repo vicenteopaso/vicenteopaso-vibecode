@@ -49,8 +49,28 @@ test.describe("Homepage Visual Regression", () => {
       }
     });
 
-    // Additional wait for carousel to settle
-    await page.waitForTimeout(500);
+    // Wait for carousel transform to stabilize (deterministic wait)
+    await page.evaluate(() => {
+      const carousel = document.querySelector('[data-testid="impact-cards"]');
+      if (!carousel) return;
+      return new Promise<void>((resolve) => {
+        let lastTransform = (carousel as HTMLElement).style.transform;
+        let stableCount = 0;
+        const checkTransform = setInterval(() => {
+          const currentTransform = (carousel as HTMLElement).style.transform;
+          if (currentTransform === lastTransform) {
+            stableCount++;
+            if (stableCount >= 3) {
+              clearInterval(checkTransform);
+              resolve();
+            }
+          } else {
+            stableCount = 0;
+            lastTransform = currentTransform;
+          }
+        }, 100);
+      });
+    });
 
     // Take full page screenshot
     await expect(page).toHaveScreenshot("homepage-light.png", {
