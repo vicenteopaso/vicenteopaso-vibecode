@@ -136,3 +136,49 @@ export async function waitForHomepage(page: Page): Promise<void> {
   await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
   await waitForStableTransform(page, '[data-testid="impact-cards"]');
 }
+
+// Wait for modal to be fully visible and stable
+export async function waitForModalOpen(page: Page): Promise<void> {
+  // Wait for the dialog to be visible
+  await page.waitForSelector('[role="dialog"]', { state: "visible" });
+
+  // Wait for backdrop overlay to be visible
+  await page.waitForSelector('[data-state="open"]', { state: "visible" });
+
+  // Wait for any animations to complete
+  await page.evaluate(() => document.fonts.ready);
+  await waitForStableHeight(page);
+}
+
+// Wait for modal to be fully closed
+export async function waitForModalClose(page: Page): Promise<void> {
+  // Wait for dialog to be hidden
+  await page.waitForSelector('[role="dialog"]', {
+    state: "hidden",
+    timeout: 5000,
+  });
+}
+
+// Wait for theme transition to complete
+export async function waitForThemeTransition(page: Page): Promise<void> {
+  // The theme provider uses disableTransitionOnChange, but we still wait for
+  // the DOM to update and any re-renders to complete
+  await page.evaluate(() => document.fonts.ready);
+  await waitForStableHeight(page);
+}
+
+// Get the current theme class on html element
+export async function getCurrentTheme(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    return document.documentElement.classList.contains("dark")
+      ? "dark"
+      : "light";
+  });
+}
+
+// Mask for the contact dialog (excluding Turnstile widget which is dynamic)
+export async function contactDialogMasks(page: Page): Promise<Locator[]> {
+  return [
+    page.locator(".cf-turnstile"), // Turnstile challenge container is dynamic
+  ];
+}
