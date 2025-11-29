@@ -410,8 +410,8 @@ test.describe("Component Visual Regression", () => {
   });
 
   test("renders in dark mode", async ({ page }) => {
-    await page.goto("/page");
     await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/page");
     await page.waitForLoadState("networkidle");
 
     await expect(page).toHaveScreenshot("component-dark.png", {
