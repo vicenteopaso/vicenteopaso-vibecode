@@ -51,13 +51,56 @@ pnpm install
 - - `pnpm lint` (or `pnpm lint:fix` to auto-fix import ordering and other auto-fixable issues)
 - - `pnpm typecheck`
 - Run tests locally:
-- - `pnpm test`
-- - `pnpm test:e2e` (when relevant)
-- - `pnpm coverage` to verify coverage and generate reports.
+- - `pnpm test` (unit & integration tests)
+- - `pnpm test:e2e` (end-to-end tests when relevant)
+- - `pnpm test:visual` (visual regression tests when UI changes)
+- - `pnpm coverage` to verify coverage stays above 90%
 - Check for security vulnerabilities in dependencies:
 - - `pnpm audit:security` to check for high+ vulnerabilities
 - - `pnpm audit:security:fix` to attempt automatic fixes if needed
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
+
+### Testing guidelines
+
+This project maintains **>90% test coverage** across multiple testing layers. See [Testing Guide](./docs/TESTING.md) for comprehensive documentation.
+
+#### Test Types
+
+- **Unit tests** (`pnpm test`): Test individual functions, utilities, and component logic
+- **E2E tests** (`pnpm test:e2e`): Test complete user flows and critical paths
+- **Visual regression** (`pnpm test:visual`): Catch unintended UI changes
+- **Type checking** (`pnpm typecheck`): Ensure TypeScript type safety
+
+#### When to Add Tests
+
+- **New features**: Always include unit and E2E tests for new functionality
+- **Bug fixes**: Add regression test that would have caught the bug
+- **UI changes**: Run visual tests and update baselines if intentional
+- **Refactoring**: Tests should still pass; if not, tests need updating
+
+#### Running Tests
+
+```bash
+# Quick test run
+pnpm test                    # Unit tests only
+
+# Full test suite
+pnpm test:e2e                # E2E tests (requires dev server)
+pnpm test:visual             # Visual regression tests
+pnpm coverage                # Generate coverage report
+
+# Update visual baselines (after intentional UI changes)
+pnpm test:visual:update
+```
+
+#### Test Coverage Requirements
+
+- Maintain **>90% statement coverage**
+- All new components must have tests
+- All bug fixes must include regression tests
+- E2E tests required for critical user flows (contact form, CV download, navigation)
+
+See [Testing Guide](./docs/TESTING.md) for detailed best practices and examples.
 
 ### Component documentation guidelines
 

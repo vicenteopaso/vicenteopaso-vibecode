@@ -22,12 +22,15 @@
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:visual": "playwright test test/visual",
+    "test:visual:update": "playwright test test/visual --update-snapshots",
     "coverage": "mkdir -p coverage/unit/.tmp && vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "content": "node scripts/contentlayer-build.mjs",
     "clean:local": "node scripts/clean-local.mjs",
-    "full:local": "pnpm clean:local && pnpm install && pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm typecheck && pnpm coverage && pnpm audit:a11y && pnpm audit:security:fix",
-    "partial:local": "pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm typecheck && pnpm coverage && pnpm audit:a11y && pnpm audit:security:fix",
+    "full:local": "pnpm clean:local && pnpm install && pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm test:visual && pnpm typecheck && pnpm coverage && pnpm audit:a11y && pnpm audit:security:fix",
+    "partial:local": "pnpm build && pnpm lint:fix && pnpm format:fix && pnpm validate:links && pnpm coverage && pnpm test:e2e && pnpm test:visual && pnpm typecheck && pnpm audit:a11y && pnpm audit:security:fix",
     "sitemap": "next-sitemap --config next-sitemap.config.js"
   },
   "dependencies": {

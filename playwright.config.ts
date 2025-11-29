@@ -15,6 +15,23 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
   },
+  // Visual regression testing configuration
+  expect: {
+    toHaveScreenshot: {
+      // Maximum allowed pixel difference
+      maxDiffPixels: 100,
+      // Threshold for pixel comparison (0-1, lower is stricter)
+      threshold: 0.2,
+      // Disable animations for consistent screenshots
+      animations: "disabled" as const,
+    },
+  },
+  // Reporter configuration
+  // Both E2E and visual tests (including those in test/visual/ that override testDir)
+  // will share the same output location ("playwright-report"). The visual regression settings above
+  // (lines 18-28) apply to both E2E tests (when they use screenshots) and dedicated visual tests.
+  // If you need to separate reports by test type in the future, adjust the outputFolder accordingly.
+  reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
   webServer: process.env.PLAYWRIGHT_SKIP_WEB_SERVER
     ? undefined
     : {
