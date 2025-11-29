@@ -136,3 +136,19 @@ export async function waitForHomepage(page: Page): Promise<void> {
   await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
   await waitForStableTransform(page, '[data-testid="impact-cards"]');
 }
+
+// Wait for static page (no dynamic content) to be fully loaded and ready for screenshot
+export async function waitForStaticPage(page: Page): Promise<void> {
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts to load
+  await page.evaluate(() => document.fonts.ready);
+
+  // Wait for main heading to be visible
+  await page.waitForSelector("h1", { state: "visible" });
+
+  // Wait for footer to ensure full page is rendered
+  await page.waitForSelector("footer", { state: "visible" });
+
+  await waitForStableHeight(page);
+}
