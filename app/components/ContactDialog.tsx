@@ -34,6 +34,12 @@ interface ContactDialogProps {
 /** Countdown duration in seconds after successful form submission. */
 const COUNTDOWN_SECONDS = 10;
 
+/**
+ * Delay before transitioning from success state to countdown state.
+ * This gives users time to read the success message before the countdown begins.
+ */
+const SUCCESS_TO_COUNTDOWN_DELAY_MS = 100;
+
 /** Form state machine: idle → submitting → success → countdown → closed */
 type FormState = "idle" | "submitting" | "success" | "countdown";
 
@@ -142,7 +148,8 @@ export function ContactDialog({
 
     if (countdownSeconds <= 0) {
       // Auto-close the modal when countdown reaches zero
-      setIsOpen(false);
+      // Use handleOpenChange to ensure proper state cleanup
+      handleOpenChange(false);
       return;
     }
 
@@ -153,7 +160,7 @@ export function ContactDialog({
     return () => {
       window.clearTimeout(timerId);
     };
-  }, [formState, countdownSeconds]);
+  }, [formState, countdownSeconds, handleOpenChange]);
 
   // Transition from success to countdown state
   useEffect(() => {
@@ -161,7 +168,7 @@ export function ContactDialog({
       // Short delay to show success message before starting countdown
       const timerId = window.setTimeout(() => {
         setFormState("countdown");
-      }, 100);
+      }, SUCCESS_TO_COUNTDOWN_DELAY_MS);
 
       return () => {
         window.clearTimeout(timerId);
