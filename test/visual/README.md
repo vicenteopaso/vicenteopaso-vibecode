@@ -9,7 +9,7 @@ test/visual/
 ├── pages/              # Full-page screenshots
 │   ├── home.visual.spec.ts      # Homepage/About page at root (light, dark, mobile)
 │   ├── cv.visual.spec.ts        # CV page (light, dark, mobile)
-│   └── policies.visual.spec.ts  # Planned
+│   └── policies.visual.spec.ts  # Privacy policy page (light, dark, mobile)
 ├── components/         # Component-level screenshots (planned)
 │   ├── navigation.visual.spec.ts
 │   ├── profile-card.visual.spec.ts
@@ -113,6 +113,7 @@ Use dedicated helper functions for each page type:
 
 - **`waitForHomepage(page)`**: Waits for homepage to be fully loaded (network idle, fonts, portrait, ImpactCards, footer, stable height, frozen carousels)
 - **`waitForCVPage(page)`**: Waits for CV page to be fully loaded (network idle, fonts, h1, references section, footer, stable height)
+- **`waitForPolicyPage(page)`**: Waits for policy page to be fully loaded (network idle, fonts, h1, footer, stable height)
 
 ### Dynamic Content Handling
 
