@@ -110,8 +110,28 @@ test.describe("Homepage Visual Regression", () => {
       }
     });
 
-    // Additional wait for carousel to settle
-    await page.waitForTimeout(500);
+    // Wait for carousel to settle by polling its scroll position
+    await page.evaluate(() => {
+      return new Promise<void>((resolve) => {
+        const carousel = document.querySelector('[data-testid="impact-cards"]');
+        if (!carousel) return resolve();
+        let lastPosition = carousel.scrollLeft;
+        let stableCount = 0;
+        const checkPosition = setInterval(() => {
+          const currentPosition = carousel.scrollLeft;
+          if (currentPosition === lastPosition) {
+            stableCount++;
+            if (stableCount >= 3) {
+              clearInterval(checkPosition);
+              resolve();
+            }
+          } else {
+            stableCount = 0;
+            lastPosition = currentPosition;
+          }
+        }, 100);
+      });
+    });
 
     await expect(page).toHaveScreenshot("homepage-dark.png", {
       fullPage: true,
