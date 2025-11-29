@@ -10,7 +10,7 @@ test/visual/
 │   ├── home.visual.spec.ts
 │   ├── about.visual.spec.ts
 │   ├── cv.visual.spec.ts
-│   └── policies.visual.spec.ts
+│   └── policies.visual.spec.ts  # Planned
 ├── components/         # Component-level screenshots (planned)
 │   ├── navigation.visual.spec.ts
 │   ├── profile-card.visual.spec.ts
