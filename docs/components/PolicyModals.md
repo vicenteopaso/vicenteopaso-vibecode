@@ -132,13 +132,6 @@ Uses `markdownComponents` from `lib/markdown-components.tsx`:
 
 ## Usage in Footer
 
-```tsx
-<Link href="#" onClick={() => /* open modal */}>
-  Cookie Policy
-</Link>
-<CookiePolicyModal />
-```
-
 Note: Footer uses Link components that navigate to dedicated pages (`/cookie-policy`, etc.) instead of opening modals. These modal components are available but not currently used in the Footer.
 
 ## Testing
