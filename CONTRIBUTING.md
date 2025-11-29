@@ -59,6 +59,22 @@ pnpm install
 - - `pnpm audit:security:fix` to attempt automatic fixes if needed
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
 
+### Component documentation guidelines
+
+When creating or modifying UI components:
+
+- **Document new components** in `docs/components/` following the established format (see [Component Catalog](./docs/components/README.md)).
+- **Update existing documentation** when component APIs change (props, behavior, accessibility features).
+- **Include**:
+  - Purpose and use cases
+  - Complete props/API reference with TypeScript types
+  - Usage examples with code snippets
+  - Accessibility features (keyboard navigation, ARIA, screen reader support)
+  - Design tokens used (colors, spacing, typography)
+  - Testing notes and current coverage
+- **Link from `DESIGN_SYSTEM.md`** if the component represents a new design pattern.
+- See existing component docs (`ProfileCard.md`, `Modal.md`, etc.) as examples.
+
 ### Linting guidelines
 
 - **Import ordering**: Imports are automatically sorted by `eslint-plugin-simple-import-sort`. Run `pnpm lint:fix` to auto-sort imports.
