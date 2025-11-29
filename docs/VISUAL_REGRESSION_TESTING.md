@@ -46,7 +46,8 @@ Create targeted visual regression tests for critical UI surfaces:
 
 - Home page (root `/`) - Light, dark, and mobile viewport (375×667px)
 - CV page (`/cv`) - Light, dark, and mobile viewport (375×667px)
-- Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`) - Planned
+- Policy pages (`/cookie-policy`) - Light, dark, and mobile viewport (375×667px)
+- Policy pages (`/privacy-policy`, `/accessibility`) - Planned
 
 #### Critical Components
 
@@ -64,7 +65,7 @@ test/visual/
 ├── pages/
 │   ├── home.visual.spec.ts          # ✅ Light, dark, mobile (375×667px) - About page at root
 │   ├── cv.visual.spec.ts            # ✅ Light, dark, mobile (375×667px)
-│   └── policies.visual.spec.ts      # 🔜 Planned
+│   └── policies.visual.spec.ts      # ✅ Cookie policy: Light, dark, mobile (375×667px)
 ├── components/
 │   ├── navigation.visual.spec.ts    # 🔜 Planned
 │   ├── profile-card.visual.spec.ts  # 🔜 Planned
