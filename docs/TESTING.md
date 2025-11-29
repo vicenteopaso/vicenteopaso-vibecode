@@ -205,6 +205,13 @@ test("user can submit contact form", async ({ page }) => {
 
 Always use shared utilities instead of inline waits:
 
+**Page-Specific Wait Helpers** (recommended for all tests):
+
+- **`waitForHomepage(page)`**: Waits for homepage to be fully loaded (network idle, fonts, portrait, ImpactCards, footer, stable height, frozen carousels)
+- **`waitForCVPage(page)`**: Waits for CV page to be fully loaded (network idle, fonts, h1, references section, footer, stable height)
+
+**Low-Level Utilities** (for custom pages or component tests):
+
 - **`waitForStableHeight(page, consecutive?, intervalMs?)`**: Waits until `document.body.scrollHeight` remains stable for N consecutive checks (default: 3 checks × 100ms)
 - **`freezeCarouselInteractions(page, selector)`**: Disables `pointer-events` on all buttons within selector to prevent user-driven carousel changes
 - **`waitForStableTransform(page, selector, consecutive?, intervalMs?)`**: Waits for CSS transform to stabilize
@@ -226,22 +233,11 @@ This site has dynamic content that requires masking:
 ```typescript
 // test/visual/pages/home.visual.spec.ts
 import { test, expect } from "@playwright/test";
-import {
-  freezeCarouselInteractions,
-  homepageMasks,
-  waitForStableHeight,
-  waitForStableTransform,
-} from "../utils";
+import { waitForHomepage, homepageMasks } from "../utils";
 
 test("homepage renders correctly in light mode", async ({ page }) => {
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-  await page.evaluate(() => document.fonts.ready);
-
-  // Use shared utilities for stable layout
-  await waitForStableHeight(page);
-  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-  await waitForStableTransform(page, '[data-testid="impact-cards"]');
+  await waitForHomepage(page); // Handles all setup: networkidle, fonts, elements, stability
 
   await expect(page).toHaveScreenshot("homepage-light.png", {
     fullPage: true,
@@ -253,12 +249,7 @@ test("homepage renders correctly in light mode", async ({ page }) => {
 test("homepage renders correctly in dark mode", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-  await page.evaluate(() => document.fonts.ready);
-
-  await waitForStableHeight(page);
-  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-  await waitForStableTransform(page, '[data-testid="impact-cards"]');
+  await waitForHomepage(page);
 
   await expect(page).toHaveScreenshot("homepage-dark.png", {
     fullPage: true,
@@ -270,12 +261,7 @@ test("homepage renders correctly in dark mode", async ({ page }) => {
 test("homepage renders correctly on mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-  await page.evaluate(() => document.fonts.ready);
-
-  await waitForStableHeight(page);
-  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-  await waitForStableTransform(page, '[data-testid="impact-cards"]');
+  await waitForHomepage(page);
 
   await expect(page).toHaveScreenshot("homepage-mobile.png", {
     fullPage: true,
@@ -566,15 +552,20 @@ expect(component.state.isValid).toBe(true);
 
 ### Visual Regression
 
-1. **Use shared utilities**: Always prefer `test/visual/utils.ts` helpers over inline waits:
+1. **Use page-specific helpers**: Always prefer page-specific wait helpers from `test/visual/utils.ts` to avoid code duplication:
 
 ```typescript
-// ✅ GOOD: Shared utilities
+// ✅ BEST: Page-specific helper (handles all setup)
+import { waitForHomepage, waitForCVPage } from "../utils";
+await waitForHomepage(page); // For homepage
+await waitForCVPage(page); // For CV page
+
+// ✅ GOOD: Low-level utilities for custom pages
 import { waitForStableHeight, freezeCarouselInteractions } from "../utils";
 await waitForStableHeight(page);
 await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
 
-// ❌ BAD: Inline polling logic (duplicates code)
+// ❌ BAD: Inline polling logic or duplicated setup code
 await page.evaluate(() => {
   /* inline polling */
 });
@@ -589,7 +580,7 @@ await expect(page).toHaveScreenshot("page.png", {
 ```
 
 3. **Disable animations**: Ensure consistent screenshots
-4. **Wait for stability**: `waitForLoadState('networkidle')`, `document.fonts.ready`, `waitForStableHeight()`
+4. **Wait for stability**: Page-specific helpers handle this automatically; for custom pages use `waitForLoadState('networkidle')`, `document.fonts.ready`, `waitForStableHeight()`
 5. **Test multiple viewports**: Mobile (375×667), tablet, desktop
 
 See [Visual Regression Testing Guide](./VISUAL_REGRESSION_TESTING.md) for details.
