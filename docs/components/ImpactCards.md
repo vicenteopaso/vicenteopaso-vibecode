@@ -192,7 +192,7 @@ This prevents layout shift when cards with different heights rotate in.
 
 ## Testing
 
-**Test file:** Tested as part of About page (`test/unit/about-page.test.tsx`)
+**Test file:** Tested as part of Home page (`test/unit/home-page.test.tsx`)
 
 - ✅ Renders correct number of cards initially
 - ✅ Cards contain markdown content

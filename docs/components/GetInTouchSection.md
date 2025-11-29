@@ -72,7 +72,7 @@ export default function AboutPage() {
 
 ## Testing
 
-**Test file:** `test/unit/about-page.test.tsx`
+**Test file:** `test/unit/home-page.test.tsx`
 
 - ✅ Renders section heading
 - ✅ Renders contact dialog trigger
