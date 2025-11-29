@@ -18,6 +18,28 @@ The design system is built on:
 - Dark/light theme support via `next-themes`
 - Brutalist-inspired with zero border radius (configurable)
 
+## Component Catalog
+
+Comprehensive documentation for all components is available in the [`docs/components/`](./components/) directory.
+
+### Key Components
+
+- **[ProfileCard](./components/ProfileCard.md)** - User profile with avatar, name, tagline, and action links
+- **[NavigationMenu](./components/NavigationMenu.md)** - Main navigation with theme toggle and contact dialog trigger
+- **[Modal](./components/Modal.md)** - Base modal/dialog component with size variants and analytics
+- **[ErrorBoundary](./components/ErrorBoundary.md)** - Error boundary wrapper for graceful error handling
+
+### Full Component List
+
+See the [Component Documentation Index](./components/README.md) for a complete catalog including:
+
+- Layout components (Header, Footer)
+- UI components (Modal, ContactDialog, ProfileCard)
+- Content components (ImpactCards, ReferencesCarousel)
+- Policy modals (Cookie, Privacy, TechStack)
+
+Each component doc includes props, states, accessibility notes, usage examples, and testing information.
+
 ---
 
 ## Design Tokens

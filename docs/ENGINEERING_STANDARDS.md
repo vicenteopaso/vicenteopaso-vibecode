@@ -46,7 +46,14 @@ This document captures the engineering intent for this repository. It is a **nor
 
 ### 2.2 Component Engineering
 
-- Components should be documented (Storybook is optional but recommended if the component surface grows).
+- Components should be documented via markdown files in `docs/components/` (see [Component Catalog](./components/README.md)).
+- Each component documentation should include:
+  - Purpose and use cases
+  - Props/API reference with types
+  - Usage examples
+  - Accessibility features and keyboard interactions
+  - Design tokens and theming
+  - Testing notes and coverage
 - Reusable design tokens for spacing, colors, typography, breakpoints, radii, and shadows.
 - Composition over inheritance.
 - No ad-hoc inline styles; prefer Tailwind or structured CSS.
@@ -255,7 +262,15 @@ This document captures the engineering intent for this repository. It is a **nor
 
 ### 10.3 Documentation
 
-- Living documentation, via markdown docs and optionally Storybook, for key components and tokens.
+- Living documentation in `docs/components/` for all key components and design tokens.
+- Markdown-based component documentation provides:
+  - Clear API reference with typed props
+  - Usage examples and patterns
+  - Accessibility guidelines
+  - Integration with design system tokens
+  - Testing and coverage information
+- See [Component Catalog](./components/README.md) for the full component index.
+- Component documentation should be updated whenever component APIs change.
 
 ## 11. Governance & Documentation _(implemented: README, ARCHITECTURE, CONSTITUTION, CONTRIBUTING, SECURITY, ERROR_HANDLING, etc.)_
 
