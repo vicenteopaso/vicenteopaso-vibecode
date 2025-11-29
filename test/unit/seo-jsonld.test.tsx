@@ -31,8 +31,8 @@ describe("SeoJsonLd", () => {
     expect(getByTestId("website-json-ld")).toBeInTheDocument();
   });
 
-  it("renders person JSON-LD only on /about and /cv", () => {
-    vi.mocked(usePathname).mockReturnValue("/about");
+  it("renders person JSON-LD only on / and /cv", () => {
+    vi.mocked(usePathname).mockReturnValue("/");
     const { getAllByTestId, unmount } = render(<SeoJsonLd />);
 
     expect(getAllByTestId("person-json-ld").length).toBeGreaterThan(0);
@@ -47,7 +47,7 @@ describe("SeoJsonLd", () => {
 
     unmountCv();
 
-    vi.mocked(usePathname).mockReturnValue("/");
+    vi.mocked(usePathname).mockReturnValue("/tech-stack");
     const { queryByTestId } = render(<SeoJsonLd />);
     expect(queryByTestId("person-json-ld")).not.toBeInTheDocument();
   });

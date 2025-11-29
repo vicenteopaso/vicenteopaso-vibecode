@@ -7,9 +7,8 @@ This directory contains Playwright-based visual regression tests for the portfol
 ```
 test/visual/
 ├── pages/              # Full-page screenshots
-│   ├── home.visual.spec.ts
-│   ├── about.visual.spec.ts
-│   ├── cv.visual.spec.ts
+│   ├── home.visual.spec.ts      # Homepage/About page at root (light, dark, mobile)
+│   ├── cv.visual.spec.ts        # CV page (light, dark, mobile)
 │   └── policies.visual.spec.ts  # Planned
 ├── components/         # Component-level screenshots (planned)
 │   ├── navigation.visual.spec.ts
@@ -57,38 +56,58 @@ Baselines are stored in `*-snapshots/` directories next to test files.
    git commit -m "test: update visual baselines for [reason]"
    ```
 
-## Writing Visual Tests
+## Writing New Tests
 
-### Full Page Screenshot
+### Basic Template
+
+**Always use shared utilities from `utils.ts`:**
 
 ```typescript
-test("page renders correctly", async ({ page }) => {
-  await page.goto("/page-url");
-  await page.waitForLoadState("networkidle");
+import { expect, test } from "@playwright/test";
+import {
+  waitForStableHeight,
+  freezeCarouselInteractions,
+  homepageMasks, // or cvPageMasks for CV page
+} from "../utils";
 
-  await expect(page).toHaveScreenshot("page-name.png", {
-    fullPage: true,
-    animations: "disabled",
+test.describe("Page Name Visual Regression", () => {
+  test("renders page correctly in light mode", async ({ page }) => {
+    await page.goto("/your-page");
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => document.fonts.ready);
+
+    // Use shared utilities for stable layout
+    await waitForStableHeight(page);
+
+    // Freeze carousels if present
+    await freezeCarouselInteractions(page, '[data-testid="your-carousel"]');
+
+    await expect(page).toHaveScreenshot("your-page-light.png", {
+      fullPage: true,
+      animations: "disabled",
+      mask: await homepageMasks(page), // Mask dynamic content
+    });
   });
 });
 ```
 
-### Component Screenshot
+### Dynamic Content Handling
+
+This site has dynamic content that requires masking:
+
+- **ProfileCard**: `Math.random()` selects from 3 portrait images
+- **ImpactCards**: Auto-rotates cards every 7s with random selection
+- **ReferencesCarousel**: Auto-rotates testimonials every 5s
+
+**Solution**: Use shared mask functions:
 
 ```typescript
-test("component renders correctly", async ({ page }) => {
-  await page.goto("/page-with-component");
+// Homepage
+mask: await homepageMasks(page), // Excludes portrait + ImpactCards
 
-  const component = page.locator('[data-testid="component-name"]');
-  await expect(component).toBeVisible();
-
-  await expect(component).toHaveScreenshot("component-name.png", {
-    animations: "disabled",
-  });
-});
+// CV page
+mask: await cvPageMasks(page), // Excludes references carousel
 ```
-
-### Multiple Themes
 
 ```typescript
 test("component in light mode", async ({ page }) => {
@@ -113,11 +132,13 @@ test("component in dark mode", async ({ page }) => {
 
 ## Best Practices
 
-1. **Disable animations**: Always use `animations: 'disabled'`
-2. **Wait for content**: Use `waitForLoadState('networkidle')`
-3. **Descriptive names**: Name screenshots clearly (e.g., `homepage-hero-dark.png`)
-4. **Test both themes**: Test light and dark mode for all pages
-5. **Mask dynamic content**: Use `mask` option for timestamps or random data
+1. **Use shared utilities**: Always prefer `utils.ts` helpers over inline waits or timeouts
+2. **Mask dynamic content**: Use `homepageMasks()` or `cvPageMasks()` for areas with random/time-based changes
+3. **Disable animations**: Always use `animations: 'disabled'`
+4. **Wait for stability**: Use `waitForLoadState('networkidle')`, `document.fonts.ready`, `waitForStableHeight()`
+5. **Descriptive names**: Name screenshots clearly (e.g., `homepage-light.png`, `cv-dark.png`)
+6. **Test both themes**: Test light and dark mode for all pages
+7. **Test mobile viewports**: Include 375×667 mobile tests
 
 ## Troubleshooting
 

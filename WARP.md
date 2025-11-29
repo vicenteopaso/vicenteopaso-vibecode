@@ -30,6 +30,9 @@ This is a single Next.js App Router project using pnpm.
   - One-time (or CI) browser install: `npx playwright install --with-deps`
   - Ensure the app is running locally on `http://localhost:3000` (e.g. `pnpm dev`)
   - Run E2E suite: `pnpm test:e2e`
+  - Run visual regression tests: `pnpm test:visual`
+  - Update visual baselines (after intentional UI changes): `pnpm test:visual:update`
+  - Visual test utilities: See `test/visual/utils.ts` for shared helpers
 - **Pre-commit hooks & lint-staged**
   - Husky pre-commit runs `pnpm lint-staged` (see `package.json` and `.husky/pre-commit`).
 - **Cleaning local artifacts**
@@ -49,10 +52,9 @@ This is a single Next.js App Router project using pnpm.
     - Wraps the app with `ThemeProvider` (`app/components/ThemeProvider.tsx`) powered by `next-themes` to support light/dark themes via a `class` attribute on `<html>`.
     - Injects the Cloudflare Turnstile script (`https://challenges.cloudflare.com/turnstile/v0/api.js`) globally, which is required by the contact form.
     - Renders a persistent `Header`, main content container (`<main>` with a centered shell), and `Footer`.
-  - `app/page.tsx` simply re-uses `app/about/page.tsx` so the home route (`/`) is the same as the About page.
+  - `app/page.tsx` implements the About page at the root route (`/`).
 - Routes are organized under `app/`:
-  - `/about` → `app/about/page.tsx`
-  - `/contact` → `app/contact/page.tsx`
+  - `/` → `app/page.tsx` (Home page at root)
   - `/cv` → `app/cv/page.tsx`
   - `/api/contact` → `app/api/contact/route.ts` (Next.js Route Handler for the contact form).
 
@@ -82,14 +84,14 @@ This is a single Next.js App Router project using pnpm.
     - `basics`, `work`, `education`, `skills`, `languages`, `interests`, `references`, and `publications`.
     - Many fields (e.g., `references[*].reference`) contain HTML strings, which are rendered via `dangerouslySetInnerHTML` in `app/cv/page.tsx` and `ReferencesCarousel.tsx`.
 - Page implementations:
-- - `app/about/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
+- - `app/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
 - - `app/cv/page.tsx` similarly reads `content/cv.md`, parses frontmatter with `gray-matter`, and then `JSON.parse`s the body as a `CvJson` structure. It then renders sections for experience, skills, education, languages, interests, publications, and references.
   - If the JSON is invalid, the page gracefully falls back to a simple error message and instructs the user to check `content/cv.md`.
 - Contentlayer configuration:
   - `contentlayer.config.ts` defines a `Page` document type over `content/*.md` with required fields `name`, `title`, `slug` and optional `tagline`, `initials`.
   - It also defines a computed `cv` field that attempts to parse `doc.body.raw` as JSON for the `slug === "cv"` document.
   - `next.config.mjs` wraps the Next config with `withContentlayer`, and `tsconfig.json` maps `"contentlayer/generated"` to `"./.contentlayer/generated"`.
-  - **Important**: the current pages (`app/about/page.tsx`, `app/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
+  - **Important**: the current pages (`app/page.tsx`, `app/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
 
 ### 4. Contact flow: client dialog → API route → Turnstile → Formspree
 
@@ -132,6 +134,18 @@ This is a single Next.js App Router project using pnpm.
   - Config: `playwright.config.ts` sets `testDir: "./test/e2e"` so only files under `test/e2e/` are picked up.
   - Example test: `test/e2e/basic-navigation.spec.ts` visits `http://localhost:3000/` and asserts the page title and visibility of the `CV` and `Contact` links.
   - When running locally, ensure a dev server is running before invoking `pnpm test:e2e` (or using the configured Playwright web server command).
+- **Visual regression tests (Playwright)**
+  - Located in `test/visual/pages/` with shared utilities in `test/visual/utils.ts`.
+  - Uses Playwright's native screenshot comparison with masking for dynamic content.
+  - **Shared utilities** (`test/visual/utils.ts`):
+    - `waitForStableHeight()`: Polls scrollHeight until stable
+    - `freezeCarouselInteractions()`: Disables pointer events on carousel buttons
+    - `waitForStableTransform()`: Polls CSS transform until stable
+    - `homepageMasks()`: Returns locators for portrait + ImpactCards
+    - `cvPageMasks()`: Returns locators for references carousel
+  - **Dynamic content handling**: Masks are used to exclude areas with random selection (ProfileCard portraits) or auto-rotation (ImpactCards, ReferencesCarousel).
+  - Run visual tests: `pnpm test:visual`
+  - Update baselines after intentional UI changes: `pnpm test:visual:update`
 
 ### 6. Linting, formatting, and CI expectations
 

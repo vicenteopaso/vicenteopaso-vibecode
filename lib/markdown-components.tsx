@@ -93,11 +93,11 @@ export const markdownComponents: Components = {
 };
 
 /**
- * Variant for about page sections: maps h3 to h2 with smaller styling
+ * Variant for Home (root /) page sections: maps h3 to h2 with smaller styling
  */
 export const aboutPageComponents: Components = {
   ...markdownComponents,
-  // Tighten top spacing for section headings within About page cards
+  // Tighten top spacing for section headings within Home page cards
   h2: (props) => (
     // eslint-disable-next-line jsx-a11y/heading-has-content
     <h2
@@ -127,7 +127,7 @@ export const aboutPageComponents: Components = {
 };
 
 /**
- * Variant for about page intro section: larger typography without card styling
+ * Variant for Home (root /) intro section: larger typography without card styling
  */
 export const introComponents: Components = {
   p: (props) => (

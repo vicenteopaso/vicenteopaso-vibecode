@@ -44,10 +44,9 @@ Create targeted visual regression tests for critical UI surfaces:
 
 #### Critical Pages
 
-- Homepage (`/`)
-- About page (`/about`)
-- CV page (`/cv`)
-- Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`)
+- Home page (root `/`) - Light, dark, and mobile viewport (375×667px)
+- CV page (`/cv`) - Light, dark, and mobile viewport (375×667px)
+- Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`) - Planned
 
 #### Critical Components
 
@@ -63,17 +62,16 @@ Create targeted visual regression tests for critical UI surfaces:
 ```
 test/visual/
 ├── pages/
-│   ├── home.visual.spec.ts
-│   ├── about.visual.spec.ts
-│   ├── cv.visual.spec.ts
-│   └── policies.visual.spec.ts
+│   ├── home.visual.spec.ts          # ✅ Light, dark, mobile (375×667px) - About page at root
+│   ├── cv.visual.spec.ts            # ✅ Light, dark, mobile (375×667px)
+│   └── policies.visual.spec.ts      # 🔜 Planned
 ├── components/
-│   ├── navigation.visual.spec.ts
-│   ├── profile-card.visual.spec.ts
-│   ├── contact-dialog.visual.spec.ts
-│   └── footer.visual.spec.ts
+│   ├── navigation.visual.spec.ts    # 🔜 Planned
+│   ├── profile-card.visual.spec.ts  # 🔜 Planned
+│   ├── contact-dialog.visual.spec.ts # 🔜 Planned
+│   └── footer.visual.spec.ts        # 🔜 Planned
 └── themes/
-    └── theme-switching.visual.spec.ts
+    └── theme-switching.visual.spec.ts # 🔜 Planned
 ```
 
 ### 3. Baseline Management
@@ -129,54 +127,119 @@ pnpm playwright show-report
 
 ### Writing Visual Tests
 
+**Always use shared utilities from `test/visual/utils.ts`:**
+
 ```typescript
 import { test, expect } from "@playwright/test";
+import {
+  waitForStableHeight,
+  freezeCarouselInteractions,
+  homepageMasks,
+} from "../utils";
 
 test.describe("Homepage Visual Regression", () => {
   test("renders homepage correctly in light mode", async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
+    await page.evaluate(() => document.fonts.ready);
 
-    // Take full page screenshot
+    // Wait for stable layout
+    await waitForStableHeight(page);
+    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+    // Take full page screenshot with masking
     await expect(page).toHaveScreenshot("homepage-light.png", {
       fullPage: true,
-      animations: "disabled", // Disable animations for consistency
-    });
-  });
-
-  test("renders homepage correctly in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
-
-    await expect(page).toHaveScreenshot("homepage-dark.png", {
-      fullPage: true,
       animations: "disabled",
+      mask: await homepageMasks(page), // Excludes portrait + ImpactCards
     });
   });
 });
 ```
+
+test("renders homepage correctly in dark mode", async ({ page }) => {
+await page.emulateMedia({ colorScheme: "dark" });
+await page.goto("/");
+await page.waitForLoadState("networkidle");
+await page.evaluate(() => document.fonts.ready);
+
+    await waitForStableHeight(page);
+    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+    await expect(page).toHaveScreenshot("homepage-dark.png", {
+      fullPage: true,
+      animations: "disabled",
+      mask: await homepageMasks(page),
+    });
+
+});
+});
+
+````
 
 ### Component-Level Visual Tests
 
 ```typescript
 test("profile card - about page variant", async ({ page }) => {
-  await page.goto("/about");
+  await page.goto("/");
 
   // Target specific component
   const profileCard = page.locator('[data-testid="profile-card"]');
   await expect(profileCard).toBeVisible();
 
-  // Screenshot just the component
+  // Screenshot just the component (note: portrait is masked at page level)
   await expect(profileCard).toHaveScreenshot("profile-card-about.png", {
     animations: "disabled",
   });
 });
-```
+````
 
 ## Best Practices
 
-### 1. Disable Animations
+### 1. Use Shared Utilities
+
+**Always use utilities from `test/visual/utils.ts` instead of inline waits:**
+
+```typescript
+// ✅ GOOD: Shared utilities
+import { waitForStableHeight, freezeCarouselInteractions } from "../utils";
+await waitForStableHeight(page);
+await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+// ❌ BAD: Inline polling logic (duplicates code, harder to maintain)
+await page.evaluate(() => {
+  return new Promise<void>((resolve) => {
+    let lastHeight = document.body.scrollHeight;
+    // ... inline polling code ...
+  });
+});
+```
+
+### 2. Mask Dynamic Content
+
+This site has dynamic content that requires masking:
+
+**Dynamic content sources:**
+
+- **ProfileCard**: `Math.random()` selects from 3 portrait images on mount
+- **ImpactCards**: Auto-rotates cards every 7s with random selection
+- **ReferencesCarousel**: Auto-rotates testimonials every 5s
+
+**Solution**: Use Playwright's `mask` option with shared helper functions:
+
+```typescript
+// Homepage: Mask portrait + ImpactCards
+await expect(page).toHaveScreenshot("homepage.png", {
+  mask: await homepageMasks(page), // Returns [portrait, impact-cards]
+});
+
+// CV page: Mask references carousel
+await expect(page).toHaveScreenshot("cv.png", {
+  mask: await cvPageMasks(page), // Returns [#references]
+});
+```
+
+### 3. Disable Animations
 
 Always disable animations for consistent screenshots:
 
@@ -186,27 +249,17 @@ await expect(page).toHaveScreenshot("example.png", {
 });
 ```
 
-### 2. Wait for Content
+### 4. Wait for Content
 
 Ensure all content is loaded before screenshot:
 
 ```typescript
 await page.waitForLoadState("networkidle");
-// Or wait for specific elements
-await page.locator('[data-testid="critical-element"]').waitFor();
+await page.evaluate(() => document.fonts.ready);
+await waitForStableHeight(page); // From test/visual/utils.ts
 ```
 
-### 3. Handle Dynamic Content
-
-Mask or exclude dynamic content (timestamps, random data):
-
-```typescript
-await expect(page).toHaveScreenshot("example.png", {
-  mask: [page.locator(".timestamp"), page.locator(".random-quote")],
-});
-```
-
-### 4. Use Descriptive Names
+### 5. Use Descriptive Names
 
 Name screenshots descriptively:
 
@@ -218,17 +271,92 @@ Name screenshots descriptively:
 "screenshot1.png";
 ```
 
-### 5. Test Multiple Viewports
+### 6. Test Multiple Viewports
 
-Test responsive design across viewports:
+Test responsive design across viewports for comprehensive coverage:
 
 ```typescript
+// Desktop/default viewport (light mode)
+test("homepage light mode", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical resources to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
+  await expect(page).toHaveScreenshot("homepage-light.png", {
+    fullPage: true,
+    timeout: 15000,
+  });
+});
+
+// Desktop/default viewport (dark mode)
+test("homepage dark mode", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical resources to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
+  await expect(page).toHaveScreenshot("homepage-dark.png", {
+    fullPage: true,
+    timeout: 15000,
+  });
+});
+
+// Mobile viewport (iPhone SE dimensions)
 test("homepage mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
-  await expect(page).toHaveScreenshot("homepage-mobile.png");
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical resources to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
+  await expect(page).toHaveScreenshot("homepage-mobile.png", {
+    fullPage: true,
+    timeout: 15000,
+  });
 });
 ```
+
+**Best practice**: All primary pages should include light mode, dark mode, and mobile viewport tests to ensure comprehensive responsive design coverage.
+
+### Deterministic Waiting Patterns
+
+**Always use deterministic waits instead of arbitrary timeouts** like `waitForTimeout()`. Hard-coded delays make tests slower and less reliable. Instead, wait for specific conditions:
+
+```typescript
+// ✅ GOOD: Wait for fonts to load
+await page.evaluate(() => document.fonts.ready);
+
+// ✅ GOOD: Wait for specific elements to be visible
+await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+await page.waitForSelector('[data-testid="carousel"]', { state: "visible" });
+
+// ✅ GOOD: Wait for network to be idle
+await page.waitForLoadState("networkidle");
+
+// ✅ GOOD: Wait for specific network requests
+await page.waitForResponse(
+  (response) =>
+    response.url().includes("/api/data") && response.status() === 200,
+);
+
+// ❌ BAD: Arbitrary timeout
+await page.waitForTimeout(1000); // DON'T DO THIS
+```
+
+**Why deterministic waits are better**:
+
+- Tests run as fast as possible (no waiting longer than necessary)
+- Tests are more reliable (wait for actual conditions, not arbitrary time)
+- Easier to debug failures (you know exactly what condition wasn't met)
+- Better CI performance (faster test suite execution)
 
 ## Reviewing Changes
 
@@ -272,10 +400,7 @@ export default defineConfig({
     },
   },
   // Generate HTML report with visual diffs
-  reporter: [
-    ["html", { outputFolder: "playwright-report" }],
-    ["list"],
-  ],
+  reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
 });
 ```
 

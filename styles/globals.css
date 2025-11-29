@@ -225,7 +225,7 @@ body {
     outline-offset: 2px;
   }
 
-  /* Subtle animation for About page impact cards */
+  /* Subtle animation for Home page impact cards (root /) */
   .impact-card {
     will-change: opacity, transform;
   }

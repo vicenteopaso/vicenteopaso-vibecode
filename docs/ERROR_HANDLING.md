@@ -299,7 +299,7 @@ export async function POST(request: NextRequest) {
 
 ### SSR/SSG Error Handling
 
-**Locations**: `app/about/page.tsx`, `app/cv/page.tsx`
+**Locations**: `app/page.tsx`, `app/cv/page.tsx`
 
 Both pages read markdown files from the filesystem at build/runtime:
 
