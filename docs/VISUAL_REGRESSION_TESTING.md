@@ -335,7 +335,7 @@ Update baselines when:
 **Process:**
 
 1. Make design changes
-2. Run `pnpm test:visual -- --update-snapshots`
+2. Run `pnpm test:visual:update`
 3. Review all updated screenshots carefully
 4. Commit updated baselines with descriptive message
 5. Link to related design change PR or issue
