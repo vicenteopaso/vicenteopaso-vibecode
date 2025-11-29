@@ -261,7 +261,7 @@ pnpm test:visual:update      # Update baselines
 pnpm typecheck               # Run TypeScript compiler
 
 # All quality checks
-pnpm partial:local           # Build, lint, format, test, e2e, coverage, a11y, security
+pnpm partial:local           # Build, lint, format, validate:links, coverage, test:e2e, test:visual, typecheck, audit:a11y, audit:security:fix
 pnpm full:local              # Clean install + all checks
 ```
 
