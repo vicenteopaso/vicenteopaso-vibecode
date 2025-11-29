@@ -136,3 +136,111 @@ export async function waitForHomepage(page: Page): Promise<void> {
   await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
   await waitForStableTransform(page, '[data-testid="impact-cards"]');
 }
+
+// Get the current theme from the document's root element
+export async function getCurrentTheme(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    const html = document.documentElement;
+    if (html.classList.contains("dark")) return "dark";
+    if (html.classList.contains("light")) return "light";
+    // next-themes may use data-theme attribute as well
+    return html.getAttribute("data-theme") || "system";
+  });
+}
+
+// Toggle the theme by clicking the theme toggle button
+export async function toggleTheme(page: Page): Promise<void> {
+  const themeToggle = page.locator('button[aria-label="Toggle color theme"]');
+  await themeToggle.click();
+}
+
+// Wait for theme switch to complete by observing the root element class change
+// Uses MutationObserver for reliable detection
+export async function waitForThemeSwitch(
+  page: Page,
+  expectedTheme: "light" | "dark",
+): Promise<void> {
+  // Wait for the class to be applied to the HTML element
+  // next-themes sets the class on <html> element
+  await page.waitForFunction(
+    (theme) => {
+      const html = document.documentElement;
+      return html.classList.contains(theme);
+    },
+    expectedTheme,
+    { timeout: 10000 },
+  );
+
+  // Wait for any CSS custom properties and styles to be applied
+  // This ensures colors and backgrounds have updated
+  await page.evaluate(() => {
+    // Force a reflow to ensure all styles are applied
+    void document.body.offsetHeight;
+    return new Promise<void>((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve();
+        });
+      });
+    });
+  });
+
+  // Wait for fonts to ensure consistent rendering
+  await page.evaluate(() => document.fonts.ready);
+}
+
+// Wait for page to be ready for theme switching tests
+// This function waits for hydration to complete and the initial theme to be applied
+export async function waitForThemeTestReady(page: Page): Promise<void> {
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts to load
+  await page.evaluate(() => document.fonts.ready);
+
+  // Wait for navigation menu to be visible (contains theme toggle)
+  await page.waitForSelector('button[aria-label="Toggle color theme"]', {
+    state: "visible",
+  });
+
+  // Wait for footer to ensure full page is rendered
+  await page.waitForSelector("footer", { state: "visible" });
+
+  // Wait for next-themes hydration to complete
+  // The component sets mounted=true after useEffect runs
+  // We detect this by checking if the theme class is present
+  await page.waitForFunction(
+    () => {
+      const html = document.documentElement;
+      return html.classList.contains("dark") || html.classList.contains("light");
+    },
+    undefined,
+    { timeout: 10000 },
+  );
+
+  await waitForStableHeight(page);
+}
+
+// Ensure page is in a specific theme before testing
+// This handles the case where system preference affects initial theme
+export async function ensureTheme(
+  page: Page,
+  targetTheme: "light" | "dark",
+): Promise<void> {
+  await waitForThemeTestReady(page);
+
+  const currentTheme = await getCurrentTheme(page);
+
+  // If not in the target theme, toggle to get there
+  if (currentTheme !== targetTheme) {
+    await toggleTheme(page);
+    await waitForThemeSwitch(page, targetTheme);
+  }
+
+  // Verify we're in the correct theme
+  const finalTheme = await getCurrentTheme(page);
+  if (finalTheme !== targetTheme) {
+    throw new Error(
+      `Failed to set theme to ${targetTheme}. Current theme: ${finalTheme}`,
+    );
+  }
+}
