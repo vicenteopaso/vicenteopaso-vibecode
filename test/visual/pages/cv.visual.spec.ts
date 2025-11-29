@@ -60,23 +60,33 @@ test.describe("CV Page Visual Regression", () => {
     await page.waitForSelector("footer", { state: "visible" });
 
     // Wait for page height to stabilize (ReferencesCarousel does dynamic height measurement)
-    await page.waitForFunction(() => {
-      // Wait until scrollHeight remains unchanged for 200ms
-      if (!window.__lastScrollHeightCheck) {
-        window.__lastScrollHeightCheck = {
-          height: document.documentElement.scrollHeight,
-          stableSince: Date.now(),
-        };
-        return false;
-      }
-      const currentHeight = document.documentElement.scrollHeight;
-      if (currentHeight !== window.__lastScrollHeightCheck.height) {
-        window.__lastScrollHeightCheck.height = currentHeight;
-        window.__lastScrollHeightCheck.stableSince = Date.now();
-        return false;
-      }
-      return Date.now() - window.__lastScrollHeightCheck.stableSince > 200;
-    }, { timeout: 2000 });
+    await page.waitForFunction(
+      () => {
+        // Wait until scrollHeight remains unchanged for 200ms
+        interface WindowWithCheck extends Window {
+          __lastScrollHeightCheck?: {
+            height: number;
+            stableSince: number;
+          };
+        }
+        const w = window as WindowWithCheck;
+        if (!w.__lastScrollHeightCheck) {
+          w.__lastScrollHeightCheck = {
+            height: document.documentElement.scrollHeight,
+            stableSince: Date.now(),
+          };
+          return false;
+        }
+        const currentHeight = document.documentElement.scrollHeight;
+        if (currentHeight !== w.__lastScrollHeightCheck.height) {
+          w.__lastScrollHeightCheck.height = currentHeight;
+          w.__lastScrollHeightCheck.stableSince = Date.now();
+          return false;
+        }
+        return Date.now() - w.__lastScrollHeightCheck.stableSince > 200;
+      },
+      { timeout: 2000 },
+    );
 
     await expect(page).toHaveScreenshot("cv-mobile.png", {
       fullPage: true,
