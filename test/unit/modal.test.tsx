@@ -72,4 +72,20 @@ describe("Modal component", () => {
     expect(screen.getByText("Modal content")).toBeInTheDocument();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
+
+  it("has mobile-friendly scrollable styles on dialog content", () => {
+    render(
+      <Modal trigger={<button type="button">Open modal</button>}>
+        <p>Scrollable modal content</p>
+      </Modal>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Open modal" }));
+
+    const dialog = screen.getByRole("dialog");
+    // Verify the dialog has scrollable and mobile-friendly styles
+    expect(dialog).toHaveClass("overflow-y-auto");
+    expect(dialog).toHaveClass("overscroll-contain");
+    expect(dialog).toHaveClass("max-h-[90dvh]");
+  });
 });
