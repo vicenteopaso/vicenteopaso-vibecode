@@ -27,7 +27,9 @@ export default defineConfig({
     },
   },
   // Reporter configuration
-  // Both E2E and visual test reports will share the same output location ("playwright-report").
+  // Both E2E and visual tests (including those in test/visual/ that override testDir)
+  // will share the same output location ("playwright-report"). The visual regression settings above
+  // (lines 18-28) apply to both E2E tests (when they use screenshots) and dedicated visual tests.
   // If you need to separate reports by test type in the future, adjust the outputFolder accordingly.
   reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
   webServer: process.env.PLAYWRIGHT_SKIP_WEB_SERVER
