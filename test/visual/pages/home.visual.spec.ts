@@ -78,6 +78,10 @@ test.describe("Homepage Visual Regression", () => {
       animations: "disabled",
       timeout: 15000,
       maxDiffPixelRatio: 0.02, // Allow for ImpactCards carousel rotation
+      mask: [
+        page.locator('img[alt*="Portrait"]'), // Mask randomly changing profile photo
+        page.locator('[data-testid="impact-cards"]'), // Mask auto-rotating impact cards
+      ],
     });
   });
 
@@ -158,6 +162,10 @@ test.describe("Homepage Visual Regression", () => {
       animations: "disabled",
       timeout: 15000,
       maxDiffPixelRatio: 0.02, // Allow for ImpactCards carousel rotation
+      mask: [
+        page.locator('img[alt*="Portrait"]'), // Mask randomly changing profile photo
+        page.locator('[data-testid="impact-cards"]'), // Mask auto-rotating impact cards
+      ],
     });
   });
 
@@ -238,6 +246,10 @@ test.describe("Homepage Visual Regression", () => {
       animations: "disabled",
       timeout: 15000,
       maxDiffPixelRatio: 0.02, // Allow for ImpactCards carousel rotation
+      mask: [
+        page.locator('img[alt*="Portrait"]'), // Mask randomly changing profile photo
+        page.locator('[data-testid="impact-cards"]'), // Mask auto-rotating impact cards
+      ],
     });
   });
 });

@@ -19,6 +19,7 @@ test.describe("CV Page Visual Regression", () => {
       fullPage: true,
       animations: "disabled",
       timeout: 15000,
+      mask: [page.locator("#references")], // Mask auto-rotating references carousel
     });
   });
 
@@ -41,6 +42,7 @@ test.describe("CV Page Visual Regression", () => {
       fullPage: true,
       animations: "disabled",
       timeout: 15000,
+      mask: [page.locator("#references")], // Mask auto-rotating references carousel
     });
   });
 
@@ -92,6 +94,7 @@ test.describe("CV Page Visual Regression", () => {
       fullPage: true,
       animations: "disabled",
       timeout: 15000,
+      mask: [page.locator("#references")], // Mask auto-rotating references carousel
     });
   });
 });
