@@ -197,40 +197,73 @@ test("user can submit contact form", async ({ page }) => {
 
 ### 4. Visual Regression Tests
 
-**Location**: `test/visual/`
+**Location**: `test/visual/` (tests), `test/visual/utils.ts` (shared utilities)
 
-**Purpose**: Catch unintended UI changes
+**Purpose**: Catch unintended UI changes with deterministic, stable screenshots
+
+#### Shared Utilities (`test/visual/utils.ts`)
+
+Always use shared utilities instead of inline waits:
+
+- **`waitForStableHeight(page, consecutive?, intervalMs?)`**: Waits until `document.body.scrollHeight` remains stable for N consecutive checks (default: 3 checks × 100ms)
+- **`freezeCarouselInteractions(page, selector)`**: Disables `pointer-events` on all buttons within selector to prevent user-driven carousel changes
+- **`waitForStableTransform(page, selector, consecutive?, intervalMs?)`**: Waits for CSS transform to stabilize
+- **`homepageMasks(page)`**: Returns `[portrait img, impact-cards]` locators for masking dynamic homepage elements
+- **`cvPageMasks(page)`**: Returns `[#references section]` locator for masking dynamic CV elements
+
+#### Handling Dynamic Content
+
+This site has dynamic content that requires masking:
+
+- **ProfileCard**: `Math.random()` selects from 3 portrait images on mount
+- **ImpactCards**: Auto-rotates cards every 7s with random selection
+- **ReferencesCarousel**: Auto-rotates testimonials every 5s
+
+**Solution**: Use Playwright's `mask` option with shared utilities:
 
 **Example**:
 
 ```typescript
 // test/visual/pages/home.visual.spec.ts
 import { test, expect } from "@playwright/test";
+import {
+  freezeCarouselInteractions,
+  homepageMasks,
+  waitForStableHeight,
+  waitForStableTransform,
+} from "../utils";
 
 test("homepage renders correctly in light mode", async ({ page }) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
+  await page.evaluate(() => document.fonts.ready);
+
+  // Use shared utilities for stable layout
+  await waitForStableHeight(page);
+  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+  await waitForStableTransform(page, '[data-testid="impact-cards"]');
 
   await expect(page).toHaveScreenshot("homepage-light.png", {
     fullPage: true,
     animations: "disabled",
-    timeout: 15000,
+    mask: await homepageMasks(page), // Excludes portrait + ImpactCards
   });
 });
 
 test("homepage renders correctly in dark mode", async ({ page }) => {
-  await page.goto("/");
   await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
   await page.waitForLoadState("networkidle");
-
-  // Wait for fonts and critical images to load
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
+  await waitForStableHeight(page);
+  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+  await waitForStableTransform(page, '[data-testid="impact-cards"]');
 
   await expect(page).toHaveScreenshot("homepage-dark.png", {
     fullPage: true,
     animations: "disabled",
-    timeout: 15000,
+    mask: await homepageMasks(page),
   });
 });
 
@@ -238,15 +271,16 @@ test("homepage renders correctly on mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
   await page.waitForLoadState("networkidle");
-
-  // Wait for fonts and critical images to load
   await page.evaluate(() => document.fonts.ready);
-  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
+  await waitForStableHeight(page);
+  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+  await waitForStableTransform(page, '[data-testid="impact-cards"]');
 
   await expect(page).toHaveScreenshot("homepage-mobile.png", {
     fullPage: true,
     animations: "disabled",
-    timeout: 15000,
+    mask: await homepageMasks(page),
   });
 });
 ```
@@ -532,10 +566,31 @@ expect(component.state.isValid).toBe(true);
 
 ### Visual Regression
 
-1. **Disable animations**: Ensure consistent screenshots
-2. **Wait for content**: Use `waitForLoadState('networkidle')`
-3. **Mask dynamic content**: Timestamps, random data
-4. **Test multiple viewports**: Mobile, tablet, desktop
+1. **Use shared utilities**: Always prefer `test/visual/utils.ts` helpers over inline waits:
+
+```typescript
+// ✅ GOOD: Shared utilities
+import { waitForStableHeight, freezeCarouselInteractions } from "../utils";
+await waitForStableHeight(page);
+await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+// ❌ BAD: Inline polling logic (duplicates code)
+await page.evaluate(() => {
+  /* inline polling */
+});
+```
+
+2. **Mask dynamic content**: Use Playwright's `mask` option for random/time-based changes:
+
+```typescript
+await expect(page).toHaveScreenshot("page.png", {
+  mask: await homepageMasks(page), // portrait + ImpactCards
+});
+```
+
+3. **Disable animations**: Ensure consistent screenshots
+4. **Wait for stability**: `waitForLoadState('networkidle')`, `document.fonts.ready`, `waitForStableHeight()`
+5. **Test multiple viewports**: Mobile (375×667), tablet, desktop
 
 See [Visual Regression Testing Guide](./VISUAL_REGRESSION_TESTING.md) for details.
 

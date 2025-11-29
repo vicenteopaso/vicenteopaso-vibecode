@@ -30,6 +30,9 @@ This is a single Next.js App Router project using pnpm.
   - One-time (or CI) browser install: `npx playwright install --with-deps`
   - Ensure the app is running locally on `http://localhost:3000` (e.g. `pnpm dev`)
   - Run E2E suite: `pnpm test:e2e`
+  - Run visual regression tests: `pnpm test:visual`
+  - Update visual baselines (after intentional UI changes): `pnpm test:visual:update`
+  - Visual test utilities: See `test/visual/utils.ts` for shared helpers
 - **Pre-commit hooks & lint-staged**
   - Husky pre-commit runs `pnpm lint-staged` (see `package.json` and `.husky/pre-commit`).
 - **Cleaning local artifacts**
@@ -131,6 +134,18 @@ This is a single Next.js App Router project using pnpm.
   - Config: `playwright.config.ts` sets `testDir: "./test/e2e"` so only files under `test/e2e/` are picked up.
   - Example test: `test/e2e/basic-navigation.spec.ts` visits `http://localhost:3000/` and asserts the page title and visibility of the `CV` and `Contact` links.
   - When running locally, ensure a dev server is running before invoking `pnpm test:e2e` (or using the configured Playwright web server command).
+- **Visual regression tests (Playwright)**
+  - Located in `test/visual/pages/` with shared utilities in `test/visual/utils.ts`.
+  - Uses Playwright's native screenshot comparison with masking for dynamic content.
+  - **Shared utilities** (`test/visual/utils.ts`):
+    - `waitForStableHeight()`: Polls scrollHeight until stable
+    - `freezeCarouselInteractions()`: Disables pointer events on carousel buttons
+    - `waitForStableTransform()`: Polls CSS transform until stable
+    - `homepageMasks()`: Returns locators for portrait + ImpactCards
+    - `cvPageMasks()`: Returns locators for references carousel
+  - **Dynamic content handling**: Masks are used to exclude areas with random selection (ProfileCard portraits) or auto-rotation (ImpactCards, ReferencesCarousel).
+  - Run visual tests: `pnpm test:visual`
+  - Update baselines after intentional UI changes: `pnpm test:visual:update`
 
 ### 6. Linting, formatting, and CI expectations
 

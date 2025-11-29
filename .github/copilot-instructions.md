@@ -44,6 +44,9 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 - Keep tests in sync with changes:
   - Unit tests: **Vitest** under `test/unit/`.
   - E2E tests: **Playwright** under `test/e2e/`.
+  - Visual regression tests: **Playwright** under `test/visual/pages/` with shared utilities in `test/visual/utils.ts`.
+    - Always use shared utilities (`waitForStableHeight`, `freezeCarouselInteractions`, etc.) instead of inline waits.
+    - Mask dynamic content (portrait, ImpactCards, references) using `homepageMasks()` or `cvPageMasks()`.
 - Follow existing linting, formatting, and Husky + lint-staged setup.
 
 ## Don’t
@@ -68,8 +71,9 @@ These instructions guide AI assistants contributing to this repo. Follow these c
   - Tailwind CSS v4 setup and global styles.
 - `scripts/`:
   - Utility scripts for build, cleaning local artifacts, audits, etc.
-- `test/unit/`, `test/e2e/`:
-  - Vitest unit tests and Playwright E2E tests, respectively.
+- `test/unit/`, `test/e2e/`, `test/visual/`:
+  - Vitest unit tests, Playwright E2E tests, and Playwright visual regression tests, respectively.
+  - `test/visual/utils.ts` contains shared helpers for deterministic screenshots.
 
 ## Commands cheat sheet
 
@@ -80,6 +84,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 - Types: `pnpm typecheck`
 - Unit tests: `pnpm test` (Vitest)
 - E2E tests: `pnpm test:e2e` (Playwright; ensure a dev server is running and run `npx playwright install --with-deps` at least once)
+- Visual tests: `pnpm test:visual` (Playwright visual regression; update baselines with `pnpm test:visual:update`)
 
 ## PR expectations
 

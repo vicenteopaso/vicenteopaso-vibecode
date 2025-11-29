@@ -127,33 +127,60 @@ pnpm playwright show-report
 
 ### Writing Visual Tests
 
+**Always use shared utilities from `test/visual/utils.ts`:**
+
 ```typescript
 import { test, expect } from "@playwright/test";
+import {
+  waitForStableHeight,
+  freezeCarouselInteractions,
+  homepageMasks,
+} from "../utils";
 
 test.describe("Homepage Visual Regression", () => {
   test("renders homepage correctly in light mode", async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
+    await page.evaluate(() => document.fonts.ready);
 
-    // Take full page screenshot
+    // Wait for stable layout
+    await waitForStableHeight(page);
+    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+    // Take full page screenshot with masking
     await expect(page).toHaveScreenshot("homepage-light.png", {
       fullPage: true,
-      animations: "disabled", // Disable animations for consistency
-    });
-  });
-
-  test("renders homepage correctly in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
-
-    await expect(page).toHaveScreenshot("homepage-dark.png", {
-      fullPage: true,
       animations: "disabled",
+      mask: await homepageMasks(page), // Excludes portrait + ImpactCards
     });
   });
 });
 ```
+
+      animations: "disabled", // Disable animations for consistency
+    });
+
+});
+
+test("renders homepage correctly in dark mode", async ({ page }) => {
+await page.emulateMedia({ colorScheme: "dark" });
+await page.goto("/");
+await page.waitForLoadState("networkidle");
+await page.evaluate(() => document.fonts.ready);
+
+    await waitForStableHeight(page);
+    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+    await expect(page).toHaveScreenshot("homepage-dark.png", {
+      fullPage: true,
+      animations: "disabled",
+      mask: await homepageMasks(page),
+    });
+
+});
+});
+
+````
 
 ### Component-Level Visual Tests
 
@@ -165,16 +192,59 @@ test("profile card - about page variant", async ({ page }) => {
   const profileCard = page.locator('[data-testid="profile-card"]');
   await expect(profileCard).toBeVisible();
 
-  // Screenshot just the component
+  // Screenshot just the component (note: portrait is masked at page level)
   await expect(profileCard).toHaveScreenshot("profile-card-about.png", {
     animations: "disabled",
   });
 });
-```
+````
 
 ## Best Practices
 
-### 1. Disable Animations
+### 1. Use Shared Utilities
+
+**Always use utilities from `test/visual/utils.ts` instead of inline waits:**
+
+```typescript
+// ✅ GOOD: Shared utilities
+import { waitForStableHeight, freezeCarouselInteractions } from "../utils";
+await waitForStableHeight(page);
+await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+
+// ❌ BAD: Inline polling logic (duplicates code, harder to maintain)
+await page.evaluate(() => {
+  return new Promise<void>((resolve) => {
+    let lastHeight = document.body.scrollHeight;
+    // ... inline polling code ...
+  });
+});
+```
+
+### 2. Mask Dynamic Content
+
+This site has dynamic content that requires masking:
+
+**Dynamic content sources:**
+
+- **ProfileCard**: `Math.random()` selects from 3 portrait images on mount
+- **ImpactCards**: Auto-rotates cards every 7s with random selection
+- **ReferencesCarousel**: Auto-rotates testimonials every 5s
+
+**Solution**: Use Playwright's `mask` option with shared helper functions:
+
+```typescript
+// Homepage: Mask portrait + ImpactCards
+await expect(page).toHaveScreenshot("homepage.png", {
+  mask: await homepageMasks(page), // Returns [portrait, impact-cards]
+});
+
+// CV page: Mask references carousel
+await expect(page).toHaveScreenshot("cv.png", {
+  mask: await cvPageMasks(page), // Returns [#references]
+});
+```
+
+### 3. Disable Animations
 
 Always disable animations for consistent screenshots:
 
@@ -184,27 +254,17 @@ await expect(page).toHaveScreenshot("example.png", {
 });
 ```
 
-### 2. Wait for Content
+### 4. Wait for Content
 
 Ensure all content is loaded before screenshot:
 
 ```typescript
 await page.waitForLoadState("networkidle");
-// Or wait for specific elements
-await page.locator('[data-testid="critical-element"]').waitFor();
+await page.evaluate(() => document.fonts.ready);
+await waitForStableHeight(page); // From test/visual/utils.ts
 ```
 
-### 3. Handle Dynamic Content
-
-Mask or exclude dynamic content (timestamps, random data):
-
-```typescript
-await expect(page).toHaveScreenshot("example.png", {
-  mask: [page.locator(".timestamp"), page.locator(".random-quote")],
-});
-```
-
-### 4. Use Descriptive Names
+### 5. Use Descriptive Names
 
 Name screenshots descriptively:
 
