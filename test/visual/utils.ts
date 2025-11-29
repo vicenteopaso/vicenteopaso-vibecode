@@ -136,3 +136,38 @@ export async function waitForHomepage(page: Page): Promise<void> {
   await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
   await waitForStableTransform(page, '[data-testid="impact-cards"]');
 }
+
+// Wait for modal dialog to be visible and stable
+export async function waitForModal(page: Page): Promise<void> {
+  // Wait for the Radix UI dialog overlay to appear
+  await page.waitForSelector('[data-state="open"]', { state: "visible" });
+
+  // Wait for modal content to be visible
+  await page.waitForSelector('[role="dialog"]', { state: "visible" });
+
+  // Wait for fonts to load
+  await page.evaluate(() => document.fonts.ready);
+
+  // Short delay for animations to complete
+  await page.waitForTimeout(300);
+}
+
+// Wait for modal with content to be fully loaded (for async-loaded content)
+export async function waitForModalContent(page: Page): Promise<void> {
+  await waitForModal(page);
+
+  // Wait for "Loading…" text to disappear (content has loaded)
+  await page.waitForFunction(() => {
+    const dialog = document.querySelector('[role="dialog"]');
+    if (!dialog) return false;
+    return !dialog.textContent?.includes("Loading…");
+  });
+
+  // Additional wait for content rendering stability
+  await page.waitForTimeout(200);
+}
+
+// Get the modal dialog element for screenshotting
+export function getModalLocator(page: Page): Locator {
+  return page.locator('[role="dialog"]');
+}
