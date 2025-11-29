@@ -227,6 +227,11 @@ Test responsive design across viewports for comprehensive coverage:
 test("homepage light mode", async ({ page }) => {
   await page.goto("/");
   await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical resources to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
   await expect(page).toHaveScreenshot("homepage-light.png", {
     fullPage: true,
     timeout: 15000,
@@ -238,6 +243,11 @@ test("homepage dark mode", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
   await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical resources to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
   await expect(page).toHaveScreenshot("homepage-dark.png", {
     fullPage: true,
     timeout: 15000,
@@ -249,6 +259,11 @@ test("homepage mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
   await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical resources to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
   await expect(page).toHaveScreenshot("homepage-mobile.png", {
     fullPage: true,
     timeout: 15000,
@@ -257,6 +272,38 @@ test("homepage mobile viewport", async ({ page }) => {
 ```
 
 **Best practice**: All primary pages should include light mode, dark mode, and mobile viewport tests to ensure comprehensive responsive design coverage.
+
+### Deterministic Waiting Patterns
+
+**Always use deterministic waits instead of arbitrary timeouts** like `waitForTimeout()`. Hard-coded delays make tests slower and less reliable. Instead, wait for specific conditions:
+
+```typescript
+// ✅ GOOD: Wait for fonts to load
+await page.evaluate(() => document.fonts.ready);
+
+// ✅ GOOD: Wait for specific elements to be visible
+await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+await page.waitForSelector('[data-testid="carousel"]', { state: "visible" });
+
+// ✅ GOOD: Wait for network to be idle
+await page.waitForLoadState("networkidle");
+
+// ✅ GOOD: Wait for specific network requests
+await page.waitForResponse(
+  (response) =>
+    response.url().includes("/api/data") && response.status() === 200,
+);
+
+// ❌ BAD: Arbitrary timeout
+await page.waitForTimeout(1000); // DON'T DO THIS
+```
+
+**Why deterministic waits are better**:
+
+- Tests run as fast as possible (no waiting longer than necessary)
+- Tests are more reliable (wait for actual conditions, not arbitrary time)
+- Easier to debug failures (you know exactly what condition wasn't met)
+- Better CI performance (faster test suite execution)
 
 ## Reviewing Changes
 

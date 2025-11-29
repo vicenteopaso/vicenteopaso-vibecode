@@ -223,6 +223,10 @@ test("homepage renders correctly in dark mode", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.waitForLoadState("networkidle");
 
+  // Wait for fonts and critical images to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
   await expect(page).toHaveScreenshot("homepage-dark.png", {
     fullPage: true,
     animations: "disabled",
@@ -234,6 +238,10 @@ test("homepage renders correctly on mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
   await page.waitForLoadState("networkidle");
+
+  // Wait for fonts and critical images to load
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
 
   await expect(page).toHaveScreenshot("homepage-mobile.png", {
     fullPage: true,
