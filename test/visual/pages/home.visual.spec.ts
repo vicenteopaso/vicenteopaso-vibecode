@@ -93,8 +93,6 @@ test.describe("Homepage Visual Regression", () => {
 
     await waitForStableHeight(page);
     await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-    await waitForStableTransform(page, '[data-testid="impact-cards"]');
-
     await expect(page).toHaveScreenshot("homepage-mobile.png", {
       fullPage: true,
       animations: "disabled",
