@@ -41,6 +41,8 @@ The `Modal` component is a base dialog/modal primitive built on Radix UI Dialog.
 - Page content behind overlay remains visible but dimmed
 - Focus trapped within modal
 - Escape key closes modal
+- **Body scroll locked** (via Radix UI's built-in `react-remove-scroll`)
+- **Modal content scrollable** when it exceeds 85% of viewport height
 
 ## Accessibility
 
@@ -179,6 +181,26 @@ The modal uses Radix UI Portal to render outside the DOM hierarchy:
 ```
 
 This ensures the modal appears above all other content and avoids z-index issues.
+
+### Scroll Lock & Overflow Handling
+
+The modal implements proper scroll-lock behavior following Radix UI's recommended patterns:
+
+```tsx
+<Dialog.Content
+  className="... max-h-[85vh] overflow-y-auto overscroll-contain ..."
+>
+```
+
+- **Body scroll lock**: Radix UI Dialog uses `react-remove-scroll` internally to prevent background scrolling when modal is open
+- **Modal content scrolling**: `max-h-[85vh]` limits modal height to 85% of viewport, with `overflow-y-auto` enabling scroll when content overflows
+- **Scroll containment**: `overscroll-contain` prevents scroll chaining to the body on mobile devices (iOS/Android)
+
+This ensures:
+
+1. Users cannot scroll the page behind the modal
+2. Long modal content remains accessible via scrolling
+3. Mobile devices (iOS, Android) properly contain scroll within the modal
 
 ## Testing
 

@@ -72,4 +72,21 @@ describe("Modal component", () => {
     expect(screen.getByText("Modal content")).toBeInTheDocument();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
+
+  it("applies scroll-lock styles to modal content for overflow handling", () => {
+    render(
+      <Modal trigger={<button type="button">Open modal</button>}>
+        <p>Modal content</p>
+      </Modal>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Open modal" }));
+
+    const dialog = screen.getByRole("dialog");
+
+    // Modal should have max-height and overflow-y-auto for scroll containment
+    expect(dialog.className).toContain("max-h-[85vh]");
+    expect(dialog.className).toContain("overflow-y-auto");
+    expect(dialog.className).toContain("overscroll-contain");
+  });
 });
