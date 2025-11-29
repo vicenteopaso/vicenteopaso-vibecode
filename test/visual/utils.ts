@@ -136,3 +136,25 @@ export async function waitForHomepage(page: Page): Promise<void> {
   await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
   await waitForStableTransform(page, '[data-testid="impact-cards"]');
 }
+
+// Wait for ReferencesCarousel to be fully loaded and ready for screenshot
+export async function waitForReferencesCarousel(page: Page): Promise<void> {
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts to load
+  await page.evaluate(() => document.fonts.ready);
+
+  // Wait for references section to be visible
+  await page.waitForSelector("#references", { state: "visible" });
+
+  // Wait for the carousel content to be rendered (has dots container)
+  await page.waitForSelector("#references .flex.items-center.justify-center", {
+    state: "visible",
+  });
+
+  // Wait for height to stabilize (carousel dynamically calculates height)
+  await waitForStableHeight(page);
+
+  // Freeze carousel interactions to prevent rotation during screenshots
+  await freezeCarouselInteractions(page, "#references");
+}
