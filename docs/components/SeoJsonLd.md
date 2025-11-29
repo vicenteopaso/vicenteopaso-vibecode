@@ -81,7 +81,7 @@ Returns structured data for the website:
   "@type": "WebSite",
   "name": "Vicente Opaso",
   "url": "https://opa.so",
-  "description": "Product & Design System Leader...",
+  "description": "Product & Design System Leader. Building accessible, scalable, and delightful digital experiences. Passionate about design systems, product strategy, and inclusive technology.",
   "inLanguage": "en-US",
   "potentialAction": {
     "@type": "SearchAction",
