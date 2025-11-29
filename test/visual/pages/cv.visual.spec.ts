@@ -18,6 +18,7 @@ test.describe("CV Page Visual Regression", () => {
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/cv");
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(1000);
 
     await expect(page).toHaveScreenshot("cv-dark.png", {
       fullPage: true,
@@ -30,6 +31,7 @@ test.describe("CV Page Visual Regression", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto("/cv");
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(1000);
 
     await expect(page).toHaveScreenshot("cv-mobile.png", {
       fullPage: true,
