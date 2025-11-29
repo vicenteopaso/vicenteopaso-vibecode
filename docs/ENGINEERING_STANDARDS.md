@@ -115,15 +115,61 @@ This document captures the engineering intent for this repository. It is a **nor
 - Sensitive values provided via encrypted environment variables (e.g., Vercel env).
 - API routes protected as appropriate (rate limits, basic origin checks, edge protections).
 
-## 5. Performance & Web Vitals _(enforced in CI via Lighthouse CI)_
+## 5. Testing Strategy _(implemented: >90% coverage maintained)_
 
-### 5.1 Core Web Vitals Targets
+### 5.1 Testing Philosophy
+
+- Multi-layered approach: unit, integration, E2E, and visual regression tests
+- High confidence: Catch regressions before production
+- Fast feedback: Tests run quickly in development
+- Maintainable: Tests don't break with refactoring
+
+### 5.2 Test Coverage Targets
+
+- **Unit/Integration tests**: >90% statement coverage (currently 97.31%)
+- **E2E tests**: All critical user journeys covered
+- **Visual regression**: All pages and key component variants
+- **Type safety**: 100% via TypeScript strict mode
+
+### 5.3 Testing Stack
+
+- **Unit tests**: Vitest + React Testing Library
+- **E2E tests**: Playwright (headless browser automation)
+- **Visual regression**: Playwright built-in screenshot comparison
+- **Type checking**: TypeScript compiler (`tsc --noEmit`)
+- **Linting**: ESLint with security and accessibility plugins
+- **Accessibility audits**: Custom script + Lighthouse CI
+
+### 5.4 Test Requirements
+
+- All new features must include tests
+- All bug fixes must include regression tests
+- UI changes require visual regression test baseline updates
+- Critical flows must have E2E coverage:
+  - Contact form submission
+  - CV page navigation and download
+  - Theme switching
+  - Policy page rendering
+
+### 5.5 Visual Regression Testing
+
+- **Strategy**: Playwright-based screenshot comparison (no Storybook required)
+- **Rationale**: Lightweight, no additional services, works with existing infrastructure
+- **Coverage**: Homepage, About, CV, policy pages, key components in light/dark themes
+- **Baseline management**: Screenshots stored in git, updated with `--update-snapshots`
+- **CI integration**: Visual tests run on all PRs, diffs uploaded as artifacts
+
+See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRESSION_TESTING.md) for detailed documentation.
+
+## 6. Performance & Web Vitals _(enforced in CI via Lighthouse CI)_
+
+### 6.1 Core Web Vitals Targets
 
 - LCP < 2.5s on primary pages.
 - CLS < 0.1.
 - INP / interaction latency < 200ms on typical hardware.
 
-### 5.2 Metrics and Optimizations
+### 6.2 Metrics and Optimizations
 
 - Use Next.js image optimization where applicable.
 - Static assets cached with long-lived, immutable headers when safe.
@@ -132,7 +178,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - Code splitting and route-based chunking.
 - Rely on tree-shaking and dead-code elimination.
 
-### 5.3 Lighthouse
+### 6.3 Lighthouse
 
 - **Long-term target** Lighthouse scores of ≥ 95 for all categories
 - **Current baseline thresholds** (enforced in CI as warnings):
@@ -157,9 +203,9 @@ This document captures the engineering intent for this repository. It is a **nor
 - Reports are uploaded as GitHub Actions artifacts and to temporary public storage for easy review.
 - PRs automatically receive a comment with Lighthouse scores for all audited pages.
 
-## 6. SEO & Discoverability _(implemented for current routes)_
+## 7. SEO & Discoverability _(implemented for current routes)_
 
-### 6.1 Technical SEO
+### 7.1 Technical SEO
 
 - Per-page titles and meta descriptions.
 - Canonical URLs.
@@ -169,34 +215,34 @@ This document captures the engineering intent for this repository. It is a **nor
 - Clean, descriptive URL structure.
 - JSON-LD structured data (Person/Profile, Website, and other types as appropriate).
 
-### 6.2 Content SEO
+### 7.2 Content SEO
 
 - Descriptive H1/H2 hierarchy per page.
 - Clear, scannable paragraphs and bullet lists.
 - Thoughtful keyword usage without keyword stuffing.
 
-## 7. Observability & Monitoring _(implemented: Vercel Analytics/Speed Insights + Sentry)_
+## 8. Observability & Monitoring _(implemented: Vercel Analytics/Speed Insights + Sentry)_
 
-### 7.1 Logging & Analytics
+### 8.1 Logging & Analytics
 
 - Privacy-respecting analytics (e.g., Vercel Analytics plus any chosen 3rd-party tracking that meets privacy constraints).
 - Basic traffic dashboards and referrer insights.
 - Ability to see top pages and engagement.
 
-### 7.2 Performance & Error Monitoring
+### 8.2 Performance & Error Monitoring
 
 - Real-time Core Web Vitals via Vercel Speed Insights.
 - Error tracking via Sentry (client + server) with grouping, breadcrumbs, and replay.
 
-### 7.3 Build & Deployment Monitoring
+### 8.3 Build & Deployment Monitoring
 
 - CI build logs for each PR and push.
 - Preview deployments per PR (Vercel).
 - Optional Lighthouse CI or periodic Lighthouse checks.
 
-## 8. Reliability & Operations _(implemented via GitHub Actions + Vercel)_
+## 9. Reliability & Operations _(implemented via GitHub Actions + Vercel)_
 
-### 8.1 Deployment
+### 9.1 Deployment
 
 - Continuous Deployment via GitHub → Vercel.
 - Branch protection on `main`.
@@ -221,25 +267,6 @@ This document captures the engineering intent for this repository. It is a **nor
 ### 8.3 Uptime
 
 - Uptime monitoring via Vercel or an external service (e.g., UptimeRobot) if/when warranted.
-
-## 9. Testing Standards _(implemented for unit + E2E; visual/smoke are aspirational)_
-
-### 9.1 Unit Testing
-
-- Vitest (or Jest) for unit tests.
-- React Testing Library for component behavior.
-
-### 9.2 Integration & E2E Testing
-
-- Playwright (or Cypress) for integration and end-to-end tests, covering:
-  - Routing and navigation
-  - Form interactions (happy path + failures)
-  - Basic accessibility interactions
-
-### 9.3 Visual & Smoke Testing (Aspirational)
-
-- Visual regression testing (e.g., Chromatic or Percy) as the UI surface grows.
-- Automated smoke tests per PR for core flows.
 
 ## 10. Design System Standards _(partially implemented via Tailwind tokens and shared components)_
 

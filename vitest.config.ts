@@ -8,6 +8,7 @@ export default defineConfig({
     exclude: [
       ...configDefaults.exclude,
       "test/e2e/**",
+      "test/visual/**",
       "next-sitemap.config.*",
     ],
     coverage: {

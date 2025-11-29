@@ -68,6 +68,14 @@ const nextConfig = {
   typedRoutes: true,
   turbopack: {},
   productionBrowserSourceMaps: true,
+  images: {
+    localPatterns: [
+      {
+        pathname: "/assets/images/**",
+        search: "",
+      },
+    ],
+  },
   async headers() {
     if (!isProd) {
       // In development, avoid setting CSP and other security headers so
@@ -154,8 +162,8 @@ const sentryWebpackPluginOptions = {
 // Only apply Sentry config if the minimum required env vars are set
 // This prevents build warnings when Sentry is not configured
 const shouldUseSentry =
-  (process.env.SENTRY_DSN ||
-    process.env.NEXT_PUBLIC_SENTRY_DSN) ||
+  process.env.SENTRY_DSN ||
+  process.env.NEXT_PUBLIC_SENTRY_DSN ||
   (process.env.SENTRY_AUTH_TOKEN &&
     process.env.SENTRY_ORG &&
     process.env.SENTRY_PROJECT);
