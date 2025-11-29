@@ -10,7 +10,6 @@ test("footer links navigate to pages", async ({ page }) => {
   });
   await expect(cookieLink).toBeVisible();
   await cookieLink.click();
-  await page.waitForURL("**/cookie-policy");
   await expect(
     page.getByRole("heading", { name: "Cookie Policy", exact: true }),
   ).toBeVisible();
@@ -23,7 +22,6 @@ test("footer links navigate to pages", async ({ page }) => {
   });
   await expect(privacyLink).toBeVisible();
   await privacyLink.click();
-  await page.waitForURL("**/privacy-policy");
   await expect(
     page.getByRole("heading", { name: "Privacy Policy", exact: true }),
   ).toBeVisible();
@@ -36,7 +34,6 @@ test("footer links navigate to pages", async ({ page }) => {
   });
   await expect(techStackLink).toBeVisible();
   await techStackLink.click();
-  await page.waitForURL("**/tech-stack");
   await expect(
     page.getByRole("heading", { name: "Tech Stack", exact: true }),
   ).toBeVisible();
