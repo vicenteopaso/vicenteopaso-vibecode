@@ -273,7 +273,7 @@ export default defineConfig({
   },
   // Generate HTML report with visual diffs
   reporter: [
-    ["html", { outputFolder: "test-results/visual-report" }],
+    ["html", { outputFolder: "playwright-report" }],
     ["list"],
   ],
 });
