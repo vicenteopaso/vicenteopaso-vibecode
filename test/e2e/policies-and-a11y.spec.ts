@@ -22,8 +22,10 @@ test("footer links navigate to pages", async ({ page }) => {
     exact: true,
   });
   await expect(privacyLink).toBeVisible();
-  await privacyLink.click();
-  await page.waitForURL("**/privacy-policy");
+  await Promise.all([
+    page.waitForURL("**/privacy-policy"),
+    privacyLink.click(),
+  ]);
   await expect(
     page.getByRole("heading", { name: "Privacy Policy", exact: true }),
   ).toBeVisible();
