@@ -9,7 +9,7 @@ vi.mock("../../app/components/ImpactCards", () => ({
   ),
 }));
 
-import AboutPage from "../../app/about/page";
+import HomePage from "../../app/page";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -32,7 +32,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
     expect(screen.getByText("Engineering leader")).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
     expect(
@@ -85,7 +85,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     expect(
       screen.getByText(/This is the introduction body\./i),
@@ -121,7 +121,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     const impactSection = screen.getByRole("region", {
       name: /impact cards/i,
@@ -153,7 +153,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     const githubLinks = screen.getAllByRole("link", {
       name: /github profile/i,
@@ -186,7 +186,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     expect(
       screen.getByText(/Direct content without introduction/i),
@@ -217,7 +217,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     const impactSection = screen.getByRole("region", {
       name: /impact cards/i,
@@ -259,7 +259,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     const impactCards = screen.getByTestId("impact-cards");
     const cardsProp = JSON.parse(
@@ -286,7 +286,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<AboutPage />);
+    const { container } = render(<HomePage />);
 
     // react-markdown should render an <hr> for *** inside the section
     const hrs = container.querySelectorAll("hr");
@@ -313,7 +313,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     expect(screen.getByText(/One/i)).toBeInTheDocument();
     expect(screen.getByText(/Two/i)).toBeInTheDocument();
@@ -336,7 +336,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<AboutPage />);
+    const { container } = render(<HomePage />);
     const hrs = container.querySelectorAll("hr");
     expect(hrs.length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/Paragraph after\./i)).toBeInTheDocument();
@@ -357,7 +357,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AboutPage />);
+    render(<HomePage />);
 
     // Name should not render when missing; tagline still renders
     expect(screen.queryByText("Vicente Opaso")).not.toBeInTheDocument();
@@ -383,7 +383,7 @@ describe("AboutPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<AboutPage />);
+    const { container } = render(<HomePage />);
 
     // There should be no intro section; only the Profile header and footer exist
     expect(container.querySelectorAll("section.space-y-4.py-3").length).toBe(0);

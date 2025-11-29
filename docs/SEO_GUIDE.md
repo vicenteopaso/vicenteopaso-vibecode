@@ -26,8 +26,8 @@ This site treats SEO as an engineering concern.
 
 - `SeoJsonLd` is a client component that injects JSON-LD via `<Script type="application/ld+json">`:
   - Always includes the `WebSite` JSON-LD on all routes.
-  - Includes the `Person` JSON-LD **only** on `/about` and `/cv` (controlled via `usePathname`).
-- If you add new routes that should expose `Person` schema, update the `includePerson` condition.
+  - Includes the `Person` JSON-LD **only** on `/` (root/About page) and `/cv` (controlled via `usePathname`).
+- If you add new routes that should expose `Person` schema, update the `includePerson` condition (currently includes `/` and `/cv`).
 
 ### `app/layout.tsx` and Open Graph images
 

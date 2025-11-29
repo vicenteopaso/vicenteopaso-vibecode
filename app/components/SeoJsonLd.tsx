@@ -9,7 +9,7 @@ import { getPersonJsonLd, getWebsiteJsonLd } from "../../lib/seo";
 export function SeoJsonLd() {
   const pathname = usePathname();
 
-  const includePerson = pathname === "/about" || pathname === "/cv";
+  const includePerson = pathname === "/" || pathname === "/cv";
 
   return (
     <>

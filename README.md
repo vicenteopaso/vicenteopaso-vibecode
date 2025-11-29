@@ -64,8 +64,7 @@ High‑level layout:
 
 - `app/`
   - `layout.tsx` – HTML shell, global styles, SEO metadata, theme provider, header/footer, and skip link to main content.
-  - `page.tsx` – Home route, implemented as the About page.
-  - `about/page.tsx` – Reads `content/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
+  - `page.tsx` – Home route (root `/`), implemented as the About page. Reads `content/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
   - `cv/page.tsx` – Reads `content/cv.md`, parses the JSON CV body, and renders experience, skills, education, languages, interests, publications, and references.
   - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page rendered with shared `markdownComponents`.
   - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page rendered with shared `markdownComponents`.
@@ -100,7 +99,7 @@ High‑level layout:
   - `tsconfig.json` – Strict TS config with path mapping for `@/*` and `contentlayer/generated`.
   - `.eslintrc.json`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
 
-> Note: `app/about/page.tsx` and `app/cv/page.tsx` currently read from the filesystem at runtime rather than querying Contentlayer. Any refactor should keep the existing behavior (especially the JSON‑driven CV and its error handling) or migrate fully to Contentlayer with equivalent semantics.
+> Note: `app/page.tsx` and `app/cv/page.tsx` currently read from the filesystem at runtime rather than querying Contentlayer. Any refactor should keep the existing behavior (especially the JSON‑driven CV and its error handling) or migrate fully to Contentlayer with equivalent semantics.
 
 ---
 
@@ -129,7 +128,7 @@ Then open `http://localhost:3000` in your browser.
 
 The main routes are:
 
-- `/` and `/about` – About page (markdown‑driven)
+- `/` – About page (markdown‑driven, served at root)
 - `/cv` – JSON CV page
 - `/cookie-policy` – Cookie policy page (markdown‑backed)
 - `/privacy-policy` – Privacy policy page (markdown‑backed)
@@ -156,7 +155,7 @@ The site includes sitemap generation via `next-sitemap`. The configuration is in
 
 ## Editing content
 
-### About page (`/about`)
+### About page (`/`)
 
 - Source file: `content/about.md`
 - Frontmatter fields:

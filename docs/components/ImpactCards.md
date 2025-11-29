@@ -6,7 +6,7 @@ A rotating grid of impact statement cards with smooth fade animations. Cards aut
 
 **Location:** `app/components/ImpactCards.tsx`
 
-**Usage:** Rendered on About page to showcase key achievements and impact areas
+**Usage:** Rendered on About page (root route `/`) to showcase key achievements and impact areas
 
 ## Props
 
@@ -213,6 +213,6 @@ None - This is a standalone presentational component
 
 ## Related Documentation
 
-- [About Page](../../app/about/page.tsx)
+- [About Page](../../app/page.tsx) (root route)
 - [Design System - Cards](../DESIGN_SYSTEM.md#cards)
 - [Design System - Motion](../DESIGN_SYSTEM.md#motion--transitions)

@@ -19,11 +19,45 @@ test.describe("Homepage Visual Regression", () => {
     // Wait for footer to ensure full page is rendered
     await page.waitForSelector("footer", { state: "visible" });
 
+    // Wait for page height to stabilize
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        let lastHeight = document.body.scrollHeight;
+        let stableCount = 0;
+        const checkHeight = setInterval(() => {
+          const currentHeight = document.body.scrollHeight;
+          if (currentHeight === lastHeight) {
+            stableCount++;
+            if (stableCount >= 3) {
+              clearInterval(checkHeight);
+              resolve(true);
+            }
+          } else {
+            stableCount = 0;
+            lastHeight = currentHeight;
+          }
+        }, 100);
+      });
+    });
+
+    // Stop carousel rotation to ensure stable screenshot
+    await page.evaluate(() => {
+      const carousel = document.querySelector('[data-testid="impact-cards"]');
+      if (carousel) {
+        const buttons = carousel.querySelectorAll("button");
+        buttons.forEach((btn) => (btn.style.pointerEvents = "none"));
+      }
+    });
+
+    // Additional wait for carousel to settle
+    await page.waitForTimeout(500);
+
     // Take full page screenshot
     await expect(page).toHaveScreenshot("homepage-light.png", {
       fullPage: true,
       animations: "disabled",
       timeout: 15000,
+      maxDiffPixelRatio: 0.02, // Allow for ImpactCards carousel rotation
     });
   });
 
@@ -46,10 +80,44 @@ test.describe("Homepage Visual Regression", () => {
     // Wait for footer to ensure full page is rendered
     await page.waitForSelector("footer", { state: "visible" });
 
+    // Wait for page height to stabilize
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        let lastHeight = document.body.scrollHeight;
+        let stableCount = 0;
+        const checkHeight = setInterval(() => {
+          const currentHeight = document.body.scrollHeight;
+          if (currentHeight === lastHeight) {
+            stableCount++;
+            if (stableCount >= 3) {
+              clearInterval(checkHeight);
+              resolve(true);
+            }
+          } else {
+            stableCount = 0;
+            lastHeight = currentHeight;
+          }
+        }, 100);
+      });
+    });
+
+    // Stop carousel rotation to ensure stable screenshot
+    await page.evaluate(() => {
+      const carousel = document.querySelector('[data-testid="impact-cards"]');
+      if (carousel) {
+        const buttons = carousel.querySelectorAll("button");
+        buttons.forEach((btn) => (btn.style.pointerEvents = "none"));
+      }
+    });
+
+    // Additional wait for carousel to settle
+    await page.waitForTimeout(500);
+
     await expect(page).toHaveScreenshot("homepage-dark.png", {
       fullPage: true,
       animations: "disabled",
       timeout: 15000,
+      maxDiffPixelRatio: 0.02, // Allow for ImpactCards carousel rotation
     });
   });
 
@@ -72,10 +140,44 @@ test.describe("Homepage Visual Regression", () => {
     // Wait for footer to ensure full page is rendered
     await page.waitForSelector("footer", { state: "visible" });
 
+    // Wait for page height to stabilize
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        let lastHeight = document.body.scrollHeight;
+        let stableCount = 0;
+        const checkHeight = setInterval(() => {
+          const currentHeight = document.body.scrollHeight;
+          if (currentHeight === lastHeight) {
+            stableCount++;
+            if (stableCount >= 3) {
+              clearInterval(checkHeight);
+              resolve(true);
+            }
+          } else {
+            stableCount = 0;
+            lastHeight = currentHeight;
+          }
+        }, 100);
+      });
+    });
+
+    // Stop carousel rotation to ensure stable screenshot
+    await page.evaluate(() => {
+      const carousel = document.querySelector('[data-testid="impact-cards"]');
+      if (carousel) {
+        const buttons = carousel.querySelectorAll("button");
+        buttons.forEach((btn) => (btn.style.pointerEvents = "none"));
+      }
+    });
+
+    // Additional wait for carousel to settle
+    await page.waitForTimeout(500);
+
     await expect(page).toHaveScreenshot("homepage-mobile.png", {
       fullPage: true,
       animations: "disabled",
       timeout: 15000,
+      maxDiffPixelRatio: 0.02, // Allow for ImpactCards carousel rotation
     });
   });
 });

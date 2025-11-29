@@ -44,8 +44,7 @@ Create targeted visual regression tests for critical UI surfaces:
 
 #### Critical Pages
 
-- Homepage (`/`) - Light, dark, and mobile viewport (375×667px)
-- About page (`/about`) - Light, dark, and mobile viewport (375×667px)
+- Homepage/About page (`/`) - Light, dark, and mobile viewport (375×667px)
 - CV page (`/cv`) - Light, dark, and mobile viewport (375×667px)
 - Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`) - Planned
 
@@ -63,8 +62,7 @@ Create targeted visual regression tests for critical UI surfaces:
 ```
 test/visual/
 ├── pages/
-│   ├── home.visual.spec.ts          # ✅ Light, dark, mobile (375×667px)
-│   ├── about.visual.spec.ts         # ✅ Light, dark, mobile (375×667px)
+│   ├── about.visual.spec.ts         # ✅ Light, dark, mobile (375×667px) - About page at root
 │   ├── cv.visual.spec.ts            # ✅ Light, dark, mobile (375×667px)
 │   └── policies.visual.spec.ts      # 🔜 Planned
 ├── components/
@@ -161,7 +159,7 @@ test.describe("Homepage Visual Regression", () => {
 
 ```typescript
 test("profile card - about page variant", async ({ page }) => {
-  await page.goto("/about");
+  await page.goto("/");
 
   // Target specific component
   const profileCard = page.locator('[data-testid="profile-card"]');

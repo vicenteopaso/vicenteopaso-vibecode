@@ -6,7 +6,7 @@ A call-to-action section that combines a heading, description text, contact dial
 
 **Location:** `app/components/GetInTouchSection.tsx`
 
-**Usage:** Rendered on About page
+**Usage:** Rendered on About page (root route `/`)
 
 ## Props
 

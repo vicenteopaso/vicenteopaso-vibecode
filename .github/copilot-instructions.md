@@ -36,7 +36,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
   - Client-side errors should fail gracefully without exposing internal details.
   - Preserve user context and avoid losing form data on errors.
 - Preserve content behavior:
-  - `app/about/page.tsx` and `app/cv/page.tsx` read from the filesystem (`content/about.md`, `content/cv.md`) at runtime.
+  - `app/page.tsx` and `app/cv/page.tsx` read from the filesystem (`content/about.md`, `content/cv.md`) at runtime.
   - If migrating to Contentlayer, ensure **feature parity** and preserve error handling for invalid CV JSON.
 - Preserve the contact flow:
   - Client dialog with Cloudflare Turnstile → `/api/contact` route handler → Formspree.

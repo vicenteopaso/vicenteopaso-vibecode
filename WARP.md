@@ -49,10 +49,9 @@ This is a single Next.js App Router project using pnpm.
     - Wraps the app with `ThemeProvider` (`app/components/ThemeProvider.tsx`) powered by `next-themes` to support light/dark themes via a `class` attribute on `<html>`.
     - Injects the Cloudflare Turnstile script (`https://challenges.cloudflare.com/turnstile/v0/api.js`) globally, which is required by the contact form.
     - Renders a persistent `Header`, main content container (`<main>` with a centered shell), and `Footer`.
-  - `app/page.tsx` simply re-uses `app/about/page.tsx` so the home route (`/`) is the same as the About page.
+  - `app/page.tsx` implements the About page at the root route (`/`).
 - Routes are organized under `app/`:
-  - `/about` → `app/about/page.tsx`
-  - `/contact` → `app/contact/page.tsx`
+  - `/` → `app/page.tsx` (the About page) page)
   - `/cv` → `app/cv/page.tsx`
   - `/api/contact` → `app/api/contact/route.ts` (Next.js Route Handler for the contact form).
 
@@ -82,14 +81,14 @@ This is a single Next.js App Router project using pnpm.
     - `basics`, `work`, `education`, `skills`, `languages`, `interests`, `references`, and `publications`.
     - Many fields (e.g., `references[*].reference`) contain HTML strings, which are rendered via `dangerouslySetInnerHTML` in `app/cv/page.tsx` and `ReferencesCarousel.tsx`.
 - Page implementations:
-- - `app/about/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
+- - `app/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
 - - `app/cv/page.tsx` similarly reads `content/cv.md`, parses frontmatter with `gray-matter`, and then `JSON.parse`s the body as a `CvJson` structure. It then renders sections for experience, skills, education, languages, interests, publications, and references.
   - If the JSON is invalid, the page gracefully falls back to a simple error message and instructs the user to check `content/cv.md`.
 - Contentlayer configuration:
   - `contentlayer.config.ts` defines a `Page` document type over `content/*.md` with required fields `name`, `title`, `slug` and optional `tagline`, `initials`.
   - It also defines a computed `cv` field that attempts to parse `doc.body.raw` as JSON for the `slug === "cv"` document.
   - `next.config.mjs` wraps the Next config with `withContentlayer`, and `tsconfig.json` maps `"contentlayer/generated"` to `"./.contentlayer/generated"`.
-  - **Important**: the current pages (`app/about/page.tsx`, `app/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
+  - **Important**: the current pages (`app/page.tsx`, `app/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
 
 ### 4. Contact flow: client dialog → API route → Turnstile → Formspree
 

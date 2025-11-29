@@ -69,7 +69,7 @@ introduced only where interactivity is required.
 
 - `content/about.md` contains frontmatter and markdown for the About page.
 - `content/cv.md` contains frontmatter and a JSON object in the markdown body for the CV.
-- `app/about/page.tsx` and `app/cv/page.tsx` currently read these files directly at runtime using `fs` + `gray-matter` / `JSON.parse`.
+- `app/page.tsx` and `app/cv/page.tsx` currently read these files directly at runtime using `fs` + `gray-matter` / `JSON.parse`.
 - Contentlayer is configured and may be used in the future, but the filesystem remains the runtime source of truth for About/CV.
 
 **Content Rendering Flow:**
@@ -94,7 +94,7 @@ Return HTML to client
 
 **Key files:**
 
-- `app/about/page.tsx` - renders `content/about.md`
+- `app/page.tsx` - renders `content/about.md` (About page at root route)
 - `app/cv/page.tsx` - renders `content/cv.md` with JSON CV parsing
 - `lib/sanitize-html.ts` - sanitizes rich content
 
@@ -334,9 +334,7 @@ See [`docs/SENTRY_SETUP.md`](./SENTRY_SETUP.md) for detailed Sentry configuratio
 ```
 app/
 ├── layout.tsx               # Root layout with providers
-├── page.tsx                 # Home page
-├── about/
-│   └── page.tsx            # About page (reads content/about.md)
+├── page.tsx                 # About page at root route (reads content/about.md)
 ├── cv/
 │   └── page.tsx            # CV page (reads content/cv.md)
 ├── api/

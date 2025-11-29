@@ -21,7 +21,7 @@ None - The component uses `usePathname()` to determine which schemas to include.
    - Alternate names
    - Potential actions (search)
 
-2. **Person Schema** (About and CV pages only)
+2. **Person Schema** (root/About and CV pages only)
    - Name, job title, description
    - Contact points (email, location)
    - Social media profiles
@@ -32,7 +32,7 @@ None - The component uses `usePathname()` to determine which schemas to include.
 
 ```typescript
 const pathname = usePathname();
-const includePerson = pathname === "/about" || pathname === "/cv";
+const includePerson = pathname === "/" || pathname === "/cv";
 ```
 
 Person schema only included on pages where biographical information is relevant.
@@ -161,7 +161,7 @@ No visual UI - purely for SEO and machine-readable structured data.
 **Test file:** `test/unit/seo-jsonld.test.tsx`
 
 - ✅ Renders Website schema on all pages
-- ✅ Renders Person schema on About page
+- ✅ Renders Person schema on root page (About)
 - ✅ Renders Person schema on CV page
 - ✅ Does not render Person schema on other pages
 - ✅ JSON-LD is valid and parseable

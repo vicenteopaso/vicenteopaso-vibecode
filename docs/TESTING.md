@@ -166,8 +166,8 @@ describe('ProfileCard', () => {
 import { test, expect } from "@playwright/test";
 
 test("user can submit contact form", async ({ page }) => {
-  // Navigate to about page
-  await page.goto("/about");
+  // Navigate to root page (About page)
+  await page.goto("/");
 
   // Open contact dialog
   await page.click("text=Contact me");
