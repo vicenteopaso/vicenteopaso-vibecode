@@ -250,7 +250,7 @@ When visual tests fail in CI:
 3. Review diffs locally
 4. If intentional, update baselines:
    ```bash
-   pnpm test:visual -- --update-snapshots
+   pnpm test:visual:update
    git add test/visual/**/*-snapshots/
    git commit -m "test: update visual baselines for [reason]"
    ```
