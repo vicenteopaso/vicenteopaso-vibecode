@@ -60,15 +60,23 @@ test.describe("CV Page Visual Regression", () => {
     await page.waitForSelector("footer", { state: "visible" });
 
     // Wait for page height to stabilize (ReferencesCarousel does dynamic height measurement)
-    await page.evaluate(async () => {
-      let previousHeight = document.documentElement.scrollHeight;
-      for (let i = 0; i < 5; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        const currentHeight = document.documentElement.scrollHeight;
-        if (currentHeight === previousHeight) break;
-        previousHeight = currentHeight;
+    await page.waitForFunction(() => {
+      // Wait until scrollHeight remains unchanged for 200ms
+      if (!window.__lastScrollHeightCheck) {
+        window.__lastScrollHeightCheck = {
+          height: document.documentElement.scrollHeight,
+          stableSince: Date.now(),
+        };
+        return false;
       }
-    });
+      const currentHeight = document.documentElement.scrollHeight;
+      if (currentHeight !== window.__lastScrollHeightCheck.height) {
+        window.__lastScrollHeightCheck.height = currentHeight;
+        window.__lastScrollHeightCheck.stableSince = Date.now();
+        return false;
+      }
+      return Date.now() - window.__lastScrollHeightCheck.stableSince > 200;
+    }, { timeout: 2000 });
 
     await expect(page).toHaveScreenshot("cv-mobile.png", {
       fullPage: true,
