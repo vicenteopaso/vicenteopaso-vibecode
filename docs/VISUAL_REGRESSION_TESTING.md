@@ -121,7 +121,7 @@ pnpm test:visual
 pnpm test:visual -- test/visual/pages/home.visual.spec.ts
 
 # Update baselines after intentional changes
-pnpm test:visual -- --update-snapshots
+pnpm test:visual:update
 
 # View HTML report with diffs
 pnpm playwright show-report
