@@ -18,6 +18,10 @@ interface ModalProps {
   analyticsEventName?: string;
   /** Optional extra metadata to send with the analytics event. */
   analyticsMetadata?: AnalyticsMetadata;
+  /** Controlled open state. When provided, the modal becomes controlled. */
+  open?: boolean;
+  /** Callback when the open state changes. Required when using controlled mode. */
+  onOpenChange?: (open: boolean) => void;
 }
 
 function getSizeClasses(size: ModalSize = "md") {
@@ -38,15 +42,24 @@ export function Modal({
   size = "md",
   analyticsEventName,
   analyticsMetadata,
+  open,
+  onOpenChange,
 }: ModalProps) {
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen && analyticsEventName) {
+      track(analyticsEventName, analyticsMetadata);
+    }
+    onOpenChange?.(isOpen);
+  };
+
+  // Build props for Dialog.Root based on controlled vs uncontrolled mode
+  const dialogRootProps =
+    open !== undefined
+      ? { open, onOpenChange: handleOpenChange }
+      : { onOpenChange: handleOpenChange };
+
   return (
-    <Dialog.Root
-      onOpenChange={(open) => {
-        if (open && analyticsEventName) {
-          track(analyticsEventName, analyticsMetadata);
-        }
-      }}
-    >
+    <Dialog.Root {...dialogRootProps}>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm" />

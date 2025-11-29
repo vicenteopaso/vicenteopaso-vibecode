@@ -3,7 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import type { FormEvent, ReactNode } from "react";
 import React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
@@ -31,11 +31,14 @@ interface ContactDialogProps {
   children?: ReactNode;
 }
 
+const COUNTDOWN_DURATION = 10;
+
 export function ContactDialog({
   triggerLabel = "Contact me",
   trigger,
   children,
 }: ContactDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [phone, setPhone] = useState("");
@@ -46,7 +49,75 @@ export function ContactDialog({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
+  const countdownIntervalRef = useRef<number | null>(null);
+
+  // Whether the form is in success state with countdown
+  const isSuccessState = countdown !== null;
+
+  // Reset all form state to initial values
+  const resetFormState = useCallback(() => {
+    setEmail("");
+    setPhone("");
+    setMessage("");
+    setError(null);
+    setSuccess(null);
+    setEmailError(null);
+    setMessageError(null);
+    setCountdown(null);
+    setSubmitting(false);
+    // Clear any running countdown
+    if (countdownIntervalRef.current !== null) {
+      window.clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+  }, []);
+
+  // Handle modal open/close
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      if (open) {
+        // Reset form when modal opens to ensure fresh state
+        resetFormState();
+        // Reset Turnstile for fresh verification
+        window.turnstile?.reset();
+        setTurnstileToken(null);
+        setIsChallengeVisible(false);
+      }
+    },
+    [resetFormState],
+  );
+
+  // Start countdown after successful submission
+  const startCountdown = useCallback(() => {
+    setCountdown(COUNTDOWN_DURATION);
+
+    countdownIntervalRef.current = window.setInterval(() => {
+      setCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          // Clear interval and close modal
+          if (countdownIntervalRef.current !== null) {
+            window.clearInterval(countdownIntervalRef.current);
+            countdownIntervalRef.current = null;
+          }
+          setIsOpen(false);
+          return null;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (countdownIntervalRef.current !== null) {
+        window.clearInterval(countdownIntervalRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -153,6 +224,8 @@ export function ContactDialog({
       setMessage("");
       setEmailError(null);
       setMessageError(null);
+      // Start countdown for auto-close
+      startCountdown();
     } catch (err) {
       // Reset Turnstile so the user can try again after an error.
       window.turnstile?.reset();
@@ -182,6 +255,8 @@ export function ContactDialog({
       size="md"
       analyticsEventName="contact_open"
       analyticsMetadata={{ component: "ContactDialog" }}
+      open={isOpen}
+      onOpenChange={handleOpenChange}
     >
       <Dialog.Title className="flex items-center gap-2 text-base font-semibold tracking-tight text-[color:var(--text-primary)]">
         Contact me
@@ -200,11 +275,12 @@ export function ContactDialog({
           <input
             type="email"
             name="email"
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="you@example.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
+            disabled={isSuccessState}
             aria-required="true"
             aria-invalid={emailError ? "true" : "false"}
             aria-describedby={
@@ -226,21 +302,23 @@ export function ContactDialog({
           <input
             type="tel"
             name="phone"
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="Phone number"
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
+            disabled={isSuccessState}
           />
         </label>
         <label className="flex flex-col gap-1.5">
           <span className="text-[color:var(--text-primary)]">Message</span>
           <textarea
             name="message"
-            className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="A few words about your project or question"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             required
+            disabled={isSuccessState}
             aria-required="true"
             aria-invalid={messageError ? "true" : "false"}
             aria-describedby={
@@ -284,17 +362,27 @@ export function ContactDialog({
           </p>
         ) : null}
 
-        <p
+        <div
           id="contact-status"
           role="status"
           aria-live="polite"
+          aria-atomic="true"
           className="text-[11px]"
         >
           {error ? <span className="text-red-400">{error}</span> : null}
           {!error && success ? (
             <span className="text-emerald-400">{success}</span>
           ) : null}
-        </p>
+          {isSuccessState ? (
+            <p className="mt-2 text-sm text-[color:var(--text-muted)]">
+              This dialog will close in{" "}
+              <span className="font-semibold text-[color:var(--text-primary)]">
+                {countdown}
+              </span>{" "}
+              {countdown === 1 ? "second" : "seconds"}.
+            </p>
+          ) : null}
+        </div>
 
         {children}
 
@@ -310,7 +398,7 @@ export function ContactDialog({
           <button
             type="submit"
             className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-            disabled={submitting || !turnstileToken}
+            disabled={submitting || !turnstileToken || isSuccessState}
           >
             {submitting ? "Sending..." : "Send"}
           </button>
