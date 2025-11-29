@@ -51,7 +51,7 @@ This is a single Next.js App Router project using pnpm.
     - Renders a persistent `Header`, main content container (`<main>` with a centered shell), and `Footer`.
   - `app/page.tsx` implements the About page at the root route (`/`).
 - Routes are organized under `app/`:
-  - `/` → `app/page.tsx` (the About page) page)
+  - `/` → `app/page.tsx` (the About page)
   - `/cv` → `app/cv/page.tsx`
   - `/api/contact` → `app/api/contact/route.ts` (Next.js Route Handler for the contact form).
 

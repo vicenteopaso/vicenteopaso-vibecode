@@ -62,7 +62,7 @@ Create targeted visual regression tests for critical UI surfaces:
 ```
 test/visual/
 ├── pages/
-│   ├── about.visual.spec.ts         # ✅ Light, dark, mobile (375×667px) - About page at root
+│   ├── home.visual.spec.ts          # ✅ Light, dark, mobile (375×667px) - About page at root
 │   ├── cv.visual.spec.ts            # ✅ Light, dark, mobile (375×667px)
 │   └── policies.visual.spec.ts      # 🔜 Planned
 ├── components/
