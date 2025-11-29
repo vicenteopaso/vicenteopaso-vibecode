@@ -157,11 +157,6 @@ test.describe("Homepage Visual Regression", () => {
 });
 ```
 
-      animations: "disabled", // Disable animations for consistency
-    });
-
-});
-
 test("renders homepage correctly in dark mode", async ({ page }) => {
 await page.emulateMedia({ colorScheme: "dark" });
 await page.goto("/");
