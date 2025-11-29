@@ -154,14 +154,12 @@ test.describe("Homepage Visual Regression", () => {
       mask: await homepageMasks(page), // Excludes portrait + ImpactCards
     });
   });
-});
-```
 
-test("renders homepage correctly in dark mode", async ({ page }) => {
-await page.emulateMedia({ colorScheme: "dark" });
-await page.goto("/");
-await page.waitForLoadState("networkidle");
-await page.evaluate(() => document.fonts.ready);
+  test("renders homepage correctly in dark mode", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => document.fonts.ready);
 
     await waitForStableHeight(page);
     await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
@@ -171,11 +169,9 @@ await page.evaluate(() => document.fonts.ready);
       animations: "disabled",
       mask: await homepageMasks(page),
     });
-
+  });
 });
-});
-
-````
+```
 
 ### Component-Level Visual Tests
 
@@ -192,7 +188,7 @@ test("profile card - about page variant", async ({ page }) => {
     animations: "disabled",
   });
 });
-````
+```
 
 ## Best Practices
 
