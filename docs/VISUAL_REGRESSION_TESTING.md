@@ -44,7 +44,7 @@ Create targeted visual regression tests for critical UI surfaces:
 
 #### Critical Pages
 
-- Homepage/About page (`/`) - Light, dark, and mobile viewport (375×667px)
+- Home page (root `/`) - Light, dark, and mobile viewport (375×667px)
 - CV page (`/cv`) - Light, dark, and mobile viewport (375×667px)
 - Policy pages (`/privacy-policy`, `/cookie-policy`, `/accessibility`) - Planned
 

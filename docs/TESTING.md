@@ -287,7 +287,7 @@ test("homepage renders correctly on mobile viewport", async ({ page }) => {
 
 **When to write**:
 
-- Critical pages (homepage, CV, about) - test in light mode, dark mode, and mobile viewport
+- Critical pages (Home/root `/`, CV `/cv`) - test in light mode, dark mode, and mobile viewport
 - Component visual variations
 - Theme switching
 - Responsive breakpoints (especially mobile 375×667px)

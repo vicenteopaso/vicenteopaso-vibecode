@@ -26,7 +26,7 @@
 [![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
 [![Dependabot](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates)
 
-This repo contains the source for my personal site and CV, built with Next.js App Router and a content-first approach. It renders an “About” page and a structured CV from markdown/JSON content, and includes a spam‑protected contact flow using Cloudflare Turnstile and Formspree.
+This repo contains the source for my personal site and CV, built with Next.js App Router and a content-first approach. It renders a Home page at the root (`/`) and a structured CV at `/cv` from markdown/JSON content, and includes a spam‑protected contact flow using Cloudflare Turnstile and Formspree.
 
 The project is optimized for readability, accessibility, and maintainability, with a focus on composable UI, modern tooling, and strong Developer Experience.
 
@@ -64,7 +64,7 @@ High‑level layout:
 
 - `app/`
   - `layout.tsx` – HTML shell, global styles, SEO metadata, theme provider, header/footer, and skip link to main content.
-  - `page.tsx` – Home route (root `/`), implemented as the About page. Reads `content/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
+  - `page.tsx` – Home route (root `/`). Reads `content/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
   - `cv/page.tsx` – Reads `content/cv.md`, parses the JSON CV body, and renders experience, skills, education, languages, interests, publications, and references.
   - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page rendered with shared `markdownComponents`.
   - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page rendered with shared `markdownComponents`.
@@ -75,14 +75,14 @@ High‑level layout:
     - `Modal.tsx` – Shared Radix dialog wrapper with consistent styling and optional Vercel Analytics tracking on open.
     - `ContactDialog.tsx` – Contact form dialog implemented on top of `Modal`, including Turnstile integration.
     - `CookiePolicyModal.tsx`, `PrivacyPolicyModal.tsx`, `TechStackModal.tsx` – Footer modals that fetch markdown content via `/api/content/[slug]` and render with `react-markdown` using shared `markdownComponents` from `lib/markdown-components.tsx`.
-    - `ImpactCards.tsx` – Rotating impact cards for the About page, rendering markdown snippets with subtle animations.
+    - `ImpactCards.tsx` – Rotating impact cards for the Home page, rendering markdown snippets with subtle animations.
     - `ReferencesCarousel.tsx` – Auto‑rotating carousel for CV references.
     - `ThemeProvider.tsx` – Wraps `next-themes` configuration.
     - `icons.tsx` – Shared icon primitives (GitHub, LinkedIn, X, download, and small glyph icons).
   - `api/contact/route.ts` – Validates and forwards contact form submissions (Turnstile verification + Formspree).
   - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by modals and pages.
 - `content/`
-  - `about.md` – Frontmatter + markdown body for the About page.
+  - `about.md` – Frontmatter + markdown body for the Home page (rendered at root `/`).
   - `cv.md` – Frontmatter + JSON object in the markdown body for the CV.
   - `cookie-policy.md` – Markdown source for the cookie policy.
   - `privacy-policy.md` – Markdown source for the privacy policy.

@@ -65,7 +65,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
   - Route handlers (e.g., `app/api/contact/route.ts`).
   - Shared UI components in `app/components/`.
 - `content/`:
-  - `about.md`: frontmatter + markdown body for the About page.
+  - `about.md`: frontmatter + markdown body for the Home page (rendered at root `/`).
   - `cv.md`: frontmatter + **JSON object** in the body for the CV; this JSON is parsed at runtime and must stay valid.
 - `styles/`:
   - Tailwind CSS v4 setup and global styles.
