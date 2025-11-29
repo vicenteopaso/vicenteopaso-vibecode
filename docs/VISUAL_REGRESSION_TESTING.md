@@ -121,7 +121,7 @@ pnpm test:visual
 pnpm test:visual -- test/visual/pages/home.visual.spec.ts
 
 # Update baselines after intentional changes
-pnpm test:visual -- --update-snapshots
+pnpm test:visual:update
 
 # View HTML report with diffs
 pnpm playwright show-report
@@ -250,7 +250,7 @@ When visual tests fail in CI:
 3. Review diffs locally
 4. If intentional, update baselines:
    ```bash
-   pnpm test:visual -- --update-snapshots
+   pnpm test:visual:update
    git add test/visual/**/*-snapshots/
    git commit -m "test: update visual baselines for [reason]"
    ```
@@ -273,7 +273,7 @@ export default defineConfig({
   },
   // Generate HTML report with visual diffs
   reporter: [
-    ["html", { outputFolder: "test-results/visual-report" }],
+    ["html", { outputFolder: "playwright-report" }],
     ["list"],
   ],
 });
@@ -335,7 +335,7 @@ Update baselines when:
 **Process:**
 
 1. Make design changes
-2. Run `pnpm test:visual -- --update-snapshots`
+2. Run `pnpm test:visual:update`
 3. Review all updated screenshots carefully
 4. Commit updated baselines with descriptive message
 5. Link to related design change PR or issue

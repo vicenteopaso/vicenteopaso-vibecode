@@ -27,6 +27,8 @@ export default defineConfig({
     },
   },
   // Reporter configuration
+  // Both E2E and visual test reports will share the same output location ("playwright-report").
+  // If you need to separate reports by test type in the future, adjust the outputFolder accordingly.
   reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
   webServer: process.env.PLAYWRIGHT_SKIP_WEB_SERVER
     ? undefined
