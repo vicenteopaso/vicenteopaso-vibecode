@@ -271,7 +271,7 @@ Name screenshots descriptively:
 "screenshot1.png";
 ```
 
-### 5. Test Multiple Viewports
+### 6. Test Multiple Viewports
 
 Test responsive design across viewports for comprehensive coverage:
 
