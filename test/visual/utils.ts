@@ -1,5 +1,57 @@
 import type { Locator, Page } from "@playwright/test";
 
+// Wait for element's hover styles to stabilize
+export async function waitForHoverStyles(
+  page: Page,
+  element: Locator,
+  consecutive: number = 3,
+  intervalMs: number = 50,
+): Promise<void> {
+  const elementHandle = await element.elementHandle();
+  if (!elementHandle) return;
+
+  await page.evaluate(
+    (args) => {
+      const { consecutive, intervalMs } = args as {
+        consecutive: number;
+        intervalMs: number;
+      };
+      const el = args.element as HTMLElement;
+      if (!el) return;
+      return new Promise<void>((resolve) => {
+        const getStylesSnapshot = () => {
+          const styles = getComputedStyle(el);
+          return `${styles.color}|${styles.backgroundColor}|${styles.textDecoration}|${styles.borderColor}`;
+        };
+        let lastStyles = getStylesSnapshot();
+        let stableCount = 0;
+        const check = setInterval(() => {
+          const currentStyles = getStylesSnapshot();
+          if (currentStyles === lastStyles) {
+            stableCount++;
+            if (stableCount >= consecutive) {
+              clearInterval(check);
+              resolve();
+            }
+          } else {
+            stableCount = 0;
+            lastStyles = currentStyles;
+          }
+        }, intervalMs);
+      });
+    },
+    { consecutive, intervalMs, element: elementHandle },
+  );
+}
+
+// Prepare page for hover state tests (reduced motion + page ready)
+export async function prepareForHoverTest(page: Page): Promise<void> {
+  // Enable reduced motion for deterministic animations
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.waitForLoadState("networkidle");
+  await page.evaluate(() => document.fonts.ready);
+}
+
 // Wait until document height is stable for N consecutive checks
 export async function waitForStableHeight(
   page: Page,
