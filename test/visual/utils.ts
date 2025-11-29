@@ -96,3 +96,43 @@ export async function homepageMasks(page: Page): Promise<Locator[]> {
 export async function cvPageMasks(page: Page): Promise<Locator[]> {
   return [page.locator("#references")];
 }
+
+// Wait for CV page to be fully loaded and ready for screenshot
+export async function waitForCVPage(page: Page): Promise<void> {
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts to load
+  await page.evaluate(() => document.fonts.ready);
+
+  // Wait for CV heading to be visible
+  await page.waitForSelector("h1", { state: "visible" });
+
+  // Wait for references section to be fully rendered (includes dynamic height calculation)
+  await page.waitForSelector("#references", { state: "visible" });
+  await page.waitForSelector("footer", { state: "visible" });
+
+  await waitForStableHeight(page);
+}
+
+// Wait for homepage to be fully loaded and ready for screenshot
+export async function waitForHomepage(page: Page): Promise<void> {
+  await page.waitForLoadState("networkidle");
+
+  // Wait for fonts to load
+  await page.evaluate(() => document.fonts.ready);
+
+  // Wait for profile image to be visible and loaded
+  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+
+  // Wait for carousel container (ImpactCards) to be visible
+  await page.waitForSelector('[data-testid="impact-cards"], .space-y-6', {
+    state: "visible",
+  });
+
+  // Wait for footer to ensure full page is rendered
+  await page.waitForSelector("footer", { state: "visible" });
+
+  await waitForStableHeight(page);
+  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+  await waitForStableTransform(page, '[data-testid="impact-cards"]');
+}

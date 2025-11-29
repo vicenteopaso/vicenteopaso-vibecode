@@ -65,31 +65,54 @@ Baselines are stored in `*-snapshots/` directories next to test files.
 ```typescript
 import { expect, test } from "@playwright/test";
 import {
-  waitForStableHeight,
-  freezeCarouselInteractions,
+  waitForHomepage, // or waitForCVPage for CV page
   homepageMasks, // or cvPageMasks for CV page
 } from "../utils";
 
 test.describe("Page Name Visual Regression", () => {
   test("renders page correctly in light mode", async ({ page }) => {
-    await page.goto("/your-page");
-    await page.waitForLoadState("networkidle");
-    await page.evaluate(() => document.fonts.ready);
+    await page.goto("/");
+    await waitForHomepage(page); // Handles all setup: networkidle, fonts, elements, stability
 
-    // Use shared utilities for stable layout
-    await waitForStableHeight(page);
-
-    // Freeze carousels if present
-    await freezeCarouselInteractions(page, '[data-testid="your-carousel"]');
-
-    await expect(page).toHaveScreenshot("your-page-light.png", {
+    await expect(page).toHaveScreenshot("homepage-light.png", {
       fullPage: true,
       animations: "disabled",
       mask: await homepageMasks(page), // Mask dynamic content
     });
   });
+
+  test("renders page correctly in dark mode", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/");
+    await waitForHomepage(page);
+
+    await expect(page).toHaveScreenshot("homepage-dark.png", {
+      fullPage: true,
+      animations: "disabled",
+      mask: await homepageMasks(page),
+    });
+  });
+
+  test("renders page on mobile viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/");
+    await waitForHomepage(page);
+
+    await expect(page).toHaveScreenshot("homepage-mobile.png", {
+      fullPage: true,
+      animations: "disabled",
+      mask: await homepageMasks(page),
+    });
+  });
 });
 ```
+
+### Page-Specific Wait Helpers
+
+Use dedicated helper functions for each page type:
+
+- **`waitForHomepage(page)`**: Waits for homepage to be fully loaded (network idle, fonts, portrait, ImpactCards, footer, stable height, frozen carousels)
+- **`waitForCVPage(page)`**: Waits for CV page to be fully loaded (network idle, fonts, h1, references section, footer, stable height)
 
 ### Dynamic Content Handling
 

@@ -131,51 +131,69 @@ pnpm playwright show-report
 
 ```typescript
 import { test, expect } from "@playwright/test";
-import {
-  waitForStableHeight,
-  freezeCarouselInteractions,
-  homepageMasks,
-} from "../utils";
+import { waitForHomepage, homepageMasks } from "../utils";
 
 test.describe("Homepage Visual Regression", () => {
   test("renders homepage correctly in light mode", async ({ page }) => {
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
-    await page.evaluate(() => document.fonts.ready);
+    await waitForHomepage(page); // Handles all setup: networkidle, fonts, elements, stability
 
-    // Wait for stable layout
-    await waitForStableHeight(page);
-    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-
-    // Take full page screenshot with masking
     await expect(page).toHaveScreenshot("homepage-light.png", {
       fullPage: true,
       animations: "disabled",
       mask: await homepageMasks(page), // Excludes portrait + ImpactCards
     });
   });
-});
-```
 
-test("renders homepage correctly in dark mode", async ({ page }) => {
-await page.emulateMedia({ colorScheme: "dark" });
-await page.goto("/");
-await page.waitForLoadState("networkidle");
-await page.evaluate(() => document.fonts.ready);
-
-    await waitForStableHeight(page);
-    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
+  test("renders homepage correctly in dark mode", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/");
+    await waitForHomepage(page);
 
     await expect(page).toHaveScreenshot("homepage-dark.png", {
       fullPage: true,
       animations: "disabled",
       mask: await homepageMasks(page),
     });
+  });
 
-});
-});
+  test("renders homepage on mobile viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/");
+    await waitForHomepage(page);
 
-````
+    await expect(page).toHaveScreenshot("homepage-mobile.png", {
+      fullPage: true,
+      animations: "disabled",
+      mask: await homepageMasks(page),
+    });
+  });
+});
+```
+
+#### Page-Specific Wait Helpers
+
+Use dedicated helper functions for each page type to avoid code duplication:
+
+- **`waitForHomepage(page)`**: Waits for homepage to be fully loaded (network idle, fonts, portrait, ImpactCards, footer, stable height, frozen carousels)
+- **`waitForCVPage(page)`**: Waits for CV page to be fully loaded (network idle, fonts, h1, references section, footer, stable height)
+
+```typescript
+// CV page example
+import { test, expect } from "@playwright/test";
+import { waitForCVPage, cvPageMasks } from "../utils";
+
+test("renders CV page in light mode", async ({ page }) => {
+  await page.goto("/cv");
+  await waitForCVPage(page);
+
+  await expect(page).toHaveScreenshot("cv-light.png", {
+    fullPage: true,
+    animations: "disabled",
+    mask: await cvPageMasks(page),
+  });
+});
+```
 
 ### Component-Level Visual Tests
 
@@ -192,16 +210,33 @@ test("profile card - about page variant", async ({ page }) => {
     animations: "disabled",
   });
 });
-````
+```
 
 ## Best Practices
 
-### 1. Use Shared Utilities
+### 1. Use Page-Specific Wait Helpers
 
-**Always use utilities from `test/visual/utils.ts` instead of inline waits:**
+**Always use page-specific wait helpers from `test/visual/utils.ts` to avoid code duplication:**
 
 ```typescript
-// ✅ GOOD: Shared utilities
+// ✅ GOOD: Page-specific wait helper (handles all setup)
+import { waitForHomepage, waitForCVPage } from "../utils";
+await waitForHomepage(page); // For homepage
+await waitForCVPage(page); // For CV page
+
+// ❌ BAD: Repeated inline setup (duplicates code across tests)
+await page.waitForLoadState("networkidle");
+await page.evaluate(() => document.fonts.ready);
+await page.waitForSelector("h1", { state: "visible" });
+// ... more setup ...
+```
+
+### 2. Use Shared Low-Level Utilities
+
+For custom pages or components, use the low-level utilities:
+
+```typescript
+// ✅ GOOD: Shared utilities for custom pages
 import { waitForStableHeight, freezeCarouselInteractions } from "../utils";
 await waitForStableHeight(page);
 await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
@@ -215,7 +250,7 @@ await page.evaluate(() => {
 });
 ```
 
-### 2. Mask Dynamic Content
+### 3. Mask Dynamic Content
 
 This site has dynamic content that requires masking:
 
@@ -239,7 +274,7 @@ await expect(page).toHaveScreenshot("cv.png", {
 });
 ```
 
-### 3. Disable Animations
+### 4. Disable Animations
 
 Always disable animations for consistent screenshots:
 
@@ -249,17 +284,23 @@ await expect(page).toHaveScreenshot("example.png", {
 });
 ```
 
-### 4. Wait for Content
+### 5. Wait for Content
 
-Ensure all content is loaded before screenshot:
+Ensure all content is loaded before screenshot. **Prefer page-specific helpers:**
 
 ```typescript
+// ✅ BEST: Use page-specific helper (encapsulates all waiting logic)
+import { waitForHomepage, waitForCVPage } from "../utils";
+await waitForHomepage(page);
+await waitForCVPage(page);
+
+// ✅ GOOD: Manual approach for custom pages
 await page.waitForLoadState("networkidle");
 await page.evaluate(() => document.fonts.ready);
 await waitForStableHeight(page); // From test/visual/utils.ts
 ```
 
-### 5. Use Descriptive Names
+### 6. Use Descriptive Names
 
 Name screenshots descriptively:
 
@@ -271,23 +312,22 @@ Name screenshots descriptively:
 "screenshot1.png";
 ```
 
-### 6. Test Multiple Viewports
+### 7. Test Multiple Viewports
 
-Test responsive design across viewports for comprehensive coverage:
+Test responsive design across viewports for comprehensive coverage. **Use page-specific helpers to reduce duplication:**
 
 ```typescript
+import { waitForHomepage, homepageMasks } from "../utils";
+
 // Desktop/default viewport (light mode)
 test("homepage light mode", async ({ page }) => {
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-
-  // Wait for fonts and critical resources to load
-  await page.evaluate(() => document.fonts.ready);
-  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+  await waitForHomepage(page);
 
   await expect(page).toHaveScreenshot("homepage-light.png", {
     fullPage: true,
     timeout: 15000,
+    mask: await homepageMasks(page),
   });
 });
 
@@ -295,15 +335,12 @@ test("homepage light mode", async ({ page }) => {
 test("homepage dark mode", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-
-  // Wait for fonts and critical resources to load
-  await page.evaluate(() => document.fonts.ready);
-  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+  await waitForHomepage(page);
 
   await expect(page).toHaveScreenshot("homepage-dark.png", {
     fullPage: true,
     timeout: 15000,
+    mask: await homepageMasks(page),
   });
 });
 
@@ -311,15 +348,12 @@ test("homepage dark mode", async ({ page }) => {
 test("homepage mobile viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-
-  // Wait for fonts and critical resources to load
-  await page.evaluate(() => document.fonts.ready);
-  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+  await waitForHomepage(page);
 
   await expect(page).toHaveScreenshot("homepage-mobile.png", {
     fullPage: true,
     timeout: 15000,
+    mask: await homepageMasks(page),
   });
 });
 ```
@@ -328,9 +362,13 @@ test("homepage mobile viewport", async ({ page }) => {
 
 ### Deterministic Waiting Patterns
 
-**Always use deterministic waits instead of arbitrary timeouts** like `waitForTimeout()`. Hard-coded delays make tests slower and less reliable. Instead, wait for specific conditions:
+**Always use deterministic waits instead of arbitrary timeouts** like `waitForTimeout()`. Hard-coded delays make tests slower and less reliable. **Page-specific helpers encapsulate these patterns:**
 
 ```typescript
+// ✅ BEST: Page-specific helper (encapsulates all deterministic waits)
+await waitForHomepage(page);
+await waitForCVPage(page);
+
 // ✅ GOOD: Wait for fonts to load
 await page.evaluate(() => document.fonts.ready);
 

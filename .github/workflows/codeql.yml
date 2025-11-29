@@ -3,7 +3,7 @@ name: CodeQL
 on:
   push:
     branches:
-      - '**'   # run on all branches, including Copilot-created ones
+      - "**" # run on all branches, including Copilot-created ones
   pull_request:
     branches: ["main"]
   schedule:
