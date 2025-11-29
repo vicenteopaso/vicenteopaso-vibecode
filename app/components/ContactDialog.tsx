@@ -3,7 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import type { FormEvent, ReactNode } from "react";
 import React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
@@ -25,17 +25,24 @@ declare global {
   }
 }
 
+/** Duration in seconds before auto-closing the modal after success. */
+const AUTO_CLOSE_SECONDS = 5;
+
 interface ContactDialogProps {
   triggerLabel?: string;
   trigger?: ReactNode;
   children?: ReactNode;
+  /** Duration in seconds before auto-close after success. Default is 5. */
+  autoCloseDelay?: number;
 }
 
 export function ContactDialog({
   triggerLabel = "Contact me",
   trigger,
   children,
+  autoCloseDelay = AUTO_CLOSE_SECONDS,
 }: ContactDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [phone, setPhone] = useState("");
@@ -43,10 +50,67 @@ export function ContactDialog({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState<number | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
+  const countdownIntervalRef = useRef<number | null>(null);
+
+  // Reset state when dialog closes
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      if (!open) {
+        // Clear countdown interval if dialog is closed manually
+        if (countdownIntervalRef.current !== null) {
+          window.clearInterval(countdownIntervalRef.current);
+          countdownIntervalRef.current = null;
+        }
+        // Reset form state when closing
+        setSuccess(null);
+        setError(null);
+        setCountdown(null);
+        setEmailError(null);
+        setMessageError(null);
+      }
+    },
+    [setIsOpen],
+  );
+
+  // Auto-close countdown effect
+  useEffect(() => {
+    if (success && countdown === null) {
+      // Start countdown when success is set
+      setCountdown(autoCloseDelay);
+    }
+  }, [success, countdown, autoCloseDelay]);
+
+  useEffect(() => {
+    if (countdown !== null && countdown > 0) {
+      countdownIntervalRef.current = window.setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === null || prev <= 1) {
+            if (countdownIntervalRef.current !== null) {
+              window.clearInterval(countdownIntervalRef.current);
+              countdownIntervalRef.current = null;
+            }
+            // Auto-close the modal
+            setIsOpen(false);
+            return null;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => {
+        if (countdownIntervalRef.current !== null) {
+          window.clearInterval(countdownIntervalRef.current);
+          countdownIntervalRef.current = null;
+        }
+      };
+    }
+  }, [countdown]);
 
   useEffect(() => {
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -182,6 +246,8 @@ export function ContactDialog({
       size="md"
       analyticsEventName="contact_open"
       analyticsMetadata={{ component: "ContactDialog" }}
+      open={isOpen}
+      onOpenChange={handleOpenChange}
     >
       <Dialog.Title className="flex items-center gap-2 text-base font-semibold tracking-tight text-[color:var(--text-primary)]">
         Contact me
@@ -292,7 +358,17 @@ export function ContactDialog({
         >
           {error ? <span className="text-red-400">{error}</span> : null}
           {!error && success ? (
-            <span className="text-emerald-400">{success}</span>
+            <span className="text-emerald-400">
+              {success}
+              {countdown !== null && countdown > 0 ? (
+                <span
+                  data-testid="countdown"
+                  className="ml-1 text-[color:var(--text-muted)]"
+                >
+                  (closing in {countdown}s)
+                </span>
+              ) : null}
+            </span>
           ) : null}
         </p>
 
