@@ -20,8 +20,8 @@ export default defineConfig({
   // Visual regression testing configuration
   expect: {
     toHaveScreenshot: {
-      // Maximum allowed pixel difference (increased to account for carousels)
-      maxDiffPixels: 10000,
+      // Maximum allowed pixel difference (set low for effective regression; override per-test if needed)
+      maxDiffPixels: 200,
       // Threshold for pixel comparison (0-1, lower is stricter)
       // Increased to handle carousel and animated content
       threshold: 0.5,
