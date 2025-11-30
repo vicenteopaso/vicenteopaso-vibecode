@@ -16,6 +16,11 @@ export default defineConfig({
   timeout: 30000,
   use: {
     baseURL: BASE_URL,
+    // Disable Vercel toolbar to prevent visual regression false positives
+    // (toolbar badge count changes can trigger spurious test failures)
+    extraHTTPHeaders: {
+      "x-vercel-skip-toolbar": "1",
+    },
   },
   // Visual regression testing configuration
   expect: {

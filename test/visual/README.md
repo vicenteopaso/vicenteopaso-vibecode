@@ -190,6 +190,10 @@ Ensure consistent environment:
 - Or run tests in Docker container
 - Adjust `threshold` if minor differences are acceptable
 
+### Vercel toolbar appears in screenshots
+
+The Vercel toolbar is automatically hidden during visual tests via the `x-vercel-skip-toolbar` HTTP header configured in `playwright.config.ts`. This prevents false positive regressions when the toolbar badge count changes.
+
 ## Related Documentation
 
 - [Visual Regression Testing Guide](../../docs/VISUAL_REGRESSION_TESTING.md)
