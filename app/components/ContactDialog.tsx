@@ -58,6 +58,11 @@ export function ContactDialog({
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Form field refs for Enter key navigation
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
+  const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
+
   // Modal open state (controlled)
   const [isOpen, setIsOpen] = useState(false);
 
@@ -273,6 +278,36 @@ export function ContactDialog({
   // Determine if the submit button should be disabled
   const isSubmitDisabled = isFormDisabled || !turnstileToken;
 
+  // Handle Enter key navigation between fields
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    currentField: "email" | "phone" | "message",
+  ) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+
+      // Navigate to next field based on current field
+      if (currentField === "email" && phoneInputRef.current) {
+        phoneInputRef.current.focus();
+      } else if (currentField === "phone" && messageInputRef.current) {
+        messageInputRef.current.focus();
+      } else if (currentField === "message") {
+        // From message field, check if form is valid before submitting
+        const trimmedEmail = email.trim();
+        const trimmedMessage = message.trim();
+        const isFormValid = trimmedEmail && trimmedMessage && turnstileToken;
+
+        if (isFormValid && !isFormDisabled) {
+          // Trigger form submission
+          const form = event.currentTarget.closest("form");
+          if (form) {
+            form.requestSubmit();
+          }
+        }
+      }
+    }
+  };
+
   const triggerNode = trigger ?? (
     <button
       type="button"
@@ -306,12 +341,14 @@ export function ContactDialog({
         <label className="flex flex-col gap-1.5">
           <span className="text-[color:var(--text-primary)]">Email</span>
           <input
+            ref={emailInputRef}
             type="email"
             name="email"
             className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="you@example.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            onKeyDown={(event) => handleKeyDown(event, "email")}
             required
             disabled={isFormDisabled}
             aria-required="true"
@@ -333,23 +370,27 @@ export function ContactDialog({
             Phone (optional)
           </span>
           <input
+            ref={phoneInputRef}
             type="tel"
             name="phone"
             className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="Phone number"
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
+            onKeyDown={(event) => handleKeyDown(event, "phone")}
             disabled={isFormDisabled}
           />
         </label>
         <label className="flex flex-col gap-1.5">
           <span className="text-[color:var(--text-primary)]">Message</span>
           <textarea
+            ref={messageInputRef}
             name="message"
             className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="A few words about your project or question"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
+            onKeyDown={(event) => handleKeyDown(event, "message")}
             required
             disabled={isFormDisabled}
             aria-required="true"
@@ -429,7 +470,7 @@ export function ContactDialog({
         <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-sm">
           <Dialog.Close
             className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-            disabled={formState === "submitting" || formState === "countdown"}
+            disabled={formState === "submitting"}
           >
             Close
           </Dialog.Close>

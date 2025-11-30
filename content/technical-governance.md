@@ -173,4 +173,4 @@ For developers and contributors:
 
 ## Last Updated
 
-This technical governance documentation was last reviewed and updated on November 27, 2025.
+This technical governance documentation was last reviewed and updated on December 1, 2025.

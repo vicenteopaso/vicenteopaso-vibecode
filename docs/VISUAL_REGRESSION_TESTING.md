@@ -441,8 +441,50 @@ export default defineConfig({
   },
   // Generate HTML report with visual diffs
   reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
+  // Suppress Vercel Toolbar in screenshots
+  use: {
+    extraHTTPHeaders: {
+      "x-vercel-skip-toolbar": "1",
+    },
+  },
 });
 ```
+
+### Third-Party Script Handling
+
+Visual tests require deterministic screenshots without third-party overlays or indicators. This project handles analytics and monitoring scripts as follows:
+
+#### Vercel Speed Insights Suppression
+
+The `AnalyticsWrapper` component (`app/components/AnalyticsWrapper.tsx`) conditionally renders analytics based on environment detection:
+
+```typescript
+// Runtime detection prevents Speed Insights indicator in visual tests
+const isTestEnvironment =
+  (navigator as Navigator & { webdriver?: boolean }).webdriver === true ||
+  (window as Window & { __PLAYWRIGHT__?: boolean }).__PLAYWRIGHT__ === true;
+
+if (isTestEnvironment) {
+  return null; // Skip analytics in test environments
+}
+```
+
+The `__PLAYWRIGHT__` flag is set by test utilities (`test/visual/utils.ts`) in `setThemeLight()` and `setThemeDark()` functions via `page.addInitScript()`.
+
+#### Vercel Toolbar Suppression
+
+The Vercel Toolbar (separate from Speed Insights) is suppressed via HTTP header:
+
+```typescript
+// playwright.config.ts
+use: {
+  extraHTTPHeaders: {
+    "x-vercel-skip-toolbar": "1",
+  },
+}
+```
+
+This dual-layer approach ensures clean screenshots without analytics overlays or toolbars during visual regression tests.
 
 ### Tolerance Configuration
 
@@ -568,6 +610,6 @@ A: Yes! Navigate to pages that render component variations, or create dedicated 
 
 ---
 
-**Last updated**: November 30, 2025  
+**Last updated**: December 1, 2025  
 **Status**: ✅ Phase 2 complete - Component visual tests implemented  
 **Owner**: Vicente Opaso

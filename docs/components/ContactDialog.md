@@ -70,12 +70,13 @@ idle → submitting → success → countdown → closed
 On successful submission:
 
 1. Form fields are immediately reset (cleared)
-2. All inputs and Send button are disabled (Close button remains enabled)
-3. Success message is displayed
-4. A 10-second countdown begins
-5. Countdown is shown with "Closing in X seconds…" message
-6. Modal auto-closes when countdown reaches zero
-7. Reopening the modal shows a fresh, enabled form
+2. All inputs and Send button are disabled
+3. **Close button remains enabled** (user can dismiss immediately or wait for auto-close)
+4. Success message is displayed
+5. A 10-second countdown begins
+6. Countdown is shown with "Closing in X seconds…" message
+7. Modal auto-closes when countdown reaches zero (or user can close manually anytime)
+8. Reopening the modal shows a fresh, enabled form
 
 ### Error Flow
 
@@ -101,12 +102,15 @@ On validation or server error:
 
 ### Keyboard Navigation
 
-| Key         | Action                                      |
-| ----------- | ------------------------------------------- |
-| `Tab`       | Navigate between form fields                |
-| `Shift+Tab` | Navigate backwards                          |
-| `Enter`     | Submit form (when focused on submit button) |
-| `Escape`    | Close dialog                                |
+| Key           | Action                                                       |
+| ------------- | ------------------------------------------------------------ |
+| `Tab`         | Navigate between form fields                                 |
+| `Shift+Tab`   | Navigate backwards                                           |
+| `Enter`       | From Email: Move to Phone field                              |
+|               | From Phone: Move to Message field                            |
+|               | From Message: Submit form (if all required fields are valid) |
+| `Shift+Enter` | In Message field: Insert new line (textarea behavior)        |
+| `Escape`      | Close dialog                                                 |
 
 ### Focus Management
 
