@@ -1,9 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 import { waitForHomepage, waitForStableHeight } from "../utils";
+import { setThemeDark, setThemeLight } from "../utils";
 
 test.describe("Footer Visual Regression", () => {
   test("renders footer in light mode", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
@@ -16,7 +18,7 @@ test.describe("Footer Visual Regression", () => {
   });
 
   test("renders footer in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
 
@@ -42,6 +44,7 @@ test.describe("Footer Visual Regression", () => {
   });
 
   test("renders footer on CV page", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/cv");
     await page.waitForLoadState("networkidle");
     await page.evaluate(() => document.fonts.ready);

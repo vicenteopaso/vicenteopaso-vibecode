@@ -3,12 +3,15 @@ import { expect, test } from "@playwright/test";
 import {
   freezeReferencesCarousel,
   REFERENCES_SECTION_SELECTOR,
+  setThemeDark,
+  setThemeLight,
   waitForCVPage,
   waitForStableHeight,
 } from "../utils";
 
 test.describe("References Carousel Visual Regression", () => {
   test("renders references carousel in light mode", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 
@@ -27,7 +30,7 @@ test.describe("References Carousel Visual Regression", () => {
   });
 
   test("renders references carousel in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 
@@ -67,6 +70,7 @@ test.describe("References Carousel Visual Regression", () => {
 
 test.describe("References Carousel Navigation Visual Regression", () => {
   test("renders carousel indicator dots correctly", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 

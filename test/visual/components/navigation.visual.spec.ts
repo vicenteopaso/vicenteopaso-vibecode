@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-import { waitForHomepage, waitForStableHeight } from "../utils";
+import {
+  setThemeDark,
+  setThemeLight,
+  waitForHomepage,
+  waitForStableHeight,
+} from "../utils";
 
 test.describe("Navigation Menu Visual Regression", () => {
   test("renders navigation correctly in light mode", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
@@ -18,7 +24,7 @@ test.describe("Navigation Menu Visual Regression", () => {
   });
 
   test("renders navigation correctly in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
 
@@ -33,6 +39,7 @@ test.describe("Navigation Menu Visual Regression", () => {
   test("renders navigation with CV active state in light mode", async ({
     page,
   }) => {
+    await setThemeLight(page);
     await page.goto("/cv");
     await page.waitForLoadState("networkidle");
     await page.evaluate(() => document.fonts.ready);
@@ -50,7 +57,7 @@ test.describe("Navigation Menu Visual Regression", () => {
   test("renders navigation with CV active state in dark mode", async ({
     page,
   }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/cv");
     await page.waitForLoadState("networkidle");
     await page.evaluate(() => document.fonts.ready);

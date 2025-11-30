@@ -1,12 +1,11 @@
 import "../styles/globals.css";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import React from "react";
 
 import { baseMetadata } from "../lib/seo";
+import { AnalyticsWrapper } from "./components/AnalyticsWrapper";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Footer } from "./components/Footer";
 import { GlobalErrorHandler } from "./components/GlobalErrorHandler";
@@ -73,9 +72,8 @@ export default function RootLayout({
             </main>
           </ErrorBoundary>
           <Footer />
-          <Analytics />
-          <SpeedInsights />
         </ThemeProvider>
+        <AnalyticsWrapper />
       </body>
     </html>
   );

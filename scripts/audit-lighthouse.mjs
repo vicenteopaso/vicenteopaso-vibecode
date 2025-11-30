@@ -24,4 +24,4 @@ Note: Browser DevTools Lighthouse provides the same metrics as CI and
       supports additional features like device emulation and throttling.
 `);
 
-process.exit(1);
+process.exit(0);

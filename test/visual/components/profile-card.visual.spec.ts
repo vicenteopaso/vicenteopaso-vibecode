@@ -1,10 +1,17 @@
 import { expect, test } from "@playwright/test";
 
-import { getPortraitMask, waitForCVPage, waitForHomepage } from "../utils";
+import {
+  getPortraitMask,
+  setThemeDark,
+  setThemeLight,
+  waitForCVPage,
+  waitForHomepage,
+} from "../utils";
 
 test.describe("Profile Card Visual Regression", () => {
   test.describe("Homepage Profile Card (with avatar)", () => {
     test("renders profile card in light mode", async ({ page }) => {
+      await setThemeLight(page);
       await page.goto("/");
       await waitForHomepage(page);
 
@@ -25,7 +32,7 @@ test.describe("Profile Card Visual Regression", () => {
     });
 
     test("renders profile card in dark mode", async ({ page }) => {
-      await page.emulateMedia({ colorScheme: "dark" });
+      await setThemeDark(page);
       await page.goto("/");
       await waitForHomepage(page);
 
@@ -65,6 +72,7 @@ test.describe("Profile Card Visual Regression", () => {
 
   test.describe("CV Profile Card (without avatar)", () => {
     test("renders CV header profile card in light mode", async ({ page }) => {
+      await setThemeLight(page);
       await page.goto("/cv");
       await waitForCVPage(page);
 
@@ -81,7 +89,7 @@ test.describe("Profile Card Visual Regression", () => {
     });
 
     test("renders CV header profile card in dark mode", async ({ page }) => {
-      await page.emulateMedia({ colorScheme: "dark" });
+      await setThemeDark(page);
       await page.goto("/cv");
       await waitForCVPage(page);
 

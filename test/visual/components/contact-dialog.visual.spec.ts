@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-import { waitForHomepage, waitForStableHeight } from "../utils";
+import {
+  setThemeDark,
+  setThemeLight,
+  waitForHomepage,
+  waitForStableHeight,
+} from "../utils";
 
 test.describe("Contact Dialog Visual Regression", () => {
   test("renders contact dialog in light mode", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
@@ -22,7 +28,7 @@ test.describe("Contact Dialog Visual Regression", () => {
   });
 
   test("renders contact dialog in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
 

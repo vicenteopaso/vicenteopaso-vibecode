@@ -16,8 +16,9 @@ export default defineConfig({
   timeout: 30000,
   use: {
     baseURL: BASE_URL,
-    // Disable Vercel toolbar to prevent visual regression false positives
-    // (toolbar badge count changes can trigger spurious test failures)
+    // Send header that disables Vercel Toolbar (per Vercel docs).
+    // Note: This does NOT disable Speed Insights (different product), which we suppress
+    // via runtime detection in `AnalyticsWrapper`.
     extraHTTPHeaders: {
       "x-vercel-skip-toolbar": "1",
     },
@@ -47,8 +48,5 @@ export default defineConfig({
         url: BASE_URL,
         timeout: 120_000,
         reuseExistingServer: !process.env.CI,
-        env: {
-          PLAYWRIGHT: "1",
-        },
       },
 });
