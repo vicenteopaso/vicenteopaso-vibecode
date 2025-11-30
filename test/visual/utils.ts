@@ -7,26 +7,40 @@ import type { Locator, Page } from "@playwright/test";
  * @param locator - The Playwright locator for the element
  * @param consecutive - Number of consecutive stable checks required (default: 3)
  * @param intervalMs - Interval between checks in milliseconds (default: 50)
+ * @param timeoutMs - Maximum time to wait in milliseconds (default: 5000)
  */
 export async function waitForHoverStyles(
   locator: Locator,
   consecutive: number = 3,
   intervalMs: number = 50,
+  timeoutMs: number = 5000,
 ): Promise<void> {
   await locator.evaluate(
     (el, args) => {
-      const { consecutive, intervalMs } = args as {
+      const { consecutive, intervalMs, timeoutMs } = args as {
         consecutive: number;
         intervalMs: number;
+        timeoutMs: number;
       };
-      return new Promise<void>((resolve) => {
+      return new Promise<void>((resolve, reject) => {
         const getStyles = () => {
           const computed = getComputedStyle(el);
-          return `${computed.color}|${computed.backgroundColor}|${computed.borderColor}|${computed.boxShadow}`;
+          return `${computed.color}|${computed.backgroundColor}|${computed.borderColor}|${computed.boxShadow}|${computed.transform}|${computed.opacity}`;
         };
         let lastStyles = getStyles();
         let stableCount = 0;
+        const startTime = Date.now();
         const check = setInterval(() => {
+          // Check for timeout
+          if (Date.now() - startTime > timeoutMs) {
+            clearInterval(check);
+            reject(
+              new Error(
+                `Hover styles did not stabilize within ${timeoutMs}ms`,
+              ),
+            );
+            return;
+          }
           const currentStyles = getStyles();
           if (currentStyles === lastStyles) {
             stableCount++;
@@ -41,7 +55,7 @@ export async function waitForHoverStyles(
         }, intervalMs);
       });
     },
-    { consecutive, intervalMs },
+    { consecutive, intervalMs, timeoutMs },
   );
 }
 
