@@ -46,7 +46,7 @@ function fillForm() {
   fireEvent.change(message, { target: { value: "Hello" } });
 }
 
-function openDialogSimple() {
+function openDialogWithoutWaiting() {
   render(<ContactDialog />);
   const trigger = screen.getByRole("button", { name: /contact/i });
   fireEvent.click(trigger);
@@ -103,7 +103,7 @@ describe("ContactDialog", () => {
       window.turnstile.render = vi.fn();
     }
 
-    openDialogSimple();
+    openDialogWithoutWaiting();
 
     fillForm();
 
@@ -202,6 +202,28 @@ describe("ContactDialog", () => {
       await waitFor(() => {
         expect(screen.getByText(/closing in/i)).toBeInTheDocument();
       });
+    });
+
+    it("starts countdown at 10 seconds after successful submission", async () => {
+      await openDialogAndWaitForTurnstile();
+      fillForm();
+
+      const form = screen.getByLabelText(/email/i).closest("form");
+      expect(form).not.toBeNull();
+
+      // Submit the form
+      fireEvent.submit(form as HTMLFormElement);
+
+      // Wait for countdown to appear
+      await waitFor(
+        () => {
+          expect(screen.getByText(/closing in/i)).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
+      // Verify countdown starts at 10
+      expect(screen.getByText(/closing in 10/i)).toBeInTheDocument();
     });
   });
 

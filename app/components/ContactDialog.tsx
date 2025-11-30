@@ -79,9 +79,10 @@ export function ContactDialog({
     setMessageError(null);
     setFormState("idle");
     setCountdownSeconds(COUNTDOWN_SECONDS);
-    // Reset Turnstile token and widget
+    // Reset Turnstile token, widget, and visibility state
     window.turnstile?.reset();
     setTurnstileToken(null);
+    setIsChallengeVisible(false);
   }, []);
 
   // Handle modal open/close state changes
@@ -165,7 +166,7 @@ export function ContactDialog({
   // Transition from success to countdown state
   useEffect(() => {
     if (formState === "success") {
-      // Short delay to show success message before starting countdown
+      // Minimal delay to ensure success message renders before state transition
       const timerId = window.setTimeout(() => {
         setFormState("countdown");
       }, SUCCESS_TO_COUNTDOWN_DELAY_MS);
