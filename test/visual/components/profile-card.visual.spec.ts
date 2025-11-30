@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { waitForCVPage, waitForHomepage } from "../utils";
+import { getPortraitMask, waitForCVPage, waitForHomepage } from "../utils";
 
 test.describe("Profile Card Visual Regression", () => {
   test.describe("Homepage Profile Card (with avatar)", () => {
@@ -13,7 +13,7 @@ test.describe("Profile Card Visual Regression", () => {
       await expect(profileSection).toBeVisible();
 
       // Mask the portrait image since it's randomly selected
-      const portraitMask = page.locator('img[alt*="Portrait"]');
+      const portraitMask = getPortraitMask(page);
 
       await expect(profileSection).toHaveScreenshot(
         "profile-card-homepage-light.png",
@@ -32,7 +32,7 @@ test.describe("Profile Card Visual Regression", () => {
       const profileSection = page.locator("header.section-card");
       await expect(profileSection).toBeVisible();
 
-      const portraitMask = page.locator('img[alt*="Portrait"]');
+      const portraitMask = getPortraitMask(page);
 
       await expect(profileSection).toHaveScreenshot(
         "profile-card-homepage-dark.png",
@@ -51,7 +51,7 @@ test.describe("Profile Card Visual Regression", () => {
       const profileSection = page.locator("header.section-card");
       await expect(profileSection).toBeVisible();
 
-      const portraitMask = page.locator('img[alt*="Portrait"]');
+      const portraitMask = getPortraitMask(page);
 
       await expect(profileSection).toHaveScreenshot(
         "profile-card-homepage-mobile.png",

@@ -1,26 +1,21 @@
 import { expect, test } from "@playwright/test";
 
-import { waitForCVPage, waitForStableHeight } from "../utils";
+import {
+  freezeReferencesCarousel,
+  REFERENCES_SECTION_SELECTOR,
+  waitForCVPage,
+  waitForStableHeight,
+} from "../utils";
 
 test.describe("References Carousel Visual Regression", () => {
   test("renders references carousel in light mode", async ({ page }) => {
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    // Navigate to the references section
-    const referencesSection = page.locator("#references");
+    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
     await expect(referencesSection).toBeVisible();
 
-    // Freeze carousel auto-rotation by disabling pointer events on navigation buttons
-    await page.evaluate(() => {
-      const section = document.querySelector("#references");
-      if (!section) return;
-      const buttons = section.querySelectorAll("button");
-      buttons.forEach((btn) => {
-        (btn as HTMLButtonElement).style.pointerEvents = "none";
-      });
-    });
-
+    await freezeReferencesCarousel(page);
     await waitForStableHeight(page);
 
     await expect(referencesSection).toHaveScreenshot(
@@ -36,19 +31,10 @@ test.describe("References Carousel Visual Regression", () => {
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const referencesSection = page.locator("#references");
+    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
     await expect(referencesSection).toBeVisible();
 
-    // Freeze carousel auto-rotation
-    await page.evaluate(() => {
-      const section = document.querySelector("#references");
-      if (!section) return;
-      const buttons = section.querySelectorAll("button");
-      buttons.forEach((btn) => {
-        (btn as HTMLButtonElement).style.pointerEvents = "none";
-      });
-    });
-
+    await freezeReferencesCarousel(page);
     await waitForStableHeight(page);
 
     await expect(referencesSection).toHaveScreenshot(
@@ -64,19 +50,10 @@ test.describe("References Carousel Visual Regression", () => {
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const referencesSection = page.locator("#references");
+    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
     await expect(referencesSection).toBeVisible();
 
-    // Freeze carousel auto-rotation
-    await page.evaluate(() => {
-      const section = document.querySelector("#references");
-      if (!section) return;
-      const buttons = section.querySelectorAll("button");
-      buttons.forEach((btn) => {
-        (btn as HTMLButtonElement).style.pointerEvents = "none";
-      });
-    });
-
+    await freezeReferencesCarousel(page);
     await waitForStableHeight(page);
 
     await expect(referencesSection).toHaveScreenshot(
@@ -93,13 +70,11 @@ test.describe("References Carousel Navigation Visual Regression", () => {
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const referencesSection = page.locator("#references");
+    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
     await expect(referencesSection).toBeVisible();
 
-    // Find the dots navigation container
-    const dotsContainer = referencesSection.locator(
-      ".flex.items-center.justify-center.gap-2",
-    );
+    // Find the dots navigation container (buttons within the references section)
+    const dotsContainer = referencesSection.locator("button").first().locator("..");
 
     if ((await dotsContainer.count()) > 0) {
       await expect(dotsContainer).toHaveScreenshot(
