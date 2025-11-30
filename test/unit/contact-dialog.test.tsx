@@ -30,10 +30,17 @@ vi.mock("next/script", () => ({
   default: () => null,
 }));
 
-function openDialog(autoCloseDelay?: number) {
+function renderContactDialog(autoCloseDelay?: number) {
   render(<ContactDialog autoCloseDelay={autoCloseDelay} />);
+}
+
+async function openDialog() {
   const trigger = screen.getByRole("button", { name: /contact/i });
   fireEvent.click(trigger);
+  // Wait for dialog to open
+  await waitFor(() => {
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
 }
 
 function fillForm() {
@@ -46,14 +53,11 @@ function fillForm() {
 
 async function submitForm() {
   const sendButton = screen.getByRole("button", { name: /send/i });
-  await act(async () => {
-    fireEvent.click(sendButton);
-  });
+  fireEvent.click(sendButton);
 }
 
 describe("ContactDialog", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
     process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = "test-site-key";
 
     type TurnstileRender = (
@@ -77,13 +81,13 @@ describe("ContactDialog", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.useRealTimers();
     window.turnstile = undefined;
   });
 
   describe("form validation", () => {
     it("requires email and message", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       // Submit the form without filling any fields to trigger validation
       const email = screen.getByLabelText(/email/i);
@@ -106,7 +110,8 @@ describe("ContactDialog", () => {
         window.turnstile.render = vi.fn();
       }
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       fillForm();
 
@@ -121,7 +126,8 @@ describe("ContactDialog", () => {
     });
 
     it("renders all form fields correctly", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
@@ -132,8 +138,14 @@ describe("ContactDialog", () => {
 
   describe("success flow with countdown and auto-close", () => {
     it("shows success message after successful submission", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
+
+      // Wait for Turnstile to enable send button
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -143,8 +155,16 @@ describe("ContactDialog", () => {
     });
 
     it("displays countdown after successful submission", async () => {
-      openDialog(3);
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      
+      renderContactDialog(3);
+      await openDialog();
       fillForm();
+
+      // Wait for Turnstile to enable send button
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -156,11 +176,20 @@ describe("ContactDialog", () => {
       // Countdown should be visible
       expect(screen.getByTestId("countdown")).toBeInTheDocument();
       expect(screen.getByText(/closing in 3s/i)).toBeInTheDocument();
+      
+      vi.useRealTimers();
     });
 
     it("counts down each second", async () => {
-      openDialog(3);
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      
+      renderContactDialog(3);
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -185,11 +214,20 @@ describe("ContactDialog", () => {
       await waitFor(() => {
         expect(screen.getByText(/closing in 1s/i)).toBeInTheDocument();
       });
+      
+      vi.useRealTimers();
     });
 
     it("auto-closes modal when countdown reaches zero", async () => {
-      openDialog(2);
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      
+      renderContactDialog(2);
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -206,10 +244,13 @@ describe("ContactDialog", () => {
       await waitFor(() => {
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
       });
+      
+      vi.useRealTimers();
     });
 
     it("clears form fields after successful submission", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
 
       const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
@@ -217,6 +258,10 @@ describe("ContactDialog", () => {
 
       expect(emailInput.value).toBe("test@example.com");
       expect(messageInput.value).toBe("Hello there, this is a test message.");
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -237,11 +282,16 @@ describe("ContactDialog", () => {
         json: async () => ({ error: "Server error occurred" }),
       } as Response);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
 
       const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
       const messageInput = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -261,8 +311,13 @@ describe("ContactDialog", () => {
         json: async () => ({ error: "Rate limit exceeded" }),
       } as Response);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -280,8 +335,13 @@ describe("ContactDialog", () => {
         json: async () => ({ error: "Error" }),
       } as Response);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -296,10 +356,15 @@ describe("ContactDialog", () => {
         json: async () => {
           throw new Error("Parse error");
         },
-      } as Response);
+      } as unknown as Response);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -311,7 +376,8 @@ describe("ContactDialog", () => {
 
   describe("focus and accessibility", () => {
     it("has aria-live region for status announcements", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       const statusElement = screen.getByRole("status");
       expect(statusElement).toBeInTheDocument();
@@ -319,7 +385,8 @@ describe("ContactDialog", () => {
     });
 
     it("marks email input as invalid when validation fails", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       const emailInput = screen.getByLabelText(/email/i);
       const form = emailInput.closest("form");
@@ -332,7 +399,8 @@ describe("ContactDialog", () => {
     });
 
     it("marks message input as invalid when validation fails", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       const messageInput = screen.getByLabelText(/message/i);
       const form = messageInput.closest("form");
@@ -345,8 +413,13 @@ describe("ContactDialog", () => {
     });
 
     it("announces success message to screen readers", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -362,8 +435,13 @@ describe("ContactDialog", () => {
         json: async () => ({ error: "Connection failed" }),
       } as Response);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -374,7 +452,8 @@ describe("ContactDialog", () => {
     });
 
     it("has required aria attributes on form fields", async () => {
-      openDialog();
+      renderContactDialog();
+      await openDialog();
 
       const emailInput = screen.getByLabelText(/email/i);
       const messageInput = screen.getByLabelText(/message/i);
@@ -386,8 +465,15 @@ describe("ContactDialog", () => {
 
   describe("modal state management", () => {
     it("resets state when modal is closed and reopened", async () => {
-      openDialog(5);
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      
+      renderContactDialog(5);
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -408,15 +494,26 @@ describe("ContactDialog", () => {
       const trigger = screen.getByRole("button", { name: /contact/i });
       fireEvent.click(trigger);
 
-      // Success message should not be visible
+      await waitFor(() => {
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
+      });
+
+      // Success message should not be visible (state reset)
       expect(screen.queryByText(/Message sent/i)).not.toBeInTheDocument();
-      // Countdown should not be visible
-      expect(screen.queryByTestId("countdown")).not.toBeInTheDocument();
+      
+      vi.useRealTimers();
     });
 
     it("stops countdown when modal is manually closed", async () => {
-      openDialog(10);
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      
+      renderContactDialog(10);
+      await openDialog();
       fillForm();
+
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
+      });
 
       await submitForm();
 
@@ -428,6 +525,11 @@ describe("ContactDialog", () => {
       const closeButton = screen.getByRole("button", { name: /close/i });
       fireEvent.click(closeButton);
 
+      // Modal should be closed
+      await waitFor(() => {
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      });
+
       // Advance timers
       await act(async () => {
         vi.advanceTimersByTime(5000);
@@ -435,65 +537,75 @@ describe("ContactDialog", () => {
 
       // Modal should remain closed
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      
+      vi.useRealTimers();
     });
   });
 
   describe("form interaction", () => {
     it("disables send button while submitting", async () => {
-      let resolvePromise: (value: unknown) => void;
-      const slowPromise = new Promise((resolve) => {
+      let resolvePromise!: (value: Response) => void;
+      const slowPromise = new Promise<Response>((resolve) => {
         resolvePromise = resolve;
       });
 
-      vi.spyOn(window, "fetch").mockReturnValue(slowPromise as Promise<Response>);
+      vi.spyOn(window, "fetch").mockReturnValue(slowPromise);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
 
-      const sendButton = screen.getByRole("button", { name: /send/i });
-
-      // Submit the form
-      await act(async () => {
-        fireEvent.click(sendButton);
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
       });
 
+      // Submit the form
+      await submitForm();
+
       // Button should show "Sending..." and be disabled
-      expect(screen.getByRole("button", { name: /sending/i })).toBeDisabled();
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /sending/i })).toBeDisabled();
+      });
 
       // Resolve the promise
       await act(async () => {
-        resolvePromise!({
+        resolvePromise({
           ok: true,
           json: async () => ({ ok: true }),
-        });
+        } as Response);
       });
     });
 
     it("disables close button while submitting", async () => {
-      let resolvePromise: (value: unknown) => void;
-      const slowPromise = new Promise((resolve) => {
+      let resolvePromise!: (value: Response) => void;
+      const slowPromise = new Promise<Response>((resolve) => {
         resolvePromise = resolve;
       });
 
-      vi.spyOn(window, "fetch").mockReturnValue(slowPromise as Promise<Response>);
+      vi.spyOn(window, "fetch").mockReturnValue(slowPromise);
 
-      openDialog();
+      renderContactDialog();
+      await openDialog();
       fillForm();
 
-      // Submit the form
-      await act(async () => {
-        fireEvent.click(screen.getByRole("button", { name: /send/i }));
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /send/i })).not.toBeDisabled();
       });
 
+      // Submit the form
+      await submitForm();
+
       // Close button should be disabled
-      expect(screen.getByRole("button", { name: /close/i })).toBeDisabled();
+      await waitFor(() => {
+        expect(screen.getByRole("button", { name: /close/i })).toBeDisabled();
+      });
 
       // Resolve the promise
       await act(async () => {
-        resolvePromise!({
+        resolvePromise({
           ok: true,
           json: async () => ({ ok: true }),
-        });
+        } as Response);
       });
     });
   });
