@@ -108,7 +108,7 @@ On validation or server error:
 | `Shift+Tab`   | Navigate backwards                                           |
 | `Enter`       | From Email: Move to Phone field                              |
 |               | From Phone: Move to Message field                            |
-|               | From Message: Submit form (if all required fields are valid) |
+|               | From Message: Submit form (if all required fields are non-empty; "valid" here means non-empty, not HTML5 validation) |
 | `Shift+Enter` | In Message field: Insert new line (textarea behavior)        |
 | `Escape`      | Close dialog                                                 |
 
