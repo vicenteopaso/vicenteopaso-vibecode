@@ -69,7 +69,7 @@ idle → submitting → success → countdown → closed
 
 On successful submission:
 1. Form fields are immediately reset (cleared)
-2. All inputs and buttons are disabled
+2. All inputs and Send button are disabled (Close button remains enabled)
 3. Success message is displayed
 4. A 10-second countdown begins
 5. Countdown is shown with "Closing in X seconds…" message
