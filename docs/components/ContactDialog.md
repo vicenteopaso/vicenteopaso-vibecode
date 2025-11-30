@@ -47,16 +47,45 @@ The `ContactDialog` component is a comprehensive contact form modal with Cloudfl
 - **Server-side validation**: Domain check, rate limiting (see `/api/contact`)
 - **Token verification**: Server validates Turnstile token
 
-### Form States
+### Form State Machine
 
-| State      | Description                            | UI Feedback                          |
-| ---------- | -------------------------------------- | ------------------------------------ |
-| Initial    | Form ready for input                   | Submit button disabled until CAPTCHA |
-| Validating | User triggered submit, checking fields | Inline error messages                |
-| Verified   | Turnstile completed successfully       | Submit button enabled                |
-| Submitting | Form data being sent                   | "Sending..." button, disabled        |
-| Success    | Message sent successfully              | Green success message                |
-| Error      | Submission failed                      | Red error message, Turnstile reset   |
+The component uses a state machine for form submission:
+
+```
+idle → submitting → success → countdown → closed
+         ↓
+       error → idle
+```
+
+| State        | Description                      | UI Feedback                                 |
+| ------------ | -------------------------------- | ------------------------------------------- |
+| `idle`       | Form ready for input             | Submit button disabled until CAPTCHA        |
+| `submitting` | Form data being sent             | "Sending..." button, all inputs disabled    |
+| `success`    | Message sent successfully        | Green success message, form fields reset    |
+| `countdown`  | Auto-close countdown in progress | Shows "Closing in X seconds" with countdown |
+| `closed`     | Modal closed after countdown     | Modal returns to idle state on next open    |
+
+### Success Flow (v2.0)
+
+On successful submission:
+
+1. Form fields are immediately reset (cleared)
+2. All inputs and Send button are disabled (Close button remains enabled)
+3. Success message is displayed
+4. A 10-second countdown begins
+5. Countdown is shown with "Closing in X seconds…" message
+6. Modal auto-closes when countdown reaches zero
+7. Reopening the modal shows a fresh, enabled form
+
+### Error Flow
+
+On validation or server error:
+
+- Form values are preserved (user doesn't lose data)
+- Inputs remain enabled
+- Turnstile is reset (new verification required)
+- Error message displayed
+- No countdown, modal stays open
 
 ## Accessibility
 
@@ -66,7 +95,8 @@ The `ContactDialog` component is a comprehensive contact form modal with Cloudfl
 - `aria-invalid="true/false"` on fields with validation errors
 - `aria-describedby` linking fields to error messages and status
 - `role="status"` on status message container
-- `aria-live="polite"` on status updates
+- `aria-live="polite"` on status updates and countdown
+- `aria-atomic="true"` on countdown for screen reader announcements
 - `aria-hidden="true"` on honeypot field
 
 ### Keyboard Navigation
@@ -91,6 +121,7 @@ The `ContactDialog` component is a comprehensive contact form modal with Cloudfl
 - Form fields properly labeled with `<label>` elements
 - Error messages associated with fields via `aria-describedby`
 - Status updates announced via `aria-live="polite"`
+- Countdown updates announced for assistive technology
 - Turnstile help text conditionally rendered for context
 
 ## Form Validation

@@ -1,5 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
 
+// Skip Sentry initialization during unit tests to avoid unnecessary client hooks.
+if (process.env.NODE_ENV === "test" || process.env.VITEST) {
+  // eslint-disable-next-line no-console
+  if (process.env.VITEST)
+    console.debug("[Sentry] Skipping client init in tests.");
+}
+
 // Ensure the DSN is a public client key, not a secret auth token.
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 

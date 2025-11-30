@@ -3,7 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import type { FormEvent, ReactNode } from "react";
 import React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
@@ -31,6 +31,18 @@ interface ContactDialogProps {
   children?: ReactNode;
 }
 
+/** Countdown duration in seconds after successful form submission. */
+const COUNTDOWN_SECONDS = 10;
+
+/**
+ * Delay before transitioning from success state to countdown state.
+ * This gives users time to read the success message before the countdown begins.
+ */
+const SUCCESS_TO_COUNTDOWN_DELAY_MS = 1000;
+
+/** Form state machine: idle → submitting → success → countdown → closed */
+type FormState = "idle" | "submitting" | "success" | "countdown";
+
 export function ContactDialog({
   triggerLabel = "Contact me",
   trigger,
@@ -40,15 +52,63 @@ export function ContactDialog({
   const [message, setMessage] = useState("");
   const [phone, setPhone] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Modal open state (controlled)
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Form state machine
+  const [formState, setFormState] = useState<FormState>("idle");
+
+  // Countdown timer
+  const [countdownSeconds, setCountdownSeconds] = useState(COUNTDOWN_SECONDS);
+
+  // Derive success message from formState instead of maintaining separate state
+  const successMessage =
+    formState === "success" || formState === "countdown"
+      ? "Message sent. I'll get back to you as soon as I can."
+      : null;
+
+  // Reset the form to its initial state
+  const resetForm = useCallback(() => {
+    setEmail("");
+    setPhone("");
+    setMessage("");
+    setError(null);
+    setEmailError(null);
+    setMessageError(null);
+    setFormState("idle");
+    setCountdownSeconds(COUNTDOWN_SECONDS);
+    // Reset Turnstile token, widget, and visibility state
+    window.turnstile?.reset();
+    setTurnstileToken(null);
+    setIsChallengeVisible(false);
+  }, []);
+
+  // Handle modal open/close state changes
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      // Only reset the form on open if previous state was "countdown" (after success)
+      if (open && formState === "countdown") {
+        resetForm();
+      }
+    },
+    [resetForm, formState],
+  );
+
   useEffect(() => {
+    // In Playwright E2E, skip rendering Turnstile and set a fake token
+    if (process.env.PLAYWRIGHT) {
+      setTurnstileToken("test-token");
+      setIsChallengeVisible(false);
+      return;
+    }
+
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
     if (!siteKey) {
@@ -92,10 +152,45 @@ export function ContactDialog({
     };
   }, []);
 
+  // Countdown effect: when in countdown state, decrement every second
+  useEffect(() => {
+    if (formState !== "countdown") {
+      return;
+    }
+
+    if (countdownSeconds <= 0) {
+      // Auto-close the modal when countdown reaches zero
+      // Use handleOpenChange to ensure proper state cleanup
+      handleOpenChange(false);
+      return;
+    }
+
+    const timerId = window.setTimeout(() => {
+      setCountdownSeconds((prev) => prev - 1);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [formState, countdownSeconds, handleOpenChange]);
+
+  // Transition from success to countdown state
+  useEffect(() => {
+    if (formState === "success") {
+      // Minimal delay to ensure success message renders before state transition
+      const timerId = window.setTimeout(() => {
+        setFormState("countdown");
+      }, SUCCESS_TO_COUNTDOWN_DELAY_MS);
+
+      return () => {
+        window.clearTimeout(timerId);
+      };
+    }
+  }, [formState]);
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSuccess(null);
     setEmailError(null);
     setMessageError(null);
 
@@ -122,7 +217,7 @@ export function ContactDialog({
     const formData = new FormData(event.currentTarget);
     const honeypot = (formData.get("website") ?? "").toString().trim();
 
-    setSubmitting(true);
+    setFormState("submitting");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -147,12 +242,14 @@ export function ContactDialog({
         throw new Error(message);
       }
 
-      setSuccess("Message sent. I'll get back to you as soon as I can.");
+      // Success: reset form fields and transition to success state
+      // Success message is derived from formState
       setEmail("");
       setPhone("");
       setMessage("");
       setEmailError(null);
       setMessageError(null);
+      setFormState("success");
     } catch (err) {
       // Reset Turnstile so the user can try again after an error.
       window.turnstile?.reset();
@@ -162,10 +259,19 @@ export function ContactDialog({
           ? err.message
           : "Something went wrong. Please try again.";
       setError(message);
-    } finally {
-      setSubmitting(false);
+      // On error, keep form in idle state so user can retry
+      setFormState("idle");
     }
   }
+
+  // Determine if form inputs should be disabled (during submit or after success)
+  const isFormDisabled =
+    formState === "submitting" ||
+    formState === "success" ||
+    formState === "countdown";
+
+  // Determine if the submit button should be disabled
+  const isSubmitDisabled = isFormDisabled || !turnstileToken;
 
   const triggerNode = trigger ?? (
     <button
@@ -182,6 +288,8 @@ export function ContactDialog({
       size="md"
       analyticsEventName="contact_open"
       analyticsMetadata={{ component: "ContactDialog" }}
+      open={isOpen}
+      onOpenChange={handleOpenChange}
     >
       <Dialog.Title className="flex items-center gap-2 text-base font-semibold tracking-tight text-[color:var(--text-primary)]">
         Contact me
@@ -200,11 +308,12 @@ export function ContactDialog({
           <input
             type="email"
             name="email"
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="you@example.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
+            disabled={isFormDisabled}
             aria-required="true"
             aria-invalid={emailError ? "true" : "false"}
             aria-describedby={
@@ -226,21 +335,23 @@ export function ContactDialog({
           <input
             type="tel"
             name="phone"
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="Phone number"
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
+            disabled={isFormDisabled}
           />
         </label>
         <label className="flex flex-col gap-1.5">
           <span className="text-[color:var(--text-primary)]">Message</span>
           <textarea
             name="message"
-            className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60"
+            className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
             placeholder="A few words about your project or question"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             required
+            disabled={isFormDisabled}
             aria-required="true"
             aria-invalid={messageError ? "true" : "false"}
             aria-describedby={
@@ -284,17 +395,32 @@ export function ContactDialog({
           </p>
         ) : null}
 
-        <p
+        {/* Status messages with aria-live for accessibility */}
+        <div
           id="contact-status"
           role="status"
           aria-live="polite"
+          aria-atomic="true"
           className="text-[11px]"
         >
           {error ? <span className="text-red-400">{error}</span> : null}
-          {!error && success ? (
-            <span className="text-emerald-400">{success}</span>
+          {!error && successMessage ? (
+            <span className="text-emerald-400">{successMessage}</span>
           ) : null}
-        </p>
+        </div>
+
+        {/* Countdown message shown after successful submission */}
+        {formState === "countdown" ? (
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="rounded-md bg-emerald-500/10 px-3 py-2 text-center text-sm text-emerald-400"
+          >
+            Closing in {countdownSeconds}{" "}
+            {countdownSeconds === 1 ? "second" : "seconds"}…
+          </div>
+        ) : null}
 
         {children}
 
@@ -303,16 +429,16 @@ export function ContactDialog({
         <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-sm">
           <Dialog.Close
             className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-            disabled={submitting}
+            disabled={formState === "submitting" || formState === "countdown"}
           >
             Close
           </Dialog.Close>
           <button
             type="submit"
             className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-            disabled={submitting || !turnstileToken}
+            disabled={isSubmitDisabled}
           >
-            {submitting ? "Sending..." : "Send"}
+            {formState === "submitting" ? "Sending..." : "Send"}
           </button>
         </div>
       </form>

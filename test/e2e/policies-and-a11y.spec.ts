@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("footer links navigate to pages", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "networkidle" });
 
   // Test Cookie Policy link navigates to page
   const cookieLink = page.getByRole("link", {
@@ -16,7 +16,7 @@ test("footer links navigate to pages", async ({ page }) => {
   ).toBeVisible();
 
   // Navigate back and test Privacy Policy link
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "networkidle" });
   const privacyLink = page.getByRole("link", {
     name: "Privacy Policy",
     exact: true,
@@ -31,7 +31,7 @@ test("footer links navigate to pages", async ({ page }) => {
   ).toBeVisible();
 
   // Navigate back and test Tech Stack link
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "networkidle" });
   const techStackLink = page.getByRole("link", {
     name: "Tech Stack",
     exact: true,
@@ -63,7 +63,7 @@ test("policy and tech stack pages render main headings", async ({ page }) => {
 test("skip link appears on focus and targets main content", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "networkidle" });
 
   // Press Tab to focus the skip link
   await page.keyboard.press("Tab");
