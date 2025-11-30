@@ -2,7 +2,7 @@
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export function AnalyticsWrapper() {
   const [shouldRender, setShouldRender] = useState<boolean>(true);
