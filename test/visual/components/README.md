@@ -4,14 +4,14 @@ This directory contains visual regression tests for individual UI components. Te
 
 ## Test Files
 
-| File                              | Component           | Tests                                          |
-| --------------------------------- | ------------------- | ---------------------------------------------- |
-| `navigation.visual.spec.ts`       | NavigationMenu      | Light, dark, mobile, CV active state           |
-| `profile-card.visual.spec.ts`     | ProfileCard         | Homepage variant, CV variant (no avatar)       |
-| `contact-dialog.visual.spec.ts`   | ContactDialog       | Light, dark, mobile                            |
-| `impact-cards.visual.spec.ts`     | ImpactCards         | Light, dark, mobile, single card               |
-| `references-carousel.visual.spec.ts` | ReferencesCarousel | Light, dark, mobile, navigation dots          |
-| `footer.visual.spec.ts`           | Footer              | Light, dark, mobile, CV page                   |
+| File                                 | Component          | Tests                                    |
+| ------------------------------------ | ------------------ | ---------------------------------------- |
+| `navigation.visual.spec.ts`          | NavigationMenu     | Light, dark, mobile, CV active state     |
+| `profile-card.visual.spec.ts`        | ProfileCard        | Homepage variant, CV variant (no avatar) |
+| `contact-dialog.visual.spec.ts`      | ContactDialog      | Light, dark, mobile                      |
+| `impact-cards.visual.spec.ts`        | ImpactCards        | Light, dark, mobile, single card         |
+| `references-carousel.visual.spec.ts` | ReferencesCarousel | Light, dark, mobile, navigation dots     |
+| `footer.visual.spec.ts`              | Footer             | Light, dark, mobile, CV page             |
 
 ## Running Tests
 
@@ -40,6 +40,7 @@ All component tests follow these patterns:
 Snapshots follow the pattern: `{component}-{variant}-{theme/viewport}-linux.png`
 
 Examples:
+
 - `navigation-light-linux.png`
 - `profile-card-homepage-dark-linux.png`
 - `contact-dialog-mobile-linux.png`

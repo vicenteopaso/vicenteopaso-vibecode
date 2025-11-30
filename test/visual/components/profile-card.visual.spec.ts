@@ -88,9 +88,12 @@ test.describe("Profile Card Visual Regression", () => {
       const profileSection = page.locator("header.section-card");
       await expect(profileSection).toBeVisible();
 
-      await expect(profileSection).toHaveScreenshot("profile-card-cv-dark.png", {
-        animations: "disabled",
-      });
+      await expect(profileSection).toHaveScreenshot(
+        "profile-card-cv-dark.png",
+        {
+          animations: "disabled",
+        },
+      );
     });
 
     test("renders CV header profile card on mobile viewport", async ({
