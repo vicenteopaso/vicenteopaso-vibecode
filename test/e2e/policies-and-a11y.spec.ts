@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 test("footer links navigate to pages", async ({ page }) => {
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
+    // Continue if networkidle times out - page may have background requests
+  });
 
   // Test Cookie Policy link navigates to page
   const cookieLink = page.getByRole("link", {
@@ -16,7 +19,10 @@ test("footer links navigate to pages", async ({ page }) => {
   ).toBeVisible();
 
   // Navigate back and test Privacy Policy link
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
+    // Continue if networkidle times out
+  });
   const privacyLink = page.getByRole("link", {
     name: "Privacy Policy",
     exact: true,
@@ -31,7 +37,10 @@ test("footer links navigate to pages", async ({ page }) => {
   ).toBeVisible();
 
   // Navigate back and test Tech Stack link
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {
+    // Continue if networkidle times out - page may have background requests
+  });
   const techStackLink = page.getByRole("link", {
     name: "Tech Stack",
     exact: true,
@@ -63,7 +72,10 @@ test("policy and tech stack pages render main headings", async ({ page }) => {
 test("skip link appears on focus and targets main content", async ({
   page,
 }) => {
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
+    // Continue if networkidle times out
+  });
 
   // Press Tab to focus the skip link
   await page.keyboard.press("Tab");
