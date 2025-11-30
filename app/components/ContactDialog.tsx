@@ -38,7 +38,7 @@ const COUNTDOWN_SECONDS = 10;
  * Delay before transitioning from success state to countdown state.
  * This gives users time to read the success message before the countdown begins.
  */
-const SUCCESS_TO_COUNTDOWN_DELAY_MS = 100;
+const SUCCESS_TO_COUNTDOWN_DELAY_MS = 1000;
 
 /** Form state machine: idle → submitting → success → countdown → closed */
 type FormState = "idle" | "submitting" | "success" | "countdown";
