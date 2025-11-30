@@ -73,16 +73,17 @@ test.describe("References Carousel Navigation Visual Regression", () => {
     const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
     await expect(referencesSection).toBeVisible();
 
-    // Find the dots navigation container (buttons within the references section)
-    const dotsContainer = referencesSection.locator("button").first().locator("..");
+    // Find the dots navigation container using data-testid for reliable selection
+    const dotsContainer = referencesSection.locator(
+      '[data-testid="references-carousel-dots"]',
+    );
 
-    if ((await dotsContainer.count()) > 0) {
-      await expect(dotsContainer).toHaveScreenshot(
-        "references-carousel-dots.png",
-        {
-          animations: "disabled",
-        },
-      );
-    }
+    await expect(dotsContainer).toBeVisible();
+    await expect(dotsContainer).toHaveScreenshot(
+      "references-carousel-dots.png",
+      {
+        animations: "disabled",
+      },
+    );
   });
 });
