@@ -81,10 +81,11 @@ export function ContactDialog({
       if (open) {
         // Reset form when modal opens to ensure fresh state
         resetFormState();
-        // Reset Turnstile for fresh verification
-        window.turnstile?.reset();
+        // Reset Turnstile state first, then reset the widget
+        // The widget reset will trigger a new verification and provide a fresh token
         setTurnstileToken(null);
         setIsChallengeVisible(false);
+        window.turnstile?.reset();
       }
     },
     [resetFormState],

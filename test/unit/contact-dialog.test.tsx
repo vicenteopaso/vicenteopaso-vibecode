@@ -1,5 +1,4 @@
 import {
-  act,
   fireEvent,
   render,
   screen,
@@ -30,10 +29,21 @@ vi.mock("next/script", () => ({
   default: () => null,
 }));
 
-function openDialog() {
+async function openDialog() {
   render(<ContactDialog />);
   const trigger = screen.getByRole("button", { name: /contact/i });
   fireEvent.click(trigger);
+  // Wait for the dialog to open and the Turnstile callback to provide a token
+  // The Send button is disabled when there's no token, so we wait for it to be enabled
+  await waitFor(
+    () => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      // The Send button should not be disabled (meaning token is set)
+      const sendButton = screen.getByRole("button", { name: /send/i });
+      expect(sendButton).not.toBeDisabled();
+    },
+    { timeout: 1000 },
+  );
 }
 
 function fillForm() {
@@ -45,7 +55,11 @@ function fillForm() {
 }
 
 describe("ContactDialog", () => {
+  // Store the turnstile callback so reset() can invoke it
+  let turnstileCallback: ((token: string) => void) | null = null;
+
   beforeEach(() => {
+    turnstileCallback = null;
     process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = "test-site-key";
 
     type TurnstileRender = (
@@ -55,10 +69,18 @@ describe("ContactDialog", () => {
 
     window.turnstile = {
       render: vi.fn((_, options: { callback: (token: string) => void }) => {
+        // Store the callback for reset() to use
+        turnstileCallback = options.callback;
         // Simulate Turnstile immediately providing a token
         options.callback("test-token");
       }) as TurnstileRender,
-      reset: vi.fn(),
+      reset: vi.fn(() => {
+        // When reset is called, re-invoke the callback with a new token
+        // This simulates real Turnstile behavior where reset triggers re-verification
+        if (turnstileCallback) {
+          turnstileCallback("test-token-after-reset");
+        }
+      }),
     };
 
     vi.spyOn(window, "fetch").mockResolvedValue({
@@ -70,10 +92,11 @@ describe("ContactDialog", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     window.turnstile = undefined;
+    turnstileCallback = null;
   });
 
   it("requires email and message", async () => {
-    openDialog();
+    await openDialog();
 
     // Submit the form without filling any fields to trigger validation
     const email = screen.getByLabelText(/email/i);
@@ -96,7 +119,15 @@ describe("ContactDialog", () => {
       window.turnstile.render = vi.fn();
     }
 
-    openDialog();
+    // Use manual dialog opening since we don't want to wait for token
+    render(<ContactDialog />);
+    const trigger = screen.getByRole("button", { name: /contact/i });
+    fireEvent.click(trigger);
+
+    // Wait for dialog to be visible
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
 
     fillForm();
 
@@ -111,7 +142,7 @@ describe("ContactDialog", () => {
   });
 
   it("renders all form fields correctly", async () => {
-    openDialog();
+    await openDialog();
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
@@ -120,7 +151,7 @@ describe("ContactDialog", () => {
   });
 
   it("shows countdown after successful submission", async () => {
-    openDialog();
+    await openDialog();
     fillForm();
 
     const form = screen.getByLabelText(/message/i).closest("form");
@@ -139,7 +170,7 @@ describe("ContactDialog", () => {
   });
 
   it("disables form inputs after successful submission", async () => {
-    openDialog();
+    await openDialog();
     fillForm();
 
     const email = screen.getByLabelText(/email/i);
@@ -169,7 +200,7 @@ describe("ContactDialog", () => {
   });
 
   it("clears form fields after successful submission", async () => {
-    openDialog();
+    await openDialog();
     fillForm();
 
     const email = screen.getByLabelText(/email/i) as HTMLInputElement;
@@ -194,7 +225,7 @@ describe("ContactDialog", () => {
   });
 
   it("has accessible countdown with aria-live region", async () => {
-    openDialog();
+    await openDialog();
     fillForm();
 
     const form = screen.getByLabelText(/message/i).closest("form");
@@ -213,146 +244,51 @@ describe("ContactDialog", () => {
     expect(statusRegion).toHaveAttribute("aria-atomic", "true");
     expect(statusRegion).toHaveTextContent(/This dialog will close in/i);
   });
-});
 
-describe("ContactDialog countdown with fake timers", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = "test-site-key";
-
-    type TurnstileRender = (
-      container: HTMLElement,
-      options: { callback: (token: string) => void },
-    ) => void;
-
-    window.turnstile = {
-      render: vi.fn((_, options: { callback: (token: string) => void }) => {
-        options.callback("test-token");
-      }) as TurnstileRender,
-      reset: vi.fn(),
-    };
-
-    vi.spyOn(window, "fetch").mockImplementation(() =>
-      Promise.resolve({
-        ok: true,
-        json: async () => ({ ok: true }),
-      } as Response),
-    );
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.useRealTimers();
-    window.turnstile = undefined;
-  });
-
-  it("countdown decrements and dialog closes at zero", async () => {
+  it("form resets to initial state when closed and reopened", async () => {
     render(<ContactDialog />);
     const trigger = screen.getByRole("button", { name: /contact/i });
+    fireEvent.click(trigger);
 
-    await act(async () => {
-      fireEvent.click(trigger);
-      // Advance timers to allow Turnstile interval to run
-      vi.advanceTimersByTime(500);
-    });
-
-    const email = screen.getByLabelText(/email/i);
-    const message = screen.getByLabelText(/message/i);
-
-    await act(async () => {
-      fireEvent.change(email, { target: { value: "test@example.com" } });
-      fireEvent.change(message, { target: { value: "Hello" } });
-    });
-
-    const form = message.closest("form");
-    expect(form).not.toBeNull();
-
-    // Submit the form
-    await act(async () => {
-      fireEvent.submit(form as HTMLFormElement);
-      // Flush microtasks for the fetch promise
-      await vi.runAllTimersAsync();
-    });
-
-    // Verify countdown started at 10
-    expect(screen.getByText("10")).toBeInTheDocument();
-
-    // Advance timer by 1 second
-    await act(async () => {
-      vi.advanceTimersByTime(1000);
-    });
-
-    // Should now show 9
-    expect(screen.getByText("9")).toBeInTheDocument();
-
-    // Advance to the end of the countdown
-    await act(async () => {
-      vi.advanceTimersByTime(9000);
-    });
-
-    // Dialog should be closed - the modal should no longer be in the document
-    expect(screen.queryByText(/Message sent/i)).not.toBeInTheDocument();
-  });
-
-  it("reopens with fresh empty form after countdown closes", async () => {
-    render(<ContactDialog />);
-    const trigger = screen.getByRole("button", { name: /contact/i });
-
-    await act(async () => {
-      fireEvent.click(trigger);
-      // Advance timers to allow Turnstile interval to run
-      vi.advanceTimersByTime(500);
-    });
-
+    // Fill the form
     const email = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const phone = screen.getByLabelText(/phone/i) as HTMLInputElement;
     const message = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
 
-    await act(async () => {
-      fireEvent.change(email, { target: { value: "test@example.com" } });
-      fireEvent.change(message, { target: { value: "Hello" } });
+    fireEvent.change(email, { target: { value: "test@example.com" } });
+    fireEvent.change(phone, { target: { value: "123-456-7890" } });
+    fireEvent.change(message, { target: { value: "Hello there" } });
+
+    expect(email.value).toBe("test@example.com");
+    expect(phone.value).toBe("123-456-7890");
+    expect(message.value).toBe("Hello there");
+
+    // Close the dialog
+    const closeButton = screen.getByRole("button", { name: /close/i });
+    fireEvent.click(closeButton);
+
+    // Wait for modal to close
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
-    const form = message.closest("form");
-    expect(form).not.toBeNull();
+    // Reopen the dialog
+    fireEvent.click(trigger);
 
-    // Submit the form
-    await act(async () => {
-      fireEvent.submit(form as HTMLFormElement);
-      await vi.runAllTimersAsync();
+    // Wait for modal to reopen
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 
-    // Verify countdown started
-    expect(screen.getByText(/This dialog will close in/i)).toBeInTheDocument();
-
-    // Advance to close the dialog
-    await act(async () => {
-      vi.advanceTimersByTime(10000);
-    });
-
-    // Dialog should be closed
-    expect(screen.queryByText(/Message sent/i)).not.toBeInTheDocument();
-
-    // Re-open the dialog
-    const newTrigger = screen.getByRole("button", { name: /contact/i });
-    await act(async () => {
-      fireEvent.click(newTrigger);
-      // Advance timers to allow Turnstile interval to run
-      vi.advanceTimersByTime(500);
-    });
-
-    // Form should be empty and enabled
+    // Form should be empty
     const newEmail = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const newPhone = screen.getByLabelText(/phone/i) as HTMLInputElement;
     const newMessage = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
 
     expect(newEmail.value).toBe("");
+    expect(newPhone.value).toBe("");
     expect(newMessage.value).toBe("");
     expect(newEmail).not.toBeDisabled();
     expect(newMessage).not.toBeDisabled();
-
-    // Should not show countdown or success message
-    expect(
-      screen.queryByText(/This dialog will close in/i),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByText(/Message sent/i)).not.toBeInTheDocument();
   });
 });

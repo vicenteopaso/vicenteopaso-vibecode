@@ -49,14 +49,25 @@ The `ContactDialog` component is a comprehensive contact form modal with Cloudfl
 
 ### Form States
 
-| State      | Description                            | UI Feedback                          |
-| ---------- | -------------------------------------- | ------------------------------------ |
-| Initial    | Form ready for input                   | Submit button disabled until CAPTCHA |
-| Validating | User triggered submit, checking fields | Inline error messages                |
-| Verified   | Turnstile completed successfully       | Submit button enabled                |
-| Submitting | Form data being sent                   | "Sending..." button, disabled        |
-| Success    | Message sent successfully              | Green success message                |
-| Error      | Submission failed                      | Red error message, Turnstile reset   |
+| State      | Description                            | UI Feedback                                                |
+| ---------- | -------------------------------------- | ---------------------------------------------------------- |
+| Initial    | Form ready for input                   | Submit button disabled until CAPTCHA                       |
+| Validating | User triggered submit, checking fields | Inline error messages                                      |
+| Verified   | Turnstile completed successfully       | Submit button enabled                                      |
+| Submitting | Form data being sent                   | "Sending..." button, disabled                              |
+| Success    | Message sent successfully              | Green success message, countdown timer, all inputs disabled |
+| Countdown  | Auto-close countdown active            | Visible countdown (10s), form disabled                     |
+| Error      | Submission failed                      | Red error message, Turnstile reset                         |
+
+### Success State Behavior
+
+On successful form submission:
+1. Form fields are immediately cleared
+2. All form inputs and the Send button are disabled
+3. A visible 10-second countdown is displayed
+4. The countdown message is announced to screen readers via `aria-live="polite"`
+5. The modal automatically closes when the countdown reaches zero
+6. Reopening the modal restores it to the initial, empty, active state
 
 ## Accessibility
 
@@ -66,7 +77,8 @@ The `ContactDialog` component is a comprehensive contact form modal with Cloudfl
 - `aria-invalid="true/false"` on fields with validation errors
 - `aria-describedby` linking fields to error messages and status
 - `role="status"` on status message container
-- `aria-live="polite"` on status updates
+- `aria-live="polite"` on status updates and countdown messages
+- `aria-atomic="true"` on status region for full content announcement
 - `aria-hidden="true"` on honeypot field
 
 ### Keyboard Navigation

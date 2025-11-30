@@ -10,13 +10,44 @@ The `Modal` component is a base dialog/modal primitive built on Radix UI Dialog.
 
 ## Props
 
-| Prop                 | Type                   | Default     | Description                                               |
-| -------------------- | ---------------------- | ----------- | --------------------------------------------------------- |
-| `trigger`            | `ReactNode`            | required    | Element that triggers the modal (typically a button)      |
-| `children`           | `ReactNode`            | required    | Modal content to display                                  |
-| `size`               | `"sm" \| "md" \| "lg"` | `"md"`      | Modal width preset                                        |
-| `analyticsEventName` | `string`               | `undefined` | Optional Vercel Analytics event name to track modal opens |
-| `analyticsMetadata`  | `AnalyticsMetadata`    | `undefined` | Optional metadata to send with the analytics event        |
+| Prop                 | Type                   | Default     | Description                                                    |
+| -------------------- | ---------------------- | ----------- | -------------------------------------------------------------- |
+| `trigger`            | `ReactNode`            | required    | Element that triggers the modal (typically a button)           |
+| `children`           | `ReactNode`            | required    | Modal content to display                                       |
+| `size`               | `"sm" \| "md" \| "lg"` | `"md"`      | Modal width preset                                             |
+| `analyticsEventName` | `string`               | `undefined` | Optional Vercel Analytics event name to track modal opens      |
+| `analyticsMetadata`  | `AnalyticsMetadata`    | `undefined` | Optional metadata to send with the analytics event             |
+| `open`               | `boolean`              | `undefined` | Controlled open state (modal becomes controlled when provided) |
+| `onOpenChange`       | `(open: boolean) => void` | `undefined` | Callback when open state changes (required for controlled mode) |
+
+### Controlled vs Uncontrolled Mode
+
+The Modal supports both uncontrolled (default) and controlled modes:
+
+**Uncontrolled Mode (default):**
+```tsx
+<Modal trigger={<button>Open</button>}>
+  <p>Content</p>
+</Modal>
+```
+
+**Controlled Mode:**
+```tsx
+const [isOpen, setIsOpen] = useState(false);
+
+<Modal
+  trigger={<button>Open</button>}
+  open={isOpen}
+  onOpenChange={setIsOpen}
+>
+  <p>Content</p>
+</Modal>
+```
+
+Use controlled mode when you need to:
+- Programmatically close the modal (e.g., after form submission)
+- Implement auto-close behavior (e.g., countdown timer)
+- Coordinate modal state with other components
 
 ### Size Presets
 
