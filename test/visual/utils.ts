@@ -120,7 +120,10 @@ export async function cvPageMasks(page: Page): Promise<Locator[]> {
 
 // Wait for CV page to be fully loaded and ready for screenshot
 export async function waitForCVPage(page: Page): Promise<void> {
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
+    // Continue if networkidle times out
+  });
 
   // Wait for fonts to load
   await page.evaluate(() => document.fonts.ready);
@@ -137,7 +140,10 @@ export async function waitForCVPage(page: Page): Promise<void> {
 
 // Wait for homepage to be fully loaded and ready for screenshot
 export async function waitForHomepage(page: Page): Promise<void> {
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
+    // Continue if networkidle times out
+  });
 
   // Wait for fonts to load
   await page.evaluate(() => document.fonts.ready);
