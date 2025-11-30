@@ -7,9 +7,10 @@ This directory contains Playwright-based visual regression tests for the portfol
 ```
 test/visual/
 ├── pages/              # Full-page screenshots
-│   ├── home.visual.spec.ts      # Homepage/About page at root (light, dark, mobile)
-│   ├── cv.visual.spec.ts        # CV page (light, dark, mobile)
-│   └── policies.visual.spec.ts  # Planned
+│   ├── home.visual.spec.ts         # Homepage/About page at root (light, dark, mobile)
+│   ├── cv.visual.spec.ts           # CV page (light, dark, mobile)
+│   ├── hover-states.visual.spec.ts # Hover states for interactive elements
+│   └── policies.visual.spec.ts     # Planned
 ├── components/         # Component-level screenshots (planned)
 │   ├── navigation.visual.spec.ts
 │   ├── profile-card.visual.spec.ts
@@ -113,6 +114,7 @@ Use dedicated helper functions for each page type:
 
 - **`waitForHomepage(page)`**: Waits for homepage to be fully loaded (network idle, fonts, portrait, ImpactCards, footer, stable height, frozen carousels)
 - **`waitForCVPage(page)`**: Waits for CV page to be fully loaded (network idle, fonts, h1, references section, footer, stable height)
+- **`waitForHoverStyles(locator)`**: Waits for hover styles to stabilize on an element after hovering
 
 ### Dynamic Content Handling
 
@@ -162,6 +164,44 @@ test("component in dark mode", async ({ page }) => {
 5. **Descriptive names**: Name screenshots clearly (e.g., `homepage-light.png`, `cv-dark.png`)
 6. **Test both themes**: Test light and dark mode for all pages
 7. **Test mobile viewports**: Include 375×667 mobile tests
+8. **Use reduced motion for hover tests**: Prefer `reducedMotion: 'reduce'` for predictable hover state testing
+
+## Hover State Testing
+
+For testing hover states of interactive elements:
+
+```typescript
+import { expect, test } from "@playwright/test";
+import { waitForHomepage, waitForHoverStyles } from "../utils";
+
+test.describe("Hover States", () => {
+  test.beforeEach(async ({ page }) => {
+    // Enable reduced motion for animation predictability
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    // Set desktop viewport to ensure all elements are visible
+    await page.setViewportSize({ width: 1280, height: 720 });
+  });
+
+  test("button hover state", async ({ page }) => {
+    await page.goto("/");
+    await waitForHomepage(page);
+
+    const button = page.locator('button[aria-label="My Button"]');
+    await button.hover();
+    await waitForHoverStyles(button);
+
+    await expect(button).toHaveScreenshot("button-hover.png", {
+      animations: "disabled",
+    });
+  });
+});
+```
+
+Key points for hover state tests:
+- **Reduced motion**: Use `reducedMotion: 'reduce'` to disable CSS transitions/animations
+- **Desktop viewport**: Set viewport width ≥ 640px to show desktop-only elements
+- **Wait for hover styles**: Use `waitForHoverStyles(locator)` for deterministic completion
+- **Element screenshots**: Take screenshots of the hovered element, not the full page
 
 ## Troubleshooting
 

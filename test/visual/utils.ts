@@ -1,5 +1,50 @@
 import type { Locator, Page } from "@playwright/test";
 
+/**
+ * Wait for an element's hover styles to stabilize after hovering.
+ * Checks that computed styles remain unchanged for consecutive checks.
+ *
+ * @param locator - The Playwright locator for the element
+ * @param consecutive - Number of consecutive stable checks required (default: 3)
+ * @param intervalMs - Interval between checks in milliseconds (default: 50)
+ */
+export async function waitForHoverStyles(
+  locator: Locator,
+  consecutive: number = 3,
+  intervalMs: number = 50,
+): Promise<void> {
+  await locator.evaluate(
+    (el, args) => {
+      const { consecutive, intervalMs } = args as {
+        consecutive: number;
+        intervalMs: number;
+      };
+      return new Promise<void>((resolve) => {
+        const getStyles = () => {
+          const computed = getComputedStyle(el);
+          return `${computed.color}|${computed.backgroundColor}|${computed.borderColor}|${computed.boxShadow}`;
+        };
+        let lastStyles = getStyles();
+        let stableCount = 0;
+        const check = setInterval(() => {
+          const currentStyles = getStyles();
+          if (currentStyles === lastStyles) {
+            stableCount++;
+            if (stableCount >= consecutive) {
+              clearInterval(check);
+              resolve();
+            }
+          } else {
+            stableCount = 0;
+            lastStyles = currentStyles;
+          }
+        }, intervalMs);
+      });
+    },
+    { consecutive, intervalMs },
+  );
+}
+
 // Wait until document height is stable for N consecutive checks
 export async function waitForStableHeight(
   page: Page,
