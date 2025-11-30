@@ -80,8 +80,6 @@ test.describe("Impact Cards Individual Card Visual Regression", () => {
     // Take a screenshot with proper clip to ensure we capture the element, not viewport
     await expect(impactCard).toHaveScreenshot("impact-card-single-light.png", {
       animations: "disabled",
-      // Ensure we capture the actual element bounds
-      clip: await impactCard.boundingBox().then((box) => box || undefined),
     });
   });
 });
