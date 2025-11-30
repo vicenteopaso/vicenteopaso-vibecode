@@ -183,7 +183,7 @@ export function ImpactCards({
   if (!visibleCards.length) return null;
 
   return (
-    <>
+    <div data-testid="impact-cards">
       {/* Hidden measurement grid to compute tallest card without affecting layout.
           Use the exact same card chrome as the visible cards so measurements
           match what is actually rendered. */}
@@ -226,6 +226,6 @@ export function ImpactCards({
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
