@@ -418,7 +418,7 @@ export function ContactDialog({
         <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-sm">
           <Dialog.Close
             className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
-            disabled={formState === "submitting"}
+            disabled={formState === "submitting" || formState === "countdown"}
           >
             Close
           </Dialog.Close>
