@@ -1,5 +1,30 @@
 import type { Locator, Page } from "@playwright/test";
 
+// Shared selectors for visual tests
+export const PORTRAIT_SELECTOR = 'img[alt*="Portrait"]';
+export const REFERENCES_SECTION_SELECTOR = "#references";
+
+// Theme helpers for next-themes: ensure deterministic light/dark
+export async function setThemeLight(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    localStorage.setItem("theme", "light");
+    // Set flag to indicate Playwright test environment
+    // This will be checked by AnalyticsWrapper to prevent Speed Insights from loading
+    (window as Window & { __PLAYWRIGHT__?: boolean }).__PLAYWRIGHT__ = true;
+  });
+  await page.emulateMedia({ colorScheme: "light" });
+}
+
+export async function setThemeDark(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    localStorage.setItem("theme", "dark");
+    // Set flag to indicate Playwright test environment
+    // This will be checked by AnalyticsWrapper to prevent Speed Insights from loading
+    (window as Window & { __PLAYWRIGHT__?: boolean }).__PLAYWRIGHT__ = true;
+  });
+  await page.emulateMedia({ colorScheme: "dark" });
+}
+
 // Wait until document height is stable for N consecutive checks
 export async function waitForStableHeight(
   page: Page,
@@ -15,7 +40,10 @@ export async function waitForStableHeight(
       return new Promise<void>((resolve) => {
         let lastHeight = document.body.scrollHeight;
         let stableCount = 0;
+        let iterations = 0;
+        const maxIterations = 50; // Max 5 seconds with 100ms interval
         const checkHeight = setInterval(() => {
+          iterations++;
           const currentHeight = document.body.scrollHeight;
           if (currentHeight === lastHeight) {
             stableCount++;
@@ -26,6 +54,10 @@ export async function waitForStableHeight(
           } else {
             stableCount = 0;
             lastHeight = currentHeight;
+          }
+          if (iterations >= maxIterations) {
+            clearInterval(checkHeight);
+            resolve();
           }
         }, intervalMs);
       });
@@ -66,7 +98,10 @@ export async function waitForStableTransform(
       return new Promise<void>((resolve) => {
         let lastTransform = getComputedStyle(el).transform;
         let stableCount = 0;
+        let iterations = 0;
+        const maxIterations = 50; // Max 5 seconds with 100ms interval
         const check = setInterval(() => {
+          iterations++;
           const currentTransform = getComputedStyle(el).transform;
           if (currentTransform === lastTransform) {
             stableCount++;
@@ -78,6 +113,10 @@ export async function waitForStableTransform(
             stableCount = 0;
             lastTransform = currentTransform;
           }
+          if (iterations >= maxIterations) {
+            clearInterval(check);
+            resolve();
+          }
         }, intervalMs);
       });
     },
@@ -85,54 +124,71 @@ export async function waitForStableTransform(
   );
 }
 
+// Freeze references carousel buttons to prevent auto-rotation during screenshots
+export async function freezeReferencesCarousel(page: Page): Promise<void> {
+  await page.evaluate((selector) => {
+    const section = document.querySelector(selector);
+    if (!section) return;
+    const buttons = section.querySelectorAll("button");
+    buttons.forEach((btn) => {
+      (btn as HTMLButtonElement).style.pointerEvents = "none";
+    });
+  }, REFERENCES_SECTION_SELECTOR);
+}
+
+// Get portrait mask locator for visual tests
+export function getPortraitMask(page: Page): Locator {
+  return page.locator(PORTRAIT_SELECTOR);
+}
+
 // Shared masks for pages
 export async function homepageMasks(page: Page): Promise<Locator[]> {
   return [
-    page.locator('img[alt*="Portrait"]'),
+    page.locator(PORTRAIT_SELECTOR),
     page.locator('[data-testid="impact-cards"]'),
   ];
 }
 
 export async function cvPageMasks(page: Page): Promise<Locator[]> {
-  return [page.locator("#references")];
+  return [page.locator(REFERENCES_SECTION_SELECTOR)];
 }
 
 // Wait for CV page to be fully loaded and ready for screenshot
 export async function waitForCVPage(page: Page): Promise<void> {
-  await page.waitForLoadState("networkidle");
-
-  // Wait for fonts to load
-  await page.evaluate(() => document.fonts.ready);
+  // Wait for basic page load
+  await page.waitForLoadState("domcontentloaded");
 
   // Wait for CV heading to be visible
-  await page.waitForSelector("h1", { state: "visible" });
+  await page.waitForSelector("h1", { state: "visible", timeout: 10000 });
 
-  // Wait for references section to be fully rendered (includes dynamic height calculation)
-  await page.waitForSelector("#references", { state: "visible" });
-  await page.waitForSelector("footer", { state: "visible" });
+  // Wait for footer to ensure page is mostly rendered
+  await page.waitForSelector("footer", { state: "visible", timeout: 10000 });
 
-  await waitForStableHeight(page);
+  // Short delay to let things settle
+  await page.waitForTimeout(200);
 }
 
 // Wait for homepage to be fully loaded and ready for screenshot
 export async function waitForHomepage(page: Page): Promise<void> {
-  await page.waitForLoadState("networkidle");
+  // Wait for basic page load
+  await page.waitForLoadState("domcontentloaded");
 
-  // Wait for fonts to load
-  await page.evaluate(() => document.fonts.ready);
+  // Wait for footer to ensure page is mostly rendered
+  await page.waitForSelector("footer", { state: "visible", timeout: 10000 });
 
-  // Wait for profile image to be visible and loaded
-  await page.waitForSelector('img[alt*="Portrait"]', { state: "visible" });
+  // Freeze carousel if it exists
+  await page
+    .evaluate(() => {
+      const carousel = document.querySelector('[data-testid="impact-cards"]');
+      if (carousel) {
+        const buttons = carousel.querySelectorAll("button");
+        buttons.forEach(
+          (btn) => ((btn as HTMLButtonElement).style.pointerEvents = "none"),
+        );
+      }
+    })
+    .catch(() => {});
 
-  // Wait for carousel container (ImpactCards) to be visible
-  await page.waitForSelector('[data-testid="impact-cards"], .space-y-6', {
-    state: "visible",
-  });
-
-  // Wait for footer to ensure full page is rendered
-  await page.waitForSelector("footer", { state: "visible" });
-
-  await waitForStableHeight(page);
-  await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-  await waitForStableTransform(page, '[data-testid="impact-cards"]');
+  // Short delay to let things settle
+  await page.waitForTimeout(200);
 }

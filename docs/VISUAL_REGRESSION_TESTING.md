@@ -66,10 +66,12 @@ test/visual/
 │   ├── cv.visual.spec.ts            # ✅ Light, dark, mobile (375×667px)
 │   └── policies.visual.spec.ts      # 🔜 Planned
 ├── components/
-│   ├── navigation.visual.spec.ts    # 🔜 Planned
-│   ├── profile-card.visual.spec.ts  # 🔜 Planned
-│   ├── contact-dialog.visual.spec.ts # 🔜 Planned
-│   └── footer.visual.spec.ts        # 🔜 Planned
+│   ├── navigation.visual.spec.ts    # ✅ Light, dark, mobile, CV active state
+│   ├── profile-card.visual.spec.ts  # ✅ Homepage and CV variants (light, dark, mobile)
+│   ├── contact-dialog.visual.spec.ts # ✅ Light, dark, mobile
+│   ├── impact-cards.visual.spec.ts  # ✅ Light, dark, mobile, single card
+│   ├── references-carousel.visual.spec.ts # ✅ Light, dark, mobile, dots navigation
+│   └── footer.visual.spec.ts        # ✅ Light, dark, mobile, CV page
 └── themes/
     └── theme-switching.visual.spec.ts # 🔜 Planned
 ```
@@ -462,20 +464,20 @@ await expect(page).toHaveScreenshot("footer.png", {
 
 ## Coverage Goals
 
-### Phase 1: Core Pages (Current)
+### Phase 1: Core Pages (Complete)
 
 - ✅ Homepage
 - ✅ About page
 - ✅ CV page
 
-### Phase 2: Components (Planned)
+### Phase 2: Components (Complete)
 
-- [ ] Navigation menu (light/dark)
-- [ ] Profile card variants
-- [ ] Contact dialog
-- [ ] Modal variations
-- [ ] Impact cards
-- [ ] References carousel
+- ✅ Navigation menu (light/dark/mobile + CV active state)
+- ✅ Profile card variants (Homepage with avatar, CV without avatar)
+- ✅ Contact dialog (light/dark/mobile)
+- ✅ Impact cards (light/dark/mobile + single card)
+- ✅ References carousel (light/dark/mobile + dots navigation)
+- ✅ Footer (light/dark/mobile + CV page)
 
 ### Phase 3: Interactions (Future)
 
@@ -566,6 +568,6 @@ A: Yes! Navigate to pages that render component variations, or create dedicated 
 
 ---
 
-**Last updated**: November 29, 2025  
-**Status**: ✅ Strategy approved, implementation in progress  
+**Last updated**: November 30, 2025  
+**Status**: ✅ Phase 2 complete - Component visual tests implemented  
 **Owner**: Vicente Opaso

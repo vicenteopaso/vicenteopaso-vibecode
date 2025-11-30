@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-import { cvPageMasks, waitForCVPage } from "../utils";
+import {
+  cvPageMasks,
+  setThemeDark,
+  setThemeLight,
+  waitForCVPage,
+} from "../utils";
 
 test.describe("CV Page Visual Regression", () => {
   test("renders CV page in light mode", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 
@@ -16,7 +22,7 @@ test.describe("CV Page Visual Regression", () => {
   });
 
   test("renders CV page in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 

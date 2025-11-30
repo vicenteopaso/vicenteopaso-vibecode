@@ -208,7 +208,7 @@ export function ImpactCards({
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3" data-testid="impact-cards">
         {visibleCards.map(({ slot, content }) => {
           const isExiting = exitingSlot === slot;
           const stateClass = isExiting ? "impact-card--out" : "impact-card--in";

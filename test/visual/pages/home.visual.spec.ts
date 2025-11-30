@@ -1,9 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 import { homepageMasks, waitForHomepage } from "../utils";
+import { setThemeDark, setThemeLight } from "../utils";
 
 test.describe("Homepage Visual Regression", () => {
   test("renders homepage correctly in light mode", async ({ page }) => {
+    await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
@@ -18,7 +20,7 @@ test.describe("Homepage Visual Regression", () => {
   });
 
   test("renders homepage correctly in dark mode", async ({ page }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
 
