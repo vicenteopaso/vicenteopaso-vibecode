@@ -136,7 +136,7 @@ export function ProfileCard({
           <div className="space-y-4">
             {/* Name and CTA Button Row */}
             <div className="flex items-start justify-between gap-3">
-              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] sm:text-5xl text-center sm:text-left w-full sm:w-auto">
+              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] text-center sm:text-left w-full sm:w-auto">
                 {name}
               </h1>
               {showDownloadIcon && (
