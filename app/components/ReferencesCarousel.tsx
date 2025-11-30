@@ -133,7 +133,10 @@ export function ReferencesCarousel({
       </div>
 
       {references.length > 1 && (
-        <div className="flex items-center justify-center gap-2">
+        <div
+          className="flex items-center justify-center gap-2"
+          data-testid="references-carousel-dots"
+        >
           {references.map((_, i) => (
             <button
               key={i}
