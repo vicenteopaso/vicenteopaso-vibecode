@@ -52,11 +52,11 @@ export function Modal({
     onOpenChange?.(newOpen);
   };
 
-  // Determine if modal should be controlled or uncontrolled
-  const dialogProps =
-    open !== undefined
-      ? { open, onOpenChange: handleOpenChange }
-      : { onOpenChange: handleOpenChange };
+  // Always provide onOpenChange; only spread open if defined
+  const dialogProps = {
+    ...(open !== undefined && { open }),
+    onOpenChange: handleOpenChange,
+  };
 
   return (
     <Dialog.Root {...dialogProps}>
