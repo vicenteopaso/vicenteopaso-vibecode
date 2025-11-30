@@ -65,7 +65,10 @@ export function ProfileCard({
     if (!mounted) return;
     const list = displayTheme === "dark" ? DARK_PORTRAITS : LIGHT_PORTRAITS;
     if (list.length > 0) {
-      const index = Math.floor(Math.random() * list.length);
+      // In Playwright runs, keep image deterministic (index 0)
+      const index = process.env.PLAYWRIGHT
+        ? 0
+        : Math.floor(Math.random() * list.length);
       setPhotoIndex(index);
     }
   }, [mounted, displayTheme]);
@@ -108,14 +111,14 @@ export function ProfileCard({
     <section className={containerClasses}>
       {showAvatar && (
         <div className="flex justify-center sm:justify-start sm:basis-1/3">
-          <Avatar.Root className="relative inline-flex aspect-square h-36 w-36 sm:h-48 sm:w-48 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-slate-600 bg-slate-900 align-middle shadow-s">
+          <Avatar.Root className="relative inline-flex aspect-square h-36 w-36 sm:h-48 sm:w-48 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-slate-600 bg-slate-900 align-middle shadow-s pointer-events-none">
             {!hasImageError && (
               <Image
                 src={photo}
                 alt={`Portrait of ${name}`}
                 fill
                 sizes="(min-width: 640px) 12rem, 9rem"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover pointer-events-none"
                 priority
                 onError={() => setHasImageError(true)}
               />

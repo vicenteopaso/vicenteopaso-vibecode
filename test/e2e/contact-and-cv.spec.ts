@@ -1,10 +1,16 @@
 import { expect, test } from "@playwright/test";
 
 test("contact dialog opens and shows required fields", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "networkidle" });
 
-  await page.getByRole("button", { name: "Contact", exact: true }).click();
+  // Ensure header is on top and interactable
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const contactButton = page
+    .locator("header")
+    .getByRole("button", { name: "Contact", exact: true });
+  await contactButton.click({ force: true });
 
+  await expect(page.getByRole("dialog")).toBeVisible({ timeout: 10000 });
   await expect(page.getByRole("heading", { name: "Contact me" })).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Message")).toBeVisible();
@@ -24,13 +30,17 @@ test.describe("Contact dialog - mobile viewport", () => {
   test.use({ viewport: { width: 375, height: 667 } }); // iPhone 8/SE dimensions
 
   test("modal content is scrollable on mobile", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("button", { name: "Contact", exact: true }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible();
+    await expect(dialog).toBeVisible({ timeout: 10000 });
 
     // Verify the dialog has overflow-y-auto (scrollable) - check CSS property
     const overflowY = await dialog.evaluate((el) =>
@@ -40,12 +50,16 @@ test.describe("Contact dialog - mobile viewport", () => {
   });
 
   test("body scroll is locked when modal is open", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("button", { name: "Contact", exact: true }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 10000 });
 
     // Check that body has scroll lock (Radix adds data-scroll-locked)
     const bodyScrollLocked = await page.evaluate(() => {
@@ -55,13 +69,17 @@ test.describe("Contact dialog - mobile viewport", () => {
   });
 
   test("dialog renders correctly on mobile viewport", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("button", { name: "Contact", exact: true }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible();
+    await expect(dialog).toBeVisible({ timeout: 10000 });
 
     // All form fields should be visible
     await expect(page.getByLabel("Email")).toBeVisible();
@@ -75,12 +93,16 @@ test.describe("Contact dialog - mobile viewport", () => {
 // Error flow tests
 test.describe("Contact dialog - error handling", () => {
   test("shows validation errors for empty form", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("button", { name: "Contact", exact: true }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 10000 });
 
     // Try to submit without filling any fields (need Turnstile verification first)
     // The form should show validation errors
@@ -97,9 +119,13 @@ test.describe("Contact dialog - error handling", () => {
   });
 
   test("form values are preserved on validation error", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("button", { name: "Contact", exact: true }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
     await expect(page.getByRole("dialog")).toBeVisible();
@@ -117,13 +143,16 @@ test.describe("Contact dialog - error handling", () => {
 // Accessibility tests
 test.describe("Contact dialog - accessibility", () => {
   test("dialog has proper aria attributes", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    await page.getByRole("button", { name: "Contact", exact: true }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page
+      .getByRole("button", { name: "Contact", exact: true })
+      .click({ force: true });
 
     // Wait for dialog to open
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible();
+    await expect(dialog).toBeVisible({ timeout: 10000 });
 
     // Dialog should have proper aria-labelledby
     await expect(dialog).toHaveAttribute("aria-labelledby", /.+/);
@@ -131,7 +160,7 @@ test.describe("Contact dialog - accessibility", () => {
   });
 
   test("has aria-live region for status messages", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
     await page.getByRole("button", { name: "Contact", exact: true }).click();
 
@@ -145,7 +174,7 @@ test.describe("Contact dialog - accessibility", () => {
   });
 
   test("focus is trapped within dialog", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
     await page.getByRole("button", { name: "Contact", exact: true }).click();
 

@@ -102,6 +102,13 @@ export function ContactDialog({
   );
 
   useEffect(() => {
+    // In Playwright E2E, skip rendering Turnstile and set a fake token
+    if (process.env.PLAYWRIGHT) {
+      setTurnstileToken("test-token");
+      setIsChallengeVisible(false);
+      return;
+    }
+
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
     if (!siteKey) {

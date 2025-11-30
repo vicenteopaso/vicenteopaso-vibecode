@@ -46,7 +46,7 @@ export function Modal({
   onOpenChange,
 }: ModalProps) {
   const handleOpenChange = (newOpen: boolean) => {
-    if (newOpen && analyticsEventName) {
+    if (newOpen && analyticsEventName && !process.env.PLAYWRIGHT) {
       track(analyticsEventName, analyticsMetadata);
     }
     onOpenChange?.(newOpen);

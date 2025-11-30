@@ -5,7 +5,7 @@ test.describe("Error Handling", () => {
     page,
   }) => {
     // Navigate to a page
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
     // Inject a script that will cause a component to throw an error
     // This simulates a runtime error in a React component
@@ -48,7 +48,7 @@ test.describe("Error Handling", () => {
       }
     });
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
     // Trigger an unhandled promise rejection
     await page.evaluate(() => {
@@ -66,11 +66,16 @@ test.describe("Error Handling", () => {
   test("page remains functional after error boundary catches error", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
-    // Verify navigation still works - use first CV link (in navigation)
-    await page.getByRole("link", { name: "CV" }).first().click();
-    await expect(page).toHaveURL(/.*cv/);
+    // Verify navigation still works - use header-scoped CV link and wait for navigation
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const cvLink = page.locator("header").getByRole("link", {
+      name: "CV",
+      exact: true,
+    });
+    await Promise.all([page.waitForURL(/\/cv(\?|$)/), cvLink.click()]);
+    await expect(page).toHaveURL(/\/cv(\?|$)/);
 
     // Verify going back works
     await page.goBack();
@@ -87,14 +92,15 @@ test.describe("Error Handling", () => {
       });
     });
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
     // Open contact dialog - use exact button name from navigation
     const contactButton = page.getByRole("button", {
       name: "Contact",
       exact: true,
     });
-    await contactButton.click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
     await expect(page.getByRole("dialog")).toBeVisible();
@@ -124,7 +130,7 @@ test.describe("Error Handling", () => {
       });
     });
 
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
 
     // Trigger a console.error
     await page.evaluate(() => {

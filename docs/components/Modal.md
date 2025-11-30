@@ -10,15 +10,15 @@ The `Modal` component is a base dialog/modal primitive built on Radix UI Dialog.
 
 ## Props
 
-| Prop                 | Type                   | Default     | Description                                               |
-| -------------------- | ---------------------- | ----------- | --------------------------------------------------------- |
-| `trigger`            | `ReactNode`            | required    | Element that triggers the modal (typically a button)      |
-| `children`           | `ReactNode`            | required    | Modal content to display                                  |
-| `size`               | `"sm" \| "md" \| "lg"` | `"md"`      | Modal width preset                                        |
-| `analyticsEventName` | `string`               | `undefined` | Optional Vercel Analytics event name to track modal opens |
-| `analyticsMetadata`  | `AnalyticsMetadata`    | `undefined` | Optional metadata to send with the analytics event        |
-| `open`               | `boolean`              | `undefined` | Optional controlled open state                            |
-| `onOpenChange`       | `(open: boolean) => void` | `undefined` | Optional callback when open state changes              |
+| Prop                 | Type                      | Default     | Description                                               |
+| -------------------- | ------------------------- | ----------- | --------------------------------------------------------- |
+| `trigger`            | `ReactNode`               | required    | Element that triggers the modal (typically a button)      |
+| `children`           | `ReactNode`               | required    | Modal content to display                                  |
+| `size`               | `"sm" \| "md" \| "lg"`    | `"md"`      | Modal width preset                                        |
+| `analyticsEventName` | `string`                  | `undefined` | Optional Vercel Analytics event name to track modal opens |
+| `analyticsMetadata`  | `AnalyticsMetadata`       | `undefined` | Optional metadata to send with the analytics event        |
+| `open`               | `boolean`                 | `undefined` | Optional controlled open state                            |
+| `onOpenChange`       | `(open: boolean) => void` | `undefined` | Optional callback when open state changes                 |
 
 ### Size Presets
 
@@ -63,6 +63,7 @@ The modal component includes mobile-optimized features:
 ### Body Scroll Lock
 
 Radix Dialog automatically prevents background scrolling when the modal is open:
+
 - Adds `data-scroll-locked` attribute to body
 - Prevents touch scroll on body while modal is visible
 - Restores scroll behavior when modal closes
@@ -84,16 +85,13 @@ The modal supports both controlled and uncontrolled usage:
 ```tsx
 const [open, setOpen] = useState(false);
 
-<Modal
-  trigger={<button>Open</button>}
-  open={open}
-  onOpenChange={setOpen}
->
+<Modal trigger={<button>Open</button>} open={open} onOpenChange={setOpen}>
   <p>Content</p>
-</Modal>
+</Modal>;
 ```
 
 This is useful for:
+
 - Programmatic opening/closing (e.g., after form submission)
 - State synchronization with parent components
 - Auto-close with countdown timers

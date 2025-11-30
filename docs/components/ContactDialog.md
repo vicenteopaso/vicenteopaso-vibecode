@@ -57,17 +57,18 @@ idle → submitting → success → countdown → closed
        error → idle
 ```
 
-| State       | Description                           | UI Feedback                                      |
-| ----------- | ------------------------------------- | ------------------------------------------------ |
-| `idle`      | Form ready for input                  | Submit button disabled until CAPTCHA             |
-| `submitting`| Form data being sent                  | "Sending..." button, all inputs disabled         |
-| `success`   | Message sent successfully             | Green success message, form fields reset         |
-| `countdown` | Auto-close countdown in progress      | Shows "Closing in X seconds" with countdown      |
-| `closed`    | Modal closed after countdown          | Modal returns to idle state on next open         |
+| State        | Description                      | UI Feedback                                 |
+| ------------ | -------------------------------- | ------------------------------------------- |
+| `idle`       | Form ready for input             | Submit button disabled until CAPTCHA        |
+| `submitting` | Form data being sent             | "Sending..." button, all inputs disabled    |
+| `success`    | Message sent successfully        | Green success message, form fields reset    |
+| `countdown`  | Auto-close countdown in progress | Shows "Closing in X seconds" with countdown |
+| `closed`     | Modal closed after countdown     | Modal returns to idle state on next open    |
 
 ### Success Flow (v2.0)
 
 On successful submission:
+
 1. Form fields are immediately reset (cleared)
 2. All inputs and Send button are disabled (Close button remains enabled)
 3. Success message is displayed
@@ -79,6 +80,7 @@ On successful submission:
 ### Error Flow
 
 On validation or server error:
+
 - Form values are preserved (user doesn't lose data)
 - Inputs remain enabled
 - Turnstile is reset (new verification required)
