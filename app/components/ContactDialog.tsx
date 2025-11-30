@@ -53,7 +53,6 @@ export function ContactDialog({
   const [phone, setPhone] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [messageError, setMessageError] = useState<string | null>(null);
   const [isChallengeVisible, setIsChallengeVisible] = useState(false);
@@ -68,13 +67,18 @@ export function ContactDialog({
   // Countdown timer
   const [countdownSeconds, setCountdownSeconds] = useState(COUNTDOWN_SECONDS);
 
+  // Derive success message from formState instead of maintaining separate state
+  const successMessage =
+    formState === "success" || formState === "countdown"
+      ? "Message sent. I'll get back to you as soon as I can."
+      : null;
+
   // Reset the form to its initial state
   const resetForm = useCallback(() => {
     setEmail("");
     setPhone("");
     setMessage("");
     setError(null);
-    setSuccess(null);
     setEmailError(null);
     setMessageError(null);
     setFormState("idle");
@@ -180,7 +184,6 @@ export function ContactDialog({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSuccess(null);
     setEmailError(null);
     setMessageError(null);
 
@@ -232,8 +235,8 @@ export function ContactDialog({
         throw new Error(message);
       }
 
-      // Success: reset form fields, show success message
-      setSuccess("Message sent. I'll get back to you as soon as I can.");
+      // Success: reset form fields and transition to success state
+      // Success message is derived from formState
       setEmail("");
       setPhone("");
       setMessage("");
@@ -394,8 +397,8 @@ export function ContactDialog({
           className="text-[11px]"
         >
           {error ? <span className="text-red-400">{error}</span> : null}
-          {!error && success ? (
-            <span className="text-emerald-400">{success}</span>
+          {!error && successMessage ? (
+            <span className="text-emerald-400">{successMessage}</span>
           ) : null}
         </div>
 

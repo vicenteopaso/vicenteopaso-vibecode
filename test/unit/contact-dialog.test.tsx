@@ -225,6 +225,95 @@ describe("ContactDialog", () => {
       // Verify countdown starts at 10
       expect(screen.getByText(/closing in 10/i)).toBeInTheDocument();
     });
+
+    it("auto-closes modal when countdown reaches zero", async () => {
+      vi.useFakeTimers();
+
+      render(<ContactDialog />);
+      const trigger = screen.getByRole("button", { name: /contact/i });
+      fireEvent.click(trigger);
+
+      // Wait for Turnstile to initialize
+      await vi.advanceTimersByTimeAsync(300);
+
+      fillForm();
+
+      const form = screen.getByLabelText(/email/i).closest("form");
+      expect(form).not.toBeNull();
+
+      // Submit the form
+      fireEvent.submit(form as HTMLFormElement);
+
+      // Wait for success state and advance through countdown transition
+      await vi.advanceTimersByTimeAsync(1200);
+
+      // Verify countdown is visible
+      expect(screen.getByText(/closing in/i)).toBeInTheDocument();
+
+      // Advance through the full countdown (10 seconds + extra buffer)
+      await vi.advanceTimersByTimeAsync(11000);
+
+      // Modal should be closed (dialog should no longer be in the document)
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+      vi.useRealTimers();
+    });
+
+    it("reopening modal after success shows fresh form with enabled inputs", async () => {
+      vi.useFakeTimers();
+
+      render(<ContactDialog />);
+      const trigger = screen.getByRole("button", { name: /contact/i });
+      fireEvent.click(trigger);
+
+      // Wait for Turnstile to initialize
+      await vi.advanceTimersByTimeAsync(300);
+
+      fillForm();
+
+      const form = screen.getByLabelText(/email/i).closest("form");
+      expect(form).not.toBeNull();
+
+      // Submit the form
+      fireEvent.submit(form as HTMLFormElement);
+
+      // Advance to countdown state
+      await vi.advanceTimersByTimeAsync(1200);
+
+      // Verify we're in countdown
+      expect(screen.getByText(/closing in/i)).toBeInTheDocument();
+
+      // Advance through countdown to auto-close
+      await vi.advanceTimersByTimeAsync(11000);
+
+      // Modal should be closed
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+      // Reopen the modal
+      fireEvent.click(trigger);
+
+      // Wait for Turnstile to re-initialize
+      await vi.advanceTimersByTimeAsync(300);
+
+      // All inputs should be enabled and empty
+      const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const messageInput = screen.getByLabelText(
+        /message/i,
+      ) as HTMLTextAreaElement;
+      const phoneInput = screen.getByLabelText(/phone/i) as HTMLInputElement;
+
+      expect(emailInput.value).toBe("");
+      expect(messageInput.value).toBe("");
+      expect(phoneInput.value).toBe("");
+      expect(emailInput).not.toBeDisabled();
+      expect(messageInput).not.toBeDisabled();
+      expect(phoneInput).not.toBeDisabled();
+
+      // Countdown should not be visible
+      expect(screen.queryByText(/closing in/i)).not.toBeInTheDocument();
+
+      vi.useRealTimers();
+    });
   });
 
   describe("error flow", () => {
