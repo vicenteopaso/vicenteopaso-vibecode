@@ -88,12 +88,12 @@ export function ContactDialog({
   const handleOpenChange = useCallback(
     (open: boolean) => {
       setIsOpen(open);
-      // When modal is reopened, reset the form to initial state
-      if (open) {
+      // Only reset the form on open if previous state was "countdown" (after success)
+      if (open && formState === "countdown") {
         resetForm();
       }
     },
-    [resetForm],
+    [resetForm, formState],
   );
 
   useEffect(() => {
