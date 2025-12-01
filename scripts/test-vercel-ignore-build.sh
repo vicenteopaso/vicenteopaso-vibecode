@@ -100,7 +100,7 @@ fi
 
 # Test 4: Verify script handles missing git diff gracefully
 echo "Test 4: Invalid commit SHA handling"
-run_test "Invalid SHAs should handle gracefully" 1 "invalid_sha_123" "$CURRENT_SHA" || true
+run_test "Invalid SHAs should handle gracefully" 1 "invalid_sha_123" "$CURRENT_SHA"
 
 echo "========================================"
 echo "Test Results"
