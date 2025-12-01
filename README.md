@@ -523,6 +523,7 @@ For deeper context, see:
 - **[WARP.md](./WARP.md)** — Higher-level explanations and architecture overview
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Design decisions, tech stack justifications, and constraints
 - **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, build skip logic, and environment configuration
+- **[docs/VERCEL_BUILD_SKIP_SETUP.md](./docs/VERCEL_BUILD_SKIP_SETUP.md)** — Step-by-step Vercel build skip configuration guide
 - **[docs/ENGINEERING_STANDARDS.md](./docs/ENGINEERING_STANDARDS.md)** — Cross-cutting architecture, quality, a11y, security, and governance intent
 - **[docs/TESTING.md](./docs/TESTING.md)** — Comprehensive testing guide (unit, E2E, visual regression)
 - **[docs/VISUAL_REGRESSION_TESTING.md](./docs/VISUAL_REGRESSION_TESTING.md)** — Visual regression testing strategy with Playwright

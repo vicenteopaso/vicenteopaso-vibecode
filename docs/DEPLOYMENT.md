@@ -20,6 +20,8 @@ The application is deployed on **Vercel**, which provides:
 
 To optimize CI/CD resources and reduce unnecessary builds, the project uses a **Vercel Ignored Build Step** that intelligently determines when a build should be skipped.
 
+> **Setup Guide**: For step-by-step Vercel configuration instructions, see [VERCEL_BUILD_SKIP_SETUP.md](./VERCEL_BUILD_SKIP_SETUP.md).
+
 ### How It Works
 
 Vercel runs the script `scripts/vercel-ignore-build.sh` before starting a build. This script:
