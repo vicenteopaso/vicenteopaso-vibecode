@@ -53,6 +53,16 @@ This document defines how this repository is run and maintained.
   - PRs authored by `vicenteopaso` that are explicitly labeled `copilot-automerge`.
 - Release notes are drafted automatically based on PR labels (features, fixes, docs, dependencies, etc.).
 
+## Labels
+
+Repository labels are managed declaratively via `.github/labels.yml` and synced automatically by the `sync-labels` workflow. This ensures:
+
+- Required labels for Dependabot (`dependencies`, `github-actions`) always exist.
+- Labels for Release Drafter categorization are consistent.
+- New labels can be added by updating the configuration file.
+
+To add or modify labels, edit `.github/labels.yml` and merge to `main`. The workflow runs automatically on changes to that file or can be triggered manually.
+
 ## Branch & PR Policy
 
 - `main` is protected and changes land via Pull Requests.
