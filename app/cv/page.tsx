@@ -5,7 +5,7 @@ import path from "path";
 import React from "react";
 
 import { sanitizeRichText } from "../../lib/sanitize-html";
-import { cvDescription, siteConfig, ogCacheVersion } from "../../lib/seo";
+import { cvDescription, ogCacheVersion, siteConfig } from "../../lib/seo";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";

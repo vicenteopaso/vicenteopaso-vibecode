@@ -15,7 +15,7 @@ export const siteConfig = {
 export const cvDescription =
   "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.";
 
-const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
+export const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
 
 export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
   const base: Metadata = {
