@@ -11,7 +11,6 @@
 <br />
 <img src="./test/visual/pages/homepage-readme.visual.spec.ts-snapshots/homepage-readme-dark-darwin.png" />
 <br />
-<br />
 
 # Opa.so
 
