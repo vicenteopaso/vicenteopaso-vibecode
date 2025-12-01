@@ -295,7 +295,9 @@ export function ContactDialog({
         // From message field, check if form is valid before submitting
         const trimmedEmail = email.trim();
         const trimmedMessage = message.trim();
-        const isFormValid = trimmedEmail && trimmedMessage && turnstileToken;
+        const isEmailValid = emailInputRef.current?.validity.valid ?? false;
+        const isFormValid =
+          trimmedEmail && trimmedMessage && isEmailValid && turnstileToken;
 
         if (isFormValid && !isFormDisabled) {
           // Trigger form submission
