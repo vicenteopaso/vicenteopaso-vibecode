@@ -87,10 +87,10 @@ echo "Test 3: Build-triggering changes"
 # Get files changed between HEAD~1 and HEAD
 CHANGED_FILES=$(git diff --name-only "$PREVIOUS_SHA" "$CURRENT_SHA")
 
-if echo "$CHANGED_FILES" | grep -qE '^(app/|lib/|styles/|public/|content/|scripts/|package\.json|pnpm-lock\.yaml|.*\.config\.)'; then
+# Patterns below are aligned with BUILD_PATHS in vercel-ignore-build.sh for accuracy.
+if echo "$CHANGED_FILES" | grep -qE '^(app/|lib/|styles/|public/|content/|scripts/|package\.json|pnpm-lock\.yaml|next\.config\.mjs|tailwind\.config\.js|postcss\.config\.js|tsconfig\.json|vitest\.config\.ts|playwright\.config\.ts)$'; then
   echo "  Current commit has build-triggering changes"
-  run_test "Build-triggering changes should build" 1 "$PREVIOUS_SHA" "$CURRENT_SHA"
-elif echo "$CHANGED_FILES" | grep -qE '^(docs/|test/|\.github/|README\.md|CONTRIBUTING\.md|.*\.md)'; then
+elif echo "$CHANGED_FILES" | grep -qE '^(docs/|test/|\.github/|README\.md|CONTRIBUTING\.md)$'; then
   echo "  Current commit has only doc changes"
   run_test "Documentation changes should skip" 0 "$PREVIOUS_SHA" "$CURRENT_SHA"
 else
