@@ -11,7 +11,7 @@ export function Footer() {
         <p className="text-center lg:text-left">
           © {year} Vicente Opaso. Vibecoded with ♥️ and{" "}
           <a
-            href="https://warp.dev"
+            href="https://app.warp.dev/referral/8X3W39"
             target="_blank"
             rel="noreferrer"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"

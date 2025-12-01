@@ -15,7 +15,7 @@ None - The component is self-contained and generates the current year dynamicall
 ## Features
 
 - **Dynamic copyright year**: Automatically updates via `new Date().getFullYear()`
-- **Attribution links**: Credits to Warp and Cursor development tools
+- **Attribution links**: Credits to [Warp](https://app.warp.dev/referral/8X3W39) and Cursor development tools
 - **Policy navigation**: Links to legal and governance pages
 - **Responsive layout**: Stacks vertically on mobile, horizontal on desktop
 - **Semantic separators**: Visual separators hidden from screen readers
@@ -35,7 +35,7 @@ None - The component is self-contained and generates the current year dynamicall
 
 ### Attribution Links (External)
 
-1. **Warp** - `https://warp.dev`
+1. **Warp** - `https://app.warp.dev/referral/8X3W39`
    - Terminal application
    - Opens in new tab
    - `rel="noreferrer"` for security

@@ -81,8 +81,8 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 
 ## Development Tools
 
-- **Warp** — Terminal for development workflow
-- **Cursor** — AI-assisted code editor
+- **[Warp](https://app.warp.dev/referral/8X3W39)** — Terminal for development workflow
+- **[Cursor](https://cursor.com)** — AI-assisted code editor
 - **PostCSS 8.4** — CSS processing
 - **autoprefixer 10.4** — CSS vendor prefixing
 
