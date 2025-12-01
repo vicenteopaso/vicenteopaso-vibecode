@@ -7,7 +7,6 @@ import { sanitizeRichText } from "../../lib/sanitize-html";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";
-import { CV_PDF_PATH } from "../config/cv";
 
 export const dynamic = "force-static";
 
@@ -175,15 +174,6 @@ export default function CVPage() {
             showDownloadIcon
             sectionLinks={sectionLinks}
           />
-        </div>
-        <div className="mt-4 flex justify-center sm:hidden">
-          <a
-            href={CV_PDF_PATH}
-            download
-            className="text-sm font-medium text-[color:var(--link)] hover:text-[color:var(--link-hover)]"
-          >
-            Download CV
-          </a>
         </div>
       </header>
 

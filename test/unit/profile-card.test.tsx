@@ -103,8 +103,9 @@ describe("ProfileCard", () => {
       />,
     );
 
+    // Download CV link exists (may have multiple instances for mobile/desktop)
     expect(
-      screen.getByRole("link", { name: "Download CV (PDF)" }),
+      screen.getAllByRole("link", { name: "Download CV (PDF)" })[0],
     ).toBeInTheDocument();
 
     expect(

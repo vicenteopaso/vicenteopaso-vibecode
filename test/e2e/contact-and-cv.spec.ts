@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("contact dialog opens and shows required fields", async ({ page }) => {
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/", { waitUntil: "load" });
 
   // Ensure header is on top and interactable
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -30,7 +30,7 @@ test.describe("Contact dialog - mobile viewport", () => {
   test.use({ viewport: { width: 375, height: 667 } }); // iPhone 8/SE dimensions
 
   test("modal content is scrollable on mobile", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
     const contactButton = page
@@ -50,7 +50,7 @@ test.describe("Contact dialog - mobile viewport", () => {
   });
 
   test("body scroll is locked when modal is open", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
     const contactButton = page
@@ -69,7 +69,7 @@ test.describe("Contact dialog - mobile viewport", () => {
   });
 
   test("dialog renders correctly on mobile viewport", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
     const contactButton = page
@@ -93,7 +93,7 @@ test.describe("Contact dialog - mobile viewport", () => {
 // Error flow tests
 test.describe("Contact dialog - error handling", () => {
   test("shows validation errors for empty form", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
     const contactButton = page
@@ -119,7 +119,7 @@ test.describe("Contact dialog - error handling", () => {
   });
 
   test("form values are preserved on validation error", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
     const contactButton = page
@@ -143,7 +143,7 @@ test.describe("Contact dialog - error handling", () => {
 // Accessibility tests
 test.describe("Contact dialog - accessibility", () => {
   test("dialog has proper aria attributes", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
     await page
@@ -160,7 +160,7 @@ test.describe("Contact dialog - accessibility", () => {
   });
 
   test("has aria-live region for status messages", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.getByRole("button", { name: "Contact", exact: true }).click();
 
@@ -174,7 +174,7 @@ test.describe("Contact dialog - accessibility", () => {
   });
 
   test("focus is trapped within dialog", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     await page.getByRole("button", { name: "Contact", exact: true }).click();
 

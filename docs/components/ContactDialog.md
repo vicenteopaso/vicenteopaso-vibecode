@@ -102,15 +102,15 @@ On validation or server error:
 
 ### Keyboard Navigation
 
-| Key           | Action                                                       |
-| ------------- | ------------------------------------------------------------ |
-| `Tab`         | Navigate between form fields                                 |
-| `Shift+Tab`   | Navigate backwards                                           |
-| `Enter`       | From Email: Move to Phone field                              |
-|               | From Phone: Move to Message field                            |
+| Key           | Action                                                                                                               |
+| ------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `Tab`         | Navigate between form fields                                                                                         |
+| `Shift+Tab`   | Navigate backwards                                                                                                   |
+| `Enter`       | From Email: Move to Phone field                                                                                      |
+|               | From Phone: Move to Message field                                                                                    |
 |               | From Message: Submit form (if all required fields are non-empty; "valid" here means non-empty, not HTML5 validation) |
-| `Shift+Enter` | In Message field: Insert new line (textarea behavior)        |
-| `Escape`      | Close dialog                                                 |
+| `Shift+Enter` | In Message field: Insert new line (textarea behavior)                                                                |
+| `Escape`      | Close dialog                                                                                                         |
 
 ### Focus Management
 

@@ -5,7 +5,7 @@ test.describe("Error Handling", () => {
     page,
   }) => {
     // Navigate to a page
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     // Inject a script that will cause a component to throw an error
     // This simulates a runtime error in a React component
@@ -48,7 +48,7 @@ test.describe("Error Handling", () => {
       }
     });
 
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     // Trigger an unhandled promise rejection
     await page.evaluate(() => {
@@ -66,7 +66,7 @@ test.describe("Error Handling", () => {
   test("page remains functional after error boundary catches error", async ({
     page,
   }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     // Verify navigation still works - use header-scoped CV link and wait for navigation
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -92,7 +92,7 @@ test.describe("Error Handling", () => {
       });
     });
 
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     // Open contact dialog - use exact button name from navigation
     const contactButton = page.getByRole("button", {
@@ -130,7 +130,7 @@ test.describe("Error Handling", () => {
       });
     });
 
-    await page.goto("/", { waitUntil: "networkidle" });
+    await page.goto("/", { waitUntil: "load" });
 
     // Trigger a console.error
     await page.evaluate(() => {

@@ -134,7 +134,7 @@ export function ProfileCard({
       <div className={`${textClasses} ${textWidthClasses}`}>
         {isCvHeader ? (
           <div className="space-y-4">
-            {/* Name and CTA Button Row - stacked on mobile/small screens, row on medium+ */}
+            {/* Name and Download Button Row - centered on mobile, row on desktop */}
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:justify-between">
               <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] text-center sm:text-left">
                 {name}
@@ -143,7 +143,7 @@ export function ProfileCard({
                 <a
                   href={CV_PDF_PATH}
                   download
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="hidden shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex"
                   aria-label="Download CV (PDF)"
                 >
                   <DownloadIcon className="h-4 w-4" />
@@ -184,29 +184,37 @@ export function ProfileCard({
           <div className={actionsRowClasses}>
             {showLinks && (
               <div className={linksRowClasses}>
-                {/* Mobile: simple text links */}
-                <div className="flex items-center gap-2 sm:hidden">
-                  <Link href="/cv" className="cursor-pointer">
-                    Read CV
-                  </Link>
-                  <span className="px-2">|</span>
-                  <a href={CV_PDF_PATH} download className="cursor-pointer">
-                    Download CV
-                  </a>
-                </div>
+                {/* Mobile: button-style links (only on home page, not CV header) */}
+                {!isCvHeader && (
+                  <div className="flex w-full items-center gap-3 sm:hidden">
+                    <Link
+                      href="/cv"
+                      className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                    >
+                      Read CV
+                    </Link>
+                    <a
+                      href={CV_PDF_PATH}
+                      download
+                      className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                    >
+                      Download CV
+                    </a>
+                  </div>
+                )}
 
                 {/* Desktop: primary/secondary buttons */}
-                <div className="hidden items-center gap-3 sm:flex">
+                <div className="hidden items-center gap-3 sm:flex sm:flex-nowrap">
                   <Link
                     href="/cv"
-                    className="inline-flex items-center justify-center rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     Read CV
                   </Link>
                   <a
                     href={CV_PDF_PATH}
                     download
-                    className="inline-flex items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     Download CV
                   </a>
@@ -245,6 +253,20 @@ export function ProfileCard({
                           </span>
                         ))}
                       </nav>
+                    )}
+                    {/* Download CV button for mobile, above social icons */}
+                    {showDownloadIcon && (
+                      <div className="flex w-full justify-center py-3 sm:hidden">
+                        <a
+                          href={CV_PDF_PATH}
+                          download
+                          className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                          aria-label="Download CV (PDF)"
+                        >
+                          <DownloadIcon className="h-4 w-4" />
+                          <span>Download CV</span>
+                        </a>
+                      </div>
                     )}
                     <div className="flex items-center justify-center gap-2 sm:justify-end">
                       <a
