@@ -476,4 +476,79 @@ describe("ContactDialog", () => {
       expect(countdownRegion).toHaveAttribute("aria-atomic", "true");
     });
   });
+
+  describe("Enter key navigation", () => {
+    it("does not submit form when pressing Enter with invalid email format", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const email = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const message = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
+
+      // Fill form with invalid email (no @ symbol)
+      fireEvent.change(email, { target: { value: "test" } });
+      fireEvent.change(message, { target: { value: "Hello" } });
+
+      // Press Enter from the message field
+      fireEvent.keyDown(message, { key: "Enter", code: "Enter" });
+
+      // Form should NOT be submitted - verify fetch was never called
+      // and no success message appears after waiting for any potential async updates
+      await waitFor(() => {
+        expect(window.fetch).not.toHaveBeenCalled();
+      });
+
+      expect(screen.queryByText(/message sent/i)).not.toBeInTheDocument();
+    });
+
+    it("submits form when pressing Enter with valid email format", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const email = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const message = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
+
+      // Fill form with valid email
+      fireEvent.change(email, { target: { value: "test@example.com" } });
+      fireEvent.change(message, { target: { value: "Hello" } });
+
+      // Press Enter from the message field
+      fireEvent.keyDown(message, { key: "Enter", code: "Enter" });
+
+      // Form should be submitted - success message should appear
+      await waitFor(() => {
+        expect(
+          screen.getByText(/message sent/i, { exact: false }),
+        ).toBeInTheDocument();
+      });
+
+      expect(window.fetch).toHaveBeenCalled();
+    });
+
+    it("navigates from email to phone field on Enter", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const email = screen.getByLabelText(/email/i) as HTMLInputElement;
+      const phone = screen.getByLabelText(/phone/i) as HTMLInputElement;
+
+      // Focus email and press Enter
+      email.focus();
+      fireEvent.keyDown(email, { key: "Enter", code: "Enter" });
+
+      // Phone should now be focused
+      expect(document.activeElement).toBe(phone);
+    });
+
+    it("navigates from phone to message field on Enter", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const phone = screen.getByLabelText(/phone/i) as HTMLInputElement;
+      const message = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
+
+      // Focus phone and press Enter
+      phone.focus();
+      fireEvent.keyDown(phone, { key: "Enter", code: "Enter" });
+
+      // Message should now be focused
+      expect(document.activeElement).toBe(message);
+    });
+  });
 });
