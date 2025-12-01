@@ -1,0 +1,109 @@
+name: Documentation Issue
+description: Report an issue with documentation or suggest improvements
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the documentation!
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation is this about?
+      options:
+        - README
+        - Engineering Standards
+        - Architecture Documentation
+        - API Documentation
+        - Component Documentation
+        - Testing Documentation
+        - Deployment/CI Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue Description
+      description: What's wrong, missing, or unclear in the documentation?
+      placeholder: "Example: The deployment section doesn't explain how to set environment variables..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Where is this documentation located? (file path or URL)
+      placeholder: "Example: docs/DEPLOYMENT.md, line 45"
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+      description: How would you improve this documentation?
+      placeholder: "Example: Add a section explaining..."
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How significant is this documentation issue?
+      options:
+        - Low - Minor typo or formatting
+        - Medium - Missing information or unclear section
+        - High - Incorrect information or blocking issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context about the documentation issue.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have checked if this is already reported in existing issues
+          required: true
+        - label: I have verified this against the latest documentation in main branch
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Implementation Instructions for Contributors
+
+        **IMPORTANT**: When resolving this documentation issue, you must:
+
+        - Comply with Technical Governance:
+          - Follow [Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md)
+          - Maintain consistency with other governance documents
+          - Follow [Technical Governance](https://vicenteopaso.com/technical-governance) principles
+        - Maintain documentation structure:
+          - Follow existing documentation patterns and formatting
+          - Cross-reference related documents appropriately
+          - Update table of contents if adding new sections
+          - Include code examples where applicable
+          - Add links to related documentation
+        - Ensure quality and accuracy:
+          - Verify all code examples are correct and tested
+          - Check all links are valid and not broken
+          - Ensure technical accuracy of content
+          - Run `pnpm lint:fix` to format markdown correctly
+          - Run `pnpm format:fix` to apply consistent formatting
+        - Update related documentation:
+          - Check if other docs reference this content
+          - Update cross-references if document structure changes
+          - Update last modified date at end of document

@@ -24,7 +24,7 @@ This document defines how this repository is run and maintained.
 
 ## Change Process
 
-1. Open an issue or write a short rationale in the PR description.
+1. Open an issue using the appropriate template (bug report, feature request, or documentation) or write a short rationale in the PR description.
 2. Run linting, tests, and accessibility checks locally where possible.
 3. Use small, focused PRs that are easy to review.
 

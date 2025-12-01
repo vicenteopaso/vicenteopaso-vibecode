@@ -154,6 +154,16 @@ When creating or modifying UI components:
 - **User-friendly fallbacks**: Never expose stack traces or internal details to users; always show graceful error messages.
 - See `docs/ERROR_HANDLING.md` for comprehensive error handling patterns and debugging workflows.
 
+## Issues and Bug Reports
+
+Issues are enabled for bug reports, feature requests, and documentation improvements. Please use the appropriate issue template:
+
+- **Bug Report**: Report functional issues, errors, or unexpected behavior
+- **Feature Request**: Suggest new features or enhancements
+- **Documentation**: Report documentation issues or suggest improvements
+
+For security vulnerabilities, use GitHub Security Advisories instead of opening a public issue.
+
 ## CI, CodeQL, and auto-merge
 
 - CI and CodeQL run automatically on pushes and pull requests to `main`.
