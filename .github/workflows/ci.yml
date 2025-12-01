@@ -5,28 +5,51 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
-  build-and-test:
+  verify:
+    name: Build & Verify
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: "22.x"
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
       - name: Enable Corepack (pnpm)
         run: corepack enable
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Lint
         run: pnpm lint
+
       - name: Typecheck
         run: pnpm typecheck
+
       - name: Validate internal links
         run: pnpm validate:links
+
       - name: Unit tests
-        run: pnpm test --runInBand || pnpm test
+        run: pnpm test
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
       - name: E2E tests
-        run: |
-          npx playwright install --with-deps
-          pnpm test:e2e
+        run: pnpm test:e2e
+
+      - name: Build
+        run: pnpm build

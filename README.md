@@ -19,7 +19,6 @@
 
 [![CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml)
 [![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
-[![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
 [![Lighthouse CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml)
 [![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
 [![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
@@ -379,15 +378,19 @@ GitHub Actions workflows in `.github/workflows/` include:
 
 - `ci.yml`:
   - Runs on pushes to `main` and all PRs.
+  - Uses pnpm caching via `actions/setup-node` for faster builds.
+  - Includes concurrency control to cancel redundant runs.
   - Installs dependencies with pnpm, then runs:
     - `pnpm lint`
     - `pnpm typecheck`
     - `pnpm validate:links` (fails CI on broken internal markdown links)
-    - `pnpm test --runInBand || pnpm test`
+    - `pnpm test`
     - `npx playwright install --with-deps`
     - `pnpm test:e2e`
-- `lint.yml`:
-  - Runs `pnpm lint` on PRs.
+    - `pnpm build`
+- `coverage.yml`:
+  - Runs unit tests with coverage reporting.
+  - Uploads coverage artifacts.
 - `lighthouse-ci.yml`:
   - Runs Lighthouse CI audits on pushes to `main` and all PRs.
   - Enforces baseline quality thresholds:
@@ -399,16 +402,21 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Warns on threshold violations; fails CI only on critical SEO/structure issues.
   - Thresholds will be incrementally improved as issues are addressed.
 - `accessibility.yml`:
-  - Runs a basic accessibility audit: `pnpm node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
+  - Runs a basic accessibility audit: `pnpm audit:a11y` (fails when potential `<Image />` `alt` issues are detected).
+- `security-audit.yml`:
+  - Runs `pnpm audit` on dependency changes and weekly.
+  - Creates GitHub issues for detected vulnerabilities.
 - `codeql.yml`:
   - Runs GitHub CodeQL analysis (JavaScript/TypeScript) on pushes, PRs targeting `main`, and a weekly schedule.
-- `release-drafter.yml` and `Release Drafter` workflow:
-  - Build a draft changelog and release notes based on PR labels (features, fixes, docs, maintenance).
+- `release-drafter.yml`:
+  - Builds a draft changelog and release notes based on PR labels (features, fixes, docs, maintenance).
 - `automerge.yml`:
   - Listens for completed `CI` and `CodeQL` workflow runs.
   - Automatically merges certain PRs when all required checks pass and branch protection allows it:
     - Dependabot PRs authored by `dependabot[bot]` with the `dependencies` label.
     - PRs authored by `vicenteopaso` with the `copilot-automerge` label (intended for safe Copilot-assisted changes).
+- `sync-labels.yml`:
+  - Syncs repository labels from `.github/labels.yml` configuration.
 
 Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Node dependencies (via pnpm) and GitHub Actions updates, labeling them as `dependencies` (and `github-actions` for workflow updates) and grouping minor/patch bumps.
 
