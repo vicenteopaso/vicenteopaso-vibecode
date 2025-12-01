@@ -203,11 +203,20 @@ export function ContactDialog({
     const trimmedMessage = message.trim();
     const trimmedPhone = phone.trim();
 
-    if (!trimmedEmail || !trimmedMessage) {
-      if (!trimmedEmail) {
+    // Check for empty required fields
+    const hasEmptyEmail = !trimmedEmail;
+    const hasEmptyMessage = !trimmedMessage;
+    // Check HTML5 email format validation
+    const hasInvalidEmail =
+      trimmedEmail && !(emailInputRef.current?.validity.valid ?? false);
+
+    if (hasEmptyEmail || hasEmptyMessage || hasInvalidEmail) {
+      if (hasEmptyEmail) {
         setEmailError("Please provide an email address.");
+      } else if (hasInvalidEmail) {
+        setEmailError("Please provide a valid email address.");
       }
-      if (!trimmedMessage) {
+      if (hasEmptyMessage) {
         setMessageError("Please provide a message.");
       }
       setError("Please fix the errors highlighted below.");
@@ -295,6 +304,7 @@ export function ContactDialog({
         // From message field, check if form is valid before submitting
         const trimmedEmail = email.trim();
         const trimmedMessage = message.trim();
+        // Check HTML5 email validation in addition to non-empty checks
         const isEmailValid = emailInputRef.current?.validity.valid ?? false;
         const isFormValid =
           trimmedEmail && trimmedMessage && isEmailValid && turnstileToken;
