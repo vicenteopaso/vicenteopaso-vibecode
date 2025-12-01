@@ -1,0 +1,77 @@
+# Repository Labels Configuration
+# This file defines all labels used in this repository.
+# Labels are synced automatically via the sync-labels workflow.
+#
+# Required by Dependabot:
+# - dependencies: Applied to dependency update PRs
+# - github-actions: Applied to GitHub Actions workflow update PRs
+#
+# Used by Release Drafter for categorizing changelog entries.
+# See .github/release-drafter.yml for the mapping.
+
+# Dependabot labels (required for dependabot.yml)
+- name: dependencies
+  description: Pull requests that update a dependency file
+  color: "0366d6"
+
+- name: github-actions
+  description: Pull requests that update GitHub Actions workflows
+  color: "000000"
+
+# Feature labels
+- name: enhancement
+  description: New feature or request
+  color: "a2eeef"
+
+- name: feature
+  description: New feature
+  color: "1d76db"
+
+# Bug labels
+- name: bug
+  description: Something isn't working
+  color: "d73a4a"
+
+- name: fix
+  description: Bug fix
+  color: "d73a4a"
+
+# Documentation labels
+- name: documentation
+  description: Improvements or additions to documentation
+  color: "0075ca"
+
+- name: docs
+  description: Documentation changes
+  color: "0075ca"
+
+# Maintenance labels
+- name: chore
+  description: Maintenance or housekeeping tasks
+  color: "fef2c0"
+
+- name: refactor
+  description: Code refactoring without functionality changes
+  color: "fef2c0"
+
+# Version control labels (for release drafter)
+- name: major
+  description: Major version bump
+  color: "b60205"
+
+- name: minor
+  description: Minor version bump
+  color: "fbca04"
+
+- name: patch
+  description: Patch version bump
+  color: "0e8a16"
+
+# Workflow labels
+- name: skip-changelog
+  description: Exclude from release notes
+  color: "ededed"
+
+- name: copilot-automerge
+  description: Auto-merge when all checks pass (copilot PRs)
+  color: "5319e7"
