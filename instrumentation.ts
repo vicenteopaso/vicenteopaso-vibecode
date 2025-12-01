@@ -14,7 +14,7 @@ export async function register() {
 
   // Ensure the Sentry SDK is loaded and initialized for the appropriate
   // runtime. The client-side configuration is handled via
-  // `sentry.client.config.ts` and `withSentryConfig` in next.config.mjs.
+  // `instrumentation-client.ts` and `withSentryConfig` in next.config.mjs.
 
   if (process.env.NEXT_RUNTIME === "nodejs") {
     // Node.js (server) runtime
@@ -26,3 +26,11 @@ export async function register() {
     await import("./sentry.edge.config");
   }
 }
+
+/**
+ * Hook to capture errors from nested React Server Components.
+ * This is called automatically by Next.js when an error occurs during server rendering.
+ *
+ * @see https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#errors-from-nested-react-server-components
+ */
+export const onRequestError = Sentry.captureRequestError;
