@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
+import React from "react";
 
-import { siteConfig } from "../../lib/seo";
+import { cvDescription, siteConfig } from "../../lib/seo";
 
 export const runtime = "edge";
 export const revalidate = 3600; // 1 hour
@@ -14,8 +15,6 @@ export const contentType = "image/png";
 
 export default function Image() {
   const title = `${siteConfig.name} · CV`;
-  const subtitle =
-    "Selected leadership roles, engineering impact and design systems work.";
 
   return new ImageResponse(
     <div
@@ -79,7 +78,7 @@ export default function Image() {
               color: "#cbd5f5",
             }}
           >
-            {subtitle}
+            {cvDescription}
           </p>
         </div>
       </div>
