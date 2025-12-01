@@ -86,10 +86,20 @@ echo ""
 
 # Check if any build-triggering path was modified
 for path in "${BUILD_PATHS[@]}"; do
-  if echo "$CHANGED_FILES" | grep -q "^$path"; then
-    echo "✓ Build-impacting path changed: $path"
-    echo "Building."
-    exit 1
+  if [[ "$path" == */ ]]; then
+    # Directory: match any file under this directory
+    if echo "$CHANGED_FILES" | grep -qE "^${path//\//\\/}"; then
+      echo "✓ Build-impacting path changed: $path"
+      echo "Building."
+      exit 1
+    fi
+  else
+    # File: match only the exact file at the root
+    if echo "$CHANGED_FILES" | grep -qE "^${path//\//\\/}\$"; then
+      echo "✓ Build-impacting path changed: $path"
+      echo "Building."
+      exit 1
+    fi
   fi
 done
 
