@@ -19,7 +19,6 @@
 
 [![CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml)
 [![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
-[![Lint](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lint.yml)
 [![Lighthouse CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml)
 [![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
 [![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
@@ -406,15 +405,19 @@ GitHub Actions workflows in `.github/workflows/` include:
 
 - `ci.yml`:
   - Runs on pushes to `main` and all PRs.
+  - Uses pnpm caching via `actions/setup-node` for faster builds.
+  - Includes concurrency control to cancel redundant runs.
   - Installs dependencies with pnpm, then runs:
     - `pnpm lint`
     - `pnpm typecheck`
     - `pnpm validate:links` (fails CI on broken internal markdown links)
-    - `pnpm test --runInBand || pnpm test`
+    - `pnpm test`
     - `npx playwright install --with-deps`
     - `pnpm test:e2e`
-- `lint.yml`:
-  - Runs `pnpm lint` on PRs.
+    - `pnpm build`
+- `coverage.yml`:
+  - Runs unit tests with coverage reporting.
+  - Uploads coverage artifacts.
 - `lighthouse-ci.yml`:
   - Runs Lighthouse CI audits on pushes to `main` and all PRs.
   - Enforces baseline quality thresholds:
@@ -426,16 +429,21 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Warns on threshold violations; fails CI only on critical SEO/structure issues.
   - Thresholds will be incrementally improved as issues are addressed.
 - `accessibility.yml`:
-  - Runs a basic accessibility audit: `pnpm node scripts/audit-a11y.mjs` (fails when potential `<Image />` `alt` issues are detected).
+  - Runs a basic accessibility audit: `pnpm audit:a11y` (fails when potential `<Image />` `alt` issues are detected).
+- `security-audit.yml`:
+  - Runs `pnpm audit` on dependency changes and weekly.
+  - Creates GitHub issues for detected vulnerabilities.
 - `codeql.yml`:
   - Runs GitHub CodeQL analysis (JavaScript/TypeScript) on pushes, PRs targeting `main`, and a weekly schedule.
-- `release-drafter.yml` and `Release Drafter` workflow:
-  - Build a draft changelog and release notes based on PR labels (features, fixes, docs, maintenance).
+- `release-drafter.yml`:
+  - Builds a draft changelog and release notes based on PR labels (features, fixes, docs, maintenance).
 - `automerge.yml`:
   - Listens for completed `CI` and `CodeQL` workflow runs.
   - Automatically merges certain PRs when all required checks pass and branch protection allows it:
     - Dependabot PRs authored by `dependabot[bot]` with the `dependencies` label.
     - PRs authored by `vicenteopaso` with the `copilot-automerge` label (intended for safe Copilot-assisted changes).
+- `sync-labels.yml`:
+  - Syncs repository labels from `.github/labels.yml` configuration.
 
 Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Node dependencies (via pnpm) and GitHub Actions updates, labeling them as `dependencies` (and `github-actions` for workflow updates) and grouping minor/patch bumps.
 
@@ -445,17 +453,27 @@ Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Node
 
 ## Labels
 
-Common labels used in this repository include:
+Labels are managed via `.github/labels.yml` and synced automatically by the `sync-labels.yml` workflow.
 
-- `dependencies` – Dependency update PRs (primarily from Dependabot), eligible for auto-merge when checks pass.
-- `github-actions` – Updates to GitHub Actions workflows (also opened by Dependabot).
-- `copilot-automerge` – Opt-in label for PRs authored by `vicenteopaso` that are safe to auto-merge when all required checks pass.
-- `enhancement`, `feature` – New features or improvements (used by Release Drafter).
+### Category labels
+
+- `enhancement`, `feature` – New features or improvements.
 - `bug`, `fix` – Bug fixes.
 - `documentation`, `docs` – Documentation-only changes.
 - `chore`, `refactor` – Maintenance and refactoring changes.
-- `dependencies` (again) – Also used by Release Drafter to categorize maintenance changes.
-- `skip-changelog` – Exclude a PR from Release Drafter’s generated release notes.
+
+### Automation labels
+
+- `dependencies` – Dependency update PRs (applied by Dependabot), also used by Release Drafter.
+- `github-actions` – GitHub Actions workflow updates (applied by Dependabot).
+- `copilot-automerge` – Opt-in label for PRs authored by `vicenteopaso` that are safe to auto-merge when all required checks pass.
+- `skip-changelog` – Exclude a PR from Release Drafter's generated release notes.
+
+### Version labels (Release Drafter)
+
+- `major` – Triggers a major version bump.
+- `minor` – Triggers a minor version bump (also triggered by `enhancement`, `feature`).
+- `patch` – Triggers a patch version bump (also triggered by `bug`, `fix`, `chore`, `docs`, `dependencies`).
 
 ---
 
@@ -470,7 +488,7 @@ To get the most out of CI, CodeQL, Dependabot, and auto-merge:
      - The `CodeQL` job from `codeql.yml`.
    - Enable **Allow auto-merge**.
 2. Keep the following labels available in the repository:
-   - `dependencies`, `github-actions`, `copilot-automerge`, `enhancement`, `feature`, `bug`, `fix`, `documentation`, `docs`, `chore`, `refactor`, `skip-changelog`.
+   - `dependencies`, `github-actions`, `copilot-automerge`, `enhancement`, `feature`, `bug`, `fix`, `documentation`, `docs`, `chore`, `refactor`, `skip-changelog`, `major`, `minor`, `patch`.
 3. When opening PRs:
    - Dependabot will label its own PRs (`dependencies`, `github-actions`) automatically.
    - For your own PRs that are safe for auto-merge, add the `copilot-automerge` label.

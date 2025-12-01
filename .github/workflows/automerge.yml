@@ -5,9 +5,19 @@ on:
     workflows: ["CI", "CodeQL"]
     types: [completed]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   automerge:
+    name: Auto Merge
     runs-on: ubuntu-latest
+
     steps:
       - name: Auto-merge Dependabot and Copilot-labeled PRs when checks pass
         env:

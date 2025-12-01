@@ -3,11 +3,15 @@ name: CodeQL
 on:
   push:
     branches:
-      - "**" # run on all branches, including Copilot-created ones
+      - "**"
   pull_request:
-    branches: ["main"]
+    branches: [main]
   schedule:
-    - cron: "0 9 * * 1" # Weekly, Mondays 09:00 UTC
+    - cron: "0 9 * * 1" # Weekly on Mondays at 9 AM UTC
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -19,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
