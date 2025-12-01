@@ -134,16 +134,16 @@ export function ProfileCard({
       <div className={`${textClasses} ${textWidthClasses}`}>
         {isCvHeader ? (
           <div className="space-y-4">
-            {/* Name and CTA Button Row */}
-            <div className="flex items-start justify-between gap-3">
-              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] text-center sm:text-left w-full sm:w-auto">
+            {/* Name and CTA Button Row - stacked on mobile/small screens, row on medium+ */}
+            <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] text-center sm:text-left">
                 {name}
               </h1>
               {showDownloadIcon && (
                 <a
                   href={CV_PDF_PATH}
                   download
-                  className="hidden rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex sm:items-center sm:gap-1.5 shrink-0"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   aria-label="Download CV (PDF)"
                 >
                   <DownloadIcon className="h-4 w-4" />
