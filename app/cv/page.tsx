@@ -5,14 +5,12 @@ import path from "path";
 import React from "react";
 
 import { sanitizeRichText } from "../../lib/sanitize-html";
-import { cvDescription, siteConfig } from "../../lib/seo";
+import { cvDescription, siteConfig, ogCacheVersion } from "../../lib/seo";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";
 
 export const dynamic = "force-static";
-
-const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
 
 export const metadata: Metadata = {
   title: "CV",
