@@ -453,17 +453,27 @@ Dependabot is configured in `.github/dependabot.yml` to open weekly PRs for Node
 
 ## Labels
 
-Common labels used in this repository include:
+Labels are managed via `.github/labels.yml` and synced automatically by the `sync-labels.yml` workflow.
 
-- `dependencies` – Dependency update PRs (primarily from Dependabot), eligible for auto-merge when checks pass.
-- `github-actions` – Updates to GitHub Actions workflows (also opened by Dependabot).
-- `copilot-automerge` – Opt-in label for PRs authored by `vicenteopaso` that are safe to auto-merge when all required checks pass.
-- `enhancement`, `feature` – New features or improvements (used by Release Drafter).
+### Category labels
+
+- `enhancement`, `feature` – New features or improvements.
 - `bug`, `fix` – Bug fixes.
 - `documentation`, `docs` – Documentation-only changes.
 - `chore`, `refactor` – Maintenance and refactoring changes.
-- `dependencies` (again) – Also used by Release Drafter to categorize maintenance changes.
-- `skip-changelog` – Exclude a PR from Release Drafter’s generated release notes.
+
+### Automation labels
+
+- `dependencies` – Dependency update PRs (applied by Dependabot), also used by Release Drafter.
+- `github-actions` – GitHub Actions workflow updates (applied by Dependabot).
+- `copilot-automerge` – Opt-in label for PRs authored by `vicenteopaso` that are safe to auto-merge when all required checks pass.
+- `skip-changelog` – Exclude a PR from Release Drafter's generated release notes.
+
+### Version labels (Release Drafter)
+
+- `major` – Triggers a major version bump.
+- `minor` – Triggers a minor version bump (also triggered by `enhancement`, `feature`).
+- `patch` – Triggers a patch version bump (also triggered by `bug`, `fix`, `chore`, `docs`, `dependencies`).
 
 ---
 
@@ -478,7 +488,7 @@ To get the most out of CI, CodeQL, Dependabot, and auto-merge:
      - The `CodeQL` job from `codeql.yml`.
    - Enable **Allow auto-merge**.
 2. Keep the following labels available in the repository:
-   - `dependencies`, `github-actions`, `copilot-automerge`, `enhancement`, `feature`, `bug`, `fix`, `documentation`, `docs`, `chore`, `refactor`, `skip-changelog`.
+   - `dependencies`, `github-actions`, `copilot-automerge`, `enhancement`, `feature`, `bug`, `fix`, `documentation`, `docs`, `chore`, `refactor`, `skip-changelog`, `major`, `minor`, `patch`.
 3. When opening PRs:
    - Dependabot will label its own PRs (`dependencies`, `github-actions`) automatically.
    - For your own PRs that are safe for auto-merge, add the `copilot-automerge` label.
