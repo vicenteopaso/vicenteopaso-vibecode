@@ -9,6 +9,7 @@ function createSentryMock() {
     getCurrentHub: vi.fn(() => ({
       getClient: () => null,
     })),
+    captureRequestError: vi.fn(),
   };
 }
 
