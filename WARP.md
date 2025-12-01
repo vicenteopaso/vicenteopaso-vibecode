@@ -1,6 +1,6 @@
 # WARP.md
 
-This file provides guidance to WARP (warp.dev) when working with code in this repository.
+This file provides guidance to WARP ([Warp](https://app.warp.dev/referral/8X3W39)) when working with code in this repository.
 
 ## Tooling & common commands
 

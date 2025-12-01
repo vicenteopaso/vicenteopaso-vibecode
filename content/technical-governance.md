@@ -16,7 +16,7 @@ Rather than writing code first and documenting later, this project inverts the t
 1. **Define Intent** — Engineering standards, architecture decisions, and governance principles are captured in markdown documents
 2. **Establish Governance** — Clear rules, quality gates, and decision-making frameworks are documented
 3. **Build with Guidance** — Code is written with these documents as the source of truth, ensuring consistency and alignment
-4. **AI as Co-Pilot** — AI tools (like Cursor) use these documents to understand context, make informed suggestions, and maintain architectural integrity
+4. **AI as Co-Pilot** — AI tools (like [Cursor](https://cursor.com)) use these documents to understand context, make informed suggestions, and maintain architectural integrity
 
 ## Spec-Driven Development (SDD) in Practice
 

@@ -1,4 +1,26 @@
-# Vicente Opaso – Personal Site & CV
+<!-- CI -->
+<div align="center">
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main" />
+</div>
+<br />
+<img src="./test/visual/pages/homepage-readme.visual.spec.ts-snapshots/homepage-readme-dark-darwin.png" />
+<br />
+
+# Opa.so
+
+This repo contains the source for my personal site and CV, built with Next.js App Router and a content-first approach. It renders a Home page at the root (`/`) and a structured CV at `/cv` from markdown/JSON content, and includes a spam‑protected contact flow using Cloudflare Turnstile and Formspree.
+
+The project is optimized for readability, accessibility, and maintainability, with a focus on composable UI, modern tooling, and strong Developer Experience.
+
+---
+
+## Tech stack
 
 <!-- Stack -->
 
@@ -12,26 +34,6 @@
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=000)
 ![pnpm](https://img.shields.io/badge/pnpm-4B3F72?logo=pnpm&logoColor=white)
-
----
-
-<!-- CI -->
-
-[![CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/ci.yml)
-[![Coverage](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/coverage.yml)
-[![Lighthouse CI](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/lighthouse-ci.yml)
-[![A11y](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml)
-[![Security Audit](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml)
-[![CodeQL](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml)
-[![Dependabot](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates)
-
-This repo contains the source for my personal site and CV, built with Next.js App Router and a content-first approach. It renders a Home page at the root (`/`) and a structured CV at `/cv` from markdown/JSON content, and includes a spam‑protected contact flow using Cloudflare Turnstile and Formspree.
-
-The project is optimized for readability, accessibility, and maintainability, with a focus on composable UI, modern tooling, and strong Developer Experience.
-
----
-
-## Tech stack
 
 - **Framework**: Next.js (App Router, `app/` directory, typed routes)
 - **Language**: TypeScript, React 18

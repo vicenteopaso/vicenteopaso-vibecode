@@ -117,6 +117,59 @@ describe("ContactDialog", () => {
     ).toBeInTheDocument();
   });
 
+  it("logs error when Turnstile site key is missing", async () => {
+    // eslint-disable-next-line no-console
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    delete process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+    render(<ContactDialog />);
+    const trigger = screen.getByRole("button", { name: /contact/i });
+    fireEvent.click(trigger);
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Turnstile site key is not configured"),
+      );
+    });
+
+    consoleErrorSpy.mockRestore();
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY = "test-site-key";
+  });
+
+  it("waits for Turnstile script to load with retry mechanism", async () => {
+    // Start without turnstile loaded
+    window.turnstile = undefined;
+
+    render(<ContactDialog />);
+    const trigger = screen.getByRole("button", { name: /contact/i });
+    fireEvent.click(trigger);
+
+    // Wait a bit, then load Turnstile
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
+    window.turnstile = {
+      render: vi.fn((_, options: { callback: (token: string) => void }) => {
+        options.callback("test-token");
+      }) as (
+        container: HTMLElement,
+        options: { callback: (token: string) => void },
+      ) => void,
+      reset: vi.fn(),
+    };
+
+    // Wait for Turnstile to be detected and rendered
+    await waitFor(
+      () => {
+        expect(
+          screen.getByText(/cloudflare turnstile verification/i),
+        ).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
+  });
+
   it("renders all form fields correctly", async () => {
     await openDialogAndWaitForTurnstile();
 
@@ -500,6 +553,62 @@ describe("ContactDialog", () => {
       expect(screen.queryByText(/message sent/i)).not.toBeInTheDocument();
     });
 
+    it("allows navigation with Enter in phone field", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const phone = screen.getByLabelText(/phone/i) as HTMLInputElement;
+
+      // Press Enter in phone field
+      fireEvent.keyDown(phone, { key: "Enter", code: "Enter" });
+
+      // No submission should occur
+      expect(window.fetch).not.toHaveBeenCalled();
+    });
+
+    it("allows multi-line text in message field with Shift+Enter", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const message = screen.getByLabelText(/message/i) as HTMLTextAreaElement;
+
+      fireEvent.change(message, { target: { value: "Line 1" } });
+      fireEvent.keyDown(message, {
+        key: "Enter",
+        code: "Enter",
+        shiftKey: true,
+      });
+
+      // No form submission
+      expect(window.fetch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("email field keyboard navigation", () => {
+    it("prevents Enter key from submitting when email is empty", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const email = screen.getByLabelText(/email/i) as HTMLInputElement;
+
+      // Press Enter without filling email
+      fireEvent.keyDown(email, { key: "Enter", code: "Enter" });
+
+      // No submission
+      expect(window.fetch).not.toHaveBeenCalled();
+    });
+
+    it("prevents Enter key from submitting when email format is invalid", async () => {
+      await openDialogAndWaitForTurnstile();
+
+      const email = screen.getByLabelText(/email/i) as HTMLInputElement;
+
+      fireEvent.change(email, { target: { value: "invalid-email" } });
+      fireEvent.keyDown(email, { key: "Enter", code: "Enter" });
+
+      // No submission
+      expect(window.fetch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("form navigation and focus", () => {
     it("submits form when pressing Enter with valid email format", async () => {
       await openDialogAndWaitForTurnstile();
 
