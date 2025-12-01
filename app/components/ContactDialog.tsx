@@ -305,7 +305,7 @@ export function ContactDialog({
         const trimmedEmail = email.trim();
         const trimmedMessage = message.trim();
         // Check HTML5 email validation in addition to non-empty checks
-        const isEmailValid = emailInputRef.current?.validity.valid ?? false;
+        const isEmailValid = emailInputRef.current?.validity.valid ?? true;
         const isFormValid =
           trimmedEmail && trimmedMessage && isEmailValid && turnstileToken;
 
