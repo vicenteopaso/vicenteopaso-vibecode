@@ -208,7 +208,7 @@ export function ContactDialog({
     const hasEmptyMessage = !trimmedMessage;
     // Check HTML5 email format validation
     const hasInvalidEmail =
-      trimmedEmail && !(emailInputRef.current?.validity.valid ?? true);
+      trimmedEmail && !(emailInputRef.current?.validity.valid ?? false);
 
     if (hasEmptyEmail || hasEmptyMessage || hasInvalidEmail) {
       if (hasEmptyEmail) {
