@@ -260,6 +260,21 @@ pnpm start
 pnpm sitemap
 ```
 
+### Composite scripts
+
+These are designed for common developer workflows.
+
+```bash
+# Full local reset: wipes environment (node_modules, caches) and rebuilds
+pnpm reset
+
+# Full local verification: runs everything needed to guarantee correctness (mirrors CI)
+pnpm verify
+```
+
+- **`reset`** — Cleans all build artifacts and caches, reinstalls dependencies, and rebuilds the project. Use after upgrading dependencies, switching branches with lockfile changes, or when the environment is in an inconsistent state.
+- **`verify`** — Runs the full verification pipeline: install → lint → typecheck → validate:links → test → test:e2e → build. Use before pushing changes to ensure local correctness matches CI expectations. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
+
 ### Content & build
 
 ```bash
@@ -286,11 +301,17 @@ pnpm format
 pnpm format:fix
 ```
 
-### Content & quality checks
+### Quality checks
 
 ```bash
 # Validate internal markdown links against known app routes
 pnpm validate:links
+
+# Run accessibility audit
+pnpm audit:a11y
+
+# Run security audit (high+ vulnerabilities)
+pnpm audit:security
 
 # Run Lighthouse CI audit
 # ⚠️  This command is designed for CI and will fail locally
@@ -316,6 +337,15 @@ pnpm test:watch
 # End-to-end tests (Playwright)
 pnpm test:e2e
 
+# End-to-end tests with UI (Playwright)
+pnpm test:e2e:ui
+
+# Visual regression tests
+pnpm test:visual
+
+# Update visual regression baselines
+pnpm test:visual:update
+
 # Generate unit test coverage reports
 pnpm coverage
 ```
@@ -340,11 +370,8 @@ npx playwright install --with-deps
 ### Maintenance
 
 ```bash
-# Clean local artifacts (.next, .turbo, .contentlayer, .vercel, coverage, etc.)
-pnpm clean:local
-
-# Install Husky git hooks
-pnpm prepare
+# Clean local artifacts (.next, .turbo, .contentlayer, .vercel, coverage, node_modules, etc.)
+pnpm clean
 ```
 
 ---

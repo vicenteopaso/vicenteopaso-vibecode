@@ -8,7 +8,14 @@ export const siteConfig = {
     "Web Engineering Manager & Frontend Architect specializing in composable platforms, design systems and developer experience. View the CV and contact details for Vicente Opaso.",
 };
 
-const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
+/**
+ * Standardized description for CV-related Open Graph metadata.
+ * Used in CV page metadata and OG image generation.
+ */
+export const cvDescription =
+  "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.";
+
+export const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
 
 export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
   const base: Metadata = {
@@ -26,7 +33,7 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
       siteName: siteConfig.name,
       images: [
         {
-          url: `/cv/opengraph-image?v=${ogCacheVersion}`,
+          url: `/opengraph-image?v=${ogCacheVersion}`,
           width: 1200,
           height: 630,
         },
@@ -38,7 +45,7 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
       description: siteConfig.description,
       site: "@vicenteopaso",
       creator: "@vicenteopaso",
-      images: [`/cv/opengraph-image?v=${ogCacheVersion}`],
+      images: [`/opengraph-image?v=${ogCacheVersion}`],
     },
   };
 
