@@ -1,14 +1,48 @@
 import fs from "fs";
 import matter from "gray-matter";
+import type { Metadata } from "next";
 import path from "path";
 import React from "react";
 
 import { sanitizeRichText } from "../../lib/sanitize-html";
+import { siteConfig } from "../../lib/seo";
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { ProfileCard } from "../components/ProfileCard";
 import { ReferencesCarousel } from "../components/ReferencesCarousel";
 
 export const dynamic = "force-static";
+
+const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
+
+const cvDescription =
+  "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.";
+
+export const metadata: Metadata = {
+  title: "CV",
+  description: cvDescription,
+  openGraph: {
+    type: "website",
+    url: `${siteConfig.url}/cv`,
+    title: `${siteConfig.name} · CV`,
+    description: cvDescription,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: `/cv/opengraph-image?v=${ogCacheVersion}`,
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} · CV`,
+    description: cvDescription,
+    site: "@vicenteopaso",
+    creator: "@vicenteopaso",
+    images: [`/cv/opengraph-image?v=${ogCacheVersion}`],
+  },
+};
 
 type Highlight = {
   title?: string;

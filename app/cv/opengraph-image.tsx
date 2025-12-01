@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import React from "react";
 
 import { siteConfig } from "../../lib/seo";
 
@@ -15,7 +16,7 @@ export const contentType = "image/png";
 export default function Image() {
   const title = `${siteConfig.name} · CV`;
   const subtitle =
-    "Selected leadership roles, engineering impact and design systems work.";
+    "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.";
 
   return new ImageResponse(
     <div

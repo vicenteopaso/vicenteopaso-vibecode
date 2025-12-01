@@ -26,7 +26,7 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
       siteName: siteConfig.name,
       images: [
         {
-          url: `/cv/opengraph-image?v=${ogCacheVersion}`,
+          url: `/opengraph-image?v=${ogCacheVersion}`,
           width: 1200,
           height: 630,
         },
@@ -38,7 +38,7 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
       description: siteConfig.description,
       site: "@vicenteopaso",
       creator: "@vicenteopaso",
-      images: [`/cv/opengraph-image?v=${ogCacheVersion}`],
+      images: [`/opengraph-image?v=${ogCacheVersion}`],
     },
   };
 
