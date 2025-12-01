@@ -61,8 +61,16 @@ SKIP_PATHS=(
   "pnpm-workspace.yaml"
 )
 
-# Get list of changed files
-CHANGED_FILES=$(git diff --name-only "$VERCEL_GIT_PREVIOUS_SHA" "$VERCEL_GIT_COMMIT_SHA")
+# Get list of changed files (handle invalid refs gracefully)
+set +e
+CHANGED_FILES=$(git diff --name-only "$VERCEL_GIT_PREVIOUS_SHA" "$VERCEL_GIT_COMMIT_SHA" 2>/dev/null)
+GIT_DIFF_EXIT=$?
+set -e
+
+if [ $GIT_DIFF_EXIT -ne 0 ]; then
+  echo "Error comparing commits (invalid refs?). Building."
+  exit 1
+fi
 
 if [[ -z "$CHANGED_FILES" ]]; then
   echo "No files changed. Skipping build."

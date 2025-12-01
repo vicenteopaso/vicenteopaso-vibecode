@@ -44,6 +44,11 @@ pnpm install
   pnpm build
   pnpm sitemap
   ```
+- Test Vercel build skip logic:
+  ```bash
+  pnpm test:vercel-skip
+  ```
+  This validates that the build skip script correctly identifies when Vercel should skip a build.
 
 ## Composite scripts
 
