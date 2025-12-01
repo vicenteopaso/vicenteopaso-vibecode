@@ -8,6 +8,13 @@ export const siteConfig = {
     "Web Engineering Manager & Frontend Architect specializing in composable platforms, design systems and developer experience. View the CV and contact details for Vicente Opaso.",
 };
 
+/**
+ * Standardized description for CV-related Open Graph metadata.
+ * Used in CV page metadata and OG image generation.
+ */
+export const cvDescription =
+  "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.";
+
 const ogCacheVersion = process.env.NEXT_PUBLIC_OG_CACHE_DATE ?? "1";
 
 export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {

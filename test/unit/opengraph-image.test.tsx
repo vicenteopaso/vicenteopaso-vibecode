@@ -21,7 +21,7 @@ import RootOgImage, {
   contentType as rootContentType,
   size as rootSize,
 } from "../../app/opengraph-image";
-import { baseMetadata, siteConfig } from "../../lib/seo";
+import { baseMetadata, cvDescription, siteConfig } from "../../lib/seo";
 
 describe("Root OG image route", () => {
   beforeEach(() => {
@@ -128,9 +128,7 @@ describe("CV OG image route", () => {
     }
 
     const textContent = findTextContent(element).join(" ");
-    expect(textContent).toContain(
-      "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.",
-    );
+    expect(textContent).toContain(cvDescription);
   });
 });
 
@@ -175,11 +173,8 @@ describe("OG metadata separation", () => {
   });
 
   it("CV metadata uses the new standardized description", () => {
-    const expectedDescription =
-      "Selected Technical Leadership Roles: Developer Experience (DevEx), Software Engineering Impact, and Design Systems Leadership.";
-
-    expect(cvMetadata.description).toBe(expectedDescription);
-    expect(cvMetadata.openGraph?.description).toBe(expectedDescription);
-    expect(cvMetadata.twitter?.description).toBe(expectedDescription);
+    expect(cvMetadata.description).toBe(cvDescription);
+    expect(cvMetadata.openGraph?.description).toBe(cvDescription);
+    expect(cvMetadata.twitter?.description).toBe(cvDescription);
   });
 });
