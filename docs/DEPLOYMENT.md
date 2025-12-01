@@ -52,6 +52,10 @@ The following paths contain code, dependencies, or configuration that affects th
   - `postcss.config.js` — PostCSS configuration
   - `.eslintrc.json` — ESLint configuration (affects build validation)
   - `.prettierrc` — Prettier configuration (affects build validation)
+  - `vercel.json` — Vercel deployment configuration
+  - `instrumentation.ts` / `instrumentation-client.ts` — Next.js instrumentation files (custom tracing/hooks)
+  - `sentry.edge.config.ts` / `sentry.server.config.ts` — Sentry error reporting configuration
+  - `next-sitemap.config.js` — Sitemap generation configuration
 
 **Any change to these paths will trigger a full build and deployment.**
 
