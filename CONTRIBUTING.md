@@ -45,19 +45,36 @@ pnpm install
   pnpm sitemap
   ```
 
+## Composite scripts
+
+These scripts simplify common developer workflows:
+
+- **Full local reset** (wipe → reinstall → rebuild):
+
+  ```bash
+  pnpm reset
+  ```
+
+  Use when the environment is in an inconsistent state, after switching branches with lockfile changes, or after upgrading dependencies.
+
+- **Full local verification** (install → lint → typecheck → validate:links → test → test:e2e → build):
+  ```bash
+  pnpm verify
+  ```
+  Use before pushing changes to ensure local correctness matches CI expectations. This mirrors the CI pipeline. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
+
 ## Before opening a PR
 
 - Make sure the code is formatted, linted, and type-safe:
-- - `pnpm lint` (or `pnpm lint:fix` to auto-fix import ordering and other auto-fixable issues)
-- - `pnpm typecheck`
+  - `pnpm lint` (or `pnpm lint:fix` to auto-fix import ordering and other auto-fixable issues)
+  - `pnpm typecheck`
 - Run tests locally:
-- - `pnpm test` (unit & integration tests)
-- - `pnpm test:e2e` (end-to-end tests when relevant)
-- - `pnpm test:visual` (visual regression tests when UI changes)
-- - `pnpm coverage` to verify coverage stays above 90%
+  - `pnpm test` (unit & integration tests)
+  - `pnpm test:e2e` (end-to-end tests when relevant)
+  - `pnpm test:visual` (visual regression tests when UI changes)
+  - `pnpm coverage` to verify coverage stays above 90%
 - Check for security vulnerabilities in dependencies:
-- - `pnpm audit:security` to check for high+ vulnerabilities
-- - `pnpm audit:security:fix` to attempt automatic fixes if needed
+  - `pnpm audit:security` to check for high+ vulnerabilities
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
 
 ### Testing guidelines
