@@ -279,7 +279,7 @@ export default function CVPage() {
                           {role.skills.map((skill) => (
                             <span
                               key={skill}
-                              className="rounded-full border border-[color:var(--border-subtle)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
+                              className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
                             >
                               {skill}
                             </span>
@@ -395,7 +395,7 @@ export default function CVPage() {
                     {group.keywords.map((kw) => (
                       <span
                         key={kw}
-                        className="rounded-full border border-[color:var(--border-subtle)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
+                        className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
                       >
                         {kw}
                       </span>

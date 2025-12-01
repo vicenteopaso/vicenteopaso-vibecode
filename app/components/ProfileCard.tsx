@@ -133,33 +133,35 @@ export function ProfileCard({
       )}
       <div className={`${textClasses} ${textWidthClasses}`}>
         {isCvHeader ? (
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex-1">
-              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] sm:text-5xl">
+          <div className="space-y-4">
+            {/* Name and CTA Button Row */}
+            <div className="flex items-start justify-between gap-3">
+              <h1 className="text-5xl font-semibold tracking-tight text-[color:var(--text-primary)] text-center sm:text-left w-full sm:w-auto">
                 {name}
               </h1>
-              <div className={`${showAvatar ? "max-w-2xl" : "w-full"} mt-4`}>
-                {taglineLines.map((line, idx) => (
-                  <p
-                    key={idx}
-                    className="text-xl font-semibold leading-tight text-[color:var(--secondary)] sm:text-2xl"
-                  >
-                    {line}
-                  </p>
-                ))}
-              </div>
+              {showDownloadIcon && (
+                <a
+                  href={CV_PDF_PATH}
+                  download
+                  className="hidden rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex sm:items-center sm:gap-1.5 shrink-0"
+                  aria-label="Download CV (PDF)"
+                >
+                  <DownloadIcon className="h-4 w-4" />
+                  <span>Download CV</span>
+                </a>
+              )}
             </div>
-            {showDownloadIcon && (
-              <a
-                href={CV_PDF_PATH}
-                download
-                className="hidden rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex sm:items-center sm:gap-1.5 sm:mt-1"
-                aria-label="Download CV (PDF)"
-              >
-                <DownloadIcon className="h-4 w-4" />
-                <span>Download CV</span>
-              </a>
-            )}
+            {/* Tagline Row - Full Width */}
+            <div className="w-full">
+              {taglineLines.map((line, idx) => (
+                <p
+                  key={idx}
+                  className="text-xl font-semibold leading-tight text-[color:var(--secondary)] sm:text-2xl"
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
           </div>
         ) : (
           <>

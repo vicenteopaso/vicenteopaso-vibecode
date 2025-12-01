@@ -730,5 +730,5 @@ Tests run automatically in CI on:
 
 ---
 
-**Last updated**: November 29, 2025  
+**Last updated**: December 1, 2025  
 **Maintained by**: Vicente Opaso
