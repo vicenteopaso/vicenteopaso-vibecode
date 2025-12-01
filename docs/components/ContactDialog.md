@@ -71,7 +71,7 @@ On successful submission:
 
 1. Form fields are immediately reset (cleared)
 2. All inputs and Send button are disabled
-3. **Close button remains enabled** (user can dismiss immediately or wait for auto-close)
+3. **Close button remains enabled throughout both `success` and `countdown` states** (user can dismiss immediately or wait for auto-close)
 4. Success message is displayed
 5. A 10-second countdown begins
 6. Countdown is shown with "Closing in X seconds…" message
@@ -102,15 +102,15 @@ On validation or server error:
 
 ### Keyboard Navigation
 
-| Key           | Action                                                       |
-| ------------- | ------------------------------------------------------------ |
-| `Tab`         | Navigate between form fields                                 |
-| `Shift+Tab`   | Navigate backwards                                           |
-| `Enter`       | From Email: Move to Phone field                              |
-|               | From Phone: Move to Message field                            |
+| Key           | Action                                                                                                               |
+| ------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `Tab`         | Navigate between form fields                                                                                         |
+| `Shift+Tab`   | Navigate backwards                                                                                                   |
+| `Enter`       | From Email: Move to Phone field                                                                                      |
+|               | From Phone: Move to Message field                                                                                    |
 |               | From Message: Submit form (if all required fields are non-empty; "valid" here means non-empty, not HTML5 validation) |
-| `Shift+Enter` | In Message field: Insert new line (textarea behavior)        |
-| `Escape`      | Close dialog                                                 |
+| `Shift+Enter` | In Message field: Insert new line (textarea behavior)                                                                |
+| `Escape`      | Close dialog                                                                                                         |
 
 ### Focus Management
 

@@ -42,8 +42,8 @@ Shows:
 - Circular avatar with theme-based portrait
 - Name as h1
 - Multi-line tagline
-- Mobile: "Read CV | Download CV" text links
-- Desktop: Primary/secondary buttons
+- **Mobile (<640px)**: Side-by-side primary and secondary button-styled links ("Read CV" and "Download CV")
+- **Desktop (≥640px)**: Primary/secondary buttons in horizontal layout
 
 ### CV Header Variant
 
@@ -67,9 +67,11 @@ Shows:
 Shows:
 
 - No avatar
-- Name with inline download button (desktop)
+- **Mobile (<640px)**: Name centered, full-width Download CV button positioned above social icons
+- **Desktop (≥640px)**: Name left-aligned with Download CV button in top-right corner
 - CV section navigation links
-- Social media icons with download icon
+- Social media icons (GitHub, LinkedIn, X)
+- Download icon visible only on desktop in social icons row
 
 ### Theme-Aware Portraits
 
@@ -112,20 +114,42 @@ One portrait is randomly selected on mount and changes when the theme switches.
 
 ### Mobile (< 640px)
 
+**About Page:**
+
 - Vertical stack layout
 - Avatar centered (144px × 144px)
 - Text centered
-- Simple text links ("Read CV | Download CV")
-- Social icons stacked vertically
+- Two side-by-side button-styled links (equal width with flex-1):
+  - "Read CV" (primary accent button)
+  - "Download CV" (secondary bordered button)
+- Social icons centered
+
+**CV Page:**
+
+- Name centered, tagline full-width
+- Download CV button (accent-styled) positioned above social icons with vertical padding
+- CV section links centered
+- Social icons centered in horizontal row
+- Download icon hidden (mobile-only Download CV button shown instead)
 
 ### Desktop (≥ 640px)
+
+**About Page:**
 
 - Horizontal layout with flexbox
 - Avatar left-aligned (192px × 192px)
 - Text aligned based on `align` prop
-- Button-style primary/secondary CTAs
+- Button-style primary/secondary CTAs in horizontal row with `flex-nowrap` and `whitespace-nowrap`
 - Avatar takes ~1/3 width, text takes ~2/3 width
 - Social icons in horizontal row
+
+**CV Page:**
+
+- Name and Download CV button in same row (justify-between)
+- Tagline full-width below name
+- CV section links in horizontal row
+- Social icons in horizontal row with download icon visible
+- Download icon appears as circular button in social icons row
 
 ## Design Tokens
 
@@ -211,6 +235,15 @@ The component is tested for:
 - ✅ Theme-based portrait selection
 - ✅ Responsive layout classes applied correctly
 - ✅ Accessibility attributes present
+- ✅ Multiple Download CV instances (mobile/desktop) handled correctly
+
+**Visual regression tests:** `test/visual/components/profile-card.visual.spec.ts`
+
+Captures screenshots for:
+
+- ✅ Homepage profile card (light/dark/mobile)
+- ✅ CV header profile card (light/dark/mobile)
+- ✅ Button layouts and positioning across breakpoints
 
 ## Error Handling
 
@@ -222,6 +255,33 @@ The component gracefully handles:
 4. **Multi-sentence taglines**: Automatically splits on periods and trims
 
 ## Implementation Notes
+
+### CV Header Layout Logic
+
+The component detects CV header mode when:
+
+```tsx
+const isCvHeader = showDownloadIcon && !showAvatar && !showLinks;
+```
+
+This determines:
+
+- **Mobile**: Download CV button positioned above social icons
+- **Desktop**: Download CV button in top-right corner next to name
+- Section links and social icons use specific CV layout
+
+### Button Wrapping Prevention
+
+To prevent buttons from wrapping at the 640px breakpoint:
+
+```tsx
+<div className="hidden items-center gap-3 sm:flex sm:flex-nowrap">
+  <Link className="... whitespace-nowrap">Read CV</Link>
+  <a className="... whitespace-nowrap">Download CV</a>
+</div>
+```
+
+This ensures buttons stay side-by-side on all desktop viewports.
 
 ### Theme Provider Dependency
 
