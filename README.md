@@ -503,14 +503,16 @@ With these rules in place, the `automerge.yml` workflow will only merge PRs that
 
 ## Deployment
 
-The app is designed for a standard **Next.js deployment**, and works well on platforms like **Vercel**:
+The app is deployed on **Vercel** with intelligent build skipping to optimize CI/CD resources:
 
-- Build command: `pnpm build` (or `node scripts/build.mjs` if you want to ensure Contentlayer runs first).
-- Output: Standard Next.js output (`.next`).
-- Environment:
-  - Provide `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in your hosting provider's environment settings for the contact form.
-  - Provide Sentry environment variables for error tracking and source map uploads. See **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)** for detailed setup instructions.
-  - Configure any analytics, sitemap, or custom domains as needed.
+- Build command: `pnpm build`
+- Output: Standard Next.js output (`.next`)
+- **Build optimization**: Vercel automatically skips builds when only documentation or non-build-impacting files change (e.g., `docs/`, `README.md`, tests). Code, dependencies, or config changes always trigger a build.
+- Environment variables:
+  - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` for the contact form
+  - Sentry variables for error tracking (see **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)**)
+
+For complete deployment details, build skip logic, manual redeployment instructions, and troubleshooting, see **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)**.
 
 ---
 
@@ -520,6 +522,7 @@ For deeper context, see:
 
 - **[WARP.md](./WARP.md)** — Higher-level explanations and architecture overview
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Design decisions, tech stack justifications, and constraints
+- **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, build skip logic, and environment configuration
 - **[docs/ENGINEERING_STANDARDS.md](./docs/ENGINEERING_STANDARDS.md)** — Cross-cutting architecture, quality, a11y, security, and governance intent
 - **[docs/TESTING.md](./docs/TESTING.md)** — Comprehensive testing guide (unit, E2E, visual regression)
 - **[docs/VISUAL_REGRESSION_TESTING.md](./docs/VISUAL_REGRESSION_TESTING.md)** — Visual regression testing strategy with Playwright

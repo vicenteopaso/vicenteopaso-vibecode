@@ -10,6 +10,8 @@ Explain the change in a sentence or two.
 - [ ] docs (documentation only)
 - [ ] refactor (no behavior change)
 
+> **Note**: Changes limited to documentation (`docs/`, `README.md`, etc.) or tests will skip Vercel builds automatically. See [docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md) for details on build skip logic.
+
 ### Checklist
 
 - [ ] pnpm partial:local
