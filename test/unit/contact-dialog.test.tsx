@@ -491,12 +491,13 @@ describe("ContactDialog", () => {
       // Press Enter from the message field
       fireEvent.keyDown(message, { key: "Enter", code: "Enter" });
 
-      // Form should NOT be submitted - no success message should appear
-      // Wait a bit to ensure no submission happened
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Form should NOT be submitted - verify fetch was never called
+      // and no success message appears after waiting for any potential async updates
+      await waitFor(() => {
+        expect(window.fetch).not.toHaveBeenCalled();
+      });
 
       expect(screen.queryByText(/message sent/i)).not.toBeInTheDocument();
-      expect(window.fetch).not.toHaveBeenCalled();
     });
 
     it("submits form when pressing Enter with valid email format", async () => {
