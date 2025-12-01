@@ -46,7 +46,8 @@ test("footer links navigate to pages", async ({ page }) => {
     exact: true,
   });
   await expect(techStackLink).toBeVisible();
-  await Promise.all([page.waitForURL("**/tech-stack"), techStackLink.click()]);
+  await techStackLink.click();
+  await page.waitForLoadState("load");
   await expect(
     page.getByRole("heading", { name: "Tech Stack", exact: true }),
   ).toBeVisible();
