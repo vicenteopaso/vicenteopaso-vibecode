@@ -1,5 +1,15 @@
 import * as Sentry from "@sentry/nextjs";
 
+/**
+ * Client-side Sentry initialization.
+ *
+ * This file is automatically loaded by Next.js instrumentation for client-side
+ * error tracking and performance monitoring.
+ */
+
+// Hook to capture router transitions for client-side navigation performance monitoring.
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+
 // Skip Sentry initialization during unit tests to avoid unnecessary client hooks.
 if (process.env.NODE_ENV === "test" || process.env.VITEST) {
   // eslint-disable-next-line no-console
