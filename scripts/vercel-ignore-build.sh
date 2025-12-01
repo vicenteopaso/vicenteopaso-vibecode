@@ -70,6 +70,18 @@ SKIP_PATHS=(
   "pnpm-workspace.yaml"
 )
 
+# Validate that BUILD_PATHS and SKIP_PATHS don't overlap
+# This helps catch configuration errors during development
+for build_path in "${BUILD_PATHS[@]}"; do
+  for skip_path in "${SKIP_PATHS[@]}"; do
+    if [[ "$build_path" == "$skip_path" ]]; then
+      echo "ERROR: Path '$build_path' appears in both BUILD_PATHS and SKIP_PATHS"
+      echo "This is a configuration error. Please fix scripts/vercel-ignore-build.sh"
+      exit 1
+    fi
+  done
+done
+
 # Get list of changed files (handle invalid refs gracefully)
 set +e
 CHANGED_FILES=$(git diff --name-only "$VERCEL_GIT_PREVIOUS_SHA" "$VERCEL_GIT_COMMIT_SHA" 2>/dev/null)
