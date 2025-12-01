@@ -57,11 +57,11 @@ These scripts simplify common developer workflows:
 
   Use when the environment is in an inconsistent state, after switching branches with lockfile changes, or after upgrading dependencies.
 
-- **Full local verification** (install → lint → typecheck → test → build):
+- **Full local verification** (install → lint → typecheck → validate:links → test → test:e2e → build):
   ```bash
   pnpm verify
   ```
-  Use before pushing changes to ensure local correctness matches CI expectations. This mirrors the CI pipeline.
+  Use before pushing changes to ensure local correctness matches CI expectations. This mirrors the CI pipeline. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
 
 ## Before opening a PR
 

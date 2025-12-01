@@ -274,7 +274,7 @@ pnpm verify
 ```
 
 - **`reset`** — Cleans all build artifacts and caches, reinstalls dependencies, and rebuilds the project. Use after upgrading dependencies, switching branches with lockfile changes, or when the environment is in an inconsistent state.
-- **`verify`** — Runs the full verification pipeline: install → lint → typecheck → test → build. Use before pushing changes to ensure local correctness matches CI expectations.
+- **`verify`** — Runs the full verification pipeline: install → lint → typecheck → validate:links → test → test:e2e → build. Use before pushing changes to ensure local correctness matches CI expectations. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
 
 ### Content & build
 
