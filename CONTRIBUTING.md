@@ -140,4 +140,8 @@ When creating or modifying UI components:
   - Dependabot PRs with the `dependencies` label.
   - PRs authored by `vicenteopaso` with the `copilot-automerge` label.
 
+## Labels
+
+Repository labels are managed declaratively via `.github/labels.yml`. The `sync-labels` workflow syncs labels automatically when the configuration file changes. To add or modify labels, update the configuration file and merge to `main`.
+
 Please prefer `pnpm` over `npm` or `yarn` when working in this repository.
