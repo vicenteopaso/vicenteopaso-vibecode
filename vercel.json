@@ -1,0 +1,8 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "ignoreCommand": "bash scripts/vercel-ignore-build.sh"
+}
