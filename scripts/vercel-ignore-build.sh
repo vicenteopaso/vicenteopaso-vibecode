@@ -44,6 +44,9 @@ BUILD_PATHS=(
 )
 
 # Paths that should NOT trigger a build (documentation, config files that don't affect build output)
+# Note: This list is for documentation purposes only. The script uses a whitelist approach
+# (BUILD_PATHS) rather than a blacklist. Any path not in BUILD_PATHS will skip the build.
+# This is safer because new file types default to skipping rather than building.
 SKIP_PATHS=(
   "docs/"
   "test/"
