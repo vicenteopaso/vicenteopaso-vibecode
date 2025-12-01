@@ -1,22 +1,43 @@
 ## Summary
 
-Explain the change in a sentence or two.
+<!-- Provide a clear, concise description of the changes in this PR -->
 
-## Type of change
+## Related Issue
 
-- [ ] feat (new feature)
-- [ ] fix (bug fix)
-- [ ] chore (maintenance, deps, config)
-- [ ] docs (documentation only)
-- [ ] refactor (no behavior change)
+<!-- Link to the related issue if applicable: Fixes #123, Closes #456 -->
 
-> **Note**: Changes limited to documentation (`docs/`, `README.md`, etc.) or tests will skip Vercel builds automatically. See [docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md) for details on build skip logic.
+## Type of Change
 
-### Checklist
+- [ ] `feat` — New feature or enhancement
+- [ ] `fix` — Bug fix
+- [ ] `chore` — Maintenance, dependencies, or configuration
+- [ ] `docs` — Documentation only
+- [ ] `refactor` — Code refactoring without behavior change
+- [ ] `test` — Adding or updating tests
 
-- [ ] pnpm partial:local
-- [ ] pnpm full:local
-- [ ] Updated README/docs if needed
-- [ ] No secrets or keys committed; env vars documented
-- [ ] Cross-browser/viewport checks for UI changes (if relevant)
-- [ ] Changes are consistent with [ENGINEERING_STANDARDS.md](../docs/ENGINEERING_STANDARDS.md) (or the doc has been updated to reflect new intent)
+> **Note**: Changes limited to documentation (`docs/`, `README.md`, etc.) or tests will skip Vercel builds automatically. See [docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md) for details.
+
+## Technical Governance Compliance
+
+- [ ] Follows [Engineering Standards](../docs/ENGINEERING_STANDARDS.md)
+- [ ] Follows [Architecture](../docs/ARCHITECTURE.md) guidelines
+- [ ] Follows [Technical Governance](https://vicenteopaso.com/technical-governance) principles
+- [ ] Documentation updated in `docs/` (if applicable)
+- [ ] Component documentation added/updated (if applicable)
+- [ ] README updated (if behavior changes)
+
+## Quality Checks
+
+- [ ] `pnpm lint` passes
+- [ ] `pnpm typecheck` passes
+- [ ] `pnpm test` passes with adequate coverage
+- [ ] `pnpm test:e2e` passes (if UI/routing changes)
+- [ ] Visual tests updated if UI changed (`pnpm test:visual:update`)
+
+## Additional Verification
+
+- [ ] Cross-browser testing completed (if UI changes)
+- [ ] Accessibility verified (keyboard nav, screen reader, ARIA)
+- [ ] Performance impact considered (bundle size, Core Web Vitals)
+- [ ] Security review completed (no secrets, proper input validation)
+- [ ] SEO metadata updated (if content/routing changes)
