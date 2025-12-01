@@ -203,11 +203,20 @@ export function ContactDialog({
     const trimmedMessage = message.trim();
     const trimmedPhone = phone.trim();
 
-    if (!trimmedEmail || !trimmedMessage) {
-      if (!trimmedEmail) {
+    // Check for empty required fields
+    const hasEmptyEmail = !trimmedEmail;
+    const hasEmptyMessage = !trimmedMessage;
+    // Check HTML5 email format validation
+    const hasInvalidEmail =
+      trimmedEmail && !(emailInputRef.current?.validity.valid ?? true);
+
+    if (hasEmptyEmail || hasEmptyMessage || hasInvalidEmail) {
+      if (hasEmptyEmail) {
         setEmailError("Please provide an email address.");
+      } else if (hasInvalidEmail) {
+        setEmailError("Please provide a valid email address.");
       }
-      if (!trimmedMessage) {
+      if (hasEmptyMessage) {
         setMessageError("Please provide a message.");
       }
       setError("Please fix the errors highlighted below.");
