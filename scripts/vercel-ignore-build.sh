@@ -41,6 +41,12 @@ BUILD_PATHS=(
   "postcss.config.js"
   ".eslintrc.json"
   ".prettierrc"
+  "vercel.json"
+  "app/instrumentation.ts"
+  "app/instrumentation-client.ts"
+  "sentry.edge.config.ts"
+  "sentry.server.config.ts"
+  "next-sitemap.config.js"
 )
 
 # Paths that should NOT trigger a build (documentation, config files that don't affect build output)
