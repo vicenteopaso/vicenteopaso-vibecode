@@ -23,7 +23,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
 ## System Design & Development (SDD)
 
 - The machine-readable System Design & Development Spec lives at `./sdd.yaml` and is the authoritative source of truth for principles, boundaries, and CI expectations.
-- Documentation-first: propose changes by updating docs/SDD before (or alongside) code.
+- Documentation-first: propose changes by updating the SDD (`sdd.yaml`) and relevant docs before (or alongside) code.
 - Solution-agnostic: architecture principles and governance in the SDD apply regardless of specific frameworks or libraries; the tech stack described below reflects the current implementation, not a mandate.
 - PRs that change architecture or cross-cutting behavior should update `sdd.yaml` and relevant docs.
 
