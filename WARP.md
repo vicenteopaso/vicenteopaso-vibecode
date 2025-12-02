@@ -169,7 +169,14 @@ This is a single Next.js App Router project using pnpm.
   - `lint.yml`: On PRs, runs `pnpm lint` in isolation.
   - `accessibility.yml`: On PRs, runs the accessibility audit script (`pnpm node scripts/audit-a11y.mjs`).
 - **PR template** (`.github/PULL_REQUEST_TEMPLATE.md`):
-  - The checklist calls out running `pnpm lint`, `pnpm test`, `pnpm test:e2e`, and `pnpm coverage` before marking a PR as ready.
+  - Guides contributors through structured PR submission with:
+    - **Summary**: Clear description of changes
+    - **Related Issue**: Links to related GitHub issues
+    - **Type of Change**: feat, fix, chore, docs, refactor, test
+    - **Technical Governance Compliance**: References to ENGINEERING_STANDARDS, ARCHITECTURE, and technical governance docs
+    - **Quality Checks**: Required CI commands (pnpm lint, typecheck, test, test:e2e, visual tests)
+    - **Additional Verification**: Cross-browser, accessibility, performance, security, and SEO checks
+  - Aligns with issue templates to ensure consistent compliance requirements across contribution workflows.
 
 ### 7. Other notes
 

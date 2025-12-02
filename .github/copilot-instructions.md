@@ -49,14 +49,13 @@ These instructions guide AI assistants contributing to this repo. Follow these c
     - Mask dynamic content (portrait, ImpactCards, references) using `homepageMasks()` or `cvPageMasks()`.
 - Follow existing linting, formatting, and Husky + lint-staged setup.
 
-## Don’t
+## Don't
 
 - Do not:
 - - Switch package managers again or convert the app to the legacy `pages/` router.
 - Bypass or remove Turnstile verification or other spam protections in the contact flow.
 - Hard-code secrets, API keys, or credentials.
 - Introduce changes that obviously regress accessibility, SEO, or performance without justification and tests.
-- Add Issue templates (Issues are intentionally disabled in this repo).
 
 ## Files and directories overview
 

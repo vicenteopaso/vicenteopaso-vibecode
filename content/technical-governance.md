@@ -171,6 +171,18 @@ For developers and contributors:
 - [Design System](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/DESIGN_SYSTEM.md) — Visual design tokens and patterns
 - [Accessibility Guidelines](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ACCESSIBILITY.md) — Technical a11y practices
 
+## Issue Templates and Community Feedback
+
+The repository uses structured issue templates to facilitate bug reports, feature requests, and documentation improvements:
+
+- **Bug Reports** — Structured form for reporting functional issues with browser/device context
+- **Feature Requests** — Template for proposing enhancements with use case and priority assessment
+- **Documentation Issues** — Form for reporting documentation gaps or improvements
+
+Issue templates ensure consistency, capture necessary context, and integrate with CI/CD workflows through automatic labeling. Security vulnerabilities should be reported privately through GitHub Security Advisories rather than public issues.
+
+See `.github/ISSUE_TEMPLATE/` for template definitions and usage guidelines.
+
 ## Last Updated
 
-This technical governance documentation was last reviewed and updated on December 1, 2025.
+This technical governance documentation was last reviewed and updated on December 2, 2025.

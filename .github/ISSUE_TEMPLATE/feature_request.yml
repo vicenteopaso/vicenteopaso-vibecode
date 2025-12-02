@@ -1,0 +1,122 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide as much detail as possible about what you'd like to see.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Use Case
+      description: Is this feature request related to a problem? Please describe.
+      placeholder: "Example: I'm frustrated when I try to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature or enhancement you'd like to see.
+      placeholder: "Example: Add a dark mode toggle to the header..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered.
+      placeholder: "Example: Could also use browser preference detection..."
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: What area does this feature relate to?
+      options:
+        - UI/UX
+        - Accessibility
+        - Performance
+        - SEO
+        - Content
+        - Developer Experience
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority (Your Assessment)
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve experience
+        - High - Needed for critical use case
+    validations:
+      required: true
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups or Examples
+      description: If applicable, add mockups, wireframes, or links to examples from other sites.
+      placeholder: Paste images or links here.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context, constraints, or considerations.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched existing issues to ensure this isn't a duplicate
+          required: true
+        - label: This feature aligns with the project's purpose (personal portfolio/CV site)
+          required: true
+        - label: I have considered accessibility implications
+          required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## Implementation Instructions for Contributors
+
+        **IMPORTANT**: When implementing this feature, you must:
+
+        - Comply with Technical Governance:
+          - Follow [Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md)
+          - Follow [Architecture](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ARCHITECTURE.md) guidelines
+          - Follow [Technical Governance](https://vicenteopaso.com/technical-governance) principles
+        - Document all changes:
+          - Update relevant documentation in `docs/` directory
+          - Add component documentation in `docs/components/` for new components
+          - Update README.md if behavior or features change
+          - Document any new environment variables or configuration
+        - Ensure accessibility compliance:
+          - Meet WCAG 2.1 AA standards
+          - Implement proper keyboard navigation
+          - Add appropriate ARIA labels and roles
+          - Test with screen readers
+          - Maintain sufficient color contrast
+        - Ensure all quality checks pass:
+          - Run `pnpm lint` and fix all linting errors
+          - Run `pnpm typecheck` and fix all type errors
+          - Run `pnpm test` with >90% coverage for new code
+          - Run `pnpm test:e2e` and ensure all E2E tests pass
+          - Run `pnpm test:visual` if UI changes and update baselines
+        - Consider performance and SEO:
+          - Minimize bundle size impact
+          - Maintain Core Web Vitals targets
+          - Update metadata and structured data if needed
