@@ -1,7 +1,7 @@
 {
   "type": "object",
   "properties": {
-    "version": { "type": "number" },
+    "version": { "type": ["string", "number"] },
     "name": { "type": "string" },
     "description": { "type": "string" },
     "principles": {
