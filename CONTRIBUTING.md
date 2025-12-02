@@ -63,7 +63,6 @@ These scripts simplify common developer workflows:
   Use when the environment is in an inconsistent state, after switching branches with lockfile changes, or after upgrading dependencies.
 
 - **Full local verification** (install → lint → typecheck → validate:links → test → test:e2e → build):
-
   ```bash
   pnpm verify
   ```
