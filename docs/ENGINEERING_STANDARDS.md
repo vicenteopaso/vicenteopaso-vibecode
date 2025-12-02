@@ -2,6 +2,13 @@
 
 This document captures the engineering intent for this repository. It is a **north-star** standard: some items are fully implemented today, and others are aspirational or on the backlog. Governance docs, architecture docs, and tooling should align to these principles.
 
+## 0. Documentation-First & SDD Alignment
+
+- Source of truth: the machine-readable SDD at `../sdd.yaml` defines principles, boundaries, and CI expectations.
+- Documentation-first workflow: update the SDD and relevant docs before (or alongside) code for changes that affect architecture, cross-cutting concerns, or developer workflows.
+- Solution-agnostic intent: standards describe principles and outcomes; specific tools and frameworks may change. If the implementation changes, these principles remain and the SDD should be updated.
+- Definition of Done includes: docs updated, SDD aligned, and templates (issues/PR) respected.
+
 ## 1. Architectural Foundations _(partially implemented)_
 
 ### 1.1 Core Architecture Principles

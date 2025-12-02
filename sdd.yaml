@@ -1,0 +1,129 @@
+version: 1.0
+name: vicenteopaso-vibecode
+description: >
+  Personal site and CV built with Next.js App Router, Tailwind v4, Radix UI,
+  and markdown/JSON content, with strong SEO, accessibility, and testing
+  governance.
+
+principles:
+  - clean-code
+  - accessibility
+  - performance-budgets
+  - security-first
+  - content-first-seo
+  - test-driven-changes
+  - tool-agnostic-governance
+
+stack:
+  runtime: node-lts
+  framework: nextjs-app-router
+  language: typescript
+  styling:
+    - tailwindcss-v4
+    - radix-ui
+  content:
+    - markdown + gray-matter
+    - contentlayer-configured
+  testing:
+    unit: vitest + testing-library
+    e2e: playwright
+    visual: playwright-visual
+
+standards:
+  coding:
+    languages: [ts, tsx, js]
+    linting:
+      command: pnpm lint
+      config: .eslintrc.json
+    formatting:
+      command: pnpm format
+      tool: prettier
+    typechecking:
+      command: pnpm typecheck
+  architecture:
+    patterns:
+      - feature-oriented-app-routes
+      - server-components-first
+      - presentational-components-in-app-components
+      - pure-logic-in-lib
+    boundaries:
+      app:
+        components: "UI-only; no direct fs or process.env access. Prefer props and lib helpers."
+        api-routes: "Schema validation + side-effects only; business rules live in lib/* where possible."
+      lib:
+        error-logging: "Centralized Sentry + console logging in lib/error-logging.ts."
+        markdown: "Shared markdown component maps in lib/markdown-components.tsx."
+      content:
+        about: "Frontmatter + markdown body in content/about.md."
+        cv: "Frontmatter + JSON body in content/cv.md."
+    prohibited:
+      - shared mutable state across routes
+      - cross-layer imports such as app/components importing app/api
+      - bypassing error logging helpers in lib/error-logging.ts
+
+accessibility:
+  targets:
+    - wcag-2.1-aa
+  checks:
+    manual:
+      - keyboard-navigation
+      - screen-reader-labelling
+    automated:
+      - "node scripts/audit-a11y.mjs"
+
+performance:
+  budgets:
+    lighthouse-pwa: 90
+    lighthouse-performance: 90
+
+security:
+  headers: next.config.mjs
+  external-services:
+    - cloudflare-turnstile
+    - formspree
+    - sentry
+  rules:
+    - "No secrets checked into the repo; always use environment variables."
+    - "Do not weaken CSP, CORS, or security headers without explicit justification in PRs."
+
+devex:
+  commands:
+    dev: pnpm dev
+    build: pnpm build
+    test-unit: pnpm test
+    test-e2e: pnpm test:e2e
+    coverage: pnpm coverage
+    lint: pnpm lint
+    typecheck: pnpm typecheck
+    validate-links: pnpm validate:links
+    audit-a11y: pnpm audit:a11y
+  ci:
+    required-checks:
+      - lint
+      - typecheck
+      - test-unit
+      - test-e2e
+      - coverage
+      - validate-links
+      - audit-a11y
+  pr:
+    template: .github/PULL_REQUEST_TEMPLATE.md
+    require:
+      - context
+      - changes-summary
+      - tests
+      - risk-and-rollback
+      - governance-compliance
+
+ai-governance:
+  sources-of-truth:
+    - ./sdd.yaml
+    - ./docs/ARCHITECTURE.md
+    - ./docs/ERROR_HANDLING.md
+  rules:
+    - "Prefer existing patterns and files when adding new functionality."
+    - "When adding new dependencies, include justification in the PR description."
+    - "Always wire new routes, components, or APIs into lint, typecheck, and tests."
+  safety:
+    - "Never hard-code secrets or tokens; always read from environment variables."
+    - "Avoid introducing breaking changes to security headers without review."

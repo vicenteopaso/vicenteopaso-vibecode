@@ -1,0 +1,12 @@
+{
+  "projectName": "vicenteopaso-vibecode",
+  "governance": {
+    "sddPath": "./sdd.yaml",
+    "docs": ["./docs/ARCHITECTURE.md", "./docs/ERROR_HANDLING.md"],
+    "instructions": [
+      "Always read and respect the rules in sdd.yaml when generating or editing code.",
+      "Preserve the Next.js App Router structure and testing strategy defined there.",
+      "Prefer existing patterns and components over new abstractions unless needed."
+    ]
+  }
+}

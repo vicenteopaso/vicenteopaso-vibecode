@@ -124,6 +124,8 @@ Issues and PRs work together:
 
 Small fixes (typos, minor bugs) can go directly to PRs without an issue.
 
+Note: PRs should align with the SDD (`/sdd.yaml`). If a change affects architecture or cross-cutting behavior, update the SDD and relevant docs alongside the implementation.
+
 ## Integration with CI/CD
 
 Issue labels integrate with:
@@ -144,7 +146,7 @@ To modify templates:
 ## Related Documentation
 
 - [Contributing Guide](../CONTRIBUTING.md) - How to contribute
-- [Pull Request Template](../github/PULL_REQUEST_TEMPLATE.md) - PR workflow
+- [Pull Request Template](../PULL_REQUEST_TEMPLATE.md) - PR workflow
 - [Labels Configuration](labels.yml) - Label definitions
 - [Engineering Constitution](../docs/CONSTITUTION.md) - Repository governance
 

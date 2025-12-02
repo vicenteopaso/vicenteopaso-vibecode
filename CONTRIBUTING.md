@@ -63,10 +63,25 @@ These scripts simplify common developer workflows:
   Use when the environment is in an inconsistent state, after switching branches with lockfile changes, or after upgrading dependencies.
 
 - **Full local verification** (install → lint → typecheck → validate:links → test → test:e2e → build):
+
   ```bash
   pnpm verify
   ```
+
   Use before pushing changes to ensure local correctness matches CI expectations. This mirrors the CI pipeline. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
+
+  ## Documentation-first workflow (SDD)
+
+  For changes that affect architecture, cross-cutting concerns, or developer workflows:
+  1. Propose the change by updating `sdd.yaml` (source of truth) and relevant docs in `docs/`.
+  2. Open a PR referencing the issue and summarizing the intent and scope.
+  3. Implement code changes aligned to the updated SDD and standards.
+  4. Update issue/PR templates if the change affects contribution workflows.
+  5. Ensure CI is green (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, visual tests when UI changes).
+
+  Notes:
+  - Solution-agnostic: the SDD encodes principles and boundaries; tech choices can evolve as long as principles hold.
+  - Definition of Done includes updated docs and SDD alignment.
 
 ## Before opening a PR
 

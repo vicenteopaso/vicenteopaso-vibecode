@@ -4,10 +4,20 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 
 ## Goals
 
+> Governance: The machine-readable System Design & Development Specification
+> (SDD) for this repository lives in `../sdd.yaml`. This document provides the
+> narrative architecture overview that complements the SDD.
+
 - Future-proof, SEO-first personal site
 - Minimal client-side JavaScript
 - Accessible by default (WCAG-aware)
 - Easy to extend with new content and sections
+
+## Solution-Agnostic Guidance
+
+- This document describes the current implementation. The authoritative, solution-agnostic specification is `../sdd.yaml`.
+- Architecture principles (composition, separation of concerns, a11y/SEO/perf/security baselines) apply regardless of the chosen framework or libraries.
+- Changes that impact system boundaries, critical flows, or cross-cutting concerns must update `sdd.yaml` and the relevant documentation.
 
 ## Stack
 

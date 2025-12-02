@@ -22,6 +22,7 @@
 - [ ] Follows [Engineering Standards](../docs/ENGINEERING_STANDARDS.md)
 - [ ] Follows [Architecture](../docs/ARCHITECTURE.md) guidelines
 - [ ] Follows [Technical Governance](https://vicenteopaso.com/technical-governance) principles
+- [ ] Aligns with the SDD (`/sdd.yaml`) or updates it in this PR
 - [ ] Documentation updated in `docs/` (if applicable)
 - [ ] Component documentation added/updated (if applicable)
 - [ ] README updated (if behavior changes)

@@ -1,0 +1,25 @@
+name: SDD Compliance
+
+on:
+  pull_request:
+    paths:
+      - "sdd.yaml"
+      - "sdd.schema.json"
+
+jobs:
+  validate-sdd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install ajv-cli
+        run: npm install -g ajv-cli
+
+      - name: Validate SDD
+        run: ajv validate -s sdd.schema.json -d sdd.yaml
