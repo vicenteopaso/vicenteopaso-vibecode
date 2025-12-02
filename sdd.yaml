@@ -67,7 +67,7 @@ accessibility:
   checks:
     manual:
       - keyboard-navigation
-      - screen-reader-labelling
+      - screen-reader-labeling
     automated:
       - "node scripts/audit-a11y.mjs"
 
