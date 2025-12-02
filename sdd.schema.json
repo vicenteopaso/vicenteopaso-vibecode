@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "version": { "type": ["string", "number"] },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "principles": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "stack": { "type": "object" },
+    "standards": { "type": "object" },
+    "devex": { "type": "object" },
+    "ai-governance": { "type": "object" },
+    "accessibility": { "type": "object" },
+    "performance": { "type": "object" },
+    "security": { "type": "object" }
+  },
+  "required": ["version", "principles", "standards", "devex"],
+  "additionalProperties": true
+}

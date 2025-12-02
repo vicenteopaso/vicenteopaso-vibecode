@@ -39,6 +39,12 @@ A comprehensive **north-star** document that captures engineering intent across:
 
 This document serves as the **single source of truth** for what "good" looks like in this codebase.
 
+### Solution-Agnostic Policy and SDD
+
+- The machine-readable SDD at `/sdd.yaml` is authoritative for principles, boundaries, and CI expectations.
+- Governance and standards are solution-agnostic: technology choices may evolve, but the principles must remain intact.
+- Any change that affects architecture or cross-cutting concerns should update the SDD and relevant documentation in the same PR.
+
 #### Architecture Overview (`docs/ARCHITECTURE.md`)
 
 Defines the technical architecture including:

@@ -2,6 +2,11 @@
 
 This file provides guidance to WARP ([Warp](https://app.warp.dev/referral/8X3W39)) when working with code in this repository.
 
+> Governance: The canonical System Design & Development Specification (SDD) for
+> this project lives in `./sdd.yaml`. Warp agents should treat that file as the
+> primary source of truth for principles, architecture boundaries, and CI
+> expectations.
+
 ## Tooling & common commands
 
 This is a single Next.js App Router project using pnpm.
