@@ -1,0 +1,107 @@
+"use client";
+
+import { useParams } from "next/navigation";
+
+import enUI from "@/i18n/en/ui.json";
+import esUI from "@/i18n/es/ui.json";
+
+import type { Locale } from "./locales";
+import { defaultLocale } from "./locales";
+
+type UITranslations = typeof enUI;
+type TranslationKey = keyof UITranslations;
+
+const dictionaries: Record<Locale, UITranslations> = {
+  en: enUI,
+  es: esUI as UITranslations, // Spanish is empty for now, will be populated in Task 2
+};
+
+/**
+ * Simple string interpolation helper.
+ * Replaces {key} placeholders with values from the replacements object.
+ *
+ * @example
+ * interpolate("Hello {name}!", { name: "World" }) // "Hello World!"
+ */
+function interpolate(
+  template: string,
+  replacements?: Record<string, string | number>,
+): string {
+  if (!replacements) {
+    return template;
+  }
+
+  return template.replace(/\{(\w+)\}/g, (match, key) => {
+    const value = replacements[key];
+    return value !== undefined ? String(value) : match;
+  });
+}
+
+/**
+ * Hook to access translations for the current locale.
+ *
+ * Returns a function that resolves a translation key to a string.
+ * Supports simple string interpolation for dynamic values.
+ *
+ * @example
+ * const t = useTranslations();
+ * return <p>{t("nav.contact")}</p>;
+ *
+ * @example
+ * const t = useTranslations();
+ * return <p>{t("contact.countdownMessage", { seconds: 5, secondsLabel: "seconds" })}</p>;
+ */
+export function useTranslations() {
+  const params = useParams();
+  // Extract locale from URL params, default to "en"
+  const locale = (params?.lang as Locale) || defaultLocale;
+  const dict = dictionaries[locale] || dictionaries[defaultLocale];
+
+  return function t(
+    key: TranslationKey,
+    replacements?: Record<string, string | number>,
+  ): string {
+    const value = dict[key];
+    if (value === undefined) {
+      // Fallback to key if translation is missing
+      // eslint-disable-next-line no-console
+      console.warn(`Missing translation for key: ${String(key)}`);
+      return String(key);
+    }
+    return interpolate(value, replacements);
+  };
+}
+
+/**
+ * Get the current locale from URL params (for server components).
+ * Falls back to default locale if not found.
+ */
+export function getLocaleFromParams(
+  params: { lang?: string } | undefined,
+): Locale {
+  if (!params?.lang) {
+    return defaultLocale;
+  }
+  return (params.lang as Locale) || defaultLocale;
+}
+
+/**
+ * Get translations dictionary for a specific locale (for server components).
+ */
+export function getTranslations(locale: Locale = defaultLocale) {
+  const dict = dictionaries[locale] || dictionaries[defaultLocale];
+
+  return function t(
+    key: TranslationKey,
+    replacements?: Record<string, string | number>,
+  ): string {
+    const value = dict[key];
+    if (value === undefined) {
+      // Fallback to key if translation is missing
+      // eslint-disable-next-line no-console
+      console.warn(`Missing translation for key: ${String(key)}`);
+      return String(key);
+    }
+    return interpolate(value, replacements);
+  };
+}

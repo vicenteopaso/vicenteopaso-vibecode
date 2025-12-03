@@ -21,7 +21,7 @@ export const metadata: Metadata = baseMetadata({
 });
 
 export default function TechStackPage() {
-  const filePath = path.join(process.cwd(), "content", "tech-stack.md");
+  const filePath = path.join(process.cwd(), "content", "en", "tech-stack.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 

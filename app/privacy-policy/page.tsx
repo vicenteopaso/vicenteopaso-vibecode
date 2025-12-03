@@ -22,7 +22,12 @@ export const metadata: Metadata = baseMetadata({
 });
 
 export default function PrivacyPolicyPage() {
-  const filePath = path.join(process.cwd(), "content", "privacy-policy.md");
+  const filePath = path.join(
+    process.cwd(),
+    "content",
+    "en",
+    "privacy-policy.md",
+  );
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 

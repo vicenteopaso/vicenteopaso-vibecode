@@ -16,7 +16,7 @@ import { ProfileCard } from "./components/ProfileCard";
 export const dynamic = "force-static";
 
 export default function HomePage() {
-  const filePath = path.join(process.cwd(), "content", "about.md");
+  const filePath = path.join(process.cwd(), "content", "en", "about.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
   const name = (data.name as string) || "";
