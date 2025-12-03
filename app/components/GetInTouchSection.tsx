@@ -1,5 +1,3 @@
-
-
 import React from "react";
 
 import { getTranslations } from "@/lib/i18n";

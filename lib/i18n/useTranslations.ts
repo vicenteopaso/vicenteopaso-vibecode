@@ -25,7 +25,7 @@ export function useTranslations() {
   const params = useParams();
   // Extract locale from URL params, default to "en"
   const locale = (params?.lang as Locale) || defaultLocale;
-  
+
   // Use the server-side getTranslations function
   return getTranslations(locale);
 }

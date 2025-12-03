@@ -20,6 +20,10 @@ on:
 permissions:
   contents: write # Required to push translations back to the repo
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   translate:
     runs-on: ubuntu-latest
@@ -52,8 +56,13 @@ jobs:
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             BASE_REF="${{ github.event.pull_request.base.sha }}"
           else
-            # For push events, compare against previous commit
-            BASE_REF="HEAD^"
+            # For push events, compare against previous commit (if it exists)
+            if git rev-parse HEAD^ >/dev/null 2>&1; then
+              BASE_REF="HEAD^"
+            else
+              # First commit on branch, compare against empty tree
+              BASE_REF="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+            fi
           fi
 
           # Check if any English content files changed
@@ -78,6 +87,15 @@ jobs:
         if: steps.diff.outputs.no_changes == 'false'
         run: pnpm install --frozen-lockfile
 
+      - name: Validate DeepL API key
+        if: steps.diff.outputs.no_changes == 'false'
+        run: |
+          if [ -z "${{ secrets.DEEPL_API_KEY }}" ]; then
+            echo "❌ Error: DEEPL_API_KEY secret is not configured"
+            echo "Please add the DEEPL_API_KEY secret in repository settings"
+            exit 1
+          fi
+
       - name: Run DeepL translation script
         if: steps.diff.outputs.no_changes == 'false'
         env:
@@ -99,7 +117,7 @@ jobs:
           fi
 
       - name: Commit and push translated files
-        if: steps.diff.outputs.no_changes == 'false' && steps.check_changes.outputs.has_changes == 'true'
+        if: steps.diff.outputs.no_changes == 'false' && steps.check_changes.outputs.has_changes == 'true' && github.event_name == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

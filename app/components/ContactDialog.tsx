@@ -499,7 +499,9 @@ export function ContactDialog({
             className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
             disabled={isSubmitDisabled}
           >
-            {formState === "submitting" ? t("contact.sendingButton") : t("contact.sendButton")}
+            {formState === "submitting"
+              ? t("contact.sendingButton")
+              : t("contact.sendButton")}
           </button>
         </div>
       </form>

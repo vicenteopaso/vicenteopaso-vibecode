@@ -19,7 +19,7 @@ import { useTranslations } from "@/lib/i18n";
 export function LanguageToggle() {
   const t = useTranslations();
   const [showMessage, setShowMessage] = useState(false);
-  
+
   // For now, we're always on English. Full routing will be added later.
   const currentLocale = "en";
   const nextLocale = currentLocale === "en" ? "es" : "en";
@@ -48,7 +48,7 @@ export function LanguageToggle() {
       >
         {nextLocale.toUpperCase()}
       </button>
-      
+
       {showMessage && (
         <div
           role="status"

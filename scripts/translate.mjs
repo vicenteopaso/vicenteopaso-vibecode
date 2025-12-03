@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * DeepL Translation Script
  *
@@ -20,10 +22,6 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import * as deepl from "deepl-node";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Configuration
 const ROOT = process.cwd();
@@ -31,6 +29,9 @@ const EN_CONTENT_DIR = path.join(ROOT, "content", "en");
 const ES_CONTENT_DIR = path.join(ROOT, "content", "es");
 const EN_UI = path.join(ROOT, "i18n", "en", "ui.json");
 const ES_UI = path.join(ROOT, "i18n", "es", "ui.json");
+
+// Rate limiting configuration
+const RATE_LIMIT_DELAY_MS = 100;
 
 // Validate environment
 if (!process.env.DEEPL_API_KEY) {
@@ -65,13 +66,16 @@ async function translateText(text) {
 /**
  * Translate UI dictionary from English to Spanish
  * Only translates new keys that don't exist in Spanish
+ * Returns object with success status and any failed keys
  */
 async function translateUiJson() {
   console.log("\n📝 Translating UI dictionary...");
 
+  const result = { success: true, failed: [] };
+
   if (!fs.existsSync(EN_UI)) {
     console.log("⚠️  English UI dictionary not found, skipping");
-    return;
+    return result;
   }
 
   const enRaw = fs.readFileSync(EN_UI, "utf8");
@@ -90,7 +94,15 @@ async function translateUiJson() {
     }
   }
 
-  let changed = false;
+  // Clean up orphaned keys (keys that exist in Spanish but not in English)
+  const enKeys = new Set(Object.keys(enJson));
+  const orphanedKeys = Object.keys(esJson).filter((key) => !enKeys.has(key));
+  if (orphanedKeys.length > 0) {
+    console.log(`🧹 Removing ${orphanedKeys.length} orphaned UI keys`);
+    orphanedKeys.forEach((key) => delete esJson[key]);
+  }
+
+  let changed = orphanedKeys.length > 0;
   let translatedCount = 0;
 
   for (const [key, value] of Object.entries(enJson)) {
@@ -101,12 +113,20 @@ async function translateUiJson() {
 
     if (!esJson[key]) {
       console.log(`  Translating: ${key}`);
-      const translated = await translateText(value);
-      esJson[key] = translated;
-      changed = true;
-      translatedCount++;
-      // Small delay to respect API rate limits
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      try {
+        const translated = await translateText(value);
+        esJson[key] = translated;
+        changed = true;
+        translatedCount++;
+        // Small delay to respect API rate limits
+        await new Promise((resolve) =>
+          setTimeout(resolve, RATE_LIMIT_DELAY_MS),
+        );
+      } catch (error) {
+        console.error(`  ❌ Failed to translate key "${key}":`, error.message);
+        result.failed.push({ key, error: error.message });
+        result.success = false;
+      }
     }
   }
 
@@ -114,23 +134,28 @@ async function translateUiJson() {
     fs.mkdirSync(path.dirname(ES_UI), { recursive: true });
     fs.writeFileSync(ES_UI, JSON.stringify(esJson, null, 2) + "\n", "utf8");
     console.log(
-      `✅ UI dictionary updated: ${translatedCount} strings translated`,
+      `✅ UI dictionary updated: ${translatedCount} strings translated${orphanedKeys.length > 0 ? `, ${orphanedKeys.length} keys removed` : ""}`,
     );
   } else {
     console.log("✅ UI dictionary up to date");
   }
+
+  return result;
 }
 
 /**
  * Translate markdown/MDX files from English to Spanish
  * Uses a metadata file to track source content hashes and avoid re-translation
+ * Returns object with success status and any failed files
  */
 async function translateMdxFiles() {
   console.log("\n📄 Translating content files...");
 
+  const result = { success: true, failed: [] };
+
   if (!fs.existsSync(EN_CONTENT_DIR)) {
     console.log("⚠️  English content directory not found, skipping");
-    return;
+    return result;
   }
 
   fs.mkdirSync(ES_CONTENT_DIR, { recursive: true });
@@ -153,12 +178,31 @@ async function translateMdxFiles() {
 
   if (files.length === 0) {
     console.log("⚠️  No content files found");
-    return;
+    return result;
+  }
+
+  // Clean up orphaned translation files (Spanish files without English source)
+  const enFiles = new Set(files);
+  const esFiles = fs
+    .readdirSync(ES_CONTENT_DIR)
+    .filter((f) => f.endsWith(".md") || f.endsWith(".mdx"));
+  const orphanedFiles = esFiles.filter((f) => !enFiles.has(f));
+
+  if (orphanedFiles.length > 0) {
+    console.log(
+      `🧹 Removing ${orphanedFiles.length} orphaned translation files`,
+    );
+    orphanedFiles.forEach((file) => {
+      const esPath = path.join(ES_CONTENT_DIR, file);
+      fs.unlinkSync(esPath);
+      delete metadata[file];
+      console.log(`  🗑️  Removed ${file}`);
+    });
   }
 
   let translatedCount = 0;
   let skippedCount = 0;
-  let metadataChanged = false;
+  let metadataChanged = orphanedFiles.length > 0;
 
   for (const file of files) {
     const enPath = path.join(EN_CONTENT_DIR, file);
@@ -183,13 +227,16 @@ async function translateMdxFiles() {
       translatedCount++;
       console.log(`  ✅ ${file} translated`);
       // Small delay to respect API rate limits
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_DELAY_MS));
     } catch (error) {
       console.error(`  ❌ Failed to translate ${file}:`, error.message);
+      result.failed.push({ file, error: error.message });
+      result.success = false;
+      // Don't update metadata for failed files
     }
   }
 
-  // Save updated metadata
+  // Save updated metadata (excluding failed files)
   if (metadataChanged) {
     fs.writeFileSync(
       metadataPath,
@@ -199,8 +246,10 @@ async function translateMdxFiles() {
   }
 
   console.log(
-    `\n✅ Content translation complete: ${translatedCount} files translated, ${skippedCount} skipped`,
+    `\n✅ Content translation complete: ${translatedCount} files translated, ${skippedCount} skipped${orphanedFiles.length > 0 ? `, ${orphanedFiles.length} orphaned files removed` : ""}`,
   );
+
+  return result;
 }
 
 /**
@@ -219,10 +268,36 @@ async function main() {
       );
     }
 
-    await translateUiJson();
-    await translateMdxFiles();
+    const uiResult = await translateUiJson();
+    const mdxResult = await translateMdxFiles();
 
-    console.log("\n🎉 Translation complete!");
+    // Collect all failures
+    const allFailures = [
+      ...uiResult.failed.map((f) => ({
+        type: "UI key",
+        name: f.key,
+        error: f.error,
+      })),
+      ...mdxResult.failed.map((f) => ({
+        type: "File",
+        name: f.file,
+        error: f.error,
+      })),
+    ];
+
+    // Print summary
+    if (allFailures.length > 0) {
+      console.log("\n⚠️  Translation Summary:");
+      console.log(`   ${allFailures.length} translation(s) failed:`);
+      allFailures.forEach(({ type, name, error }) => {
+        console.log(`   - ${type}: ${name}`);
+        console.log(`     Error: ${error}`);
+      });
+      console.error("\n❌ Translation completed with errors");
+      process.exit(1);
+    } else {
+      console.log("\n🎉 Translation complete! All translations successful.");
+    }
   } catch (error) {
     console.error("\n❌ Translation failed:", error.message);
     if (error.message.includes("401") || error.message.includes("403")) {
