@@ -1,0 +1,23 @@
+{
+  "site.title": "Vicente Opaso",
+  "site.description": "Web Engineering Manager. Frontend Architect. Design Systems & DevEx Leader.",
+  "nav.home": "Home",
+  "nav.cv": "CV",
+  "nav.about": "About",
+  "nav.contact": "Contact",
+  "contact.title": "Get in Touch",
+  "contact.name": "Name",
+  "contact.email": "Email",
+  "contact.message": "Message",
+  "contact.send": "Send Message",
+  "contact.success": "Message sent successfully!",
+  "contact.error": "Failed to send message. Please try again.",
+  "cv.download": "Download CV",
+  "cv.print": "Print CV",
+  "footer.privacy": "Privacy Policy",
+  "footer.cookies": "Cookie Policy",
+  "footer.accessibility": "Accessibility",
+  "theme.toggle": "Toggle theme",
+  "theme.light": "Light mode",
+  "theme.dark": "Dark mode"
+}

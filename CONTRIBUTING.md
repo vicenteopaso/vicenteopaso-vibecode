@@ -63,6 +63,7 @@ These scripts simplify common developer workflows:
   Use when the environment is in an inconsistent state, after switching branches with lockfile changes, or after upgrading dependencies.
 
 - **Full local verification** (install → lint → typecheck → validate:links → test → test:e2e → build):
+
   ```bash
   pnpm verify
   ```
@@ -72,6 +73,7 @@ These scripts simplify common developer workflows:
 ## Documentation-first workflow (SDD)
 
 For changes that affect architecture, cross-cutting concerns, or developer workflows:
+
 1. Propose the change by updating `sdd.yaml` (source of truth) and relevant docs in `docs/`.
 2. Open a PR referencing the issue and summarizing the intent and scope.
 3. Implement code changes aligned to the updated SDD and standards.
@@ -79,6 +81,7 @@ For changes that affect architecture, cross-cutting concerns, or developer workf
 5. Ensure CI is green (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, visual tests when UI changes).
 
 Notes:
+
 - Solution-agnostic: the SDD encodes principles and boundaries; tech choices can evolve as long as principles hold.
 - Definition of Done includes updated docs and SDD alignment.
 

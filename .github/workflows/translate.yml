@@ -1,0 +1,112 @@
+name: DeepL Translation
+
+# Trigger only when English source content changes
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "content/en/**"
+      - "i18n/en/**"
+      - "scripts/translate.mjs"
+  pull_request:
+    paths:
+      - "content/en/**"
+      - "i18n/en/**"
+      - "scripts/translate.mjs"
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write # Required to push translations back to the repo
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    # Skip translation on PRs from forks (they won't have access to secrets)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history to properly detect changes
+          fetch-depth: 0
+          # Use a PAT or GITHUB_TOKEN with write permissions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+
+      - name: Detect English content changes
+        id: diff
+        run: |
+          # For pull requests, compare against the base branch
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BASE_REF="${{ github.event.pull_request.base.sha }}"
+          else
+            # For push events, compare against previous commit
+            BASE_REF="HEAD^"
+          fi
+
+          # Check if any English content files changed
+          CHANGED=$(git diff --name-only $BASE_REF HEAD | grep -E "^(content/en|i18n/en|scripts/translate\.mjs)" || true)
+
+          if [ -z "$CHANGED" ]; then
+            echo "no_changes=true" >> $GITHUB_OUTPUT
+            echo "No English content changes detected"
+          else
+            echo "no_changes=false" >> $GITHUB_OUTPUT
+            echo "English content changes detected:"
+            echo "$CHANGED"
+          fi
+
+      - name: Skip if no English content changes
+        if: steps.diff.outputs.no_changes == 'true'
+        run: |
+          echo "✅ No relevant content changes detected. Skipping translation."
+          exit 0
+
+      - name: Install dependencies
+        if: steps.diff.outputs.no_changes == 'false'
+        run: pnpm install --frozen-lockfile
+
+      - name: Run DeepL translation script
+        if: steps.diff.outputs.no_changes == 'false'
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+        run: node scripts/translate.mjs
+
+      - name: Check for translation changes
+        if: steps.diff.outputs.no_changes == 'false'
+        id: check_changes
+        run: |
+          git add content/es i18n/es || true
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No translation changes to commit"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Translation changes detected:"
+            git diff --cached --stat
+          fi
+
+      - name: Commit and push translated files
+        if: steps.diff.outputs.no_changes == 'false' && steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update Spanish translations via DeepL [skip ci]"
+          git push
+
+      - name: Translation complete
+        if: steps.diff.outputs.no_changes == 'false'
+        run: |
+          echo "✅ Translation workflow complete"

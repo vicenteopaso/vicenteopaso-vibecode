@@ -32,7 +32,8 @@
     "audit:security": "pnpm audit --audit-level=high",
     "sitemap": "next-sitemap --config next-sitemap.config.js",
     "vercel:should-skip": "bash scripts/vercel-ignore-build.sh",
-    "test:vercel-skip": "bash scripts/test-vercel-ignore-build.sh"
+    "test:vercel-skip": "bash scripts/test-vercel-ignore-build.sh",
+    "translate": "node scripts/translate.mjs"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
@@ -48,6 +49,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "contentlayer": "^0.3.4",
+    "deepl-node": "^1.22.0",
     "gray-matter": "^4.0.3",
     "next": "^15.5.7",
     "next-contentlayer": "^0.3.4",
