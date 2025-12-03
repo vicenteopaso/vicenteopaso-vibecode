@@ -8,8 +8,11 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
+import { useTranslations } from "@/lib/i18n";
+
 import { ContactDialog } from "./ContactDialog";
 import { MoonIcon, SunIcon } from "./icons";
+import { LanguageToggle } from "./LanguageToggle";
 
 const navLinkBase =
   "inline-flex h-8 items-center justify-center rounded-full px-3 text-sm font-medium leading-none text-[color:var(--text-primary)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
@@ -24,6 +27,7 @@ const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
 export function NavigationMenu() {
   const pathname = usePathname();
   const isOnCvPage = pathname?.startsWith("/cv") ?? false;
+  const t = useTranslations();
 
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -65,7 +69,7 @@ export function NavigationMenu() {
         </span>
       </Link>
 
-      {/* Primary links + theme toggle (right-aligned) */}
+      {/* Primary links + language toggle + theme toggle (right-aligned) */}
       <NavigationMenuPrimitive.List className="flex items-center gap-3">
         <NavigationMenuPrimitive.Item>
           <Link
@@ -73,24 +77,27 @@ export function NavigationMenu() {
             className={clsx(navLinkBase, isOnCvPage && navLinkActive)}
             aria-current={isOnCvPage ? "page" : undefined}
           >
-            CV
+            {t("nav.cv")}
           </Link>
         </NavigationMenuPrimitive.Item>
         <NavigationMenuPrimitive.Item>
           <ContactDialog
             trigger={
               <button type="button" className={navLinkBase}>
-                Contact
+                {t("nav.contact")}
               </button>
             }
           />
+        </NavigationMenuPrimitive.Item>
+        <NavigationMenuPrimitive.Item>
+          <LanguageToggle />
         </NavigationMenuPrimitive.Item>
         <NavigationMenuPrimitive.Item>
           <button
             type="button"
             onClick={toggleTheme}
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-            aria-label="Toggle color theme"
+            aria-label={t("nav.themeToggle")}
           >
             {displayTheme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>

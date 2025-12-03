@@ -2,7 +2,7 @@ import { defineDocumentType, makeSource } from "contentlayer/source-files";
 
 export const Page = defineDocumentType(() => ({
   name: "Page",
-  filePathPattern: `*.md`,
+  filePathPattern: `**/*.md`,
   contentType: "markdown",
   fields: {
     name: { type: "string", required: true },
@@ -14,6 +14,17 @@ export const Page = defineDocumentType(() => ({
     description: { type: "string", required: false },
   },
   computedFields: {
+    // Extract locale from file path (e.g., "content/en/cv.md" -> "en")
+    locale: {
+      type: "string",
+      resolve: (doc) => {
+        // Assumes all content files are organized in locale subdirectories (en/, es/, etc.)
+        // Files must be in content/<locale>/*.md format
+        const supportedLocales = ["en", "es"];
+        const locale = doc._raw.sourceFilePath.split("/")[0];
+        return supportedLocales.includes(locale) ? locale : "en";
+      },
+    },
     // For the CV page (slug === "cv"), parse the markdown body as JSON
     // and expose it as a structured `cv` field via Contentlayer.
     cv: {

@@ -22,7 +22,12 @@ export const metadata: Metadata = baseMetadata({
 });
 
 export default function CookiePolicyPage() {
-  const filePath = path.join(process.cwd(), "content", "cookie-policy.md");
+  const filePath = path.join(
+    process.cwd(),
+    "content",
+    "en",
+    "cookie-policy.md",
+  );
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 

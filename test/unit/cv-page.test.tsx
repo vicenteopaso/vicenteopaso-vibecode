@@ -31,7 +31,7 @@ describe("CVPage", () => {
         /CV data could not be loaded. Please check that the JSON body/i,
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText(/content\/cv\.md/)).toBeInTheDocument();
+    expect(screen.getByText(/content\/en\/cv\.md/)).toBeInTheDocument();
   });
 
   it("renders CV sections when JSON is valid", () => {

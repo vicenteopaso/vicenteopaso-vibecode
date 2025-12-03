@@ -22,7 +22,12 @@ export const metadata: Metadata = baseMetadata({
 });
 
 export default function AccessibilityPage() {
-  const filePath = path.join(process.cwd(), "content", "accessibility.md");
+  const filePath = path.join(
+    process.cwd(),
+    "content",
+    "en",
+    "accessibility.md",
+  );
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 

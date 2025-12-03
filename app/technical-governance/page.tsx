@@ -25,6 +25,7 @@ export default function TechnicalGovernancePage() {
   const filePath = path.join(
     process.cwd(),
     "content",
+    "en",
     "technical-governance.md",
   );
   const fileContents = fs.readFileSync(filePath, "utf8");
