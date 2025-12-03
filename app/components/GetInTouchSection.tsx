@@ -1,14 +1,14 @@
-"use client";
+
 
 import React from "react";
 
-import { useTranslations } from "@/lib/i18n";
+import { getTranslations } from "@/lib/i18n";
 
 import { ContactDialog } from "./ContactDialog";
 import { ContactInfo } from "./ContactInfo";
 
 export function GetInTouchSection() {
-  const t = useTranslations();
+  const t = getTranslations("en"); // TODO: replace "en" with dynamic locale when available
 
   return (
     <section className="section-card space-y-4">
