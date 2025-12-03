@@ -247,6 +247,16 @@ To use the translation feature:
 
 This key must be added as a GitHub secret for the automated workflow to function.
 
+### Future i18n routing
+
+Currently, the application reads content from `content/*.md`. The translated content in `content/es/` is ready for future implementation of localized routes (e.g., `/es/*`). Full i18n routing integration with Next.js will require:
+
+- Middleware or route configuration to handle locale detection and routing
+- Page components that read from locale-specific content directories
+- UI component updates to use the translated dictionaries in `i18n/`
+
+The translation infrastructure is in place and ready for this integration when needed.
+
 ---
 
 ## Contact flow
