@@ -16,9 +16,9 @@
  *   DEEPL_API_KEY - Required. Your DeepL API authentication key.
  */
 
-import fs from "fs";
-import path from "path";
-import crypto from "crypto";
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
 import * as deepl from "deepl-node";
 import { fileURLToPath } from "url";
 
