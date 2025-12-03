@@ -6,7 +6,7 @@ import enUI from "@/i18n/en/ui.json";
 import esUI from "@/i18n/es/ui.json";
 
 import type { Locale } from "./locales";
-import { defaultLocale } from "./locales";
+import { defaultLocale, isValidLocale } from "./locales";
 
 type UITranslations = typeof enUI;
 type TranslationKey = keyof UITranslations;
@@ -31,8 +31,8 @@ function interpolate(
     return template;
   }
 
-  return template.replace(/\{(\w+)\}/g, (match, key) => {
-    const value = replacements[key];
+  return template.replace(/\{([^}]+)\}/g, (match, key) => {
+    const value = replacements[key.trim()];
     return value !== undefined ? String(value) : match;
   });
 }
@@ -74,7 +74,7 @@ export function useTranslations() {
 
 /**
  * Get the current locale from URL params (for server components).
- * Falls back to default locale if not found.
+ * Falls back to default locale if not found or invalid.
  */
 export function getLocaleFromParams(
   params: { lang?: string } | undefined,
@@ -82,7 +82,10 @@ export function getLocaleFromParams(
   if (!params?.lang) {
     return defaultLocale;
   }
-  return (params.lang as Locale) || defaultLocale;
+  
+  // Validate the locale parameter
+  const locale = params.lang as Locale;
+  return isValidLocale(locale) ? locale : defaultLocale;
 }
 
 /**
