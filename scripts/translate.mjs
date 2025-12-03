@@ -10,7 +10,7 @@
  * Existing translations are preserved to avoid unnecessary API calls.
  *
  * Usage:
- *   DEEPL_API_KEY=<your-key> node scripts/translate.js
+ *   DEEPL_API_KEY=<your-key> node scripts/translate.mjs
  *
  * Environment Variables:
  *   DEEPL_API_KEY - Required. Your DeepL API authentication key.
@@ -80,7 +80,14 @@ async function translateUiJson() {
   let esJson = {};
   if (fs.existsSync(ES_UI)) {
     const esRaw = fs.readFileSync(ES_UI, "utf8");
-    esJson = JSON.parse(esRaw || "{}");
+    if (esRaw.trim()) {
+      try {
+        esJson = JSON.parse(esRaw);
+      } catch (error) {
+        console.log("⚠️  Failed to parse existing Spanish UI dictionary");
+        esJson = {};
+      }
+    }
   }
 
   let changed = false;
@@ -116,7 +123,7 @@ async function translateUiJson() {
 
 /**
  * Translate markdown/MDX files from English to Spanish
- * Uses content hashing to detect changes and avoid re-translation
+ * Uses a metadata file to track source content hashes and avoid re-translation
  */
 async function translateMdxFiles() {
   console.log("\n📄 Translating content files...");
@@ -127,6 +134,18 @@ async function translateMdxFiles() {
   }
 
   fs.mkdirSync(ES_CONTENT_DIR, { recursive: true });
+
+  // Load translation metadata (tracks source hashes)
+  const metadataPath = path.join(ES_CONTENT_DIR, ".translation-metadata.json");
+  let metadata = {};
+  if (fs.existsSync(metadataPath)) {
+    try {
+      metadata = JSON.parse(fs.readFileSync(metadataPath, "utf8"));
+    } catch (error) {
+      console.log("⚠️  Failed to parse translation metadata, starting fresh");
+      metadata = {};
+    }
+  }
 
   const files = fs
     .readdirSync(EN_CONTENT_DIR)
@@ -139,6 +158,7 @@ async function translateMdxFiles() {
 
   let translatedCount = 0;
   let skippedCount = 0;
+  let metadataChanged = false;
 
   for (const file of files) {
     const enPath = path.join(EN_CONTENT_DIR, file);
@@ -147,24 +167,19 @@ async function translateMdxFiles() {
     const enContent = fs.readFileSync(enPath, "utf8");
     const enHash = hash(enContent);
 
-    // Check if Spanish version exists and is up to date
-    if (fs.existsSync(esPath)) {
-      const esContent = fs.readFileSync(esPath, "utf8");
-      const esHash = hash(esContent);
-
-      // Simple heuristic: if hashes match, content is identical (likely already translated)
-      // In practice, you might want a more sophisticated check or metadata
-      if (enHash === esHash) {
-        console.log(`  ⏭️  Skipping ${file} (up to date)`);
-        skippedCount++;
-        continue;
-      }
+    // Check if we've already translated this version of the source
+    if (metadata[file] === enHash && fs.existsSync(esPath)) {
+      console.log(`  ⏭️  Skipping ${file} (up to date)`);
+      skippedCount++;
+      continue;
     }
 
     console.log(`  Translating ${file}...`);
     try {
       const translated = await translateText(enContent);
       fs.writeFileSync(esPath, translated, "utf8");
+      metadata[file] = enHash;
+      metadataChanged = true;
       translatedCount++;
       console.log(`  ✅ ${file} translated`);
       // Small delay to respect API rate limits
@@ -172,6 +187,15 @@ async function translateMdxFiles() {
     } catch (error) {
       console.error(`  ❌ Failed to translate ${file}:`, error.message);
     }
+  }
+
+  // Save updated metadata
+  if (metadataChanged) {
+    fs.writeFileSync(
+      metadataPath,
+      JSON.stringify(metadata, null, 2) + "\n",
+      "utf8",
+    );
   }
 
   console.log(
