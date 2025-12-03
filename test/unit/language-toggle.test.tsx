@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LanguageToggle } from "../../app/components/LanguageToggle";
 
@@ -9,12 +9,14 @@ vi.mock("next/navigation", () => ({
   useParams: vi.fn(() => ({ lang: "en" })),
 }));
 
-// Mock window.alert
-global.alert = vi.fn();
-
 describe("LanguageToggle", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   describe("Rendering", () => {
@@ -97,23 +99,39 @@ describe("LanguageToggle", () => {
       fireEvent.click(button);
 
       expect(consoleSpy).toHaveBeenCalled();
-      expect(global.alert).toHaveBeenCalled();
 
       consoleSpy.mockRestore();
     });
 
-    it("should show alert with correct message when clicked", () => {
+    it("should show message with correct text when clicked", () => {
       render(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
 
-      expect(global.alert).toHaveBeenCalledWith(
-        expect.stringContaining("Language switching to ES"),
-      );
-      expect(global.alert).toHaveBeenCalledWith(
-        expect.stringContaining("Task 2"),
-      );
+      // Message should appear immediately
+      const message = screen.getByRole("status");
+      expect(message).toBeInTheDocument();
+      expect(message).toHaveTextContent("Language switching to ES");
+      expect(message).toHaveTextContent("Task 2");
+    });
+
+    it("should hide message after timeout", () => {
+      render(<LanguageToggle />);
+
+      const button = screen.getByRole("button");
+      fireEvent.click(button);
+
+      // Message should appear
+      expect(screen.getByRole("status")).toBeInTheDocument();
+
+      // Fast-forward time by 4 seconds with act
+      act(() => {
+        vi.advanceTimersByTime(4000);
+      });
+
+      // Message should disappear
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
     it("should log navigation intent when clicked", () => {
@@ -138,9 +156,13 @@ describe("LanguageToggle", () => {
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
-      fireEvent.click(button);
+      
+      expect(screen.getByRole("status")).toBeInTheDocument();
 
-      expect(global.alert).toHaveBeenCalledTimes(2);
+      fireEvent.click(button);
+      
+      // Should still show message (timer resets)
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
   });
 

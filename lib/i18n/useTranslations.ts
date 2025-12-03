@@ -61,9 +61,16 @@ export function useTranslations() {
     key: TranslationKey,
     replacements?: Record<string, string | number>,
   ): string {
-    const value = dict[key];
+    // Try to get value from current locale dictionary
+    let value = dict[key];
+    
+    // Fallback to default locale (English) if translation is missing
+    if (value === undefined && locale !== defaultLocale) {
+      value = dictionaries[defaultLocale][key];
+    }
+    
     if (value === undefined) {
-      // Fallback to key if translation is missing
+      // Fallback to key if translation is missing in both locales
       // eslint-disable-next-line no-console
       console.warn(`Missing translation for key: ${String(key)}`);
       return String(key);
@@ -98,9 +105,16 @@ export function getTranslations(locale: Locale = defaultLocale) {
     key: TranslationKey,
     replacements?: Record<string, string | number>,
   ): string {
-    const value = dict[key];
+    // Try to get value from current locale dictionary
+    let value = dict[key];
+    
+    // Fallback to default locale (English) if translation is missing
+    if (value === undefined && locale !== defaultLocale) {
+      value = dictionaries[defaultLocale][key];
+    }
+    
     if (value === undefined) {
-      // Fallback to key if translation is missing
+      // Fallback to key if translation is missing in both locales
       // eslint-disable-next-line no-console
       console.warn(`Missing translation for key: ${String(key)}`);
       return String(key);
