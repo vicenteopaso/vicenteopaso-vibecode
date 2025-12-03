@@ -1,4 +1,26 @@
 import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
+
+// Mock Next.js navigation hooks
+vi.mock("next/navigation", async () => {
+  const actual = await vi.importActual("next/navigation");
+  return {
+    ...actual,
+    useParams: () => ({ lang: "en" }),
+    usePathname: () => "/",
+    useRouter: () => ({
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      pathname: "/",
+      query: {},
+      asPath: "/",
+    }),
+  };
+});
 
 // Suppress expected warnings in tests
 const originalError = console.error;

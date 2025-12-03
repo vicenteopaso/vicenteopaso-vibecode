@@ -12,6 +12,7 @@ import { useTranslations } from "@/lib/i18n";
 
 import { ContactDialog } from "./ContactDialog";
 import { MoonIcon, SunIcon } from "./icons";
+import { LanguageToggle } from "./LanguageToggle";
 
 const navLinkBase =
   "inline-flex h-8 items-center justify-center rounded-full px-3 text-sm font-medium leading-none text-[color:var(--text-primary)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
@@ -68,7 +69,7 @@ export function NavigationMenu() {
         </span>
       </Link>
 
-      {/* Primary links + theme toggle (right-aligned) */}
+      {/* Primary links + language toggle + theme toggle (right-aligned) */}
       <NavigationMenuPrimitive.List className="flex items-center gap-3">
         <NavigationMenuPrimitive.Item>
           <Link
@@ -87,6 +88,9 @@ export function NavigationMenu() {
               </button>
             }
           />
+        </NavigationMenuPrimitive.Item>
+        <NavigationMenuPrimitive.Item>
+          <LanguageToggle />
         </NavigationMenuPrimitive.Item>
         <NavigationMenuPrimitive.Item>
           <button
