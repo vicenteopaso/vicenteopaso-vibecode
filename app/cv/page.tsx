@@ -116,7 +116,7 @@ function normalizeHighlights(highlights?: RawHighlight[]): Highlight[] {
 }
 
 export default function CVPage() {
-  const filePath = path.join(process.cwd(), "content", "cv.md");
+  const filePath = path.join(process.cwd(), "content", "en", "cv.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 
@@ -143,7 +143,7 @@ export default function CVPage() {
         )}
         <p className="text-xs text-red-400 sm:text-sm">
           CV data could not be loaded. Please check that the JSON body in
-          <code className="ml-1">content/cv.md</code> is valid.
+          <code className="ml-1">content/en/cv.md</code> is valid.
         </p>
       </div>
     );

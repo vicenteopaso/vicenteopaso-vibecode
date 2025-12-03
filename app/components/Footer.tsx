@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 
+import { useTranslations } from "@/lib/i18n";
+
 export function Footer() {
   const year = new Date().getFullYear();
+  const t = useTranslations();
 
   return (
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
@@ -16,7 +19,7 @@ export function Footer() {
             rel="noreferrer"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Warp
+            {t("footer.warp")}
           </a>{" "}
           and{" "}
           <a
@@ -25,7 +28,7 @@ export function Footer() {
             rel="noreferrer"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Cursor
+            {t("footer.cursor")}
           </a>
           .
         </p>
@@ -35,7 +38,7 @@ export function Footer() {
             href="/privacy-policy"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Privacy Policy
+            {t("footer.privacyPolicy")}
           </Link>
           <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
@@ -44,7 +47,7 @@ export function Footer() {
             href="/cookie-policy"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Cookie Policy
+            {t("footer.cookiePolicy")}
           </Link>
           <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
@@ -53,7 +56,7 @@ export function Footer() {
             href="/accessibility"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Accessibility
+            {t("footer.accessibility")}
           </Link>
           <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
@@ -62,7 +65,7 @@ export function Footer() {
             href="/technical-governance"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Technical Governance
+            {t("footer.technicalGovernance")}
           </Link>
           <span aria-hidden="true" className="text-[color:var(--text-muted)]">
             |
@@ -71,7 +74,7 @@ export function Footer() {
             href="/tech-stack"
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
-            Tech Stack
+            {t("footer.techStack")}
           </Link>
         </div>
       </div>
