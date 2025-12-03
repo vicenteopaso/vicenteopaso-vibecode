@@ -1,7 +1,7 @@
-export type { Locale } from "./locales";
-export { defaultLocale, isValidLocale, locales } from "./locales";
+export type { Locale, TranslationKey, UITranslations } from "./getTranslations";
 export {
   getLocaleFromParams,
   getTranslations,
-  useTranslations,
-} from "./useTranslations";
+} from "./getTranslations";
+export { defaultLocale, isValidLocale, locales } from "./locales";
+export { useTranslations } from "./useTranslations";

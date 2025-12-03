@@ -5,7 +5,7 @@ import {
   getLocaleFromParams,
   getTranslations,
   useTranslations,
-} from "../../lib/i18n/useTranslations";
+} from "../../lib/i18n";
 
 // Mock next/navigation
 vi.mock("next/navigation", () => ({
