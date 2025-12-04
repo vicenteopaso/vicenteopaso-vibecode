@@ -15,25 +15,11 @@ export function Footer() {
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
       <div className="shell flex flex-col items-center justify-center gap-3 py-6 text-sm text-[color:var(--text-muted)]">
         <p className="text-center lg:text-left">
-          © {year} Vicente Opaso. Vibecoded with ♥️ and{" "}
-          <a
-            href="https://app.warp.dev/referral/8X3W39"
-            target="_blank"
-            rel="noreferrer"
-            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-          >
-            {t("footer.warp")}
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://cursor.com"
-            target="_blank"
-            rel="noreferrer"
-            className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
-          >
-            {t("footer.cursor")}
-          </a>
-          .
+          {t("footer.copyright", {
+            year,
+            warp: t("footer.warp"),
+            cursor: t("footer.cursor"),
+          })}
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-end">
