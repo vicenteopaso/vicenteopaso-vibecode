@@ -155,28 +155,59 @@ describe("middleware", () => {
   });
 
   describe("Non-root path handling", () => {
-    it("should not redirect Spanish browsers from /cv", () => {
+    it("should redirect Spanish browsers from /cv to /es/cv", () => {
       const req = createMockRequest("/cv", "es-ES,es;q=0.9");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es/cv",
+      );
     });
 
-    it("should not redirect Spanish browsers from /about", () => {
+    it("should redirect English browsers from /cv to /en/cv", () => {
+      const req = createMockRequest("/cv", "en-US,en;q=0.9");
+      const response = middleware(req);
+
+      expect(response).toBeInstanceOf(NextResponse);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en/cv",
+      );
+    });
+
+    it("should redirect Spanish browsers from /about to /es/about", () => {
       const req = createMockRequest("/about", "es-ES,es;q=0.9");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es/about",
+      );
     });
 
-    it("should not redirect from nested paths", () => {
+    it("should redirect from nested paths without locale", () => {
       const req = createMockRequest("/privacy-policy", "es-ES,es;q=0.9");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es/privacy-policy",
+      );
+    });
+
+    it("should redirect browsers without accept-language header to /en for non-root paths", () => {
+      const req = createMockRequest("/tech-stack");
+      const response = middleware(req);
+
+      expect(response).toBeInstanceOf(NextResponse);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en/tech-stack",
+      );
     });
   });
 
