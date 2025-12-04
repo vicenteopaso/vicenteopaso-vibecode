@@ -121,18 +121,17 @@ test.describe("Contact dialog - mobile viewport", () => {
 test.describe("Contact dialog - error handling", () => {
   test("shows validation errors for empty form", async ({ page }) => {
     await page.goto("/en", { waitUntil: "networkidle" });
-    await page.waitForLoadState("domcontentloaded");
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    const contactButton = page
-      .locator("header")
-      .getByRole("button", { name: "Contact", exact: true });
-    await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await page.waitForLoadState("networkidle");
-    await contactButton.click();
+    const contactTrigger = page.getByRole("button", {
+      name: "Contact me",
+      exact: true,
+    });
+    await contactTrigger.click();
 
     // Wait for dialog to open and form content to be visible
-    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
+    const dialog = page.getByRole("dialog", { name: /contact me/i });
+    await expect(dialog).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Try to submit without filling any fields (need Turnstile verification first)
@@ -151,18 +150,17 @@ test.describe("Contact dialog - error handling", () => {
 
   test("form values are preserved on validation error", async ({ page }) => {
     await page.goto("/en", { waitUntil: "networkidle" });
-    await page.waitForLoadState("domcontentloaded");
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    const contactButton = page
-      .locator("header")
-      .getByRole("button", { name: "Contact", exact: true });
-    await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await page.waitForLoadState("networkidle");
-    await contactButton.click();
+    const contactTrigger = page.getByRole("button", {
+      name: "Contact me",
+      exact: true,
+    });
+    await contactTrigger.click();
 
     // Wait for dialog to open and form content to be visible
-    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
+    const dialog = page.getByRole("dialog", { name: /contact me/i });
+    await expect(dialog).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Fill in only email (leave message empty)

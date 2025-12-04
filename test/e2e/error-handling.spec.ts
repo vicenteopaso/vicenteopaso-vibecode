@@ -68,16 +68,14 @@ test.describe("Error Handling", () => {
   }) => {
     await page.goto("/en", { waitUntil: "load" });
 
-    // Verify navigation still works - use header-scoped CV link and wait for navigation
-    await page.evaluate(() => window.scrollTo(0, 0));
-    const cvLink = page.locator("header").getByRole("link", {
-      name: "CV",
+    // Verify navigation still works - use the main Read CV link and wait for navigation
+    const cvLink = page.getByRole("link", {
+      name: "Read CV",
       exact: true,
     });
 
-    // Click and rely on Playwright's built-in URL waiting instead of networkidle
     await cvLink.click();
-    await expect(page).toHaveURL(/\/en\/cv(\?|$)/);
+    await expect(page).toHaveURL(/\/cv(\?|$)/);
 
     // Verify going back works
     await page.goBack();
