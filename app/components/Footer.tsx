@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 
-import { useTranslations, useLocale } from "@/lib/i18n";
+import { useTranslations } from "@/lib/i18n";
+
+import { useLocale } from "./LocaleProvider";
 
 export function Footer() {
   const year = new Date().getFullYear();
