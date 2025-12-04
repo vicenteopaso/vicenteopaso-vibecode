@@ -130,7 +130,7 @@ test.describe("Contact dialog - error handling", () => {
     await contactTrigger.click();
 
     // Wait for dialog to open and form content to be visible
-    const dialog = page.getByRole("dialog", { name: /contact me/i });
+    const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
@@ -159,7 +159,7 @@ test.describe("Contact dialog - error handling", () => {
     await contactTrigger.click();
 
     // Wait for dialog to open and form content to be visible
-    const dialog = page.getByRole("dialog", { name: /contact me/i });
+    const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 

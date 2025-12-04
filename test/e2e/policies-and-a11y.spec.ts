@@ -52,11 +52,8 @@ test("footer links navigate to pages", async ({ page }) => {
   });
   await expect(techStackLink).toBeVisible();
 
-  // Synchronize click with page navigation and hydration
-  await Promise.all([
-    page.waitForURL(/tech-stack/, { waitUntil: "networkidle" }),
-    techStackLink.click(),
-  ]);
+  // Synchronize click with page navigation (no extra networkidle wait)
+  await Promise.all([page.waitForURL(/tech-stack/), techStackLink.click()]);
 
   await expect(
     page.getByRole("heading", { name: "Tech Stack", exact: true }),

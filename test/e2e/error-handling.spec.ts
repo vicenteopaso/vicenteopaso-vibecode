@@ -68,13 +68,14 @@ test.describe("Error Handling", () => {
   }) => {
     await page.goto("/en", { waitUntil: "load" });
 
-    // Verify navigation still works - use the main Read CV link and wait for navigation
-    const cvLink = page.getByRole("link", {
-      name: "Read CV",
+    // Verify navigation still works - use header CV link and wait for navigation
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const cvLink = page.locator("header").getByRole("link", {
+      name: "CV",
       exact: true,
     });
 
-    await cvLink.click();
+    await Promise.all([page.waitForURL(/\/cv(\?|$)/), cvLink.click()]);
     await expect(page).toHaveURL(/\/cv(\?|$)/);
 
     // Verify going back works
