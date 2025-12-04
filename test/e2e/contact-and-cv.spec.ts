@@ -127,11 +127,14 @@ test.describe("Contact dialog - error handling", () => {
       name: "Contact me",
       exact: true,
     });
-    await contactTrigger.click();
 
-    // Wait for dialog to open and form content to be visible
+    // Open dialog and wait for it to become visible
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible({ timeout: 20000 });
+    await Promise.all([
+      dialog.waitFor({ state: "visible", timeout: 20000 }),
+      contactTrigger.click(),
+    ]);
+
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Try to submit without filling any fields (need Turnstile verification first)
@@ -156,11 +159,14 @@ test.describe("Contact dialog - error handling", () => {
       name: "Contact me",
       exact: true,
     });
-    await contactTrigger.click();
 
-    // Wait for dialog to open and form content to be visible
+    // Open dialog and wait for it to become visible
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible({ timeout: 20000 });
+    await Promise.all([
+      dialog.waitFor({ state: "visible", timeout: 20000 }),
+      contactTrigger.click(),
+    ]);
+
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Fill in only email (leave message empty)

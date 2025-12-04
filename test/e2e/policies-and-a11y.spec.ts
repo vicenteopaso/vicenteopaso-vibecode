@@ -1,80 +1,50 @@
 import { expect, test } from "@playwright/test";
 
-test("footer links navigate to pages", async ({ page }) => {
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
-    // Continue if networkidle times out - page may have background requests
+test.describe("footer links navigate to pages", () => {
+  test("Cookie Policy link navigates correctly", async ({ page }) => {
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
+
+    const cookieLink = page.getByRole("link", {
+      name: "Cookie Policy",
+      exact: true,
+    });
+    await cookieLink.click();
+
+    await expect(page).toHaveURL(/\/cookie-policy$/);
+    await expect(
+      page.getByRole("heading", { name: "Cookie Policy", exact: true }),
+    ).toBeVisible({ timeout: 10000 });
   });
 
-  // Test Cookie Policy link navigates to page
-  const cookieLink = page.getByRole("link", {
-    name: "Cookie Policy",
-    exact: true,
+  test("Privacy Policy link navigates correctly", async ({ page }) => {
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
+
+    const privacyLink = page.getByRole("link", {
+      name: "Privacy Policy",
+      exact: true,
+    });
+    await privacyLink.click();
+
+    await expect(page).toHaveURL(/\/privacy-policy$/);
+    await expect(
+      page.getByRole("heading", { name: "Privacy Policy", exact: true }),
+    ).toBeVisible({ timeout: 10000 });
   });
-  await expect(cookieLink).toBeVisible();
-  await Promise.all([page.waitForURL("**/cookie-policy"), cookieLink.click()]);
-  await page.waitForLoadState("domcontentloaded");
-  await expect(
-    page.getByRole("heading", { name: /Cookie Policy/i }),
-  ).toBeVisible({ timeout: 10000 });
 
-  // Navigate back and test Privacy Policy link
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
-    // Continue if networkidle times out
+  test("Tech Stack link navigates correctly", async ({ page }) => {
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
+
+    const techStackLink = page.getByRole("link", {
+      name: "Tech Stack",
+      exact: true,
+    });
+    await techStackLink.click();
+
+    await expect(page).toHaveURL(/\/tech-stack$/);
+    await expect(
+      page.getByRole("heading", { name: "Tech Stack", exact: true }),
+    ).toBeVisible({ timeout: 10000 });
   });
-  const privacyLink = page.getByRole("link", {
-    name: "Privacy Policy",
-    exact: true,
-  });
-  await expect(privacyLink).toBeVisible();
-
-  await Promise.all([
-    page.waitForURL(/privacy-policy/, { waitUntil: "domcontentloaded" }),
-    privacyLink.click(),
-  ]);
-  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
-    // Continue if networkidle times out - page may have background requests
-  });
-  await expect(page).toHaveURL(/\/privacy-policy/);
-  await expect(
-    page.getByRole("heading", { name: "Privacy Policy", exact: true }),
-  ).toBeVisible({ timeout: 10000 });
-
-  // Navigate back and test Tech Stack link
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
-  await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {
-    // Continue if networkidle times out - page may have background requests
-  });
-  const techStackLink = page.getByRole("link", {
-    name: "Tech Stack",
-    exact: true,
-  });
-  await expect(techStackLink).toBeVisible();
-
-  // Synchronize click with page navigation (no extra networkidle wait)
-  await Promise.all([page.waitForURL(/tech-stack/), techStackLink.click()]);
-
-  await expect(
-    page.getByRole("heading", { name: "Tech Stack", exact: true }),
-  ).toBeVisible({ timeout: 10000 });
-});
-
-test("policy and tech stack pages render main headings", async ({ page }) => {
-  await page.goto("/en/cookie-policy");
-  await expect(
-    page.getByRole("heading", { name: "Cookie Policy", exact: true }),
-  ).toBeVisible();
-
-  await page.goto("/en/privacy-policy");
-  await expect(
-    page.getByRole("heading", { name: "Privacy Policy", exact: true }),
-  ).toBeVisible();
-
-  await page.goto("/en/tech-stack");
-  await expect(
-    page.getByRole("heading", { name: "Tech Stack", exact: true }),
-  ).toBeVisible();
 });
 
 test("skip link appears on focus and targets main content", async ({

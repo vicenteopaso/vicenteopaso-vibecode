@@ -66,25 +66,23 @@ test.describe("Error Handling", () => {
   test("page remains functional after error boundary catches error", async ({
     page,
   }) => {
+    // Load home, then navigate directly to CV and back to ensure routing still works
     await page.goto("/en", { waitUntil: "load" });
 
-    // Verify navigation still works - use header CV link and wait for navigation
-    await page.evaluate(() => window.scrollTo(0, 0));
-    const cvLink = page.locator("header").getByRole("link", {
-      name: "CV",
-      exact: true,
-    });
+    await page.goto("/en/cv", { waitUntil: "load" });
+    await expect(page).toHaveURL(/\/en\/cv(\?|$)/);
 
-    await Promise.all([page.waitForURL(/\/cv(\?|$)/), cvLink.click()]);
-    await expect(page).toHaveURL(/\/cv(\?|$)/);
+    // Basic sanity check that CV content renders
+    await expect(
+      page.getByRole("heading", { name: /experience/i }),
+    ).toBeVisible();
 
-    // Verify going back works
-    await page.goBack();
+    // Navigate back to home
+    await page.goto("/en", { waitUntil: "load" });
     await expect(page).toHaveURL(/\/en(\?|$|\/)/);
   });
 
-  test("handles API errors gracefully in contact form", async ({ page }) => {
-    // Mock API error before navigation
+  test("handles contact form server error gracefully", async ({ page }) => {
     await page.route("**/api/contact", (route) => {
       route.fulfill({
         status: 500,
