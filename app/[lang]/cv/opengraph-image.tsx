@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import React from "react";
 
-import { cvDescription, siteConfig } from "../../lib/seo";
+import { cvDescription, siteConfig } from "../../../lib/seo";
 
 export const runtime = "edge";
 export const revalidate = 3600; // 1 hour

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 
-import { useTranslations } from "@/lib/i18n";
+import { useTranslations, useLocale } from "@/lib/i18n";
 
 export function Footer() {
   const year = new Date().getFullYear();
   const t = useTranslations();
+  const { locale } = useLocale();
 
   return (
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
@@ -35,7 +36,7 @@ export function Footer() {
 
         <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-end">
           <Link
-            href="/privacy-policy"
+            href={`/${locale}/privacy-policy`}
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
             {t("footer.privacyPolicy")}
@@ -44,7 +45,7 @@ export function Footer() {
             |
           </span>
           <Link
-            href="/cookie-policy"
+            href={`/${locale}/cookie-policy`}
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
             {t("footer.cookiePolicy")}
@@ -53,7 +54,7 @@ export function Footer() {
             |
           </span>
           <Link
-            href="/accessibility"
+            href={`/${locale}/accessibility`}
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
             {t("footer.accessibility")}
@@ -62,7 +63,7 @@ export function Footer() {
             |
           </span>
           <Link
-            href="/technical-governance"
+            href={`/${locale}/technical-governance`}
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
             {t("footer.technicalGovernance")}
@@ -71,7 +72,7 @@ export function Footer() {
             |
           </span>
           <Link
-            href="/tech-stack"
+            href={`/${locale}/tech-stack`}
             className="text-[color:var(--link)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4"
           >
             {t("footer.techStack")}

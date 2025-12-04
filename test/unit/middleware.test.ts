@@ -75,36 +75,48 @@ describe("middleware", () => {
   });
 
   describe("Non-Spanish locale handling", () => {
-    it("should not redirect English browsers", () => {
+    it("should redirect English browsers to /en", () => {
       const req = createMockRequest("/", "en-US,en;q=0.9");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en",
+      );
     });
 
-    it("should not redirect French browsers", () => {
+    it("should redirect French browsers to /en", () => {
       const req = createMockRequest("/", "fr-FR,fr;q=0.9");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en",
+      );
     });
 
-    it("should not redirect when accept-language header is missing", () => {
+    it("should redirect to /en when accept-language header is missing", () => {
       const req = createMockRequest("/");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en",
+      );
     });
 
-    it("should not redirect when accept-language header is empty", () => {
+    it("should redirect to /en when accept-language header is empty", () => {
       const req = createMockRequest("/", "");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en",
+      );
     });
   });
 
@@ -169,12 +181,15 @@ describe("middleware", () => {
   });
 
   describe("Edge cases", () => {
-    it("should handle malformed accept-language headers", () => {
+    it("should redirect malformed accept-language headers to /en", () => {
       const req = createMockRequest("/", "invalid-header");
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en",
+      );
     });
 
     it("should handle accept-language with only language code", () => {
@@ -183,23 +198,31 @@ describe("middleware", () => {
 
       expect(response).toBeInstanceOf(NextResponse);
       expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es",
+      );
     });
 
-    it("should handle accept-language with quality values", () => {
+    it("should redirect to /en when English is first in quality values", () => {
       const req = createMockRequest("/", "en-US;q=0.9,es;q=0.8,fr;q=0.7");
       const response = middleware(req);
 
-      // Should not redirect because English is first
       expect(response).toBeInstanceOf(NextResponse);
-      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/en",
+      );
     });
 
-    it("should only check first two characters of first language preference", () => {
+    it("should handle Latin American Spanish locale codes", () => {
       const req = createMockRequest("/", "es-419,es;q=0.9"); // Latin American Spanish
       const response = middleware(req);
 
       expect(response).toBeInstanceOf(NextResponse);
       expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es",
+      );
     });
   });
 });

@@ -5,27 +5,42 @@ import path from "path";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
-import { markdownComponents } from "../../lib/markdown-components";
-import { baseMetadata } from "../../lib/seo";
+import { getLocaleFromParams } from "@/lib/i18n";
+
+import { markdownComponents } from "../../../lib/markdown-components";
+import { baseMetadata } from "../../../lib/seo";
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = baseMetadata({
-  title: "Cookie Policy",
-  description:
-    "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them in compliance with GDPR.",
-  openGraph: {
-    title: "Cookie Policy Vicente Opaso",
-    description:
-      "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them.",
-  },
-});
+export async function generateStaticParams() {
+  return [{ lang: "en" }, { lang: "es" }];
+}
 
-export default function CookiePolicyPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  return baseMetadata({
+    title: "Cookie Policy",
+    description:
+      "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them in compliance with GDPR.",
+    openGraph: {
+      title: "Cookie Policy Vicente Opaso",
+      description:
+        "Cookie Policy for opa.so. Learn about the cookies we use and how we manage them.",
+    },
+  });
+}
+
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export default async function CookiePolicyPage({ params }: PageProps) {
+  const { lang } = await params;
+  const locale = getLocaleFromParams({ lang });
+
   const filePath = path.join(
     process.cwd(),
     "content",
-    "en",
+    locale,
     "cookie-policy.md",
   );
   const fileContents = fs.readFileSync(filePath, "utf8");

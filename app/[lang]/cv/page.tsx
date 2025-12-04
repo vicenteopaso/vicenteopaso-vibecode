@@ -4,40 +4,55 @@ import type { Metadata } from "next";
 import path from "path";
 import React from "react";
 
-import { sanitizeRichText } from "../../lib/sanitize-html";
-import { cvDescription, ogCacheVersion, siteConfig } from "../../lib/seo";
-import { GetInTouchSection } from "../components/GetInTouchSection";
-import { ProfileCard } from "../components/ProfileCard";
-import { ReferencesCarousel } from "../components/ReferencesCarousel";
+import { getLocaleFromParams } from "@/lib/i18n";
+import { sanitizeRichText } from "@/lib/sanitize-html";
+import { cvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
+
+import { GetInTouchSection } from "../../components/GetInTouchSection";
+import { ProfileCard } from "../../components/ProfileCard";
+import { ReferencesCarousel } from "../../components/ReferencesCarousel";
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
-  title: "CV",
-  description: cvDescription,
-  openGraph: {
-    type: "website",
-    url: `${siteConfig.url}/cv`,
-    title: `${siteConfig.name} · CV`,
+export async function generateStaticParams() {
+  return [{ lang: "en" }, { lang: "es" }];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = getLocaleFromParams({ lang });
+
+  return {
+    title: "CV",
     description: cvDescription,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: `/cv/opengraph-image?v=${ogCacheVersion}`,
-        width: 1200,
-        height: 630,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${siteConfig.name} · CV`,
-    description: cvDescription,
-    site: "@vicenteopaso",
-    creator: "@vicenteopaso",
-    images: [`/cv/opengraph-image?v=${ogCacheVersion}`],
-  },
-};
+    openGraph: {
+      type: "website",
+      url: `${siteConfig.url}/${locale}/cv`,
+      title: `${siteConfig.name} · CV`,
+      description: cvDescription,
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: `/${locale}/cv/opengraph-image?v=${ogCacheVersion}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${siteConfig.name} · CV`,
+      description: cvDescription,
+      site: "@vicenteopaso",
+      creator: "@vicenteopaso",
+      images: [`/${locale}/cv/opengraph-image?v=${ogCacheVersion}`],
+    },
+  };
+}
 
 type Highlight = {
   title?: string;
@@ -115,8 +130,15 @@ function normalizeHighlights(highlights?: RawHighlight[]): Highlight[] {
   );
 }
 
-export default function CVPage() {
-  const filePath = path.join(process.cwd(), "content", "en", "cv.md");
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export default async function CVPage({ params }: PageProps) {
+  const { lang } = await params;
+  const locale = getLocaleFromParams({ lang });
+
+  const filePath = path.join(process.cwd(), "content", locale, "cv.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
 

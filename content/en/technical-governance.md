@@ -170,7 +170,7 @@ This documentation-first approach scales well:
 
 For developers and contributors:
 
-- [Tech Stack](/tech-stack) — Complete technology stack and tooling overview
+- [Tech Stack](/en/tech-stack) — Complete technology stack and tooling overview
 - [Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md) — Comprehensive engineering intent
 - [Architecture Overview](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ARCHITECTURE.md) — Technical architecture
 - [Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md) — Repository governance

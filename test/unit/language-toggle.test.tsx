@@ -1,27 +1,52 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import type { Mock } from "vitest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LanguageToggle } from "../../app/components/LanguageToggle";
+import { LocaleProvider } from "../../app/components/LocaleProvider";
 
 // Mock next/navigation
-vi.mock("next/navigation", () => ({
-  useParams: vi.fn(() => ({ lang: "en" })),
+vi.mock("next/navigation");
+
+// Mock LocaleProvider to return a simple wrapper
+vi.mock("../../app/components/LocaleProvider", () => ({
+  LocaleProvider: ({ children }: { children: React.ReactNode }) => children,
+  useLocale: () => ({ locale: "en", setLocale: vi.fn() }),
 }));
 
+// Helper function to render with required providers
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(<LocaleProvider>{component}</LocaleProvider>);
+};
+
 describe("LanguageToggle", () => {
+  let mockUseRouter: Mock;
+  let mockUsePathname: Mock;
+  let mockPush: Mock;
+
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.useFakeTimers();
+    mockUseRouter = vi.mocked(useRouter);
+    mockUsePathname = vi.mocked(usePathname);
+    mockPush = vi.fn();
+    mockUseRouter.mockReset();
+    mockUsePathname.mockReset();
+    mockUseRouter.mockReturnValue({ push: mockPush } as never);
+    mockUsePathname.mockReturnValue("/en");
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.clearAllMocks();
   });
 
   describe("Rendering", () => {
     it("should render toggle button with correct locale label", () => {
-      render(<LanguageToggle />);
+      render(
+        <LocaleProvider>
+          <LanguageToggle />
+        </LocaleProvider>,
+      );
 
       const button = screen.getByRole("button");
       expect(button).toBeInTheDocument();
@@ -29,14 +54,14 @@ describe("LanguageToggle", () => {
     });
 
     it("should have proper button type attribute", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("type", "button");
     });
 
     it("should apply correct CSS classes", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveClass("inline-flex");
@@ -49,7 +74,7 @@ describe("LanguageToggle", () => {
 
   describe("Accessibility", () => {
     it("should have proper ARIA label from translation key", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("aria-label");
@@ -60,7 +85,7 @@ describe("LanguageToggle", () => {
     });
 
     it("should have title attribute for tooltip", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("title");
@@ -70,7 +95,7 @@ describe("LanguageToggle", () => {
     });
 
     it("should be keyboard accessible", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).not.toHaveAttribute("disabled");
@@ -81,7 +106,7 @@ describe("LanguageToggle", () => {
     });
 
     it("should have focus-visible styles", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveClass("focus-visible:outline-none");
@@ -91,52 +116,40 @@ describe("LanguageToggle", () => {
   });
 
   describe("User interaction", () => {
-    it("should call handler when button is clicked", () => {
-      const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-      render(<LanguageToggle />);
+    it("should call router.push when button is clicked", () => {
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
 
-      expect(consoleSpy).toHaveBeenCalled();
-
-      consoleSpy.mockRestore();
+      expect(mockPush).toHaveBeenCalledWith("/es");
     });
 
-    it("should show message with correct text when clicked", () => {
-      render(<LanguageToggle />);
+    it("should disable button during navigation", () => {
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
 
-      // Message should appear immediately
-      const message = screen.getByRole("status");
-      expect(message).toBeInTheDocument();
-      expect(message).toHaveTextContent("Language switching to ES");
-      expect(message).toHaveTextContent("Task 2");
+      // After click, button should have disabled opacity
+      expect(button).toHaveClass("disabled:opacity-50");
     });
 
-    it("should hide message after timeout", () => {
-      render(<LanguageToggle />);
+    it("should construct correct path when on /en/cv", () => {
+      mockUsePathname.mockReturnValue("/en/cv");
+
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
 
-      // Message should appear
-      expect(screen.getByRole("status")).toBeInTheDocument();
-
-      // Fast-forward time by 4 seconds with act
-      act(() => {
-        vi.advanceTimersByTime(4000);
-      });
-
-      // Message should disappear
-      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      expect(mockPush).toHaveBeenCalledWith("/es/cv");
     });
 
-    it("should log navigation intent when clicked", () => {
-      const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-      render(<LanguageToggle />);
+    it("should construct correct path when on /es/cv", () => {
+      mockUsePathname.mockReturnValue("/es/cv");
+
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
@@ -150,7 +163,7 @@ describe("LanguageToggle", () => {
     });
 
     it("should handle multiple clicks", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
@@ -166,7 +179,7 @@ describe("LanguageToggle", () => {
 
   describe("Locale display", () => {
     it("should display next locale in uppercase", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       const text = button.textContent;
@@ -175,11 +188,10 @@ describe("LanguageToggle", () => {
       expect(text).toMatch(/^[A-Z]{2}$/);
     });
 
-    it("should show ES when current locale is en", async () => {
-      const { useParams } = await import("next/navigation");
-      vi.mocked(useParams).mockReturnValue({ lang: "en" });
+    it("should show ES when current locale is en", () => {
+      mockUsePathname.mockReturnValue("/en");
 
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveTextContent("ES");
@@ -188,7 +200,7 @@ describe("LanguageToggle", () => {
 
   describe("Hover and visual states", () => {
     it("should have hover styles", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveClass("hover:border-[color:var(--link-hover)]");
@@ -196,14 +208,14 @@ describe("LanguageToggle", () => {
     });
 
     it("should have transition styles", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveClass("transition-colors");
     });
 
     it("should have proper shadow styling", () => {
-      render(<LanguageToggle />);
+      renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
       expect(button).toHaveClass("shadow-sm");

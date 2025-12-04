@@ -57,12 +57,45 @@ function getKnownRoutes(appDirectory) {
     const dirName = entry.name;
 
     // Skip special directories like API routes
-    if (dirName === "api") continue;
+    if (dirName === "api" || dirName === "components" || dirName === "config") continue;
 
-    const pagePath = path.join(appDirectory, dirName, "page.tsx");
+    // Handle dynamic segments like [lang]
+    if (dirName.startsWith("[") && dirName.endsWith("]")) {
+      const segmentName = dirName.slice(1, -1); // Remove [ and ]
 
-    if (fs.existsSync(pagePath)) {
-      routes.add("/" + dirName);
+      // For [lang], add routes with /en and /es prefixes
+      if (segmentName === "lang") {
+        const subEntries = fs.readdirSync(path.join(appDirectory, dirName), {
+          withFileTypes: true,
+        });
+
+        for (const subEntry of subEntries) {
+          if (!subEntry.isDirectory()) continue;
+
+          const subDirName = subEntry.name;
+          const pagePath = path.join(appDirectory, dirName, subDirName, "page.tsx");
+
+          if (fs.existsSync(pagePath)) {
+            // Add both /en/subdir and /es/subdir routes
+            routes.add("/en/" + subDirName);
+            routes.add("/es/" + subDirName);
+          }
+        }
+
+        // Also check for page.tsx directly in [lang] directory
+        const langPagePath = path.join(appDirectory, dirName, "page.tsx");
+        if (fs.existsSync(langPagePath)) {
+          routes.add("/en");
+          routes.add("/es");
+        }
+      }
+    } else {
+      // Regular directories
+      const pagePath = path.join(appDirectory, dirName, "page.tsx");
+
+      if (fs.existsSync(pagePath)) {
+        routes.add("/" + dirName);
+      }
     }
   }
 

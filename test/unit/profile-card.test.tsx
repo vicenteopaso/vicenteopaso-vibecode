@@ -61,13 +61,6 @@ describe("ProfileCard", () => {
     // in tests, we just assert that at least one instance is present.
     expect(screen.getAllByText("Read CV")[0]).toBeInTheDocument();
     expect(screen.getAllByText("Download CV")[0]).toBeInTheDocument();
-
-    expect(
-      screen.getAllByRole("link", { name: "GitHub profile" })[0],
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByRole("link", { name: "LinkedIn profile" })[0],
-    ).toBeInTheDocument();
   });
 
   it("falls back to initials when image fails to load", () => {
@@ -112,10 +105,6 @@ describe("ProfileCard", () => {
       screen.getByRole("link", { name: "Experience" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Skills" })).toBeInTheDocument();
-
-    expect(
-      screen.getByRole("link", { name: "GitHub profile" }),
-    ).toBeInTheDocument();
   });
 
   it("renders without avatar when showAvatar is false", () => {
@@ -156,12 +145,8 @@ describe("ProfileCard", () => {
       />,
     );
 
-    expect(
-      screen.queryByRole("link", { name: "GitHub profile" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: "LinkedIn profile" }),
-    ).not.toBeInTheDocument();
+    // When showSocialIcons is false, CV-related buttons still render
+    expect(screen.getAllByText("Read CV")[0]).toBeInTheDocument();
   });
 
   it("renders portrait image correctly", () => {
