@@ -154,8 +154,12 @@ describe("LanguageToggle", () => {
       const button = screen.getByRole("button");
       fireEvent.click(button);
 
-      // Just verify the call was made with the mocked pathname
-      expect(mockPush).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Language toggle clicked"),
+      );
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("/es"));
+
+      consoleSpy.mockRestore();
     });
 
     it("should handle multiple clicks", () => {
@@ -164,8 +168,12 @@ describe("LanguageToggle", () => {
       const button = screen.getByRole("button");
       fireEvent.click(button);
 
-      // Verify first click triggered router.push
-      expect(mockPush).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+
+      fireEvent.click(button);
+
+      // Should still show message (timer resets)
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
   });
 
