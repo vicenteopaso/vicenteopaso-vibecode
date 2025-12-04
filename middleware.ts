@@ -6,8 +6,10 @@ import { locales } from "./lib/i18n/locales";
 /**
  * Middleware to handle locale-based routing and redirects.
  *
- * - Redirects Spanish-locale browsers from `/` to `/es` on first visit.
- * - Preserves user's manual locale choice after initial redirect.
+ * - Redirects non-locale-prefixed paths to the appropriate locale based on Accept-Language header.
+ * - Spanish-locale browsers are redirected to `/es/*` paths.
+ * - All other browsers are redirected to `/en/*` paths.
+ * - Preserves user's manual locale choice for paths that already include a locale prefix.
  */
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -22,19 +24,16 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Only handle the root path for automatic language detection
-  if (pathname === "/") {
-    const langHeader = req.headers.get("accept-language") || "";
-    const preferredLang = langHeader.split(",")[0]?.slice(0, 2);
+  // Handle all paths without locale prefix for automatic language detection
+  const langHeader = req.headers.get("accept-language") || "";
+  const preferredLang = langHeader.split(",")[0]?.slice(0, 2);
 
-    // Redirect Spanish-locale browsers to /es, others to /en
-    const targetLocale = preferredLang === "es" ? "es" : "en";
-    const url = req.nextUrl.clone();
-    url.pathname = `/${targetLocale}`;
-    return NextResponse.redirect(url);
-  }
-
-  return NextResponse.next();
+  // Redirect Spanish-locale browsers to /es, others to /en
+  const targetLocale = preferredLang === "es" ? "es" : "en";
+  const url = req.nextUrl.clone();
+  // Handle root path specially to avoid double slash
+  url.pathname = pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
+  return NextResponse.redirect(url);
 }
 
 /**
