@@ -124,15 +124,14 @@ async function translateUiJson() {
         esJson[key] = translated;
         translatedCount++;
         changed = true; // Only mark as changed after successful translation
-      } catch (error) {
-        console.error(`  ❌ Failed to translate key "${key}":`, error.message);
-        result.failed.push({ key, error: error.message });
-        result.success = false;
-      } finally {
         // Small delay to respect API rate limits
         await new Promise((resolve) =>
           setTimeout(resolve, RATE_LIMIT_DELAY_MS),
         );
+      } catch (error) {
+        console.error(`  ❌ Failed to translate key "${key}":`, error.message);
+        result.failed.push({ key, error: error.message });
+        result.success = false;
       }
     }
   }
