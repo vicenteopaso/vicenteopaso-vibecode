@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 
-import { useTranslations } from "@/lib/i18n";
+import { useTranslations, useLocale } from "@/lib/i18n";
 
 export function Footer() {
   const year = new Date().getFullYear();
   const t = useTranslations();
-  const locale = "en";
+  const { locale } = useLocale();
 
   return (
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/95">
