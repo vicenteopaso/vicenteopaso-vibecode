@@ -129,7 +129,9 @@ async function translateUiJson() {
 
   for (const [key, value] of Object.entries(enJson)) {
     if (typeof value !== "string") {
-      console.log(`⚠️  UI dictionary must be flat - nested objects are not supported. Please flatten key: ${key}`);
+      console.log(
+        `⚠️  UI dictionary must be flat - nested objects are not supported. Please flatten key: ${key}`,
+      );
       continue;
     }
 
@@ -137,7 +139,9 @@ async function translateUiJson() {
 
     // Check if we need to translate: missing or English value changed
     if (!esJson[key] || metadata[key] !== enValueHash) {
-      const action = !esJson[key] ? "Translating" : "Re-translating (source changed)";
+      const action = !esJson[key]
+        ? "Translating"
+        : "Re-translating (source changed)";
       console.log(`  ${action}: ${key}`);
       try {
         const translated = await translateText(value);

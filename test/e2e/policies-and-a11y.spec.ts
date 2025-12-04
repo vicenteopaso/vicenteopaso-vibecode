@@ -30,9 +30,12 @@ test("footer links navigate to pages", async ({ page }) => {
   await expect(privacyLink).toBeVisible();
 
   await Promise.all([
-    page.waitForURL("**/privacy-policy"),
+    page.waitForURL(/privacy-policy/, { waitUntil: "domcontentloaded" }),
     privacyLink.click(),
   ]);
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
+    // Continue if networkidle times out - page may have background requests
+  });
   await expect(page).toHaveURL(/\/privacy-policy/);
   await expect(
     page.getByRole("heading", { name: "Privacy Policy", exact: true }),

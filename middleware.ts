@@ -32,7 +32,8 @@ export function middleware(req: NextRequest) {
   const targetLocale = preferredLang === "es" ? "es" : "en";
   const url = req.nextUrl.clone();
   // Handle root path specially to avoid double slash
-  url.pathname = pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
+  url.pathname =
+    pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
   return NextResponse.redirect(url);
 }
 
