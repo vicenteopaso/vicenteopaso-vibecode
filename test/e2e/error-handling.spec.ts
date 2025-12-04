@@ -74,10 +74,9 @@ test.describe("Error Handling", () => {
       name: "CV",
       exact: true,
     });
-    await Promise.all([
-      page.waitForURL(/\/en\/cv(\?|$)/, { waitUntil: "networkidle" }),
-      cvLink.click(),
-    ]);
+
+    // Click and rely on Playwright's built-in URL waiting instead of networkidle
+    await cvLink.click();
     await expect(page).toHaveURL(/\/en\/cv(\?|$)/);
 
     // Verify going back works
