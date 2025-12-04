@@ -46,6 +46,7 @@ export function ProfileCard({
   sectionLinks,
 }: ProfileCardProps) {
   const { resolvedTheme } = useTheme();
+  const { locale } = useLocale();
   const [hasImageError, setHasImageError] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -189,7 +190,7 @@ export function ProfileCard({
                 {!isCvHeader && (
                   <div className="flex w-full items-center gap-3 sm:hidden">
                     <Link
-                      href="/cv"
+                      href={`/${locale}/cv`}
                       className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 no-underline hover:!no-underline"
                     >
                       Read CV
