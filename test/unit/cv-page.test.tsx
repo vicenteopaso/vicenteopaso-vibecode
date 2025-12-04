@@ -3,7 +3,7 @@ import fs from "fs";
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import CVPage from "../../app/cv/page";
+import CVPage from "../../app/[lang]/cv/page";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -23,7 +23,7 @@ describe("CVPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<CVPage />);
+    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
 
     expect(screen.getByText("CV")).toBeInTheDocument();
     expect(
@@ -121,7 +121,7 @@ describe("CVPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<CVPage />);
+    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
 
     // Header
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
@@ -209,7 +209,7 @@ describe("CVPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<CVPage />);
+    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
 
     // Header uses basics.name and getInitials handles single-word name
     expect(screen.getByText("SingleName")).toBeInTheDocument();
@@ -253,7 +253,7 @@ describe("CVPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<CVPage />);
+    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
 
     // Should still render without crashing - check for name heading
     expect(screen.getByRole("heading", { name: "Test" })).toBeInTheDocument();
@@ -301,7 +301,7 @@ describe("CVPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<CVPage />);
+    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
 
     expect(screen.getByText("Tech Corp")).toBeInTheDocument();
     expect(screen.getByText("Senior Engineer")).toBeInTheDocument();
@@ -334,7 +334,7 @@ describe("CVPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<CVPage />);
+    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
 
     expect(screen.getByText("Simple highlight")).toBeInTheDocument();
     expect(screen.getByText("Complex Highlight")).toBeInTheDocument();

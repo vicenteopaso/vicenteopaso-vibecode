@@ -4,19 +4,32 @@ import path from "path";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
+import { getLocaleFromParams } from "@/lib/i18n";
 import {
   aboutPageComponents,
   introComponents,
-} from "../lib/markdown-components";
-import { GetInTouchSection } from "./components/GetInTouchSection";
-import { GitHubIcon, LinkedInIcon, XIcon } from "./components/icons";
-import { ImpactCards } from "./components/ImpactCards";
-import { ProfileCard } from "./components/ProfileCard";
+} from "@/lib/markdown-components";
+
+import { GetInTouchSection } from "../components/GetInTouchSection";
+import { GitHubIcon, LinkedInIcon, XIcon } from "../components/icons";
+import { ImpactCards } from "../components/ImpactCards";
+import { ProfileCard } from "../components/ProfileCard";
 
 export const dynamic = "force-static";
 
-export default function HomePage() {
-  const filePath = path.join(process.cwd(), "content", "en", "about.md");
+export async function generateStaticParams() {
+  return [{ lang: "en" }, { lang: "es" }];
+}
+
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export default async function HomePage({ params }: PageProps) {
+  const { lang } = await params;
+  const locale = getLocaleFromParams({ lang });
+
+  const filePath = path.join(process.cwd(), "content", locale, "about.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(fileContents);
   const name = (data.name as string) || "";

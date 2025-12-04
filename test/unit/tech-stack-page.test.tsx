@@ -3,7 +3,7 @@ import fs from "fs";
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import TechStackPage from "../../app/tech-stack/page";
+import TechStackPage from "../../app/[lang]/tech-stack/page";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -38,7 +38,9 @@ describe("TechStackPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<TechStackPage />);
+    const { container } = render(
+      <TechStackPage params={Promise.resolve({ lang: "en" })} />,
+    );
 
     expect(
       screen.getByRole("heading", { name: /Tech Stack/i, level: 1 }),
@@ -85,7 +87,7 @@ describe("TechStackPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<TechStackPage />);
+    render(<TechStackPage params={Promise.resolve({ lang: "en" })} />);
 
     expect(
       screen.getByRole("heading", { name: /Tech Stack/i, level: 1 }),

@@ -21,7 +21,7 @@ describe("middleware", () => {
     acceptLanguage?: string,
   ): NextRequest {
     const url = new URL(pathname, "http://localhost:3000");
-    
+
     // Add clone method to URL for middleware redirect logic
     const urlWithClone = Object.assign(url, {
       clone: () => {

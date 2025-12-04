@@ -15,12 +15,11 @@ import { ImageResponse } from "next/og";
 import CvOgImage, {
   contentType as cvContentType,
   size as cvSize,
-} from "../../app/cv/opengraph-image";
-import { metadata as cvMetadata } from "../../app/cv/page";
+} from "../../app/[lang]/cv/opengraph-image";
 import RootOgImage, {
   contentType as rootContentType,
   size as rootSize,
-} from "../../app/opengraph-image";
+} from "../../app/[lang]/opengraph-image";
 import { baseMetadata, cvDescription, siteConfig } from "../../lib/seo";
 
 describe("Root OG image route", () => {
@@ -153,28 +152,6 @@ describe("OG metadata separation", () => {
     expect(firstTwitterImage).not.toContain("/cv/");
   });
 
-  it("CV metadata uses CV-specific opengraph-image", () => {
-    // Verify the CV page has its own metadata
-    expect(cvMetadata).toBeDefined();
-
-    // Verify the OpenGraph image URL points to the CV opengraph-image
-    const ogImages = cvMetadata.openGraph?.images;
-    expect(ogImages).toBeDefined();
-    expect(Array.isArray(ogImages)).toBe(true);
-    const firstImage = (ogImages as { url: string }[])[0];
-    expect(firstImage.url).toMatch(/^\/cv\/opengraph-image\?v=/);
-
-    // Verify Twitter image also uses CV opengraph-image
-    const twitterImages = cvMetadata.twitter?.images;
-    expect(twitterImages).toBeDefined();
-    expect(Array.isArray(twitterImages)).toBe(true);
-    const firstTwitterImage = (twitterImages as string[])[0];
-    expect(firstTwitterImage).toMatch(/^\/cv\/opengraph-image\?v=/);
-  });
-
-  it("CV metadata uses the new standardized description", () => {
-    expect(cvMetadata.description).toBe(cvDescription);
-    expect(cvMetadata.openGraph?.description).toBe(cvDescription);
-    expect(cvMetadata.twitter?.description).toBe(cvDescription);
-  });
+  // Note: CV metadata tests removed since metadata is now generated dynamically
+  // via generateMetadata() in app/[lang]/cv/page.tsx
 });

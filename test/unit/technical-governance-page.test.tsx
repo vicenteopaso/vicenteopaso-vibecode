@@ -3,7 +3,7 @@ import fs from "fs";
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import TechnicalGovernancePage from "../../app/technical-governance/page";
+import TechnicalGovernancePage from "../../app/[lang]/technical-governance/page";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -38,7 +38,9 @@ describe("TechnicalGovernancePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<TechnicalGovernancePage />);
+    const { container } = render(
+      <TechnicalGovernancePage params={Promise.resolve({ lang: "en" })} />,
+    );
 
     expect(
       screen.getByRole("heading", { name: /Technical Governance/i, level: 1 }),
@@ -89,7 +91,9 @@ describe("TechnicalGovernancePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<TechnicalGovernancePage />);
+    render(
+      <TechnicalGovernancePage params={Promise.resolve({ lang: "en" })} />,
+    );
 
     expect(
       screen.getByRole("heading", { name: /Technical Governance/i, level: 1 }),

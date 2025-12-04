@@ -9,7 +9,7 @@ vi.mock("../../app/components/ImpactCards", () => ({
   ),
 }));
 
-import HomePage from "../../app/page";
+import HomePage from "../../app/[lang]/page";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -32,7 +32,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
     expect(screen.getByText("Engineering leader")).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
     expect(
@@ -85,7 +85,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     expect(
       screen.getByText(/This is the introduction body\./i),
@@ -121,7 +121,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     const impactSection = screen.getByRole("region", {
       name: /impact cards/i,
@@ -153,7 +153,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     const githubLinks = screen.getAllByRole("link", {
       name: /github profile/i,
@@ -186,7 +186,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     expect(
       screen.getByText(/Direct content without introduction/i),
@@ -217,7 +217,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     const impactSection = screen.getByRole("region", {
       name: /impact cards/i,
@@ -259,7 +259,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     const impactCards = screen.getByTestId("impact-cards");
     const cardsProp = JSON.parse(
@@ -286,7 +286,9 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<HomePage />);
+    const { container } = render(
+      <HomePage params={Promise.resolve({ lang: "en" })} />,
+    );
 
     // react-markdown should render an <hr> for *** inside the section
     const hrs = container.querySelectorAll("hr");
@@ -313,7 +315,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     expect(screen.getByText(/One/i)).toBeInTheDocument();
     expect(screen.getByText(/Two/i)).toBeInTheDocument();
@@ -336,7 +338,9 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<HomePage />);
+    const { container } = render(
+      <HomePage params={Promise.resolve({ lang: "en" })} />,
+    );
     const hrs = container.querySelectorAll("hr");
     expect(hrs.length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/Paragraph after\./i)).toBeInTheDocument();
@@ -357,7 +361,7 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<HomePage />);
+    render(<HomePage params={Promise.resolve({ lang: "en" })} />);
 
     // Name should not render when missing; tagline still renders
     expect(screen.queryByText("Vicente Opaso")).not.toBeInTheDocument();
@@ -383,7 +387,9 @@ describe("HomePage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<HomePage />);
+    const { container } = render(
+      <HomePage params={Promise.resolve({ lang: "en" })} />,
+    );
 
     // There should be no intro section; only the Profile header and footer exist
     expect(container.querySelectorAll("section.space-y-4.py-3").length).toBe(0);

@@ -53,7 +53,7 @@ describe("LanguageToggle", () => {
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("aria-label");
-      
+
       const ariaLabel = button.getAttribute("aria-label");
       expect(ariaLabel).toBeTruthy();
       expect(typeof ariaLabel).toBe("string");
@@ -64,7 +64,7 @@ describe("LanguageToggle", () => {
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("title");
-      
+
       const title = button.getAttribute("title");
       expect(title).toBeTruthy();
     });
@@ -74,7 +74,7 @@ describe("LanguageToggle", () => {
 
       const button = screen.getByRole("button");
       expect(button).not.toHaveAttribute("disabled");
-      
+
       // Button should be focusable
       button.focus();
       expect(button).toHaveFocus();
@@ -144,9 +144,7 @@ describe("LanguageToggle", () => {
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining("Language toggle clicked"),
       );
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining("/es"),
-      );
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("/es"));
 
       consoleSpy.mockRestore();
     });
@@ -156,11 +154,11 @@ describe("LanguageToggle", () => {
 
       const button = screen.getByRole("button");
       fireEvent.click(button);
-      
+
       expect(screen.getByRole("status")).toBeInTheDocument();
 
       fireEvent.click(button);
-      
+
       // Should still show message (timer resets)
       expect(screen.getByRole("status")).toBeInTheDocument();
     });
@@ -172,7 +170,7 @@ describe("LanguageToggle", () => {
 
       const button = screen.getByRole("button");
       const text = button.textContent;
-      
+
       expect(text).toBe("ES");
       expect(text).toMatch(/^[A-Z]{2}$/);
     });

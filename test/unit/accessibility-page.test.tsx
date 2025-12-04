@@ -3,7 +3,7 @@ import fs from "fs";
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import AccessibilityPage from "../../app/accessibility/page";
+import AccessibilityPage from "../../app/[lang]/accessibility/page";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -38,7 +38,9 @@ describe("AccessibilityPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    const { container } = render(<AccessibilityPage />);
+    const { container } = render(
+      <AccessibilityPage params={Promise.resolve({ lang: "en" })} />,
+    );
 
     expect(
       screen.getByRole("heading", { name: /Accessibility/i, level: 1 }),
@@ -87,7 +89,7 @@ describe("AccessibilityPage", () => {
 
     vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
 
-    render(<AccessibilityPage />);
+    render(<AccessibilityPage params={Promise.resolve({ lang: "en" })} />);
 
     expect(
       screen.getByRole("heading", { name: /Accessibility Statement/i }),
