@@ -6,7 +6,7 @@ slug: tech-stack
 
 ## Overview
 
-This site is built with a modern, type-safe stack optimized for performance, accessibility, and developer experience. The architecture follows [Spec-Driven Development (SDD)](/technical-governance) principles, with comprehensive governance documentation guiding implementation decisions.
+This site is built with a modern, type-safe stack optimized for performance, accessibility, and developer experience. The architecture follows [Spec-Driven Development (SDD)](/en/technical-governance) principles, with comprehensive governance documentation guiding implementation decisions.
 
 ## Core Framework & Runtime
 
@@ -124,16 +124,16 @@ Key design principles:
 
 ## Architecture & Governance
 
-This project follows [Spec-Driven Development (SDD)](/technical-governance) principles, with comprehensive governance documentation including:
+This project follows [Spec-Driven Development (SDD)](/en/technical-governance) principles, with comprehensive governance documentation including:
 
 - **[Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md)** — North-star engineering intent
 - **[Architecture Overview](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ARCHITECTURE.md)** — Technical architecture and system design
 - **[Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md)** — Repository governance and quality gates
 
-For more details on how these governance documents guide development and enable AI-assisted workflows, see the [Technical Governance](/technical-governance) page.
+For more details on how these governance documents guide development and enable AI-assisted workflows, see the [Technical Governance](/en/technical-governance) page.
 
 ## Project Links
 
 - [GitHub Repository](https://github.com/vicenteopaso/vicenteopaso-vibecode)
 - [Hosted on Vercel](https://vercel.com)
-- [Technical Governance](/technical-governance) — How SDD and documentation-first engineering shaped this project
+- [Technical Governance](/en/technical-governance) — How SDD and documentation-first engineering shaped this project
