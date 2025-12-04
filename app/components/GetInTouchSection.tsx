@@ -5,8 +5,8 @@ import { getTranslations } from "@/lib/i18n";
 import { ContactDialog } from "./ContactDialog";
 import { ContactInfo } from "./ContactInfo";
 
-export function GetInTouchSection() {
-  const t = getTranslations("en"); // TODO: replace "en" with dynamic locale when available
+export function GetInTouchSection({ locale }: { locale: string }) {
+  const t = getTranslations(locale);
 
   return (
     <section className="section-card space-y-4">
