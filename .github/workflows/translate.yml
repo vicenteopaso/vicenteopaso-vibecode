@@ -1,6 +1,11 @@
 name: DeepL Translation
 
-# Trigger only when English source content changes
+# Trigger only when English source content changes.
+# 
+# Behavior:
+# - On push to main/develop: Runs translation and auto-commits results
+# - On pull_request: Runs translation for validation only (no auto-commit)
+#   This allows PR authors to verify translations work without unexpected commits
 on:
   push:
     branches:
