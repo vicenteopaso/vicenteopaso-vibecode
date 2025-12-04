@@ -75,7 +75,7 @@ test.describe("Error Handling", () => {
       exact: true,
     });
     await Promise.all([
-      page.waitForURL(/\/en\/cv(\?|$)/, { waitUntil: "domcontentloaded" }),
+      page.waitForURL(/\/en\/cv(\?|$)/, { waitUntil: "networkidle" }),
       cvLink.click(),
     ]);
     await expect(page).toHaveURL(/\/en\/cv(\?|$)/);

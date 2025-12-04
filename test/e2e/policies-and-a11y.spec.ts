@@ -51,11 +51,16 @@ test("footer links navigate to pages", async ({ page }) => {
     exact: true,
   });
   await expect(techStackLink).toBeVisible();
-  await techStackLink.click();
-  await page.waitForLoadState("load");
+
+  // Synchronize click with page navigation and hydration
+  await Promise.all([
+    page.waitForURL(/tech-stack/, { waitUntil: "networkidle" }),
+    techStackLink.click(),
+  ]);
+
   await expect(
     page.getByRole("heading", { name: "Tech Stack", exact: true }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
 });
 
 test("policy and tech stack pages render main headings", async ({ page }) => {
