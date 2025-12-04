@@ -79,7 +79,13 @@ async function translateUiJson() {
   }
 
   const enRaw = fs.readFileSync(EN_UI, "utf8");
-  const enJson = JSON.parse(enRaw);
+  let enJson;
+  try {
+    enJson = JSON.parse(enRaw);
+  } catch (error) {
+    console.error("❌ Failed to parse English UI dictionary:", error.message);
+    process.exit(1);
+  }
 
   let esJson = {};
   if (fs.existsSync(ES_UI)) {
