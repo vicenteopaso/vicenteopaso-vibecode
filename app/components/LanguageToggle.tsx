@@ -6,43 +6,43 @@ import React, { useState } from "react";
 import type { Locale } from "@/lib/i18n";
 import { useTranslations } from "@/lib/i18n";
 
-import { useLocale } from "./LocaleProvider";
-
 /**
  * LanguageToggle component for switching between locales.
  *
  * Enables users to toggle between supported languages (EN/ES).
  * Uses Next.js router navigation to switch between locale routes (/en, /es).
- * Context + localStorage provides immediate UI feedback during navigation.
+ * Reads locale directly from pathname for reliability.
  */
 export function LanguageToggle() {
   const t = useTranslations();
-  const { locale, setLocale } = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
 
-  const nextLocale: Locale = locale === "en" ? "es" : "en";
+  // Extract locale from pathname (always starts with /en or /es)
+  // Fallback to /en if pathname is undefined (e.g., in tests)
+  const pathSegments = (pathname || "/en").split("/").filter(Boolean);
+  const currentLocale = (
+    pathSegments[0] === "en" || pathSegments[0] === "es"
+      ? pathSegments[0]
+      : "en"
+  ) as Locale;
+  const nextLocale: Locale = currentLocale === "en" ? "es" : "en";
 
-  const handleToggle = () => {
+  const handleToggle = async () => {
     setIsLoading(true);
 
-    // Update context immediately for UI feedback
-    setLocale(nextLocale);
+    try {
+      // Replace the locale in the pathname
+      // pathname is like /en, /en/cv, /es, /es/cv
+      const safePath = pathname || "/en";
+      const newPath = safePath.replace(`/${currentLocale}`, `/${nextLocale}`);
 
-    // Build new path with new locale
-    // Current path might be /en/cv or /es/cv, we want to replace the locale
-    const segments = pathname.split("/").filter(Boolean);
-    const currentLocale = segments[0];
-
-    // If the current path starts with a locale, replace it
-    const newPath =
-      currentLocale === "en" || currentLocale === "es"
-        ? `/${nextLocale}${pathname.substring(currentLocale.length + 1)}`
-        : `/${nextLocale}${pathname}`;
-
-    // Navigate to new locale path
-    router.push(newPath as `/${string}`);
+      // Navigate to new locale path
+      await router.push(newPath as `/${string}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,7 +50,7 @@ export function LanguageToggle() {
       type="button"
       onClick={handleToggle}
       disabled={isLoading}
-      className="inline-flex h-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-3 text-xs font-medium text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+      className="inline-flex h-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-3 text-xs font-medium text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 cursor-pointer"
       aria-label={t("language.toggle")}
       title={`Switch to ${nextLocale.toUpperCase()}`}
     >

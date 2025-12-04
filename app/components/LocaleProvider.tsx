@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import type { Locale } from "@/lib/i18n";
 import { defaultLocale, locales } from "@/lib/i18n";
@@ -13,17 +14,19 @@ interface LocaleContextType {
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
+  const params = useParams();
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
   const [mounted, setMounted] = useState(false);
 
-  // Load locale from localStorage on mount
+  // Sync locale with URL params and localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("preferred-locale");
-    if (stored && locales.includes(stored as Locale)) {
-      setLocaleState(stored as Locale);
+    const urlLocale = (params?.lang as Locale) || defaultLocale;
+    if (locales.includes(urlLocale)) {
+      setLocaleState(urlLocale);
+      localStorage.setItem("preferred-locale", urlLocale);
     }
     setMounted(true);
-  }, []);
+  }, [params?.lang]);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);

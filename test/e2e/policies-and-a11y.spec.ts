@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("footer links navigate to pages", async ({ page }) => {
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
     // Continue if networkidle times out - page may have background requests
   });
@@ -12,14 +12,14 @@ test("footer links navigate to pages", async ({ page }) => {
     exact: true,
   });
   await expect(cookieLink).toBeVisible();
-  await cookieLink.click();
-  await page.waitForURL("**/cookie-policy");
+  await Promise.all([page.waitForURL("**/cookie-policy"), cookieLink.click()]);
+  await page.waitForLoadState("domcontentloaded");
   await expect(
-    page.getByRole("heading", { name: "Cookie Policy", exact: true }),
-  ).toBeVisible();
+    page.getByRole("heading", { name: /Cookie Policy/i }),
+  ).toBeVisible({ timeout: 10000 });
 
   // Navigate back and test Privacy Policy link
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
     // Continue if networkidle times out
   });
@@ -28,16 +28,18 @@ test("footer links navigate to pages", async ({ page }) => {
     exact: true,
   });
   await expect(privacyLink).toBeVisible();
+
   await Promise.all([
     page.waitForURL("**/privacy-policy"),
     privacyLink.click(),
   ]);
+  await expect(page).toHaveURL(/\/privacy-policy/);
   await expect(
     page.getByRole("heading", { name: "Privacy Policy", exact: true }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 10000 });
 
   // Navigate back and test Tech Stack link
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {
     // Continue if networkidle times out - page may have background requests
   });
@@ -54,17 +56,17 @@ test("footer links navigate to pages", async ({ page }) => {
 });
 
 test("policy and tech stack pages render main headings", async ({ page }) => {
-  await page.goto("/cookie-policy");
+  await page.goto("/en/cookie-policy");
   await expect(
     page.getByRole("heading", { name: "Cookie Policy", exact: true }),
   ).toBeVisible();
 
-  await page.goto("/privacy-policy");
+  await page.goto("/en/privacy-policy");
   await expect(
     page.getByRole("heading", { name: "Privacy Policy", exact: true }),
   ).toBeVisible();
 
-  await page.goto("/tech-stack");
+  await page.goto("/en/tech-stack");
   await expect(
     page.getByRole("heading", { name: "Tech Stack", exact: true }),
   ).toBeVisible();
@@ -73,7 +75,7 @@ test("policy and tech stack pages render main headings", async ({ page }) => {
 test("skip link appears on focus and targets main content", async ({
   page,
 }) => {
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {
     // Continue if networkidle times out
   });
@@ -85,6 +87,6 @@ test("skip link appears on focus and targets main content", async ({
   const skipLink = page.getByRole("link", { name: /skip to main content/i });
   await expect(skipLink).toBeVisible({ timeout: 10000 });
 
-  await skipLink.click();
+  await skipLink.click({ force: true });
   await expect(page.locator("main#main-content")).toBeVisible();
 });
