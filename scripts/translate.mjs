@@ -107,7 +107,7 @@ async function translateUiJson() {
 
   for (const [key, value] of Object.entries(enJson)) {
     if (typeof value !== "string") {
-      console.log(`⚠️  Skipping non-string value for key: ${key}`);
+      console.log(`⚠️  UI dictionary must be flat - nested objects are not supported. Please flatten key: ${key}`);
       continue;
     }
 
