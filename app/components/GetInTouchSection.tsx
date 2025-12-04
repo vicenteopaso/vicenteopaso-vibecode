@@ -1,11 +1,11 @@
 import React from "react";
 
-import { getTranslations } from "@/lib/i18n";
+import { getTranslations, type Locale } from "@/lib/i18n";
 
 import { ContactDialog } from "./ContactDialog";
 import { ContactInfo } from "./ContactInfo";
 
-export function GetInTouchSection({ locale }: { locale: string }) {
+export function GetInTouchSection({ locale }: { locale: Locale }) {
   const t = getTranslations(locale);
 
   return (
