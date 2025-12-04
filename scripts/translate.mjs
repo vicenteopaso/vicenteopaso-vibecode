@@ -29,6 +29,7 @@ const EN_CONTENT_DIR = path.join(ROOT, "content", "en");
 const ES_CONTENT_DIR = path.join(ROOT, "content", "es");
 const EN_UI = path.join(ROOT, "i18n", "en", "ui.json");
 const ES_UI = path.join(ROOT, "i18n", "es", "ui.json");
+const UI_METADATA = path.join(ROOT, "i18n", "es", ".ui-metadata.json");
 
 // Rate limiting configuration
 const RATE_LIMIT_DELAY_MS = 100;
@@ -65,7 +66,7 @@ async function translateText(text) {
 
 /**
  * Translate UI dictionary from English to Spanish
- * Only translates new keys that don't exist in Spanish
+ * Only translates new keys or keys with changed English values
  * Returns object with success status and any failed keys
  */
 async function translateUiJson() {
@@ -100,16 +101,31 @@ async function translateUiJson() {
     }
   }
 
+  // Load UI translation metadata (tracks source hashes)
+  let metadata = {};
+  if (fs.existsSync(UI_METADATA)) {
+    try {
+      metadata = JSON.parse(fs.readFileSync(UI_METADATA, "utf8"));
+    } catch (error) {
+      console.log("⚠️  Failed to parse UI metadata, starting fresh");
+      metadata = {};
+    }
+  }
+
   // Clean up orphaned keys (keys that exist in Spanish but not in English)
   const enKeys = new Set(Object.keys(enJson));
   const orphanedKeys = Object.keys(esJson).filter((key) => !enKeys.has(key));
   if (orphanedKeys.length > 0) {
     console.log(`🧹 Removing ${orphanedKeys.length} orphaned UI keys`);
-    orphanedKeys.forEach((key) => delete esJson[key]);
+    orphanedKeys.forEach((key) => {
+      delete esJson[key];
+      delete metadata[key];
+    });
   }
 
   let changed = orphanedKeys.length > 0;
   let translatedCount = 0;
+  let metadataChanged = orphanedKeys.length > 0;
 
   for (const [key, value] of Object.entries(enJson)) {
     if (typeof value !== "string") {
@@ -117,13 +133,19 @@ async function translateUiJson() {
       continue;
     }
 
-    if (!esJson[key]) {
-      console.log(`  Translating: ${key}`);
+    const enValueHash = hash(value);
+
+    // Check if we need to translate: missing or English value changed
+    if (!esJson[key] || metadata[key] !== enValueHash) {
+      const action = !esJson[key] ? "Translating" : "Re-translating (source changed)";
+      console.log(`  ${action}: ${key}`);
       try {
         const translated = await translateText(value);
         esJson[key] = translated;
+        metadata[key] = enValueHash;
         translatedCount++;
         changed = true; // Only mark as changed after successful translation
+        metadataChanged = true;
         // Small delay to respect API rate limits
         await new Promise((resolve) =>
           setTimeout(resolve, RATE_LIMIT_DELAY_MS),
@@ -132,6 +154,7 @@ async function translateUiJson() {
         console.error(`  ❌ Failed to translate key "${key}":`, error.message);
         result.failed.push({ key, error: error.message });
         result.success = false;
+        // Don't update metadata for failed translations
       }
     }
   }
@@ -144,6 +167,15 @@ async function translateUiJson() {
     );
   } else {
     console.log("✅ UI dictionary up to date");
+  }
+
+  // Save updated metadata
+  if (metadataChanged) {
+    fs.writeFileSync(
+      UI_METADATA,
+      JSON.stringify(metadata, null, 2) + "\n",
+      "utf8",
+    );
   }
 
   return result;
