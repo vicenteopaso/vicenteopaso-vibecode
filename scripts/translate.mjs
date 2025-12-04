@@ -122,8 +122,8 @@ async function translateUiJson() {
       try {
         const translated = await translateText(value);
         esJson[key] = translated;
-        changed = true;
         translatedCount++;
+        changed = true; // Only mark as changed after successful translation
       } catch (error) {
         console.error(`  ❌ Failed to translate key "${key}":`, error.message);
         result.failed.push({ key, error: error.message });
