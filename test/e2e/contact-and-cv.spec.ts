@@ -1,16 +1,18 @@
 import { expect, test } from "@playwright/test";
 
 test("contact dialog opens and shows required fields", async ({ page }) => {
-  await page.goto("/en", { waitUntil: "load" });
+  await page.goto("/en", { waitUntil: "networkidle" });
 
   // Ensure header is on top and interactable
   await page.evaluate(() => window.scrollTo(0, 0));
   const contactButton = page
     .locator("header")
     .getByRole("button", { name: "Contact", exact: true });
-  await contactButton.click({ force: true });
+  await expect(contactButton).toBeVisible({ timeout: 5000 });
+  await page.waitForLoadState("networkidle");
+  await contactButton.click();
 
-  await expect(page.getByRole("dialog")).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
   await expect(page.getByRole("heading", { name: "Contact me" })).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Message")).toBeVisible();
@@ -103,7 +105,7 @@ test.describe("Contact dialog - mobile viewport", () => {
 // Error flow tests
 test.describe("Contact dialog - error handling", () => {
   test("shows validation errors for empty form", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "load" });
+    await page.goto("/en", { waitUntil: "networkidle" });
     await page.waitForLoadState("domcontentloaded");
 
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -111,10 +113,11 @@ test.describe("Contact dialog - error handling", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await contactButton.click({ force: true });
+    await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
     // Wait for dialog to open and form content to be visible
-    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Try to submit without filling any fields (need Turnstile verification first)
@@ -132,7 +135,7 @@ test.describe("Contact dialog - error handling", () => {
   });
 
   test("form values are preserved on validation error", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "load" });
+    await page.goto("/en", { waitUntil: "networkidle" });
     await page.waitForLoadState("domcontentloaded");
 
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -140,10 +143,11 @@ test.describe("Contact dialog - error handling", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await contactButton.click({ force: true });
+    await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
     // Wait for dialog to open and form content to be visible
-    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Fill in only email (leave message empty)
@@ -177,11 +181,17 @@ test.describe("Contact dialog - accessibility", () => {
     await page.goto("/en", { waitUntil: "networkidle" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.getByRole("button", { name: "Contact me", exact: true }).click();
+    const contactButton = page.getByRole("button", {
+      name: "Contact me",
+      exact: true,
+    });
 
-    // Wait for dialog to open
+    // Synchronize click with dialog appearance
     const dialog = page.getByRole("dialog", { name: /contact me/i });
-    await expect(dialog).toBeVisible({ timeout: 15000 });
+    await Promise.all([
+      dialog.waitFor({ state: "visible", timeout: 15000 }),
+      contactButton.click(),
+    ]);
 
     // Look for status region within the dialog
     const statusRegion = dialog.locator('[role="status"]').first();

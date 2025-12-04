@@ -108,10 +108,17 @@ test.describe("Error Handling", () => {
 
     // Wait for button to be fully interactive before clicking
     await page.waitForLoadState("networkidle");
-    await contactButton.click();
 
-    // Wait for dialog to open and form content to be visible
-    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
+    // Synchronize click with dialog appearance
+    await Promise.all([
+      page
+        .getByRole("dialog")
+        .first()
+        .waitFor({ state: "visible", timeout: 20000 }),
+      contactButton.click(),
+    ]);
+
+    // Verify form content is visible
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Note: Full form submission testing would require Turnstile handling
