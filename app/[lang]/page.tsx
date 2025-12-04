@@ -157,7 +157,7 @@ export default async function HomePage({ params }: PageProps) {
         return renderedSections;
       })()}
 
-      <GetInTouchSection />
+      <GetInTouchSection locale={locale} />
 
       <div className="flex items-center justify-center gap-2">
         <a

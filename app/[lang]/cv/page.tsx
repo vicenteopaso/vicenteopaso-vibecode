@@ -553,7 +553,7 @@ export default async function CVPage({ params }: PageProps) {
         </section>
       )}
 
-      <GetInTouchSection />
+      <GetInTouchSection locale={locale} />
 
       <div className="flex items-center justify-center gap-2">
         <a
