@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 
 import { CV_PDF_PATH } from "../config/cv";
 import { DownloadIcon } from "./icons";
-import { useLocale } from "./LocaleProvider";
 
 interface ProfileCardProps {
   name: string;
