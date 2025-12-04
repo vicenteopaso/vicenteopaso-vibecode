@@ -64,10 +64,18 @@ test.describe("Contact dialog - mobile viewport", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await contactButton.click({ force: true });
 
-    // Wait for dialog to open and form content to be visible
-    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
+    // Wait for full hydration before interaction
+    await page.waitForLoadState("networkidle");
+
+    // Synchronize click with dialog appearance
+    const dialog = page.getByRole("dialog");
+    await Promise.all([
+      dialog.waitFor({ state: "visible", timeout: 20000 }),
+      contactButton.click(),
+    ]);
+
+    // Verify form content is visible
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Check that body has scroll lock (Radix adds data-scroll-locked)
@@ -86,11 +94,18 @@ test.describe("Contact dialog - mobile viewport", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await contactButton.click({ force: true });
 
-    // Wait for dialog to open and form content to be visible
+    // Wait for full hydration before interaction
+    await page.waitForLoadState("networkidle");
+
+    // Synchronize click with dialog appearance
     const dialog = page.getByRole("dialog");
-    await expect(dialog).toBeVisible({ timeout: 20000 });
+    await Promise.all([
+      dialog.waitFor({ state: "visible", timeout: 20000 }),
+      contactButton.click(),
+    ]);
+
+    // Verify form content is visible
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // All form fields should be visible
