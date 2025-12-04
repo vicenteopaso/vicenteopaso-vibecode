@@ -22,6 +22,10 @@ if (!window.matchMedia) {
 
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(),
+  useParams: vi.fn(() => ({ lang: "en" })),
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+  })),
 }));
 
 vi.mock("next/link", () => {

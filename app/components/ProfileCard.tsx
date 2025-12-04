@@ -7,7 +7,8 @@ import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 
 import { CV_PDF_PATH } from "../config/cv";
-import { DownloadIcon, GitHubIcon, LinkedInIcon, XIcon } from "./icons";
+import { DownloadIcon } from "./icons";
+import { useLocale } from "./LocaleProvider";
 
 interface ProfileCardProps {
   name: string;
@@ -45,6 +46,7 @@ export function ProfileCard({
   sectionLinks,
 }: ProfileCardProps) {
   const { resolvedTheme } = useTheme();
+  const { locale } = useLocale();
   const [hasImageError, setHasImageError] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -143,7 +145,7 @@ export function ProfileCard({
                 <a
                   href={CV_PDF_PATH}
                   download
-                  className="hidden shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex"
+                  className="hidden shrink-0 items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex no-underline hover:no-underline"
                   aria-label="Download CV (PDF)"
                 >
                   <DownloadIcon className="h-4 w-4" />
@@ -188,15 +190,15 @@ export function ProfileCard({
                 {!isCvHeader && (
                   <div className="flex w-full items-center gap-3 sm:hidden">
                     <Link
-                      href="/cv"
-                      className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                      href={`/${locale}/cv`}
+                      className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 no-underline hover:!no-underline"
                     >
                       Read CV
                     </Link>
                     <a
                       href={CV_PDF_PATH}
                       download
-                      className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                      className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 no-underline hover:!no-underline"
                     >
                       Download CV
                     </a>
@@ -206,15 +208,15 @@ export function ProfileCard({
                 {/* Desktop: primary/secondary buttons */}
                 <div className="hidden items-center gap-3 sm:flex sm:flex-nowrap">
                   <Link
-                    href="/cv"
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                    href={`/${locale}/cv`}
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition-colors hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 no-underline hover:!no-underline"
                   >
                     Read CV
                   </Link>
                   <a
                     href={CV_PDF_PATH}
                     download
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-2 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 no-underline hover:!no-underline"
                   >
                     Download CV
                   </a>
@@ -260,7 +262,7 @@ export function ProfileCard({
                         <a
                           href={CV_PDF_PATH}
                           download
-                          className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 no-underline hover:!no-underline"
                           aria-label="Download CV (PDF)"
                         >
                           <DownloadIcon className="h-4 w-4" />
@@ -268,37 +270,6 @@ export function ProfileCard({
                         </a>
                       </div>
                     )}
-                    <div className="flex items-center justify-center gap-2 sm:justify-end">
-                      <a
-                        href="https://github.com/vicenteopaso/"
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="GitHub profile"
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-                      >
-                        <GitHubIcon className="h-4 w-4" />
-                      </a>
-
-                      <a
-                        href="https://linkedin.com/in/vicenteopaso/"
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="LinkedIn profile"
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-                      >
-                        <LinkedInIcon className="h-4 w-4" />
-                      </a>
-
-                      <a
-                        href="https://x.com/vicenteopaso/"
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="X (Twitter) profile"
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-                      >
-                        <XIcon className="h-4 w-4" />
-                      </a>
-                    </div>
                   </div>
                 )}
 

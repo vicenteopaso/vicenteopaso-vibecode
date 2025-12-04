@@ -5,6 +5,8 @@ import type { FormEvent, ReactNode } from "react";
 import React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useTranslations } from "@/lib/i18n";
+
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
 
@@ -48,6 +50,7 @@ export function ContactDialog({
   trigger,
   children,
 }: ContactDialogProps) {
+  const t = useTranslations();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [phone, setPhone] = useState("");
@@ -75,7 +78,7 @@ export function ContactDialog({
   // Derive success message from formState instead of maintaining separate state
   const successMessage =
     formState === "success" || formState === "countdown"
-      ? "Message sent. I'll get back to you as soon as I can."
+      ? t("contact.successMessage")
       : null;
 
   // Reset the form to its initial state
@@ -212,19 +215,19 @@ export function ContactDialog({
 
     if (hasEmptyEmail || hasEmptyMessage || hasInvalidEmail) {
       if (hasEmptyEmail) {
-        setEmailError("Please provide an email address.");
+        setEmailError(t("contact.emailRequired"));
       } else if (hasInvalidEmail) {
-        setEmailError("Please provide a valid email address.");
+        setEmailError(t("contact.emailInvalid"));
       }
       if (hasEmptyMessage) {
-        setMessageError("Please provide a message.");
+        setMessageError(t("contact.messageRequired"));
       }
-      setError("Please fix the errors highlighted below.");
+      setError(t("contact.formError"));
       return;
     }
 
     if (!turnstileToken) {
-      setError("Please complete the verification.");
+      setError(t("contact.verificationRequired"));
       return;
     }
 
@@ -251,8 +254,7 @@ export function ContactDialog({
         const data = (await response.json().catch(() => null)) as {
           error?: string;
         } | null;
-        const message =
-          data?.error || "Something went wrong. Please try again.";
+        const message = data?.error || t("contact.submitError");
         throw new Error(message);
       }
 
@@ -269,9 +271,7 @@ export function ContactDialog({
       window.turnstile?.reset();
       setTurnstileToken(null);
       const message =
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.";
+        err instanceof Error ? err.message : t("contact.submitError");
       setError(message);
       // On error, keep form in idle state so user can retry
       setFormState("idle");
@@ -339,10 +339,10 @@ export function ContactDialog({
       onOpenChange={handleOpenChange}
     >
       <Dialog.Title className="flex items-center gap-2 text-base font-semibold tracking-tight text-[color:var(--text-primary)]">
-        Contact me
+        {t("contact.title")}
       </Dialog.Title>
       <Dialog.Description className="mt-1 text-sm text-[color:var(--text-muted)]">
-        Reach out with a short note about what you&apos;d like to explore.
+        {t("contact.description")}
       </Dialog.Description>
       <form
         className="mt-4 space-y-3 text-sm"
@@ -351,13 +351,15 @@ export function ContactDialog({
         aria-describedby="contact-status"
       >
         <label className="flex flex-col gap-1.5">
-          <span className="text-[color:var(--text-primary)]">Email</span>
+          <span className="text-[color:var(--text-primary)]">
+            {t("contact.emailLabel")}
+          </span>
           <input
             ref={emailInputRef}
             type="email"
             name="email"
             className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
-            placeholder="you@example.com"
+            placeholder={t("contact.emailPlaceholder")}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             onKeyDown={(event) => handleKeyDown(event, "email")}
@@ -379,14 +381,14 @@ export function ContactDialog({
         </label>
         <label className="flex flex-col gap-1.5">
           <span className="text-[color:var(--text-primary)]">
-            Phone (optional)
+            {t("contact.phoneLabel")}
           </span>
           <input
             ref={phoneInputRef}
             type="tel"
             name="phone"
             className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
-            placeholder="Phone number"
+            placeholder={t("contact.phonePlaceholder")}
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
             onKeyDown={(event) => handleKeyDown(event, "phone")}
@@ -394,12 +396,14 @@ export function ContactDialog({
           />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-[color:var(--text-primary)]">Message</span>
+          <span className="text-[color:var(--text-primary)]">
+            {t("contact.messageLabel")}
+          </span>
           <textarea
             ref={messageInputRef}
             name="message"
             className="min-h-[96px] rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)] px-3 py-2 text-sm text-[color:var(--text-primary)] shadow-sm transition focus-visible:border-[color:var(--accent)]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 disabled:cursor-not-allowed disabled:opacity-60"
-            placeholder="A few words about your project or question"
+            placeholder={t("contact.messagePlaceholder")}
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             onKeyDown={(event) => handleKeyDown(event, "message")}
@@ -443,8 +447,7 @@ export function ContactDialog({
             id="contact-verification-help"
             className="mt-1 text-sm text-[color:var(--text-muted)]"
           >
-            This Cloudflare Turnstile verification helps protect this form from
-            automated spam.
+            {t("contact.verificationHelp")}
           </p>
         ) : null}
 
@@ -470,8 +473,13 @@ export function ContactDialog({
             aria-atomic="true"
             className="rounded-md bg-emerald-500/10 px-3 py-2 text-center text-sm text-emerald-400"
           >
-            Closing in {countdownSeconds}{" "}
-            {countdownSeconds === 1 ? "second" : "seconds"}…
+            {t("contact.countdownMessage", {
+              seconds: countdownSeconds,
+              secondsLabel:
+                countdownSeconds === 1
+                  ? t("contact.secondSingular")
+                  : t("contact.secondPlural"),
+            })}
           </div>
         ) : null}
 
@@ -484,14 +492,16 @@ export function ContactDialog({
             className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
             disabled={formState === "submitting"}
           >
-            Close
+            {t("contact.closeButton")}
           </Dialog.Close>
           <button
             type="submit"
             className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
             disabled={isSubmitDisabled}
           >
-            {formState === "submitting" ? "Sending..." : "Send"}
+            {formState === "submitting"
+              ? t("contact.sendingButton")
+              : t("contact.sendButton")}
           </button>
         </div>
       </form>

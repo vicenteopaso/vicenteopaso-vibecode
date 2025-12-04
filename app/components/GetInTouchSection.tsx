@@ -1,14 +1,18 @@
 import React from "react";
 
+import { getTranslations, type Locale } from "@/lib/i18n";
+
 import { ContactDialog } from "./ContactDialog";
 import { ContactInfo } from "./ContactInfo";
 
-export function GetInTouchSection() {
+export function GetInTouchSection({ locale }: { locale: Locale }) {
+  const t = getTranslations(locale);
+
   return (
     <section className="section-card space-y-4">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-          Get in touch
+          {t("getInTouch.title")}
         </h2>
         <ContactDialog
           trigger={
@@ -16,14 +20,13 @@ export function GetInTouchSection() {
               type="button"
               className="text-sm font-medium text-[color:var(--accent)] hover:text-[color:var(--accent-hover)] hover:underline underline-offset-4 cursor-pointer"
             >
-              Contact me
+              {t("getInTouch.contactButton")}
             </button>
           }
         />
       </div>
       <p className="pt-2 text-sm text-[color:var(--text-primary)]">
-        Interested in collaborating, discussing engineering leadership, or
-        exploring new opportunities? I&apos;m open to thoughtful conversations.
+        {t("getInTouch.description")}
       </p>
       <ContactInfo variant="inline" />
     </section>

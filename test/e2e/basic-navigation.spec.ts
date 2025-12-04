@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("home page has title and navigation links", async ({ page }) => {
-  await page.goto("/", { waitUntil: "load" });
+  await page.goto("/en", { waitUntil: "load" });
 
   await expect(page).toHaveTitle(/Vicente Opaso/);
 
