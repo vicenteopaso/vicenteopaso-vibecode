@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import path from "path";
 import React from "react";
 
-import { getLocaleFromParams } from "@/lib/i18n";
+import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { sanitizeRichText } from "@/lib/sanitize-html";
 import { cvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
 
@@ -137,6 +137,7 @@ interface PageProps {
 export default async function CVPage({ params }: PageProps) {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
+  const t = getTranslations(locale);
 
   const filePath = path.join(process.cwd(), "content", locale, "cv.md");
   const fileContents = fs.readFileSync(filePath, "utf8");
@@ -189,24 +190,26 @@ export default async function CVPage({ params }: PageProps) {
   const profileInitials = getInitials(profileName);
 
   const sectionLinks = [
-    work.length > 0 ? { href: "#experience", label: "Experience" } : null,
+    work.length > 0
+      ? { href: "#experience", label: t("cv.experienceSection") }
+      : null,
     cv.skills && cv.skills.length > 0
-      ? { href: "#skills", label: "Skills" }
+      ? { href: "#skills", label: t("cv.skillsSection") }
       : null,
     cv.education && cv.education.length > 0
-      ? { href: "#education", label: "Education" }
+      ? { href: "#education", label: t("cv.educationSection") }
       : null,
     cv.languages && cv.languages.length > 0
-      ? { href: "#languages", label: "Languages" }
+      ? { href: "#languages", label: t("cv.languagesSection") }
       : null,
     cv.publications && cv.publications.length > 0
-      ? { href: "#publications", label: "Publications" }
+      ? { href: "#publications", label: t("cv.publicationsSection") }
       : null,
     cv.interests && cv.interests.length > 0
-      ? { href: "#interests", label: "Interests" }
+      ? { href: "#interests", label: t("cv.interestsSection") }
       : null,
     cv.references && cv.references.length > 0
-      ? { href: "#references", label: "References" }
+      ? { href: "#references", label: t("cv.referencesSection") }
       : null,
   ].filter((link): link is { href: string; label: string } => link !== null);
 
@@ -258,7 +261,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Experience
+              {t("cv.experienceSection")}
             </h2>
             <a
               href="#cv-top"
@@ -343,7 +346,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Education
+              {t("cv.educationSection")}
             </h2>
             <a
               href="#cv-top"
@@ -382,7 +385,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Languages
+              {t("cv.languagesSection")}
             </h2>
             <a
               href="#cv-top"
@@ -414,7 +417,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Skills
+              {t("cv.skillsSection")}
             </h2>
             <a
               href="#cv-top"
@@ -456,7 +459,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Publications
+              {t("cv.publicationsSection")}
             </h2>
             <a
               href="#cv-top"
@@ -505,7 +508,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Interests
+              {t("cv.interestsSection")}
             </h2>
             <a
               href="#cv-top"
@@ -539,7 +542,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              References
+              {t("cv.referencesSection")}
             </h2>
             <a
               href="#cv-top"
