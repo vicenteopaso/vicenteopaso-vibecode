@@ -9,6 +9,8 @@
   "cv.skillsSection": "Habilidades",
   "cv.publicationsSection": "Publicaciones",
   "cv.referencesSection": "Referencias",
+  "cv.languagesSection": "Idiomas",
+  "cv.interestsSection": "Intereses",
   "footer.copyright": "© {year} Vicente Opaso. Vibecoded con ♥️ y {warp} y {cursor}.",
   "footer.warp": "Warp",
   "footer.cursor": "Cursor",
