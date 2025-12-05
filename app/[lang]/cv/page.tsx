@@ -206,7 +206,7 @@ export default async function CVPage({ params }: PageProps) {
       ? { href: "#publications", label: t("cv.publicationsSection") }
       : null,
     cv.interests && cv.interests.length > 0
-      ? { href: "#interests", label: "Interests" }
+      ? { href: "#interests", label: t("cv.interestsSection") }
       : null,
     cv.references && cv.references.length > 0
       ? { href: "#references", label: t("cv.referencesSection") }
