@@ -19,6 +19,7 @@ The `Modal` component is a base dialog/modal primitive built on Radix UI Dialog.
 | `analyticsMetadata`  | `AnalyticsMetadata`       | `undefined` | Optional metadata to send with the analytics event        |
 | `open`               | `boolean`                 | `undefined` | Optional controlled open state                            |
 | `onOpenChange`       | `(open: boolean) => void` | `undefined` | Optional callback when open state changes                 |
+| `testId`             | `string`                  | `undefined` | Optional test ID for E2E testing (applies to Dialog.Content) |
 
 ### Size Presets
 

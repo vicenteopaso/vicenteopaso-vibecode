@@ -22,6 +22,8 @@ interface ModalProps {
   open?: boolean;
   /** Callback when the open state changes. */
   onOpenChange?: (open: boolean) => void;
+  /** Optional test ID for E2E testing. */
+  testId?: string;
 }
 
 function getSizeClasses(size: ModalSize = "md") {
@@ -44,6 +46,7 @@ export function Modal({
   analyticsMetadata,
   open,
   onOpenChange,
+  testId,
 }: ModalProps) {
   const handleOpenChange = (newOpen: boolean) => {
     if (newOpen && analyticsEventName && !process.env.PLAYWRIGHT) {
@@ -65,6 +68,7 @@ export function Modal({
         <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
         <Dialog.Content
           className={`${getSizeClasses(size)} fixed left-1/2 top-1/2 max-h-[90dvh] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden rounded-2xl border border-[color:var(--border-strong)] bg-[color:var(--bg-surface)]/95 p-6 text-sm text-[color:var(--text-primary)] shadow-[0_18px_60px_rgba(15,23,42,0.9)] outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60`}
+          data-testid={testId}
         >
           {children}
         </Dialog.Content>

@@ -337,6 +337,7 @@ export function ContactDialog({
       analyticsMetadata={{ component: "ContactDialog" }}
       open={isOpen}
       onOpenChange={handleOpenChange}
+      testId="contact-dialog"
     >
       <Dialog.Title className="flex items-center gap-2 text-base font-semibold tracking-tight text-[color:var(--text-primary)]">
         {t("contact.title")}
