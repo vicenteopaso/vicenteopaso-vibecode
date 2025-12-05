@@ -106,14 +106,14 @@ echo ""
 for path in "${BUILD_PATHS[@]}"; do
   if [[ "$path" == */ ]]; then
     # Directory: match any file under this directory
-    if echo "$CHANGED_FILES" | grep -qE "^${path//\//\\/}"; then
+    if echo "$CHANGED_FILES" | grep -qE "^$(printf '%s\n' "$path" | sed 's|[][\.*^$/]|\\&|g')"; then
       echo "✓ Build-impacting path changed: $path"
       echo "Building."
       exit 1
     fi
   else
     # File: match only the exact file at the root
-    if echo "$CHANGED_FILES" | grep -qE "^${path//\//\\/}\$"; then
+    if echo "$CHANGED_FILES" | grep -qE "^$(printf '%s\n' "$path" | sed 's|[][\.*^$/]|\\&|g')\$"; then
       echo "✓ Build-impacting path changed: $path"
       echo "Building."
       exit 1
