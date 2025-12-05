@@ -385,7 +385,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Languages
+              {t("cv.languagesSection")}
             </h2>
             <a
               href="#cv-top"
@@ -508,7 +508,7 @@ export default async function CVPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              Interests
+              {t("cv.interestsSection")}
             </h2>
             <a
               href="#cv-top"
