@@ -8,6 +8,20 @@ vi.mock("next-themes", () => ({
   useTheme: () => ({ resolvedTheme: "dark" }),
 }));
 
+vi.mock("@/lib/i18n", () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      "cv.downloadLabel": "Download CV",
+      "cv.readLabel": "Read CV",
+    };
+    return translations[key] || key;
+  },
+}));
+
+vi.mock("../../app/components/LocaleProvider", () => ({
+  useLocale: () => ({ locale: "en" }),
+}));
+
 vi.mock("next/image", () => {
   return {
     __esModule: true,
