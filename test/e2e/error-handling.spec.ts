@@ -102,17 +102,14 @@ test.describe("Error Handling", () => {
     });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
 
-    // Wait for button to be fully interactive before clicking
-    await page.waitForLoadState("networkidle");
+    // Ensure the button is enabled and hydration has settled
+    await expect(contactButton).toBeEnabled({ timeout: 5000 });
+    await page.waitForTimeout(300);
 
-    // Synchronize click with dialog appearance
-    await Promise.all([
-      page
-        .getByRole("dialog")
-        .first()
-        .waitFor({ state: "visible", timeout: 20000 }),
-      contactButton.click(),
-    ]);
+    // Click the button to open the dialog and wait for stable test id
+    await contactButton.click();
+    const dialog = page.getByTestId("contact-dialog");
+    await expect(dialog).toBeVisible({ timeout: 20000 });
 
     // Verify form content is visible
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
