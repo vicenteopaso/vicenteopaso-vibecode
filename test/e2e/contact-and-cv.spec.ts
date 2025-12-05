@@ -13,11 +13,36 @@ async function openContactDialog(page: Page) {
   await expect(contactButton).toBeVisible({ timeout: 5000 });
   await page.waitForLoadState("networkidle");
   
+  // Ensure button is enabled and clickable
+  await expect(contactButton).toBeEnabled({ timeout: 5000 });
+  
+  // Wait a moment for React hydration to complete
+  await page.waitForTimeout(300);
+  
+  // Click and wait for navigation/state change
   await contactButton.click();
   
   // Wait for dialog to appear in DOM and be visible using stable test ID
   const dialog = page.getByTestId("contact-dialog");
-  await expect(dialog).toBeVisible({ timeout: 20000 });
+  
+  try {
+    await expect(dialog).toBeVisible({ timeout: 20000 });
+  } catch (error) {
+    // Provide diagnostic information on failure
+    const buttonState = await contactButton.evaluate((el) => ({
+      disabled: (el as HTMLButtonElement).disabled,
+      ariaExpanded: el.getAttribute("aria-expanded"),
+      dataState: el.getAttribute("data-state"),
+    }));
+    
+    const dialogExists = await page.locator('[data-testid="contact-dialog"]').count();
+    
+    throw new Error(
+      `Dialog failed to open. Button state: ${JSON.stringify(buttonState)}, ` +
+      `Dialog elements found: ${dialogExists}, ` +
+      `Original error: ${error}`
+    );
+  }
   
   // Wait for form content to ensure dialog is fully rendered
   await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
