@@ -105,7 +105,7 @@ echo ""
 # Check if any build-triggering path was modified
 for path in "${BUILD_PATHS[@]}"; do
   # Escape regex special characters (but NOT forward slash, it's not special in grep)
-  escaped_path=$(printf '%s\n' "$path" | sed 's/[][\.*^$]/\\&/g')
+  escaped_path=$(printf '%s\n' "$path" | sed 's/[].[*^$[]/\\&/g')
   
   if [[ "$path" == */ ]]; then
     # Directory: match any file under this directory

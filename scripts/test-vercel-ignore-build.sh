@@ -70,7 +70,7 @@ test_sed_pattern() {
   local description="$2"
   
   # Use the exact sed pattern from vercel-ignore-build.sh
-  local escaped=$(printf '%s\n' "$test_path" | sed 's|[][\.*^$/]|\\&|g')
+  local escaped=$(printf '%s\n' "$test_path" | sed 's|[].[*^$[]|\\&|g')
   
   # Verify the escaped pattern matches the original
   if echo "$test_path" | grep -qE "^${escaped}\$"; then
