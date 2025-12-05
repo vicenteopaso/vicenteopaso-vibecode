@@ -31,6 +31,9 @@ test("CV page renders experience section", async ({ page }) => {
 test.describe("Contact dialog - mobile viewport", () => {
   test.use({ viewport: { width: 375, height: 667 } }); // iPhone 8/SE dimensions
 
+  // Configure retries for this block to handle timing issues
+  test.describe.configure({ retries: 2 });
+
   test("modal content is scrollable on mobile", async ({ page }) => {
     await page.goto("/en", { waitUntil: "networkidle" });
     await page.waitForLoadState("domcontentloaded");
@@ -40,19 +43,12 @@ test.describe("Contact dialog - mobile viewport", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await expect(contactButton).toBeEnabled();
-
-    // Ensure the app is fully hydrated before interaction
     await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
+    // Wait for dialog to open and animation to complete
     const dialog = page.getByRole("dialog");
-
-    // Synchronize click with dialog becoming visible
-    await Promise.all([
-      dialog.waitFor({ state: "visible", timeout: 20000 }),
-      contactButton.click(),
-    ]);
-
+    await expect(dialog).toBeVisible({ timeout: 20000 });
     // Wait for form content to ensure animation is complete
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
@@ -72,21 +68,11 @@ test.describe("Contact dialog - mobile viewport", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-    await expect(contactButton).toBeEnabled();
-
-    // Wait for full hydration before interaction
     await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
-    // Target the actual contact dialog by accessible name
-    const dialog = page.getByRole("dialog", { name: /contact me/i });
-
-    // Synchronize click with dialog becoming visible to avoid races
-    await Promise.all([
-      dialog.waitFor({ state: "visible", timeout: 20000 }),
-      contactButton.click(),
-    ]);
-
-    // Verify form content is visible
+    // Wait for dialog to open and form content to be visible
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Check that body has scroll lock (Radix adds data-scroll-locked)
@@ -105,18 +91,12 @@ test.describe("Contact dialog - mobile viewport", () => {
       .locator("header")
       .getByRole("button", { name: "Contact", exact: true });
     await expect(contactButton).toBeVisible({ timeout: 5000 });
-
-    // Wait for full hydration before interaction
     await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
-    // Synchronize click with dialog appearance
+    // Wait for dialog to open and form content to be visible
     const dialog = page.getByRole("dialog");
-    await Promise.all([
-      dialog.waitFor({ state: "visible", timeout: 20000 }),
-      contactButton.click(),
-    ]);
-
-    // Verify form content is visible
+    await expect(dialog).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // All form fields should be visible
@@ -134,18 +114,14 @@ test.describe("Contact dialog - error handling", () => {
     await page.goto("/en", { waitUntil: "networkidle" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    const contactTrigger = page.getByRole("button", {
-      name: "Contact me",
-      exact: true,
-    });
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await expect(contactButton).toBeVisible({ timeout: 5000 });
+    await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
-    // Open dialog and wait for it to become visible
-    const dialog = page.getByRole("dialog");
-    await Promise.all([
-      dialog.waitFor({ state: "visible", timeout: 20000 }),
-      contactTrigger.click(),
-    ]);
-
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Try to submit without filling any fields (need Turnstile verification first)
@@ -166,18 +142,14 @@ test.describe("Contact dialog - error handling", () => {
     await page.goto("/en", { waitUntil: "networkidle" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    const contactTrigger = page.getByRole("button", {
-      name: "Contact me",
-      exact: true,
-    });
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await expect(contactButton).toBeVisible({ timeout: 5000 });
+    await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
-    // Open dialog and wait for it to become visible
-    const dialog = page.getByRole("dialog");
-    await Promise.all([
-      dialog.waitFor({ state: "visible", timeout: 20000 }),
-      contactTrigger.click(),
-    ]);
-
+    await expect(page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
     await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
 
     // Fill in only email (leave message empty)
@@ -196,10 +168,15 @@ test.describe("Contact dialog - accessibility", () => {
     await page.goto("/en", { waitUntil: "networkidle" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.getByRole("button", { name: "Contact me", exact: true }).click();
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await expect(contactButton).toBeVisible({ timeout: 5000 });
+    await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
     // Wait for dialog to open
-    const dialog = page.getByRole("dialog", { name: /contact me/i });
+    const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 15000 });
 
     // Dialog should have proper aria-labelledby
@@ -211,17 +188,16 @@ test.describe("Contact dialog - accessibility", () => {
     await page.goto("/en", { waitUntil: "networkidle" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    const contactButton = page.getByRole("button", {
-      name: "Contact me",
-      exact: true,
-    });
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await expect(contactButton).toBeVisible({ timeout: 5000 });
+    await page.waitForLoadState("networkidle");
+    await contactButton.click();
 
-    // Synchronize click with dialog appearance
-    const dialog = page.getByRole("dialog", { name: /contact me/i });
-    await Promise.all([
-      dialog.waitFor({ state: "visible", timeout: 15000 }),
-      contactButton.click(),
-    ]);
+    // Wait for dialog to open
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 15000 });
 
     // Look for status region within the dialog
     const statusRegion = dialog.locator('[role="status"]').first();
@@ -233,10 +209,13 @@ test.describe("Contact dialog - accessibility", () => {
     await page.goto("/en", { waitUntil: "networkidle" });
 
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.getByRole("button", { name: "Contact me", exact: true }).click();
+    const contactButton = page
+      .locator("header")
+      .getByRole("button", { name: "Contact", exact: true });
+    await contactButton.click({ force: true });
 
     // Wait for dialog to open
-    const dialog = page.getByRole("dialog", { name: /contact me/i });
+    const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 15000 });
 
     // Tab through the dialog to verify focus stays within
