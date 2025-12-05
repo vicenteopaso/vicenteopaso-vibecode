@@ -104,16 +104,19 @@ echo ""
 
 # Check if any build-triggering path was modified
 for path in "${BUILD_PATHS[@]}"; do
+  # Escape regex special characters (but NOT forward slash, it's not special in grep)
+  escaped_path=$(printf '%s\n' "$path" | sed 's/[].[*^$[]/\\&/g')
+  
   if [[ "$path" == */ ]]; then
     # Directory: match any file under this directory
-    if echo "$CHANGED_FILES" | grep -qE "^$(printf '%s\n' "$path" | sed 's|[][\.*^$/]|\\&|g')"; then
+    if echo "$CHANGED_FILES" | grep -qE "^${escaped_path}"; then
       echo "✓ Build-impacting path changed: $path"
       echo "Building."
       exit 1
     fi
   else
     # File: match only the exact file at the root
-    if echo "$CHANGED_FILES" | grep -qE "^$(printf '%s\n' "$path" | sed 's|[][\.*^$/]|\\&|g')\$"; then
+    if echo "$CHANGED_FILES" | grep -qE "^${escaped_path}\$"; then
       echo "✓ Build-impacting path changed: $path"
       echo "Building."
       exit 1
