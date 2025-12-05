@@ -74,19 +74,13 @@ test.describe("Contact dialog - mobile viewport", () => {
     
     expect(bodyScrollLocked).toBe(true);
 
-    // Assert 2: Check computed styles on body
-    const bodyStyles = await page.evaluate(() => {
-      const computedStyle = window.getComputedStyle(document.body);
-      return {
-        overflow: computedStyle.overflow,
-        overflowY: computedStyle.overflowY,
-        position: computedStyle.position,
-        height: computedStyle.height,
-      };
+    // Assert 2: Check computed styles on body - overflow should be hidden
+    const bodyOverflow = await page.evaluate(() => {
+      return window.getComputedStyle(document.body).overflow;
     });
     
     // On mobile viewports with scroll-lock, body overflow should be hidden
-    expect(bodyStyles.overflow).toBe("hidden");
+    expect(bodyOverflow).toBe("hidden");
   });
 
   test("dialog renders correctly on mobile viewport", async ({ page }) => {
