@@ -10,15 +10,15 @@ The `Modal` component is a base dialog/modal primitive built on Radix UI Dialog.
 
 ## Props
 
-| Prop                 | Type                      | Default     | Description                                               |
-| -------------------- | ------------------------- | ----------- | --------------------------------------------------------- |
-| `trigger`            | `ReactNode`               | required    | Element that triggers the modal (typically a button)      |
-| `children`           | `ReactNode`               | required    | Modal content to display                                  |
-| `size`               | `"sm" \| "md" \| "lg"`    | `"md"`      | Modal width preset                                        |
-| `analyticsEventName` | `string`                  | `undefined` | Optional Vercel Analytics event name to track modal opens |
-| `analyticsMetadata`  | `AnalyticsMetadata`       | `undefined` | Optional metadata to send with the analytics event        |
-| `open`               | `boolean`                 | `undefined` | Optional controlled open state                            |
-| `onOpenChange`       | `(open: boolean) => void` | `undefined` | Optional callback when open state changes                 |
+| Prop                 | Type                      | Default     | Description                                                  |
+| -------------------- | ------------------------- | ----------- | ------------------------------------------------------------ |
+| `trigger`            | `ReactNode`               | required    | Element that triggers the modal (typically a button)         |
+| `children`           | `ReactNode`               | required    | Modal content to display                                     |
+| `size`               | `"sm" \| "md" \| "lg"`    | `"md"`      | Modal width preset                                           |
+| `analyticsEventName` | `string`                  | `undefined` | Optional Vercel Analytics event name to track modal opens    |
+| `analyticsMetadata`  | `AnalyticsMetadata`       | `undefined` | Optional metadata to send with the analytics event           |
+| `open`               | `boolean`                 | `undefined` | Optional controlled open state                               |
+| `onOpenChange`       | `(open: boolean) => void` | `undefined` | Optional callback when open state changes                    |
 | `testId`             | `string`                  | `undefined` | Optional test ID for E2E testing (applies to Dialog.Content) |
 
 ### Size Presets
