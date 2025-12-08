@@ -8,9 +8,12 @@ test.describe("footer links navigate to pages", () => {
       name: "Cookie Policy",
       exact: true,
     });
+    
+    // Click and wait for navigation
     await cookieLink.click();
+    await page.waitForURL(/\/en\/cookie-policy$/, { timeout: 10000 });
 
-    await expect(page).toHaveURL(/\/cookie-policy$/);
+    await expect(page).toHaveURL(/\/en\/cookie-policy$/);
     await expect(
       page.getByRole("heading", { name: "Cookie Policy", exact: true }),
     ).toBeVisible({ timeout: 10000 });
@@ -23,9 +26,12 @@ test.describe("footer links navigate to pages", () => {
       name: "Privacy Policy",
       exact: true,
     });
+    
+    // Click and wait for navigation
     await privacyLink.click();
+    await page.waitForURL(/\/en\/privacy-policy$/, { timeout: 10000 });
 
-    await expect(page).toHaveURL(/\/privacy-policy$/);
+    await expect(page).toHaveURL(/\/en\/privacy-policy$/);
     await expect(
       page.getByRole("heading", { name: "Privacy Policy", exact: true }),
     ).toBeVisible({ timeout: 10000 });
@@ -38,9 +44,12 @@ test.describe("footer links navigate to pages", () => {
       name: "Tech Stack",
       exact: true,
     });
+    
+    // Click and wait for navigation
     await techStackLink.click();
+    await page.waitForURL(/\/en\/tech-stack$/, { timeout: 10000 });
 
-    await expect(page).toHaveURL(/\/tech-stack$/);
+    await expect(page).toHaveURL(/\/en\/tech-stack$/);
     await expect(
       page.getByRole("heading", { name: "Tech Stack", exact: true }),
     ).toBeVisible({ timeout: 10000 });
