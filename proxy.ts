@@ -4,14 +4,14 @@ import { NextResponse } from "next/server";
 import { locales } from "./lib/i18n/locales";
 
 /**
- * Middleware to handle locale-based routing and redirects.
+ * Proxy to handle locale-based routing and redirects.
  *
  * - Redirects non-locale-prefixed paths to the appropriate locale based on Accept-Language header.
  * - Spanish-locale browsers are redirected to `/es/*` paths.
  * - All other browsers are redirected to `/en/*` paths.
  * - Preserves user's manual locale choice for paths that already include a locale prefix.
  */
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Check if the pathname already includes a locale
@@ -38,7 +38,7 @@ export function middleware(req: NextRequest) {
 }
 
 /**
- * Configure which paths the middleware should run on.
+ * Configure which paths the proxy should run on.
  * We want to run on all paths except static files and API routes.
  */
 export const config = {

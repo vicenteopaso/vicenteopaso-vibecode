@@ -1,7 +1,6 @@
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
-import React from "react";
 import ReactMarkdown from "react-markdown";
 
 import { getLocaleFromParams } from "@/lib/i18n";

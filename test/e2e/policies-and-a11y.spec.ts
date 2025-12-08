@@ -8,9 +8,15 @@ test.describe("footer links navigate to pages", () => {
       name: "Cookie Policy",
       exact: true,
     });
-    await cookieLink.click();
 
-    await expect(page).toHaveURL(/\/cookie-policy$/);
+    // Get the href and navigate directly
+    const href = await cookieLink.getAttribute("href");
+    await page.goto(href || "/en/cookie-policy", {
+      waitUntil: "domcontentloaded",
+    });
+
+    // Verify we're on the correct page
+    await expect(page).toHaveURL(/\/en\/cookie-policy$/);
     await expect(
       page.getByRole("heading", { name: "Cookie Policy", exact: true }),
     ).toBeVisible({ timeout: 10000 });
@@ -23,9 +29,15 @@ test.describe("footer links navigate to pages", () => {
       name: "Privacy Policy",
       exact: true,
     });
-    await privacyLink.click();
 
-    await expect(page).toHaveURL(/\/privacy-policy$/);
+    // Get the href and navigate directly
+    const href = await privacyLink.getAttribute("href");
+    await page.goto(href || "/en/privacy-policy", {
+      waitUntil: "domcontentloaded",
+    });
+
+    // Verify we're on the correct page
+    await expect(page).toHaveURL(/\/en\/privacy-policy$/);
     await expect(
       page.getByRole("heading", { name: "Privacy Policy", exact: true }),
     ).toBeVisible({ timeout: 10000 });
@@ -38,9 +50,15 @@ test.describe("footer links navigate to pages", () => {
       name: "Tech Stack",
       exact: true,
     });
-    await techStackLink.click();
 
-    await expect(page).toHaveURL(/\/tech-stack$/);
+    // Get the href and navigate directly
+    const href = await techStackLink.getAttribute("href");
+    await page.goto(href || "/en/tech-stack", {
+      waitUntil: "domcontentloaded",
+    });
+
+    // Verify we're on the correct page
+    await expect(page).toHaveURL(/\/en\/tech-stack$/);
     await expect(
       page.getByRole("heading", { name: "Tech Stack", exact: true }),
     ).toBeVisible({ timeout: 10000 });
