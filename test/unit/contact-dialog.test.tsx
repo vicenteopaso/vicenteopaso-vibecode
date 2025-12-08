@@ -296,14 +296,17 @@ describe("ContactDialog", () => {
       // Submit the form
       fireEvent.submit(form as HTMLFormElement);
 
-      // Wait for success state and advance through countdown transition
+      // Advance through the full countdown
+      // Start: success -> countdown transition (1000ms) + 10 seconds of countdown
       await vi.advanceTimersByTimeAsync(1200);
 
       // Verify countdown is visible
       expect(screen.getByText(/closing in/i)).toBeInTheDocument();
 
-      // Advance through the full countdown (10 seconds + extra buffer)
-      await vi.advanceTimersByTimeAsync(11000);
+      // Advance through the countdown 1 second at a time (10 iterations + 1 for final close)
+      for (let i = 0; i < 11; i++) {
+        await vi.advanceTimersByTimeAsync(1000);
+      }
 
       // Modal should be closed (dialog should no longer be in the document)
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -335,17 +338,24 @@ describe("ContactDialog", () => {
       // Verify we're in countdown
       expect(screen.getByText(/closing in/i)).toBeInTheDocument();
 
-      // Advance through countdown to auto-close
-      await vi.advanceTimersByTimeAsync(11000);
+      // Advance through the countdown 1 second at a time (10 iterations + 1 for final close)
+      for (let i = 0; i < 11; i++) {
+        await vi.advanceTimersByTimeAsync(1000);
+      }
 
       // Modal should be closed
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
+      // Switch to real timers before re-opening
+      vi.useRealTimers();
+
       // Reopen the modal
       fireEvent.click(trigger);
 
-      // Wait for Turnstile to re-initialize
-      await vi.advanceTimersByTimeAsync(300);
+      // Wait for the dialog to open and Turnstile to initialize
+      await waitFor(() => {
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
+      });
 
       // All inputs should be enabled and empty
       const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
