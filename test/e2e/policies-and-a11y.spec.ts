@@ -8,7 +8,12 @@ test.describe("footer links navigate to pages", () => {
       name: "Cookie Policy",
       exact: true,
     });
-    await cookieLink.click();
+    
+    // Wait for navigation to complete
+    await Promise.all([
+      page.waitForURL(/\/en\/cookie-policy$/, { timeout: 10000 }),
+      cookieLink.click(),
+    ]);
 
     await expect(page).toHaveURL(/\/en\/cookie-policy$/);
     await expect(
@@ -23,7 +28,12 @@ test.describe("footer links navigate to pages", () => {
       name: "Privacy Policy",
       exact: true,
     });
-    await privacyLink.click();
+    
+    // Wait for navigation to complete
+    await Promise.all([
+      page.waitForURL(/\/en\/privacy-policy$/, { timeout: 10000 }),
+      privacyLink.click(),
+    ]);
 
     await expect(page).toHaveURL(/\/en\/privacy-policy$/);
     await expect(
@@ -38,7 +48,12 @@ test.describe("footer links navigate to pages", () => {
       name: "Tech Stack",
       exact: true,
     });
-    await techStackLink.click();
+    
+    // Wait for navigation to complete
+    await Promise.all([
+      page.waitForURL(/\/en\/tech-stack$/, { timeout: 10000 }),
+      techStackLink.click(),
+    ]);
 
     await expect(page).toHaveURL(/\/en\/tech-stack$/);
     await expect(
