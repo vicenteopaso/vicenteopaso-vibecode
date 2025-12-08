@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import fs from "fs";
-import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("../../app/components/ImpactCards", () => ({

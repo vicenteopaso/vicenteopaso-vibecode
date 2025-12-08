@@ -3,7 +3,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { track } from "@vercel/analytics";
 import type { ReactNode } from "react";
-import React from "react";
 
 export type ModalSize = "sm" | "md" | "lg";
 
