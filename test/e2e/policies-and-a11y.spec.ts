@@ -9,11 +9,9 @@ test.describe("footer links navigate to pages", () => {
       exact: true,
     });
     
-    // Wait for navigation to complete
-    await Promise.all([
-      page.waitForURL(/\/en\/cookie-policy$/, { timeout: 10000 }),
-      cookieLink.click(),
-    ]);
+    // Click and wait for navigation
+    await cookieLink.click();
+    await page.waitForURL(/\/en\/cookie-policy$/, { timeout: 10000 });
 
     await expect(page).toHaveURL(/\/en\/cookie-policy$/);
     await expect(
@@ -29,11 +27,9 @@ test.describe("footer links navigate to pages", () => {
       exact: true,
     });
     
-    // Wait for navigation to complete
-    await Promise.all([
-      page.waitForURL(/\/en\/privacy-policy$/, { timeout: 10000 }),
-      privacyLink.click(),
-    ]);
+    // Click and wait for navigation
+    await privacyLink.click();
+    await page.waitForURL(/\/en\/privacy-policy$/, { timeout: 10000 });
 
     await expect(page).toHaveURL(/\/en\/privacy-policy$/);
     await expect(
@@ -49,11 +45,9 @@ test.describe("footer links navigate to pages", () => {
       exact: true,
     });
     
-    // Wait for navigation to complete
-    await Promise.all([
-      page.waitForURL(/\/en\/tech-stack$/, { timeout: 10000 }),
-      techStackLink.click(),
-    ]);
+    // Click and wait for navigation
+    await techStackLink.click();
+    await page.waitForURL(/\/en\/tech-stack$/, { timeout: 10000 });
 
     await expect(page).toHaveURL(/\/en\/tech-stack$/);
     await expect(
