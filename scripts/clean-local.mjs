@@ -29,6 +29,11 @@ const targets = [
   "test-results",
   "blob-report",
 
+  // Lock files
+  "package-lock.json",
+  "yarn.lock",
+  "pnpm-lock.yaml",
+
   // TypeScript build info
   "*.tsbuildinfo",
   "next-env.d.ts",
