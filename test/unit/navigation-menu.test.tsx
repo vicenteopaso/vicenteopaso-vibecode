@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { usePathname } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { NavigationMenu } from "../../app/components/NavigationMenu";

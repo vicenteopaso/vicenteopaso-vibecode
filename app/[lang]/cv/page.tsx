@@ -2,7 +2,6 @@ import fs from "fs";
 import matter from "gray-matter";
 import type { Metadata } from "next";
 import path from "path";
-import React from "react";
 
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { sanitizeRichText } from "@/lib/sanitize-html";
