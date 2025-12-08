@@ -113,9 +113,7 @@ describe("CV OG image route", () => {
       if (typeof el === "string") return [el];
       if (!el?.props) return [];
 
-      const children = (
-        el.props as { children?: React.ReactNode }
-      ).children;
+      const children = (el.props as { children?: React.ReactNode }).children;
       if (typeof children === "string") return [children];
       if (Array.isArray(children)) {
         return children.flatMap((child) =>
