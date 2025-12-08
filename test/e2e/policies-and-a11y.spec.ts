@@ -10,7 +10,7 @@ test.describe("footer links navigate to pages", () => {
     });
     await cookieLink.click();
 
-    await expect(page).toHaveURL(/\/cookie-policy$/);
+    await expect(page).toHaveURL(/\/en\/cookie-policy$/);
     await expect(
       page.getByRole("heading", { name: "Cookie Policy", exact: true }),
     ).toBeVisible({ timeout: 10000 });
@@ -25,7 +25,7 @@ test.describe("footer links navigate to pages", () => {
     });
     await privacyLink.click();
 
-    await expect(page).toHaveURL(/\/privacy-policy$/);
+    await expect(page).toHaveURL(/\/en\/privacy-policy$/);
     await expect(
       page.getByRole("heading", { name: "Privacy Policy", exact: true }),
     ).toBeVisible({ timeout: 10000 });
@@ -40,7 +40,7 @@ test.describe("footer links navigate to pages", () => {
     });
     await techStackLink.click();
 
-    await expect(page).toHaveURL(/\/tech-stack$/);
+    await expect(page).toHaveURL(/\/en\/tech-stack$/);
     await expect(
       page.getByRole("heading", { name: "Tech Stack", exact: true }),
     ).toBeVisible({ timeout: 10000 });
