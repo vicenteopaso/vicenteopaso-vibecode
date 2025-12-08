@@ -8,11 +8,13 @@ test.describe("footer links navigate to pages", () => {
       name: "Cookie Policy",
       exact: true,
     });
-    
+
     // Get the href and navigate directly
     const href = await cookieLink.getAttribute("href");
-    await page.goto(href || "/en/cookie-policy", { waitUntil: "domcontentloaded" });
-    
+    await page.goto(href || "/en/cookie-policy", {
+      waitUntil: "domcontentloaded",
+    });
+
     // Verify we're on the correct page
     await expect(page).toHaveURL(/\/en\/cookie-policy$/);
     await expect(
@@ -27,11 +29,13 @@ test.describe("footer links navigate to pages", () => {
       name: "Privacy Policy",
       exact: true,
     });
-    
+
     // Get the href and navigate directly
     const href = await privacyLink.getAttribute("href");
-    await page.goto(href || "/en/privacy-policy", { waitUntil: "domcontentloaded" });
-    
+    await page.goto(href || "/en/privacy-policy", {
+      waitUntil: "domcontentloaded",
+    });
+
     // Verify we're on the correct page
     await expect(page).toHaveURL(/\/en\/privacy-policy$/);
     await expect(
@@ -46,11 +50,13 @@ test.describe("footer links navigate to pages", () => {
       name: "Tech Stack",
       exact: true,
     });
-    
+
     // Get the href and navigate directly
     const href = await techStackLink.getAttribute("href");
-    await page.goto(href || "/en/tech-stack", { waitUntil: "domcontentloaded" });
-    
+    await page.goto(href || "/en/tech-stack", {
+      waitUntil: "domcontentloaded",
+    });
+
     // Verify we're on the correct page
     await expect(page).toHaveURL(/\/en\/tech-stack$/);
     await expect(
