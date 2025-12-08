@@ -1,5 +1,3 @@
-import React from "react";
-
 import { getTranslations, type Locale } from "@/lib/i18n";
 
 import { ContactDialog } from "./ContactDialog";

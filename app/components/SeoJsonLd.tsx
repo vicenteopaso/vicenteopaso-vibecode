@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import React from "react";
 
 import { getPersonJsonLd, getWebsiteJsonLd } from "../../lib/seo";
 
