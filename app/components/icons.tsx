@@ -1,7 +1,6 @@
 "use client";
 
 import type { SVGProps } from "react";
-import React from "react";
 
 export type IconProps = SVGProps<SVGSVGElement>;
 
