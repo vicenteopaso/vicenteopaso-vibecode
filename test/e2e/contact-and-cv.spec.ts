@@ -9,22 +9,22 @@ async function openContactDialog(page: Page) {
   const contactButton = page
     .locator("header")
     .getByRole("button", { name: "Contact", exact: true });
-  
+
   await expect(contactButton).toBeVisible({ timeout: 5000 });
   await page.waitForLoadState("networkidle");
-  
+
   // Ensure button is enabled and clickable
   await expect(contactButton).toBeEnabled({ timeout: 5000 });
-  
+
   // Wait a moment for React hydration to complete
   await page.waitForTimeout(300);
-  
+
   // Click and wait for navigation/state change
   await contactButton.click();
-  
+
   // Wait for dialog to appear in DOM and be visible using stable test ID
   const dialog = page.getByTestId("contact-dialog");
-  
+
   try {
     await expect(dialog).toBeVisible({ timeout: 20000 });
   } catch (error) {
@@ -34,19 +34,21 @@ async function openContactDialog(page: Page) {
       ariaExpanded: el.getAttribute("aria-expanded"),
       dataState: el.getAttribute("data-state"),
     }));
-    
-    const dialogExists = await page.locator('[data-testid="contact-dialog"]').count();
-    
+
+    const dialogExists = await page
+      .locator('[data-testid="contact-dialog"]')
+      .count();
+
     throw new Error(
       `Dialog failed to open. Button state: ${JSON.stringify(buttonState)}, ` +
-      `Dialog elements found: ${dialogExists}, ` +
-      `Original error: ${error}`
+        `Dialog elements found: ${dialogExists}, ` +
+        `Original error: ${error}`,
     );
   }
-  
+
   // Wait for form content to ensure dialog is fully rendered
   await expect(page.getByLabel("Email")).toBeVisible({ timeout: 5000 });
-  
+
   return dialog;
 }
 
@@ -54,7 +56,7 @@ test("contact dialog opens and shows required fields", async ({ page }) => {
   await page.goto("/en", { waitUntil: "networkidle" });
 
   await openContactDialog(page);
-  
+
   await expect(page.getByRole("heading", { name: "Contact me" })).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Message")).toBeVisible();
@@ -96,14 +98,14 @@ test.describe("Contact dialog - mobile viewport", () => {
     const bodyScrollLocked = await page.evaluate(() => {
       return document.body.hasAttribute("data-scroll-locked");
     });
-    
+
     expect(bodyScrollLocked).toBe(true);
 
     // Assert 2: Check computed styles on body - overflow should be hidden
     const bodyOverflow = await page.evaluate(() => {
       return window.getComputedStyle(document.body).overflow;
     });
-    
+
     // On mobile viewports with scroll-lock, body overflow should be hidden
     expect(bodyOverflow).toBe("hidden");
   });
