@@ -50,17 +50,17 @@ This is a single Next.js App Router project using pnpm.
 
 ## High-level architecture
 
-### 1. Next.js App Router layout & shell
+### 1. Next.js App Router layout & shell with i18n
 
 - The app uses the **App Router** with the entrypoint in `app/`:
   - `app/layout.tsx` defines the HTML shell, imports global styles from `styles/globals.css`, and exports `metadata` and `viewport` for SEO and theming.
     - Wraps the app with `ThemeProvider` (`app/components/ThemeProvider.tsx`) powered by `next-themes` to support light/dark themes via a `class` attribute on `<html>`.
     - Injects the Cloudflare Turnstile script (`https://challenges.cloudflare.com/turnstile/v0/api.js`) globally, which is required by the contact form.
     - Renders a persistent `Header`, main content container (`<main>` with a centered shell), and `Footer`.
-  - `app/page.tsx` implements the About page at the root route (`/`).
+  - `app/[lang]/page.tsx` implements the Home/About page for each locale (e.g., `/en`, `/es`).
 - Routes are organized under `app/`:
-  - `/` → `app/page.tsx` (Home page at root)
-  - `/cv` → `app/cv/page.tsx`
+  - `/[lang]` → `app/[lang]/page.tsx` (Home page for each locale)
+  - `/[lang]/cv` → `app/[lang]/cv/page.tsx` (CV page for each locale)
   - `/api/contact` → `app/api/contact/route.ts` (Next.js Route Handler for the contact form).
 
 ### 2. UI components & theming
@@ -81,22 +81,24 @@ This is a single Next.js App Router project using pnpm.
     - Base styles for typography, including headings, paragraphs, lists, links, and inline code.
   - `tailwind.config.js` scopes Tailwind’s content scanning to `app/**/*.{ts,tsx,mdx}`, `components/**/*.{ts,tsx}`, and `content/**/*.{md,mdx}`.
 
-### 3. Content model: markdown + JSON CV
+### 3. Content model: markdown + JSON CV with i18n
 
-- Raw content lives under `content/`:
-  - `content/about.md` contains frontmatter (`name`, `title`, `slug`, `tagline`, `initials`) and markdown body for the About page.
-  - `content/cv.md` uses frontmatter (`name`, `title`, `slug`) and a **JSON object in the markdown body** describing the CV:
-    - `basics`, `work`, `education`, `skills`, `languages`, `interests`, `references`, and `publications`.
-    - Many fields (e.g., `references[*].reference`) contain HTML strings, which are rendered via `dangerouslySetInnerHTML` in `app/cv/page.tsx` and `ReferencesCarousel.tsx`.
+- Raw content lives under `content/` organized by locale:
+  - `content/en/` — English source content (source of truth)
+    - `content/en/about.md` contains frontmatter (`name`, `title`, `slug`, `tagline`, `initials`) and markdown body for the About page.
+    - `content/en/cv.md` uses frontmatter (`name`, `title`, `slug`) and a **JSON object in the markdown body** describing the CV:
+      - `basics`, `work`, `education`, `skills`, `languages`, `interests`, `references`, and `publications`.
+      - Many fields (e.g., `references[*].reference`) contain HTML strings, which are rendered via `dangerouslySetInnerHTML` in `app/[lang]/cv/page.tsx` and `ReferencesCarousel.tsx`.
+  - `content/es/` — Spanish auto-translated content (mirror structure of `en/`)
 - Page implementations:
-- - `app/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/about.md` at runtime (`process.cwd()/content/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
-- - `app/cv/page.tsx` similarly reads `content/cv.md`, parses frontmatter with `gray-matter`, and then `JSON.parse`s the body as a `CvJson` structure. It then renders sections for experience, skills, education, languages, interests, publications, and references.
-  - If the JSON is invalid, the page gracefully falls back to a simple error message and instructs the user to check `content/cv.md`.
+- - `app/[lang]/page.tsx` uses `fs` + `path` + `gray-matter` to read `content/[locale]/about.md` at build time (e.g., `content/en/about.md`), parse frontmatter (`name`, `tagline`, `initials`), and split the markdown body into an intro section and subsequent sections. It renders these with `react-markdown` configured via `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx` so headings, lists, links, and inline code stay consistent with the design system.
+- - `app/[lang]/cv/page.tsx` similarly reads `content/[locale]/cv.md`, parses frontmatter with `gray-matter`, and then `JSON.parse`s the body as a `CvJson` structure. It then renders sections for experience, skills, education, languages, interests, publications, and references.
+  - If the JSON is invalid, the page gracefully falls back to a simple error message and instructs the user to check `content/[locale]/cv.md`.
 - Contentlayer configuration:
-  - `contentlayer.config.ts` defines a `Page` document type over `content/*.md` with required fields `name`, `title`, `slug` and optional `tagline`, `initials`.
+  - `contentlayer.config.ts` defines a `Page` document type over `content/**/*.md` with required fields `name`, `title`, `slug` and optional `tagline`, `initials`.
   - It also defines a computed `cv` field that attempts to parse `doc.body.raw` as JSON for the `slug === "cv"` document.
   - `next.config.mjs` wraps the Next config with `withContentlayer`, and `tsconfig.json` maps `"contentlayer/generated"` to `"./.contentlayer/generated"`.
-  - **Important**: the current pages (`app/page.tsx`, `app/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
+  - **Important**: the current pages (`app/[lang]/page.tsx`, `app/[lang]/cv/page.tsx`) still read from the filesystem directly and do not yet query Contentlayer. If you refactor them, ensure you keep feature parity (especially error handling and the JSON-based CV structure) or transition them fully to Contentlayer.
 
 ### 4. Contact flow: client dialog → API route → Turnstile → Formspree
 
