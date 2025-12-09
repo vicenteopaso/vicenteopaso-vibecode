@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
+# Disallow common attack vectors
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /xmlrpc.php
+Disallow: /admin/
+Disallow: /.env
+Disallow: /.git/
+
 Sitemap: https://opa.so/sitemap.xml

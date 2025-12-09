@@ -38,7 +38,7 @@ describe("sanitizeRichText", () => {
   });
 
   it("removes vbscript: URLs from anchors", () => {
-    const input = "<a href=\"vbscript:msgbox('xss')\">Click</a>";
+    const input = `<a href="vbscript:msgbox('xss')">Click</a>`;
     const output = sanitizeRichText(input);
 
     expect(output.toLowerCase()).not.toContain('href="vbscript:');
@@ -49,7 +49,7 @@ describe("sanitizeRichText", () => {
     const output = sanitizeRichText(input);
 
     expect(output).toContain('target="_blank"');
-    expect(output).toMatch(/rel=\"noopener noreferrer\"/);
+    expect(output).toMatch(/rel="noopener noreferrer"/);
   });
 
   it("preserves allowed attributes on span elements and strips styles", () => {

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import process from "node:process";
-import { Cli } from "clipanion";
+
 import { run as runContentlayer } from "@contentlayer/cli";
+import { Cli } from "clipanion";
 
 // Patch Clipanion's runExit so that it always sets a numeric exitCode.
 // Node 22 is stricter about process.exitCode assignments, and older

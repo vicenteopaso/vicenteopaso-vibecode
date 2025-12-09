@@ -18,9 +18,10 @@
  *   DEEPL_API_KEY - Required. Your DeepL API authentication key.
  */
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import crypto from "node:crypto";
+
 import * as deepl from "deepl-node";
 
 // Configuration
@@ -95,7 +96,10 @@ async function translateUiJson() {
       try {
         esJson = JSON.parse(esRaw);
       } catch (error) {
-        console.log("⚠️  Failed to parse existing Spanish UI dictionary");
+        console.log(
+          "⚠️  Failed to parse existing Spanish UI dictionary",
+          error,
+        );
         esJson = {};
       }
     }
@@ -107,7 +111,7 @@ async function translateUiJson() {
     try {
       metadata = JSON.parse(fs.readFileSync(UI_METADATA, "utf8"));
     } catch (error) {
-      console.log("⚠️  Failed to parse UI metadata, starting fresh");
+      console.log("⚠️  Failed to parse UI metadata, starting fresh", error);
       metadata = {};
     }
   }
@@ -209,7 +213,10 @@ async function translateMdxFiles() {
     try {
       metadata = JSON.parse(fs.readFileSync(metadataPath, "utf8"));
     } catch (error) {
-      console.log("⚠️  Failed to parse translation metadata, starting fresh");
+      console.log(
+        "⚠️  Failed to parse translation metadata, starting fresh",
+        error,
+      );
       metadata = {};
     }
   }

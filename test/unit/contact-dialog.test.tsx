@@ -251,9 +251,12 @@ describe("ContactDialog", () => {
       });
 
       // Countdown should eventually be visible (after state transition)
-      await waitFor(() => {
-        expect(screen.getByText(/closing in/i)).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByText(/closing in/i)).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
     });
 
     it("starts countdown at 10 seconds after successful submission", async () => {
@@ -525,10 +528,13 @@ describe("ContactDialog", () => {
         ).toBeInTheDocument();
       });
 
-      // Wait for countdown to appear
-      await waitFor(() => {
-        expect(screen.getByText(/closing in/i)).toBeInTheDocument();
-      });
+      // Wait for countdown to appear (includes 1s delay from SUCCESS_TO_COUNTDOWN_DELAY_MS)
+      await waitFor(
+        () => {
+          expect(screen.getByText(/closing in/i)).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
 
       // Find countdown message container and verify aria attributes
       const countdownRegion = screen
