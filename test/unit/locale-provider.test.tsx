@@ -418,14 +418,14 @@ describe("LocaleProvider and useLocale", () => {
 
   describe("Context availability", () => {
     it("should return no-op setLocale when useLocale is called outside provider", () => {
+      let result: void | undefined;
       const TestComponentOutside = () => {
         const { setLocale } = useLocale();
         return (
           <button
             data-testid="noop-btn"
             onClick={() => {
-              const result = setLocale("es");
-              expect(result).toBeUndefined();
+              result = setLocale("es");
             }}
           >
             Click
@@ -436,6 +436,7 @@ describe("LocaleProvider and useLocale", () => {
       const { getByTestId } = render(<TestComponentOutside />);
       const btn = getByTestId("noop-btn");
       btn.click();
+      expect(result).toBeUndefined();
     });
 
     it("should return default locale when context is unavailable", () => {
