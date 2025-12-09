@@ -391,7 +391,7 @@ describe("CV Page Social Icons", () => {
       expect(linkedInLink?.getAttribute("href")).toContain("linkedin.com");
 
       const xLink = screen.queryByRole("link", { name: /X/i });
-      expect(xLink?.getAttribute("href")).toContain("twitter.com");
+      expect(xLink?.getAttribute("href")).toContain("x.com");
     });
   });
 
