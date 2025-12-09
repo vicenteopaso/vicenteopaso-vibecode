@@ -136,7 +136,7 @@ git push
 ### Build Runs When It Should Be Skipped
 
 1. Check if the commit includes both docs and code changes (intentional behavior)
-2. Check if configuration files (.eslintrc, .prettierrc) were modified (these trigger builds)
+2. Check if configuration files (eslint.config.mjs, .prettierrc) were modified (these trigger builds)
 3. This is conservative behavior to avoid missing important changes
 
 ### Script Not Executing
