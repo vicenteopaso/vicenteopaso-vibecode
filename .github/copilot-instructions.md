@@ -40,7 +40,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
   - Client-side errors should fail gracefully without exposing internal details.
   - Preserve user context and avoid losing form data on errors.
 - Preserve content behavior:
-  - `app/page.tsx` and `app/cv/page.tsx` read from the filesystem (`content/about.md`, `content/cv.md`) at runtime.
+  - `app/[lang]/page.tsx` and `app/[lang]/cv/page.tsx` read from the filesystem (`content/[locale]/about.md`, `content/[locale]/cv.md`) at build time.
   - If migrating to Contentlayer, ensure **feature parity** and preserve error handling for invalid CV JSON.
 - Preserve the contact flow:
   - Client dialog with Cloudflare Turnstile → `/api/contact` route handler → Formspree.
@@ -65,15 +65,23 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 - `app/`:
   - App Router pages and layouts.
+  - `[lang]/`: Locale-specific routes (pages are in here, not at root).
   - Route handlers (e.g., `app/api/contact/route.ts`).
   - Shared UI components in `app/components/`.
 - `content/`:
-  - `about.md`: frontmatter + markdown body for the Home page (rendered at root `/`).
-  - `cv.md`: frontmatter + **JSON object** in the body for the CV; this JSON is parsed at runtime and must stay valid.
+  - `en/`: English source content files.
+    - `about.md`: frontmatter + markdown body for the Home page.
+    - `cv.md`: frontmatter + **JSON object** in the body for the CV; this JSON is parsed at build time and must stay valid.
+  - `es/`: Spanish auto-translated content files (mirror structure of `en/`).
+- `i18n/`:
+  - `en/ui.json`, `es/ui.json`: UI string dictionaries for i18n.
+- `lib/`:
+  - `i18n/`: Locale detection and translation utilities.
+  - Other shared utilities (SEO, error logging, markdown components, sanitization, rate limiting).
 - `styles/`:
   - Tailwind CSS v4 setup and global styles.
 - `scripts/`:
-  - Utility scripts for build, cleaning local artifacts, audits, etc.
+  - Utility scripts for build, cleaning local artifacts, audits, translation, etc.
 - `test/unit/`, `test/e2e/`, `test/visual/`:
   - Vitest unit tests, Playwright E2E tests, and Playwright visual regression tests, respectively.
   - `test/visual/utils.ts` contains shared helpers for deterministic screenshots.
