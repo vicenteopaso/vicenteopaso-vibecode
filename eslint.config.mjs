@@ -19,6 +19,8 @@ const ignores = [
 export default [
   {
     ignores,
+  },
+  {
     languageOptions: {
       globals: {
         ...globals.browser,

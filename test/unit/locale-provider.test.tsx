@@ -301,4 +301,181 @@ describe("LocaleProvider and useLocale", () => {
       });
     });
   });
+
+  describe("Locale validation", () => {
+    it("should only accept valid locales from locales array", async () => {
+      mockUseParams.mockReturnValue({ lang: "fr" });
+
+      render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        // 'fr' is not in the locales array, should fall back to default
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+      });
+    });
+
+    it("should accept 'en' as valid locale", async () => {
+      mockUseParams.mockReturnValue({ lang: "en" });
+
+      render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+      });
+    });
+
+    it("should accept 'es' as valid locale", async () => {
+      mockUseParams.mockReturnValue({ lang: "es" });
+
+      render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
+      });
+    });
+  });
+
+  describe("setLocale function behavior", () => {
+    it("should update locale state when calling setLocale with valid locale", async () => {
+      mockUseParams.mockReturnValue({ lang: "en" });
+
+      const { getByTestId } = render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(getByTestId("locale-display")).toHaveTextContent("en");
+      });
+
+      const button = getByTestId("set-locale-btn");
+      button.click();
+
+      await waitFor(() => {
+        expect(getByTestId("locale-display")).toHaveTextContent("es");
+      });
+    });
+
+    it("should persist locale changes to localStorage", async () => {
+      mockUseParams.mockReturnValue({ lang: "en" });
+
+      const { getByTestId } = render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(getByTestId("locale-display")).toHaveTextContent("en");
+      });
+
+      const button = getByTestId("set-locale-btn");
+      button.click();
+
+      await waitFor(() => {
+        expect(global.localStorage.setItem).toHaveBeenCalledWith(
+          "preferred-locale",
+          "es",
+        );
+      });
+    });
+
+    it("should not crash when setLocale is called multiple times", async () => {
+      mockUseParams.mockReturnValue({ lang: "en" });
+
+      const { getByTestId } = render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(getByTestId("locale-display")).toBeInTheDocument();
+      });
+
+      const button = getByTestId("set-locale-btn");
+      button.click();
+      button.click();
+
+      await waitFor(() => {
+        expect(getByTestId("locale-display")).toHaveTextContent("es");
+      });
+    });
+  });
+
+  describe("Context availability", () => {
+    it("should return no-op setLocale when useLocale is called outside provider", () => {
+      const TestComponentOutside = () => {
+        const { setLocale } = useLocale();
+        return (
+          <button
+            data-testid="noop-btn"
+            onClick={() => {
+              const result = setLocale("es");
+              expect(result).toBeUndefined();
+            }}
+          >
+            Click
+          </button>
+        );
+      };
+
+      const { getByTestId } = render(<TestComponentOutside />);
+      const btn = getByTestId("noop-btn");
+      btn.click();
+    });
+
+    it("should return default locale when context is unavailable", () => {
+      const TestComponentOutside = () => {
+        const { locale } = useLocale();
+        return <div data-testid="outside-locale">{locale}</div>;
+      };
+
+      render(<TestComponentOutside />);
+      expect(screen.getByTestId("outside-locale")).toHaveTextContent("en");
+    });
+  });
+
+  describe("Mount state handling", () => {
+    it("should render children before mounted state", async () => {
+      mockUseParams.mockReturnValue({ lang: "en" });
+
+      const { container } = render(
+        <LocaleProvider>
+          <div data-testid="always-rendered">Always Here</div>
+        </LocaleProvider>,
+      );
+
+      // Children should always be rendered, even before mount
+      expect(screen.getByTestId("always-rendered")).toBeInTheDocument();
+      expect(container).toBeInTheDocument();
+    });
+
+    it("should provide context value after mounted", async () => {
+      mockUseParams.mockReturnValue({ lang: "es" });
+
+      render(
+        <LocaleProvider>
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
+      });
+    });
+  });
 });

@@ -8102,10 +8102,10 @@ packages:
       }
     engines: { node: ">=18" }
 
-  oo-ascii-tree@1.120.0:
+  oo-ascii-tree@1.121.0:
     resolution:
       {
-        integrity: sha512-8aZZbPwoizq9fGRcn7MkCmYdZ2G4RSA/k2s8OlF4ijbbGFzxhG2jt4xVw4uRPpt9aLOgU051h/t0LePFBVppsQ==,
+        integrity: sha512-Dwzge50NT4bUxynVLtn/eFnl5Vv+8thNDVhw2MFZf6t5DmtIWKCDdQGUrIhN6PMEloDXVvPIW//oZtooSkp79g==,
       }
     engines: { node: ">= 14.17.0" }
 
@@ -10751,7 +10751,7 @@ snapshots:
       hash-wasm: 4.12.0
       inflection: 2.0.1
       memfs: 3.5.3
-      oo-ascii-tree: 1.120.0
+      oo-ascii-tree: 1.121.0
       ts-pattern: 4.3.0
       type-fest: 3.13.1
 
@@ -15977,7 +15977,7 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  oo-ascii-tree@1.120.0: {}
+  oo-ascii-tree@1.121.0: {}
 
   open@7.4.2:
     dependencies:
