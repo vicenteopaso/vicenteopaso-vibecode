@@ -126,7 +126,7 @@ High‑level layout:
   - `next.config.mjs` – Next.js config wrapped in `withContentlayer`.
   - `tailwind.config.js` – Tailwind content globs for `app/`, `components/`, and `content/`.
   - `tsconfig.json` – Strict TS config with path mapping for `@/*` and `contentlayer/generated`.
-  - `.eslintrc.json`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
+  - `eslint.config.mjs`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
 
 > Note: `app/[lang]/page.tsx` and `app/[lang]/cv/page.tsx` read locale-specific content from the filesystem at build time rather than querying Contentlayer. Any refactor should keep the existing behavior (especially the JSON‑driven CV and its error handling) or migrate fully to Contentlayer with equivalent semantics.
 

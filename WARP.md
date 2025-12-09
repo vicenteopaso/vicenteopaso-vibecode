@@ -156,10 +156,11 @@ This is a single Next.js App Router project using pnpm.
 
 ### 6. Linting, formatting, and CI expectations
 
-- **ESLint configuration** (`.eslintrc.json`):
-  - Extends `next/core-web-vitals`, `plugin:@typescript-eslint/recommended`, `plugin:jsx-a11y/recommended`, and `prettier`.
-  - Uses `@typescript-eslint/parser` and plugins `@typescript-eslint` and `jsx-a11y`.
-  - Notable custom rule: `@typescript-eslint/consistent-type-imports: "error"` (prefer `import type` for types).
+- **ESLint configuration** (`eslint.config.mjs`):
+  - Uses flat config format with ESLint 9
+  - Extends Next.js, TypeScript, JSX a11y, and Prettier configurations
+  - Uses `@typescript-eslint/parser` and plugins `@typescript-eslint` and `jsx-a11y`
+  - Notable custom rule: `@typescript-eslint/consistent-type-imports: "error"` (prefer `import type` for types)
 - **Prettier**: `.prettierrc` and `.prettierignore` exist (with `scripts/validate-links.mjs` ignored to avoid parser issues), with `prettier` invoked via scripts and `lint-staged`.
 - **Lint-staged & Husky**:
   - `lint-staged` in `package.json`:
