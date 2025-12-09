@@ -25,8 +25,8 @@
     "content": "node scripts/contentlayer-build.mjs",
     "clean": "node scripts/clean-local.mjs",
     "reset": "pnpm clean && pnpm install && pnpm build",
-    "verify": "pnpm install && pnpm lint && pnpm format && pnpm typecheck && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm build && pnpm coverage",
-    "verify:fix": "pnpm install && pnpm lint:fix && pnpm format:fix && pnpm typecheck && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm build && pnpm coverage",
+    "verify": "pnpm install && pnpm lint && pnpm format && pnpm typecheck && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm build && pnpm coverage && pnpm sitemap",
+    "verify:fix": "pnpm install && pnpm lint:fix && pnpm format:fix && pnpm typecheck && pnpm validate:links && pnpm test && pnpm test:e2e && pnpm build && pnpm coverage && pnpm sitemap",
     "validate:links": "node scripts/validate-links.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "audit:lighthouse": "node scripts/audit-lighthouse.mjs",
@@ -52,11 +52,10 @@
     "contentlayer": "^0.3.4",
     "deepl-node": "^1.22.0",
     "gray-matter": "^4.0.3",
-    "next": "^16.0.7",
+    "next": "^16.0.8",
     "next-contentlayer": "^0.3.4",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.4.6",
-    "plausible-tracker": "^0.3.9",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-markdown": "^10.1.0",
@@ -67,6 +66,7 @@
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
+    "@eslint/js": "^9.39.1",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/context-async-hooks": "^2.2.0",
     "@opentelemetry/core": "^2.2.0",
@@ -80,12 +80,14 @@
     "@testing-library/react": "^16.0.0",
     "@types/node": "^22.7.4",
     "@types/react": "^19.2.7",
-    "@types/react-dom": "^18.3.0",
+    "@types/react-dom": "^19.2.3",
+    "@next/eslint-plugin-next": "^16.0.8",
+    "globals": "^15.12.0",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "@vitest/coverage-v8": "^2.1.4",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.5.7",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.8",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-security": "^3.0.1",
@@ -95,10 +97,12 @@
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.47",
     "prettier": "^3.7.4",
-    "require-in-the-middle": "^6.0.0",
+    "import-in-the-middle": "^2.0.0",
+    "require-in-the-middle": "^8.0.1",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^4.0.2",
     "typescript": "^5.6.3",
+    "typescript-eslint": "^8.48.1",
     "vitest": "^2.1.4"
   },
   "lint-staged": {
@@ -117,7 +121,48 @@
       "cookie@<0.7.0": ">=0.7.0",
       "tmp@<=0.2.3": ">=0.2.4"
     },
+    "packageExtensions": {
+      "next-contentlayer@*": {
+        "peerDependencies": {
+          "next": "^16.0.0"
+        }
+      },
+      "@opentelemetry/core@1.13.0": {
+        "peerDependencies": {
+          "@opentelemetry/api": ">=1.0.0 <2.0.0"
+        }
+      },
+      "@opentelemetry/resources@1.13.0": {
+        "peerDependencies": {
+          "@opentelemetry/api": ">=1.0.0 <2.0.0"
+        }
+      },
+      "@opentelemetry/sdk-trace-base@1.13.0": {
+        "peerDependencies": {
+          "@opentelemetry/api": ">=1.0.0 <2.0.0"
+        }
+      },
+      "@opentelemetry/otlp-transformer@0.39.1": {
+        "peerDependencies": {
+          "@opentelemetry/api": ">=1.0.0 <2.0.0"
+        }
+      },
+      "@opentelemetry/sdk-logs@0.39.1": {
+        "peerDependencies": {
+          "@opentelemetry/api": ">=1.0.0 <2.0.0"
+        }
+      },
+      "@opentelemetry/sdk-metrics@1.13.0": {
+        "peerDependencies": {
+          "@opentelemetry/api": ">=1.0.0 <2.0.0"
+        }
+      }
+    },
     "peerDependencyRules": {
+      "allowedVersions": {
+        "@opentelemetry/api": ">=1.0.0 <2.0.0",
+        "next": "^16.0.0"
+      },
       "ignoreMissing": [
         "@opentelemetry/api@>1.5.0",
         "next@>13"

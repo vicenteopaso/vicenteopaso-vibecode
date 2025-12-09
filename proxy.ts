@@ -14,6 +14,43 @@ import { locales } from "./lib/i18n/locales";
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Redirect localized sitemap requests to root sitemap
+  if (
+    pathname === "/en/sitemap.xml" ||
+    pathname === "/es/sitemap.xml" ||
+    pathname === "/en/sitemap-0.xml" ||
+    pathname === "/es/sitemap-0.xml" ||
+    pathname === "/en/news_sitemap.xml" ||
+    pathname === "/es/news_sitemap.xml"
+  ) {
+    return NextResponse.redirect(new URL("/sitemap.xml", req.url), {
+      status: 301,
+    });
+  }
+
+  // Block common attack vectors and bot probes
+  const suspiciousPatterns = [
+    "/wp-login.php",
+    "/wp-admin",
+    "/xmlrpc.php",
+    "/wp-content",
+    "/wp-includes",
+    "/.env",
+    "/.git",
+    "/admin",
+    "/phpmyadmin",
+    "/administrator",
+    "/user/login",
+    "/sites/default",
+    "/config.php",
+    "/typo3",
+    "/cgi-bin",
+  ];
+
+  if (suspiciousPatterns.some((pattern) => pathname.startsWith(pattern))) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   // Check if the pathname already includes a locale
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
@@ -51,6 +88,6 @@ export const config = {
      * - public assets (files in /public)
      * - API routes
      */
-    "/((?!_next/static|_next/image|favicon.ico|assets|fonts|api).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|robots.txt|sitemap.xml|sitemap-0.xml|site.webmanifest).*)",
   ],
 };

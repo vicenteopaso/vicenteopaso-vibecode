@@ -1,5 +1,5 @@
-import { withContentlayer } from "next-contentlayer";
 import { withSentryConfig } from "@sentry/nextjs";
+import { withContentlayer } from "next-contentlayer";
 
 const isProd = process.env.NODE_ENV === "production";
 
