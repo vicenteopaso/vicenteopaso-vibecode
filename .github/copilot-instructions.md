@@ -9,7 +9,7 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 > authoritative for principles, architecture boundaries, and CI expectations.
 
 - Framework/runtime: **Next.js (App Router) on Node.js LTS**, managed with **pnpm**.
-- Language: **TypeScript** with React 18.
+- Language: **TypeScript** with React 19.
 - Content model: markdown files under `content/` plus a JSON CV object embedded in `content/cv.md`.
   - Do not break the JSON CV parsing semantics; preserve existing error handling and graceful fallbacks.
 - Styling/components: **Tailwind CSS v4**, **Radix UI**, theming via **next-themes**.

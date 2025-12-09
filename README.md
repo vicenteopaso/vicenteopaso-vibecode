@@ -43,7 +43,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
 ![pnpm](https://img.shields.io/badge/pnpm-4B3F72?logo=pnpm&logoColor=white)
 
 - **Framework**: Next.js (App Router, `app/` directory, typed routes)
-- **Language**: TypeScript, React 18
+- **Language**: TypeScript, React 19
 - **Styling**: Tailwind CSS v4, custom design tokens, utility classes (e.g. `shell`, `section-card`)
 - **UI primitives**: Radix UI (`@radix-ui/react-*`) for navigation, dialogs, avatars
 - **Theming**: `next-themes` for light/dark mode with `class` attribute on `<html>`

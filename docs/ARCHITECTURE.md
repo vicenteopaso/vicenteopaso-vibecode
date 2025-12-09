@@ -22,7 +22,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 ## Stack
 
 - **Runtime**: Node.js (LTS)
-- **Framework**: Next.js 15 (App Router, RSC)
+- **Framework**: Next.js 16 (App Router, RSC)
 - **Content**: Markdown + JSON CV, with Contentlayer configured for future refactors
 - **Styling**: Tailwind CSS v4 + Radix UI primitives
 - **Deployment**: Vercel
