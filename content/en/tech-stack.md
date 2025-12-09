@@ -10,8 +10,8 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 
 ## Core Framework & Runtime
 
-- **Next.js 15** — App Router with React Server Components (RSC), static site generation (SSG), and typed routes
-- **React 18.3** — UI library with server components and progressive enhancement
+- **Next.js 16** — App Router with React Server Components (RSC), static site generation (SSG), and typed routes
+- **React 19** — UI library with server components and progressive enhancement
 - **TypeScript 5.6** — Strict type checking end-to-end
 - **Node.js 22** — Runtime environment (LTS)
 
@@ -54,14 +54,14 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 
 ## Code Quality & Linting
 
-- **ESLint 8.57** — Code linting with:
+- **ESLint 9.39** — Code linting with:
   - `eslint-config-next` — Next.js recommended rules
   - `@typescript-eslint/eslint-plugin` — TypeScript-specific rules
   - `eslint-plugin-jsx-a11y` — Accessibility linting
   - `eslint-plugin-security` — Security-focused rules
   - `eslint-plugin-simple-import-sort` — Import sorting
   - `eslint-config-prettier` — Prettier integration
-- **Prettier 3.3** — Code formatting
+- **Prettier 3.7** — Code formatting
 - **Husky 9.1** — Git hooks
 - **lint-staged 15.2** — Pre-commit linting and formatting
 
@@ -69,7 +69,7 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 
 - **Vercel Analytics** — Page views and user interactions
 - **Vercel Speed Insights** — Core Web Vitals and performance metrics
-- **Sentry (@sentry/nextjs 8.30)** — Error tracking, session replay, and alerting
+- **Sentry (@sentry/nextjs 10.29)** — Error tracking, session replay, and alerting
 - **Vercel Logs** — Server-side error logs
 
 ## Build & Deployment

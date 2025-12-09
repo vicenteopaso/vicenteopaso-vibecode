@@ -22,7 +22,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 ## Stack
 
 - **Runtime**: Node.js (LTS)
-- **Framework**: Next.js 15 (App Router, RSC)
+- **Framework**: Next.js 16 (App Router, RSC)
 - **Content**: Markdown + JSON CV, with Contentlayer configured for future refactors
 - **Styling**: Tailwind CSS v4 + Radix UI primitives
 - **Deployment**: Vercel
@@ -77,19 +77,22 @@ introduced only where interactivity is required.
 
 ## Content Model & Rendering
 
-- `content/about.md` contains frontmatter and markdown for the About page.
-- `content/cv.md` contains frontmatter and a JSON object in the markdown body for the CV.
-- `app/page.tsx` and `app/cv/page.tsx` currently read these files directly at runtime using `fs` + `gray-matter` / `JSON.parse`.
-- Contentlayer is configured and may be used in the future, but the filesystem remains the runtime source of truth for About/CV.
+- Content is organized by locale under `content/[locale]/` (e.g., `content/en/about.md`, `content/es/about.md`)
+- `content/[locale]/about.md` contains frontmatter and markdown for the About page
+- `content/[locale]/cv.md` contains frontmatter and a JSON object in the markdown body for the CV
+- Pages under `app/[lang]/` read locale-specific content files at build time using `fs` + `gray-matter` / `JSON.parse`
+- Contentlayer is configured and may be used in the future, but the filesystem remains the runtime source of truth for content
 
 **Content Rendering Flow:**
 
 ```
-User requests /about or /cv
+User requests /en/about or /es/cv
   ↓
 Next.js page component (SSG at build time with force-static)
   ↓
-Read markdown from content/ directory (fs.readFileSync)
+Extract locale from [lang] route parameter
+  ↓
+Read markdown from content/[locale]/ directory (fs.readFileSync)
   ↓
 Parse frontmatter with gray-matter
   ↓
@@ -104,9 +107,10 @@ Return HTML to client
 
 **Key files:**
 
-- `app/page.tsx` - renders `content/about.md` (About page at root route)
-- `app/cv/page.tsx` - renders `content/cv.md` with JSON CV parsing
+- `app/[lang]/page.tsx` - renders `content/[locale]/about.md` (About page for each locale)
+- `app/[lang]/cv/page.tsx` - renders `content/[locale]/cv.md` with JSON CV parsing
 - `lib/sanitize-html.ts` - sanitizes rich content
+- `lib/i18n/` - locale detection and UI string translation utilities
 
 **Error handling:**
 
@@ -343,32 +347,67 @@ See [`docs/SENTRY_SETUP.md`](./SENTRY_SETUP.md) for detailed Sentry configuratio
 
 ```
 app/
-├── layout.tsx               # Root layout with providers
-├── page.tsx                 # About page at root route (reads content/about.md)
-├── cv/
-│   └── page.tsx            # CV page (reads content/cv.md)
+├── layout.tsx               # Root layout with providers and Sentry
+├── [lang]/                  # Locale-specific routes (en, es)
+│   ├── layout.tsx          # Locale layout wrapper
+│   ├── page.tsx            # About page (reads content/[locale]/about.md)
+│   ├── cv/
+│   │   └── page.tsx        # CV page (reads content/[locale]/cv.md)
+│   ├── accessibility/
+│   │   └── page.tsx        # Accessibility statement
+│   ├── cookie-policy/
+│   │   └── page.tsx        # Cookie policy
+│   ├── privacy-policy/
+│   │   └── page.tsx        # Privacy policy
+│   ├── tech-stack/
+│   │   └── page.tsx        # Tech stack documentation
+│   └── technical-governance/
+│       └── page.tsx        # Technical governance documentation
 ├── api/
-│   └── contact/
-│       └── route.ts        # Contact form API route
+│   ├── contact/
+│   │   └── route.ts        # Contact form API route
+│   └── content/
+│       └── [slug]/
+│           └── route.ts    # Content API (legacy)
 ├── components/             # Shared UI components
 │   ├── ContactDialog.tsx   # Contact form modal
 │   ├── ErrorBoundary.tsx   # React error boundary
 │   ├── Header.tsx          # Site header
 │   ├── Footer.tsx          # Site footer
+│   ├── LanguageToggle.tsx  # Language switcher
+│   ├── LocaleProvider.tsx  # Locale context provider
 │   └── ...
 └── config/
     └── cv.ts               # CV configuration
 
 content/
-├── about.md                # About page content
-├── cv.md                   # CV data (JSON + frontmatter)
-├── privacy-policy.md       # Privacy policy
-└── cookie-policy.md        # Cookie policy
+├── en/                     # English content (source)
+│   ├── about.md
+│   ├── cv.md
+│   ├── accessibility.md
+│   ├── cookie-policy.md
+│   ├── privacy-policy.md
+│   ├── tech-stack.md
+│   └── technical-governance.md
+└── es/                     # Spanish translations (auto-generated)
+    └── ...                 # (mirrors en/ structure)
+
+i18n/
+├── en/
+│   └── ui.json             # English UI strings
+└── es/
+    └── ui.json             # Spanish UI strings (auto-generated)
 
 lib/
+├── i18n/                   # i18n utilities
+│   ├── index.ts
+│   ├── locales.ts
+│   ├── getTranslations.ts
+│   └── useTranslations.ts
 ├── seo.ts                  # SEO utilities & metadata
 ├── error-logging.ts        # Sentry integration
 ├── rate-limit.ts           # Rate limiting logic
+├── markdown-components.tsx # Shared ReactMarkdown components
 └── sanitize-html.ts        # HTML sanitization
 
 styles/
