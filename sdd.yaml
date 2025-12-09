@@ -34,7 +34,7 @@ standards:
     languages: [ts, tsx, js]
     linting:
       command: pnpm lint
-      config: .eslintrc.json
+      config: eslint.config.mjs
     formatting:
       command: pnpm format
       tool: prettier
