@@ -301,4 +301,5 @@ describe("LocaleProvider and useLocale", () => {
       });
     });
   });
+
 });
