@@ -48,8 +48,9 @@ The project is optimized for readability, accessibility, and maintainability, wi
 - **UI primitives**: Radix UI (`@radix-ui/react-*`) for navigation, dialogs, avatars
 - **Theming**: `next-themes` for light/dark mode with `class` attribute on `<html>`
 - **Content**:
-  - Markdown in `content/about.md`
-  - Markdown + JSON CV in `content/cv.md`
+  - Markdown files organized by locale (`content/en/`, `content/es/`)
+  - About page: `content/[locale]/about.md`
+  - CV page: `content/[locale]/cv.md` (markdown + JSON)
   - Contentlayer integration (`contentlayer.config.ts`, `next-contentlayer`) for structured content
   - Shared ReactMarkdown components config in `lib/markdown-components.tsx` for consistent typography on policy/governance docs
 - **Forms / backend**:
@@ -127,7 +128,7 @@ High‑level layout:
   - `tsconfig.json` – Strict TS config with path mapping for `@/*` and `contentlayer/generated`.
   - `.eslintrc.json`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
 
-> Note: `app/page.tsx` and `app/cv/page.tsx` currently read from the filesystem at runtime rather than querying Contentlayer. Any refactor should keep the existing behavior (especially the JSON‑driven CV and its error handling) or migrate fully to Contentlayer with equivalent semantics.
+> Note: `app/[lang]/page.tsx` and `app/[lang]/cv/page.tsx` read locale-specific content from the filesystem at build time rather than querying Contentlayer. Any refactor should keep the existing behavior (especially the JSON‑driven CV and its error handling) or migrate fully to Contentlayer with equivalent semantics.
 
 ---
 
@@ -193,9 +194,11 @@ The site includes sitemap generation via `next-sitemap`. The configuration is in
 
 ## Editing content
 
-### About page (`/`)
+Content files are organized by locale in `content/en/` (English source) and `content/es/` (Spanish translations). Spanish content is auto-generated via DeepL when English content changes.
 
-- Source file: `content/about.md`
+### About page (`/en`, `/es`)
+
+- Source files: `content/en/about.md`, `content/es/about.md`
 - Frontmatter fields:
   - `name` – Display name
   - `title` – Used for metadata / page title
@@ -213,12 +216,12 @@ The site includes sitemap generation via `next-sitemap`. The configuration is in
       - Individual cards are separated by `***` lines.
       - Each card block is rendered by `ImpactCards` as a rotating impact card on the About page.
 
-### CV page (`/cv`)
+### CV page (`/en/cv`, `/es/cv`)
 
-- Source file: `content/cv.md`
+- Source files: `content/en/cv.md`, `content/es/cv.md`
 - Frontmatter fields:
   - `name`, `title`, `slug: cv`
-- Body: A **single JSON object**, parsed at runtime into a `CvJson` structure. Key fields include:
+- Body: A **single JSON object**, parsed at build time into a `CvJson` structure. Key fields include:
   - `basics` – Name, label, summary, highlights (with optional titles and HTML content).
   - `work` – Companies, locations, positions, date ranges, highlights, and skills.
   - `education`, `skills`, `languages`, `interests`, `publications`, `references`.
@@ -229,7 +232,7 @@ The site includes sitemap generation via `next-sitemap`. The configuration is in
 If the JSON is invalid, the CV page will:
 
 - Render a fallback message.
-- Show an error prompting you to fix `content/cv.md`.
+- Show an error prompting you to fix the CV JSON in the appropriate locale file (`content/en/cv.md` or `content/es/cv.md`).
 
 ---
 
