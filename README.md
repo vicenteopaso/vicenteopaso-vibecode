@@ -71,11 +71,16 @@ The project is optimized for readability, accessibility, and maintainability, wi
 High‑level layout:
 
 - `app/`
-  - `layout.tsx` – HTML shell, global styles, SEO metadata, theme provider, header/footer, and skip link to main content.
-  - `page.tsx` – Home route (root `/`). Reads `content/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
-  - `cv/page.tsx` – Reads `content/cv.md`, parses the JSON CV body, and renders experience, skills, education, languages, interests, publications, and references.
-  - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page rendered with shared `markdownComponents`.
-  - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page rendered with shared `markdownComponents`.
+  - `layout.tsx` – Root HTML shell, global styles, SEO metadata, theme provider, and Sentry integration.
+  - `[lang]/` – Locale-specific routes (e.g., `/en/`, `/es/`)
+    - `layout.tsx` – Locale layout wrapper for i18n validation
+    - `page.tsx` – Home route for each locale. Reads `content/[locale]/about.md` and renders it via `react-markdown` configured with `introComponents`/`aboutPageComponents` from `lib/markdown-components.tsx`, plus a profile card, intro section, rotating impact cards, social links, and a contact section.
+    - `cv/page.tsx` – Reads `content/[locale]/cv.md`, parses the JSON CV body, and renders experience, skills, education, languages, interests, publications, and references.
+    - `cookie-policy/page.tsx` – Markdown‑backed cookie policy page rendered with shared `markdownComponents`.
+    - `privacy-policy/page.tsx` – Markdown‑backed privacy policy page rendered with shared `markdownComponents`.
+    - `accessibility/page.tsx` – Accessibility statement page.
+    - `tech-stack/page.tsx` – Technical stack documentation page.
+    - `technical-governance/page.tsx` – Technical governance documentation page.
   - `components/`
     - `Header.tsx`, `Footer.tsx` – Layout chrome.
     - `NavigationMenu.tsx` – Radix navigation menu with theme toggle, logo, and contact trigger.
@@ -90,11 +95,26 @@ High‑level layout:
   - `api/contact/route.ts` – Validates and forwards contact form submissions (Turnstile verification + Formspree).
   - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by modals and pages.
 - `content/`
-  - `about.md` – Frontmatter + markdown body for the Home page (rendered at root `/`).
-  - `cv.md` – Frontmatter + JSON object in the markdown body for the CV.
-  - `cookie-policy.md` – Markdown source for the cookie policy.
-  - `privacy-policy.md` – Markdown source for the privacy policy.
-  - `tech-stack.md` – Markdown source for the tech stack content used in the footer modal.
+  - `en/` – English content (source of truth)
+    - `about.md` – Frontmatter + markdown body for the Home page.
+    - `cv.md` – Frontmatter + JSON object in the markdown body for the CV.
+    - `cookie-policy.md` – Markdown source for the cookie policy.
+    - `privacy-policy.md` – Markdown source for the privacy policy.
+    - `tech-stack.md` – Markdown source for the tech stack page.
+    - `accessibility.md` – Markdown source for the accessibility statement.
+    - `technical-governance.md` – Markdown source for the technical governance page.
+  - `es/` – Spanish translations (auto-generated via DeepL)
+    - Mirror structure of `en/` directory
+- `i18n/` – UI string dictionaries for internationalization
+  - `en/ui.json` – English UI strings
+  - `es/ui.json` – Spanish UI strings (auto-generated via DeepL)
+- `lib/` – Shared utilities and services
+  - `i18n/` – Internationalization utilities (locale detection, translation loading)
+  - `seo.ts` – SEO configuration and metadata helpers
+  - `error-logging.ts` – Centralized error logging with Sentry
+  - `markdown-components.tsx` – Shared ReactMarkdown component mappings
+  - `sanitize-html.ts` – HTML sanitization for XSS prevention
+  - `rate-limit.ts` – In-memory rate limiting for API routes
 - `styles/globals.css` – Tailwind CSS v4 setup, design tokens, global typography, layout utilities.
 - `scripts/`
   - `build.mjs` – Contentlayer + Next.js build orchestration.
@@ -136,12 +156,22 @@ Then open `http://localhost:3000` in your browser.
 
 The main routes are:
 
-- `/` – About page (markdown‑driven, served at root)
-- `/cv` – JSON CV page
-- `/cookie-policy` – Cookie policy page (markdown‑backed)
-- `/privacy-policy` – Privacy policy page (markdown‑backed)
+- `/` or `/en` – English About page (markdown‑driven, default locale)
+- `/es` – Spanish About page (auto-translated)
+- `/en/cv` – English CV page (JSON-driven)
+- `/es/cv` – Spanish CV page (auto-translated)
+- `/en/cookie-policy` – English cookie policy page
+- `/es/cookie-policy` – Spanish cookie policy page
+- `/en/privacy-policy` – English privacy policy page
+- `/es/privacy-policy` – Spanish privacy policy page
+- `/en/accessibility` – English accessibility statement
+- `/es/accessibility` – Spanish accessibility statement
+- `/en/tech-stack` – English tech stack documentation
+- `/es/tech-stack` – Spanish tech stack documentation
+- `/en/technical-governance` – English technical governance documentation
+- `/es/technical-governance` – Spanish technical governance documentation
 - `/api/contact` – Contact form API route
-- `/api/content/[slug]` – Content API for policy/tech markdown (cookie policy, privacy policy, tech stack)
+- `/api/content/[slug]` – Content API for policy/tech markdown (deprecated, pages now server-side rendered)
 
 ---
 
@@ -249,15 +279,18 @@ To use the translation feature:
 
 This key must be added as a GitHub secret for the automated workflow to function.
 
-### Future i18n routing
+### i18n Routing Implementation
 
-Currently, the application reads content from `content/*.md`. The translated content in `content/es/` is ready for future implementation of localized routes (e.g., `/es/*`). Full i18n routing integration with Next.js will require:
+The application implements localized routes using Next.js App Router's dynamic segments:
 
-- Middleware or route configuration to handle locale detection and routing
-- Page components that read from locale-specific content directories
-- UI component updates to use the translated dictionaries in `i18n/`
+- Routes are organized under `app/[lang]/` for locale-specific pages
+- Supported locales: `en` (English), `es` (Spanish)
+- Default locale: English (`en`)
+- Locale detection and validation via `lib/i18n/`
+- UI strings localized via dictionaries in `i18n/[locale]/ui.json`
+- Content localized via markdown files in `content/[locale]/`
 
-The translation infrastructure is in place and ready for this integration when needed.
+The translation infrastructure provides full i18n support with automated DeepL translations for Spanish content.
 
 ---
 
