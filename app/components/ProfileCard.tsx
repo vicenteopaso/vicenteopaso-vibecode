@@ -45,7 +45,7 @@ function SocialIcons() {
       <a
         href="https://github.com/vicenteopaso/"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noreferrer"
         aria-label="GitHub profile"
         className={socialIconClasses}
       >
@@ -65,7 +65,7 @@ function SocialIcons() {
       <a
         href="https://linkedin.com/in/vicenteopaso/"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noreferrer"
         aria-label="LinkedIn profile"
         className={socialIconClasses}
       >
@@ -85,7 +85,7 @@ function SocialIcons() {
       <a
         href="https://x.com/vicenteopaso/"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noreferrer"
         aria-label="X (Twitter) profile"
         className={socialIconClasses}
       >

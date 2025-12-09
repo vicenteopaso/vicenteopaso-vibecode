@@ -409,17 +409,17 @@ describe("CV Page Social Icons", () => {
       const githubLink = screen.queryByRole("link", { name: /GitHub/i });
       expect(githubLink).toHaveAttribute("aria-label");
       expect(githubLink).toHaveAttribute("target", "_blank");
-      expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
+      expect(githubLink).toHaveAttribute("rel", "noreferrer");
 
       const linkedInLink = screen.queryByRole("link", { name: /LinkedIn/i });
       expect(linkedInLink).toHaveAttribute("aria-label");
       expect(linkedInLink).toHaveAttribute("target", "_blank");
-      expect(linkedInLink).toHaveAttribute("rel", "noopener noreferrer");
+      expect(linkedInLink).toHaveAttribute("rel", "noreferrer");
 
       const xLink = screen.queryByRole("link", { name: /X/i });
       expect(xLink).toHaveAttribute("aria-label");
       expect(xLink).toHaveAttribute("target", "_blank");
-      expect(xLink).toHaveAttribute("rel", "noopener noreferrer");
+      expect(xLink).toHaveAttribute("rel", "noreferrer");
     });
   });
 
