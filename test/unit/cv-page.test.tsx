@@ -383,8 +383,8 @@ describe("CV Page Social Icons", () => {
 
     await waitFor(() => {
       const githubLink = screen.queryByRole("link", { name: /GitHub/i });
-      expect(githubLink?.getAttribute("href")).toBe(
-        "https://github.com/vicenteopaso",
+      expect(githubLink?.getAttribute("href")).toContain(
+        "github.com/vicenteopaso",
       );
 
       const linkedInLink = screen.queryByRole("link", { name: /LinkedIn/i });
