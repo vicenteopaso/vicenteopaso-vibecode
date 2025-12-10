@@ -31,8 +31,8 @@ describe("Root OG image route", () => {
     vi.restoreAllMocks();
   });
 
-  it("uses siteConfig and size to construct an ImageResponse", () => {
-    RootOgImage();
+  it("uses siteConfig and size to construct an ImageResponse", async () => {
+    await RootOgImage({ params: Promise.resolve({ lang: "en" }) });
 
     const imageResponseMock = vi.mocked(ImageResponse);
     expect(imageResponseMock).toHaveBeenCalledTimes(1);
@@ -72,8 +72,8 @@ describe("CV OG image route", () => {
     vi.restoreAllMocks();
   });
 
-  it("uses siteConfig and size to construct an ImageResponse", () => {
-    CvOgImage();
+  it("uses siteConfig and size to construct an ImageResponse", async () => {
+    await CvOgImage({ params: Promise.resolve({ lang: "en" }) });
 
     const imageResponseMock = vi.mocked(ImageResponse);
     expect(imageResponseMock).toHaveBeenCalledTimes(1);
@@ -99,8 +99,8 @@ describe("CV OG image route", () => {
     expect(topLevelProps.style.height).toBe("100%");
   });
 
-  it("uses the new standardized CV description", () => {
-    CvOgImage();
+  it("uses the new standardized CV description", async () => {
+    await CvOgImage({ params: Promise.resolve({ lang: "en" }) });
 
     const imageResponseMock = vi.mocked(ImageResponse);
     const [element] = imageResponseMock.mock.calls[0] as [
@@ -128,6 +128,113 @@ describe("CV OG image route", () => {
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain(cvDescription);
+  });
+
+  it("renders Spanish translations when lang is es", async () => {
+    await CvOgImage({ params: Promise.resolve({ lang: "es" }) });
+
+    const imageResponseMock = vi.mocked(ImageResponse);
+    const [element] = imageResponseMock.mock.calls[0] as [
+      React.ReactElement,
+      unknown,
+    ];
+
+    function findTextContent(el: React.ReactElement | string): string[] {
+      if (typeof el === "string") return [el];
+      if (!el?.props) return [];
+
+      const children = (el.props as { children?: React.ReactNode }).children;
+      if (typeof children === "string") return [children];
+      if (Array.isArray(children)) {
+        return children.flatMap((child) =>
+          findTextContent(child as React.ReactElement | string),
+        );
+      }
+      if (typeof children === "object" && children !== null) {
+        return findTextContent(children as React.ReactElement);
+      }
+      return [];
+    }
+
+    const textContent = findTextContent(element).join(" ");
+    expect(textContent).toContain("Currículum Vitae");
+    expect(textContent).toContain("Experiencia");
+    expect(textContent).toContain("Habilidades");
+  });
+});
+
+describe("Root OG image translations", () => {
+  beforeEach(() => {
+    vi.mocked(ImageResponse).mockClear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("renders English translations when lang is en", async () => {
+    await RootOgImage({ params: Promise.resolve({ lang: "en" }) });
+
+    const imageResponseMock = vi.mocked(ImageResponse);
+    const [element] = imageResponseMock.mock.calls[0] as [
+      React.ReactElement,
+      unknown,
+    ];
+
+    function findTextContent(el: React.ReactElement | string): string[] {
+      if (typeof el === "string") return [el];
+      if (!el?.props) return [];
+
+      const children = (el.props as { children?: React.ReactNode }).children;
+      if (typeof children === "string") return [children];
+      if (Array.isArray(children)) {
+        return children.flatMap((child) =>
+          findTextContent(child as React.ReactElement | string),
+        );
+      }
+      if (typeof children === "object" && children !== null) {
+        return findTextContent(children as React.ReactElement);
+      }
+      return [];
+    }
+
+    const textContent = findTextContent(element).join(" ");
+    expect(textContent).toContain("Design Systems");
+    expect(textContent).toContain("Developer Experience");
+    expect(textContent).toContain("Web Engineering Manager");
+  });
+
+  it("renders Spanish translations when lang is es", async () => {
+    await RootOgImage({ params: Promise.resolve({ lang: "es" }) });
+
+    const imageResponseMock = vi.mocked(ImageResponse);
+    const [element] = imageResponseMock.mock.calls[0] as [
+      React.ReactElement,
+      unknown,
+    ];
+
+    function findTextContent(el: React.ReactElement | string): string[] {
+      if (typeof el === "string") return [el];
+      if (!el?.props) return [];
+
+      const children = (el.props as { children?: React.ReactNode }).children;
+      if (typeof children === "string") return [children];
+      if (Array.isArray(children)) {
+        return children.flatMap((child) =>
+          findTextContent(child as React.ReactElement | string),
+        );
+      }
+      if (typeof children === "object" && children !== null) {
+        return findTextContent(children as React.ReactElement);
+      }
+      return [];
+    }
+
+    const textContent = findTextContent(element).join(" ");
+    expect(textContent).toContain("Design Systems");
+    expect(textContent).toContain("Experiencia del Desarrollador");
+    expect(textContent).toContain("Gerente de Ingeniería Web");
+    expect(textContent).toContain("Arquitecto Frontend");
   });
 });
 

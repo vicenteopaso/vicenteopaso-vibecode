@@ -185,7 +185,10 @@ Client shows confirmation or error message
 - SEO is centralized in a small `lib/seo` layer (site config, base metadata, and JSON-LD helpers).
 - `app/layout.tsx` uses the Next.js Metadata API for titles, descriptions, and Open Graph tags.
 - JSON-LD for `WebSite` and `Person` schema is injected via a dedicated component used in the root layout.
-- Open Graph images are generated via a dedicated route (`app/opengraph-image.tsx`).
+- Open Graph images are generated via locale-aware routes (`app/[lang]/opengraph-image.tsx` and `app/[lang]/cv/opengraph-image.tsx`).
+  - Images are dynamically generated using Next.js ImageResponse API
+  - Support both English (`/en/opengraph-image`) and Spanish (`/es/opengraph-image`) with translated content
+  - Each locale receives appropriately translated badge text, subtitles, and metadata
 
 **SEO Implementation:**
 
@@ -396,6 +399,105 @@ test/
 - FID (First Input Delay): < 100ms
 - CLS (Cumulative Layout Shift): < 0.1
 
+## Decision Trees for Common Tasks
+
+### Where should I add a new page?
+
+```
+Is the page locale-specific (needs /en/ and /es/ versions)?
+  ├─ YES: Add under app/[lang]/[page]/page.tsx + content/[locale]/[page].md
+  └─ NO: Check if it's an API/system endpoint, or policy/static page
+
+Is it a policy page (privacy, cookies, accessibility)?
+  ├─ YES: Create content/[locale]/[policy-name].md + app/[lang]/[policy-name]/page.tsx
+  │       Page reads and renders markdown with ReactMarkdown
+  └─ NO: Is it dynamic content from an API or database?
+         └─ NO: Probably static content (like /tech-stack/) → use SSG with app/[lang]/[slug]/page.tsx
+
+Is it an API route (not a page)?
+  ├─ YES: Create app/api/[route]/route.ts
+  │       Include Zod schema validation and error logging
+  └─ NO: It's a public page
+
+Does the page need metadata (OG images, title, description)?
+  ├─ YES: Export metadata from page.tsx or layout.tsx
+  │       For OG images: create app/[lang]/[page]/opengraph-image.tsx
+  │       Ensure opengraph-image.tsx accepts params: Promise<{ lang: Locale }> for locale-awareness
+  └─ NO: Let default metadata from root layout apply
+```
+
+### Where should I add UI logic?
+
+```
+Is it a reusable visual component (Button, Card, Modal)?
+  ├─ YES: Create app/components/[ComponentName].tsx (accept all config via props)
+  │       No business logic, pure UI + event handlers
+  └─ NO: Is it specific to one page?
+         ├─ YES: Can colocate in app/[lang]/[page]/ directory
+         └─ NO: Check if it's a layout component
+
+Is it a pure function (no React, string transformations, data formatting)?
+  ├─ YES: Place in lib/[category]/[function-name].ts
+  │       Export type definitions and use for props
+  └─ NO: Is it data fetching or external service calls?
+         ├─ YES: lib/services/[service-name].ts or app/api/ route handler
+         └─ NO: Is it state management or a custom hook?
+                └─ Create app/hooks/use[HookName].ts or lib/hooks/
+```
+
+### When do I need to update sdd.yaml?
+
+```
+Did I add a new architecture boundary or system component?
+  ├─ YES: Update architecture.boundaries in sdd.yaml + this document (ARCHITECTURE.md)
+  └─ NO: Continue
+
+Did I add a new tech choice or dependency with production impact?
+  ├─ YES: Document in stack section (version, justification, alternatives considered)
+  └─ NO: Continue
+
+Did I change a critical flow (contact, content rendering, auth)?
+  ├─ YES: Update critical-flows or contact-flow in sdd.yaml
+  └─ NO: Continue
+
+Did I add a requirement that affects testing, linting, or CI/CD?
+  ├─ YES: Update expectations.ci or expectations.testing
+  └─ NO: You probably don't need to update sdd.yaml
+```
+
+### When do I need to add tests?
+
+```
+Did I add a new route (page or API)?
+  ├─ YES: Add Playwright E2E test under test/e2e/
+  │       Test happy path (200), error cases, and locale variants if applicable
+  └─ NO: Is it a new component?
+         ├─ YES: Add Vitest unit test under test/unit/
+         │       Test props, event handlers, accessibility, error states
+         └─ NO: Is it a utility function?
+                ├─ YES: Add Vitest unit test
+                │       Test valid inputs, edge cases, error cases
+                └─ NO: Consider if it's internal logic worth testing
+```
+
+### How do I handle i18n (localization)?
+
+```
+Is the content user-facing text?
+  ├─ YES: Never hardcode English; use locale from [lang] route param or LocaleProvider
+  │       For UI strings: use getTranslations(locale) from lib/i18n/
+  │       For pages: read content/[locale]/ files based on lang param
+  │       For metadata: generate per-locale in metadata export or opengraph-image.tsx
+  └─ NO: Is it a route or URL?
+         ├─ YES: Always use /[lang]/... pattern, never hardcode /en/ or /es/
+         └─ NO: Error messages or logging should have English default
+
+Do I have a new metadata route (opengraph image, RSS feed, etc.)?
+  ├─ YES: Make it locale-aware by accepting params: Promise<{ lang: Locale }>
+  │       Example: app/[lang]/opengraph-image.tsx
+  │       Render translated content based on lang param
+  └─ NO: You're good
+
 ## Related Documentation
 
 - **[WARP.md](../WARP.md)** — High-level project overview and structure
@@ -405,3 +507,4 @@ test/
 - **[SECURITY_POLICY.md](./SECURITY_POLICY.md)** — Security headers and defense-in-depth
 - **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** — Error handling and observability
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** — Development workflow and standards
+```

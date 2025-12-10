@@ -50,12 +50,15 @@ standards:
       app:
         components: "UI-only; no direct fs or process.env access. Prefer props and lib helpers."
         api-routes: "Schema validation + side-effects only; business rules live in lib/* where possible."
+        opengraph: "Locale-aware image generation in app/[lang]/opengraph-image.tsx and app/[lang]/cv/opengraph-image.tsx; accepts lang param for translations."
       lib:
         error-logging: "Centralized Sentry + console logging in lib/error-logging.ts."
         markdown: "Shared markdown component maps in lib/markdown-components.tsx."
+        seo: "Single source of truth for site config, metadata, and JSON-LD in lib/seo.ts."
       content:
         about: "Frontmatter + markdown body in content/about.md."
         cv: "Frontmatter + JSON body in content/cv.md."
+        i18n: "Locale detection and translations in lib/i18n/; opengraph images support en/es locales."
     prohibited:
       - shared mutable state across routes
       - cross-layer imports such as app/components importing app/api
@@ -120,10 +123,30 @@ ai-governance:
     - ./sdd.yaml
     - ./docs/ARCHITECTURE.md
     - ./docs/ERROR_HANDLING.md
+    - ./.github/copilot-instructions.md
+  decision-criteria:
+    i18n-routing: |
+      All user-facing routes must respect the [lang] parameter from the App Router.
+      - Page components: Read lang from params.lang, never hardcode locale
+      - Metadata: Must generate per-locale using the lang param
+      - OG images: Must accept params: Promise<{ lang: Locale }> and render translated content
+      - Links: Always use /[lang]/ prefixes, never hardcode /en/ or /es/
+    component-placement: |
+      UI components belong in app/components/ (shared, stateless, accept props).
+      Business logic and utilities belong in lib/* (no React dependencies, pure functions where possible).
+      API routes contain schema validation and external service calls, not business rules.
+    testing-expectations: |
+      New features must include unit tests (Vitest) and maintain >95% function coverage.
+      Routes must have E2E tests (Playwright) verifying happy path and error cases.
+      Components must test props, event handlers, and accessibility (ARIA, semantic HTML).
   rules:
     - "Prefer existing patterns and files when adding new functionality."
     - "When adding new dependencies, include justification in the PR description."
     - "Always wire new routes, components, or APIs into lint, typecheck, and tests."
+    - "All user-visible text must be i18n-aware: never hardcode English-only content."
+    - "Opengraph and metadata routes must be locale-aware; accept lang param and translate."
+    - "When modifying sdd.yaml, ARCHITECTURE.md, or ERROR_HANDLING.md, ensure consistency across all three."
+    - "Use async/await syntax; avoid .then() chains unless necessary."
   safety:
     - "Never hard-code secrets or tokens; always read from environment variables."
     - "Avoid introducing breaking changes to security headers without review."

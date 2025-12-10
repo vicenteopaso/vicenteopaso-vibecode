@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+import type { Locale } from "../../lib/i18n/locales";
 import { siteConfig } from "../../lib/seo";
 
 export const size = {
@@ -9,10 +10,21 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default function Image() {
+type Props = {
+  params: Promise<{ lang: Locale }>;
+};
+
+export default async function Image({ params }: Props) {
+  const { lang } = await params;
   const title = siteConfig.name;
   const subtitle =
-    "Web Engineering Manager & Frontend Architect · Design Systems, Developer Experience, and Composable platforms";
+    lang === "es"
+      ? "Gerente de Ingeniería Web y Arquitecto Frontend · Design Systems, Experiencia del Desarrollador y Plataformas Componibles"
+      : "Web Engineering Manager & Frontend Architect · Design Systems, Developer Experience, and Composable platforms";
+  const badge =
+    lang === "es"
+      ? "Liderazgo en Ingeniería de Software, Design Systems y Experiencia del Desarrollador (DevEx)"
+      : "Software Engineering Leadership, Design Systems & DevEx";
 
   return new ImageResponse(
     <div
@@ -52,7 +64,7 @@ export default function Image() {
               background: "#38bdf8",
             }}
           />
-          <span>Engineering leadership, design systems & DX</span>
+          <span>{badge}</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
