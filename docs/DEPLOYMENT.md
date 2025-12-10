@@ -50,7 +50,7 @@ The following paths contain code, dependencies, or configuration that affects th
   - `tsconfig.json` — TypeScript configuration
   - `contentlayer.config.ts` — Contentlayer configuration
   - `postcss.config.js` — PostCSS configuration
-  - `.eslintrc.json` — ESLint configuration (affects build validation)
+  - `eslint.config.mjs` — ESLint configuration (affects build validation)
   - `.prettierrc` — Prettier configuration (affects build validation)
   - `vercel.json` — Vercel deployment configuration
   - `instrumentation.ts` / `instrumentation-client.ts` — Next.js instrumentation files (custom tracing/hooks)

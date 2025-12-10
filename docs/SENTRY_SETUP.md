@@ -323,6 +323,6 @@ If you encounter issues:
 
 ---
 
-**Last Updated**: 2025-11-28  
-**Sentry SDK Version**: `@sentry/nextjs@^8.30.0`  
-**Next.js Version**: `^15.0.0`
+**Last Updated**: 2025-12-09  
+**Sentry SDK Version**: `@sentry/nextjs@^10.29.0`  
+**Next.js Version**: `^16.0.8`
