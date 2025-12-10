@@ -122,7 +122,7 @@ Nos comprometemos a responder en un plazo de 2 días hábiles y trabajaremos par
 
 - **HTML**: HTML5 semántico
 - **CSS**: Tailwind CSS con design tokens personalizados
-- **JavaScript**: React 18 con Next.js 15 (mejora progresiva)
+- **JavaScript**: React 19 con Next.js 16 (mejora progresiva)
 - **ARIA**: Aplicado cuando el HTML semántico no es suficiente
 - **Frameworks**: Radix UI para componentes accesibles
 

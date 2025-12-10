@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import fs from "fs";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import CVPage from "../../app/[lang]/cv/page";
 
@@ -355,6 +355,7 @@ describe("CV Page Social Icons", () => {
     vi.clearAllMocks();
   });
 
+  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
   it.skip("should render social icons in ProfileCard when CV page loads", async () => {
     const raw = ["---", JSON.stringify(mockCVData)].join("\n");
 
@@ -374,6 +375,7 @@ describe("CV Page Social Icons", () => {
     });
   });
 
+  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
   it.skip("should have correct hrefs for social icon links", async () => {
     const raw = ["---", JSON.stringify(mockCVData)].join("\n");
 
@@ -383,18 +385,19 @@ describe("CV Page Social Icons", () => {
 
     await waitFor(() => {
       const githubLink = screen.queryByRole("link", { name: /GitHub/i });
-      expect(githubLink?.getAttribute("href")).toBe(
-        "https://github.com/vicenteopaso",
+      expect(githubLink?.getAttribute("href")).toContain(
+        "github.com/vicenteopaso",
       );
 
       const linkedInLink = screen.queryByRole("link", { name: /LinkedIn/i });
       expect(linkedInLink?.getAttribute("href")).toContain("linkedin.com");
 
       const xLink = screen.queryByRole("link", { name: /X/i });
-      expect(xLink?.getAttribute("href")).toContain("twitter.com");
+      expect(xLink?.getAttribute("href")).toContain("x.com");
     });
   });
 
+  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
   it.skip("should have proper accessibility attributes on social icons", async () => {
     const raw = ["---", JSON.stringify(mockCVData)].join("\n");
 
@@ -406,18 +409,21 @@ describe("CV Page Social Icons", () => {
       const githubLink = screen.queryByRole("link", { name: /GitHub/i });
       expect(githubLink).toHaveAttribute("aria-label");
       expect(githubLink).toHaveAttribute("target", "_blank");
-      expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
+      expect(githubLink).toHaveAttribute("rel", "noreferrer");
 
       const linkedInLink = screen.queryByRole("link", { name: /LinkedIn/i });
       expect(linkedInLink).toHaveAttribute("aria-label");
       expect(linkedInLink).toHaveAttribute("target", "_blank");
+      expect(linkedInLink).toHaveAttribute("rel", "noreferrer");
 
       const xLink = screen.queryByRole("link", { name: /X/i });
       expect(xLink).toHaveAttribute("aria-label");
       expect(xLink).toHaveAttribute("target", "_blank");
+      expect(xLink).toHaveAttribute("rel", "noreferrer");
     });
   });
 
+  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
   it.skip("should render social icons with correct styling classes", async () => {
     const raw = ["---", JSON.stringify(mockCVData)].join("\n");
 
@@ -440,6 +446,7 @@ describe("CV Page Social Icons", () => {
     });
   });
 
+  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
   it.skip("should render download CV button with social icons in CV header", async () => {
     const raw = ["---", JSON.stringify(mockCVData)].join("\n");
 

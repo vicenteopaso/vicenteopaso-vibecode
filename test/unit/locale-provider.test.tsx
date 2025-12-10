@@ -147,38 +147,16 @@ describe("LocaleProvider and useLocale", () => {
       expect(screen.getByTestId("locale")).toHaveTextContent("en");
     });
 
-    it("should have a no-op setLocale when context is not available", () => {
-      const TestComponentOutsideProvider = () => {
-        const { setLocale } = useLocale();
-        return (
-          <button
-            data-testid="set-btn"
-            onClick={() => {
-              setLocale("es");
-            }}
-          >
-            Set Locale
-          </button>
-        );
-      };
-
-      const { getByTestId } = render(<TestComponentOutsideProvider />);
-
-      // Should not throw even though setLocale is a no-op
-      const btn = getByTestId("set-btn");
-      expect(btn).toBeInTheDocument();
-
-      // Actually click to invoke the no-op function
-      expect(() => btn.click()).not.toThrow();
-    });
-
-    it("should invoke no-op setLocale without side effects when context is unavailable", () => {
+    it("should have a no-op setLocale without side effects when context is unavailable", () => {
       const TestComponentOutsideProvider = () => {
         const { locale, setLocale } = useLocale();
         return (
           <div>
             <div data-testid="locale">{locale}</div>
-            <button data-testid="change-btn" onClick={() => setLocale("es")}>
+            <button
+              data-testid="change-btn"
+              onClick={() => setLocale("es")}
+            >
               Change
             </button>
           </div>
@@ -187,13 +165,8 @@ describe("LocaleProvider and useLocale", () => {
 
       const { getByTestId } = render(<TestComponentOutsideProvider />);
 
-      // Locale should be default
       expect(getByTestId("locale")).toHaveTextContent("en");
-
-      // Click button to invoke no-op setLocale
-      getByTestId("change-btn").click();
-
-      // Locale should still be default (no-op didn't change anything)
+      expect(() => getByTestId("change-btn").click()).not.toThrow();
       expect(getByTestId("locale")).toHaveTextContent("en");
     });
   });

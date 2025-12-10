@@ -10,8 +10,8 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 
 ## Framework Principal y Runtime
 
-- **Next.js 15** — App Router con React Server Components (RSC), generación estática (SSG) y rutas tipadas
-- **React 18.3** — Librería UI con server components y mejora progresiva
+- **Next.js 16** — App Router con React Server Components (RSC), generación estática (SSG) y rutas tipadas
+- **React 19.2** — Librería UI con server components y mejora progresiva
 - **TypeScript 5.6** — Tipado estricto de extremo a extremo
 - **Node.js 24** — Entorno de ejecución (LTS)
 
@@ -54,14 +54,14 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 
 ## Calidad de Código y Linting
 
-- **ESLint 8.57** — Linter con configuraciones:
+- **ESLint 9.39** — Linter con configuraciones:
   - `eslint-config-next` — Reglas recomendadas para Next.js
   - `@typescript-eslint/eslint-plugin` — Reglas específicas para TypeScript
   - `eslint-plugin-jsx-a11y` — Accesibilidad
   - `eslint-plugin-security` — Reglas de seguridad
   - `eslint-plugin-simple-import-sort` — Ordenación de imports
   - `eslint-config-prettier` — Integración con Prettier
-- **Prettier 3.3** — Formateo de código
+- **Prettier 3.7** — Formateo de código
 - **Husky 9.1** — Git hooks
 - **lint-staged 15.2** — Linting y formateo pre-commit
 
@@ -69,7 +69,7 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 
 - **Vercel Analytics** — Métricas de interacción y visitas
 - **Vercel Speed Insights** — Core Web Vitals y métricas de rendimiento
-- **Sentry (@sentry/nextjs 8.30)** — Tracking de errores, session replay y alertas
+- **Sentry (@sentry/nextjs 10.29)** — Tracking de errores, session replay y alertas
 - **Vercel Logs** — Logs de errores del servidor
 
 ## Build y Deployment

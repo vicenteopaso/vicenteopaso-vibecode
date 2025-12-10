@@ -39,6 +39,24 @@ import RootOgImage, {
 } from "../../app/[lang]/opengraph-image";
 import { baseMetadata, getCvDescription, siteConfig } from "../../lib/seo";
 
+// Helper function to traverse React element tree and extract text content
+function findTextContent(el: React.ReactElement | string): string[] {
+  if (typeof el === "string") return [el];
+  if (!el?.props) return [];
+
+  const children = (el.props as { children?: React.ReactNode }).children;
+  if (typeof children === "string") return [children];
+  if (Array.isArray(children)) {
+    return children.flatMap((child) =>
+      findTextContent(child as React.ReactElement | string),
+    );
+  }
+  if (typeof children === "object" && children !== null) {
+    return findTextContent(children as React.ReactElement);
+  }
+  return [];
+}
+
 describe("Root OG image route", () => {
   beforeEach(() => {
     mockInstances.length = 0;
@@ -122,24 +140,6 @@ describe("CV OG image route", () => {
       element: React.ReactElement;
     };
 
-    // Traverse the element tree to find the subtitle text
-    function findTextContent(el: React.ReactElement | string): string[] {
-      if (typeof el === "string") return [el];
-      if (!el?.props) return [];
-
-      const children = (el.props as { children?: React.ReactNode }).children;
-      if (typeof children === "string") return [children];
-      if (Array.isArray(children)) {
-        return children.flatMap((child) =>
-          findTextContent(child as React.ReactElement | string),
-        );
-      }
-      if (typeof children === "object" && children !== null) {
-        return findTextContent(children as React.ReactElement);
-      }
-      return [];
-    }
-
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain(getCvDescription("en"));
   });
@@ -151,23 +151,6 @@ describe("CV OG image route", () => {
     const { element } = mockInstances[0] as {
       element: React.ReactElement;
     };
-
-    function findTextContent(el: React.ReactElement | string): string[] {
-      if (typeof el === "string") return [el];
-      if (!el?.props) return [];
-
-      const children = (el.props as { children?: React.ReactNode }).children;
-      if (typeof children === "string") return [children];
-      if (Array.isArray(children)) {
-        return children.flatMap((child) =>
-          findTextContent(child as React.ReactElement | string),
-        );
-      }
-      if (typeof children === "object" && children !== null) {
-        return findTextContent(children as React.ReactElement);
-      }
-      return [];
-    }
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain("Currículum Vitae");
@@ -193,23 +176,6 @@ describe("Root OG image translations", () => {
       element: React.ReactElement;
     };
 
-    function findTextContent(el: React.ReactElement | string): string[] {
-      if (typeof el === "string") return [el];
-      if (!el?.props) return [];
-
-      const children = (el.props as { children?: React.ReactNode }).children;
-      if (typeof children === "string") return [children];
-      if (Array.isArray(children)) {
-        return children.flatMap((child) =>
-          findTextContent(child as React.ReactElement | string),
-        );
-      }
-      if (typeof children === "object" && children !== null) {
-        return findTextContent(children as React.ReactElement);
-      }
-      return [];
-    }
-
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain("Design Systems");
     expect(textContent).toContain("Developer Experience");
@@ -223,23 +189,6 @@ describe("Root OG image translations", () => {
     const { element } = mockInstances[0] as {
       element: React.ReactElement;
     };
-
-    function findTextContent(el: React.ReactElement | string): string[] {
-      if (typeof el === "string") return [el];
-      if (!el?.props) return [];
-
-      const children = (el.props as { children?: React.ReactNode }).children;
-      if (typeof children === "string") return [children];
-      if (Array.isArray(children)) {
-        return children.flatMap((child) =>
-          findTextContent(child as React.ReactElement | string),
-        );
-      }
-      if (typeof children === "object" && children !== null) {
-        return findTextContent(children as React.ReactElement);
-      }
-      return [];
-    }
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain("Design Systems");
