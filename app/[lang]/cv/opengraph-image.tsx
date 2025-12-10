@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+import type { Locale } from "../../../lib/i18n/locales";
 import { cvDescription, siteConfig } from "../../../lib/seo";
 
 export const runtime = "edge";
@@ -12,8 +13,18 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default function Image() {
+type Props = {
+  params: Promise<{ lang: Locale }>;
+};
+
+export default async function Image({ params }: Props) {
+  const { lang } = await params;
   const title = `${siteConfig.name} · CV`;
+  const badge = lang === "es" ? "Currículum Vitae" : "Curriculum Vitae";
+  const footer =
+    lang === "es"
+      ? "Experiencia · Habilidades · Publicaciones · Referencias"
+      : "Experience · Skills · Publications · References";
 
   return new ImageResponse(
     <div
@@ -55,7 +66,7 @@ export default function Image() {
               background: "#38bdf8",
             }}
           />
-          <span>Curriculum Vitae</span>
+          <span>{badge}</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -91,7 +102,7 @@ export default function Image() {
           color: "#94a3b8",
         }}
       >
-        <span>Experience · Skills · Publications · References</span>
+        <span>{footer}</span>
         <span>{siteConfig.domain}/cv</span>
       </div>
     </div>,
