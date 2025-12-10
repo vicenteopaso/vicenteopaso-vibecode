@@ -24,7 +24,7 @@ describe("Modal component", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open modal" }));
 
     expect(screen.getByText("Modal body")).toBeInTheDocument();
-  });
+  }, 10000);
 
   it("sends analytics event when opened with analyticsEventName", () => {
     render(

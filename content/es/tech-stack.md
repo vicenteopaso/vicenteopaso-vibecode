@@ -13,7 +13,7 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 - **Next.js 16** — App Router con React Server Components (RSC), generación estática (SSG) y rutas tipadas
 - **React 19.2** — Librería UI con server components y mejora progresiva
 - **TypeScript 5.6** — Tipado estricto de extremo a extremo
-- **Node.js 22** — Entorno de ejecución (LTS)
+- **Node.js 24** — Entorno de ejecución (LTS)
 
 ## Estilos y Componentes UI
 

@@ -126,8 +126,11 @@ describe("i18n infrastructure", () => {
       // Create a mock translation with hyphenated key
       // This tests the improved regex pattern
       const mockKey = "test.{user-name}";
+      // Suppress console warning for intentionally non-existent key
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const translated = t(mockKey as any, { "user-name": "John" });
+      consoleSpy.mockRestore();
 
       // Since this key doesn't exist, it should return the key
       // But if we had interpolation in the key itself, it would work

@@ -5,7 +5,7 @@ import path from "path";
 
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { sanitizeRichText } from "@/lib/sanitize-html";
-import { cvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
+import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
 
 import { GetInTouchSection } from "../../components/GetInTouchSection";
 import { ProfileCard } from "../../components/ProfileCard";
@@ -24,15 +24,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
+  const description = getCvDescription(locale);
 
   return {
     title: "CV",
-    description: cvDescription,
+    description,
     openGraph: {
       type: "website",
       url: `${siteConfig.url}/${locale}/cv`,
       title: `${siteConfig.name} · CV`,
-      description: cvDescription,
+      description,
       siteName: siteConfig.name,
       images: [
         {
@@ -45,7 +46,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: `${siteConfig.name} · CV`,
-      description: cvDescription,
+      description,
       site: "@vicenteopaso",
       creator: "@vicenteopaso",
       images: [`/${locale}/cv/opengraph-image?v=${ogCacheVersion}`],

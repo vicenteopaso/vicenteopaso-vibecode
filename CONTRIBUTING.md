@@ -4,8 +4,28 @@ This project uses **pnpm** for package management.
 
 ## Prerequisites
 
-- Node.js (LTS recommended)
-- pnpm (see `packageManager` in `package.json` for the expected version)
+- Node.js 24 (see `.nvmrc` and `package.json` for version constraints)
+- pnpm (managed via **corepack** – see "Package Manager" section below)
+
+## Package Manager
+
+This project uses [**corepack**](https://nodejs.org/api/corepack.html) to manage the pnpm version automatically. Instead of manually pinning exact patch versions, corepack resolves compatible minor/patch updates automatically.
+
+To opt into a flexible pnpm version range (e.g., to pick up security patches):
+
+```bash
+corepack use pnpm@^10.25
+```
+
+This updates `.corepackrc.yaml` to allow pnpm versions `>=10.25.0 <10.26.0`, ensuring consistency across the team while still enabling automatic patch-level updates.
+
+If you need to lock to an exact version:
+
+```bash
+corepack use pnpm@10.25.1
+```
+
+For more details on corepack, see the [Node.js corepack documentation](https://nodejs.org/api/corepack.html).
 
 ## Installing dependencies
 

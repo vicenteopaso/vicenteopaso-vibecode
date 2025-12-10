@@ -32,7 +32,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
 <!-- Stack -->
 
 [![Vercel](https://img.shields.io/website?url=https%3A%2F%2Fvicenteopaso.vercel.app&label=vercel)](https://vicenteopaso.vercel.app)
-![Node](https://img.shields.io/badge/Node-%3E%3D22%20%3C23-43853D?logo=node.js&logoColor=white)
+![Node](https://img.shields.io/badge/Node-%3E%3D24%20%3C25-43853D?logo=node.js&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB)
 ![TS](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white)

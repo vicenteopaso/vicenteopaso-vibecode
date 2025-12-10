@@ -1,16 +1,33 @@
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("next/og", () => ({
-  ImageResponse: vi.fn(
-    (element: React.ReactElement, init: { width: number; height: number }) => ({
-      element,
-      init,
-    }),
-  ),
-}));
+// Create a mock class for ImageResponse using vi.hoisted to avoid hoisting issues
+const { MockImageResponse, mockInstances } = vi.hoisted(() => {
+  const mockInstances: Array<{
+    element: React.ReactElement;
+    init: { width: number; height: number };
+  }> = [];
 
-import { ImageResponse } from "next/og";
+  class MockImageResponse {
+    element: React.ReactElement;
+    init: { width: number; height: number };
+
+    constructor(
+      element: React.ReactElement,
+      init: { width: number; height: number },
+    ) {
+      this.element = element;
+      this.init = init;
+      mockInstances.push({ element, init });
+    }
+  }
+
+  return { MockImageResponse, mockInstances };
+});
+
+vi.mock("next/og", () => ({
+  ImageResponse: MockImageResponse,
+}));
 
 import CvOgImage, {
   contentType as cvContentType,
@@ -20,7 +37,7 @@ import RootOgImage, {
   contentType as rootContentType,
   size as rootSize,
 } from "../../app/[lang]/opengraph-image";
-import { baseMetadata, cvDescription, siteConfig } from "../../lib/seo";
+import { baseMetadata, getCvDescription, siteConfig } from "../../lib/seo";
 
 // Helper function to traverse React element tree and extract text content
 function findTextContent(el: React.ReactElement | string): string[] {
@@ -42,7 +59,7 @@ function findTextContent(el: React.ReactElement | string): string[] {
 
 describe("Root OG image route", () => {
   beforeEach(() => {
-    vi.mocked(ImageResponse).mockClear();
+    mockInstances.length = 0;
   });
 
   afterEach(() => {
@@ -52,12 +69,11 @@ describe("Root OG image route", () => {
   it("uses siteConfig and size to construct an ImageResponse", async () => {
     await RootOgImage({ params: Promise.resolve({ lang: "en" }) });
 
-    const imageResponseMock = vi.mocked(ImageResponse);
-    expect(imageResponseMock).toHaveBeenCalledTimes(1);
-    const [element, init] = imageResponseMock.mock.calls[0] as [
-      React.ReactElement,
-      { width: number; height: number },
-    ];
+    expect(mockInstances).toHaveLength(1);
+    const { element, init } = mockInstances[0] as {
+      element: React.ReactElement;
+      init: { width: number; height: number };
+    };
 
     // Assert we pass through the expected size configuration
     expect(init.width).toBe(rootSize.width);
@@ -83,7 +99,7 @@ describe("Root OG image route", () => {
 
 describe("CV OG image route", () => {
   beforeEach(() => {
-    vi.mocked(ImageResponse).mockClear();
+    mockInstances.length = 0;
   });
 
   afterEach(() => {
@@ -93,12 +109,11 @@ describe("CV OG image route", () => {
   it("uses siteConfig and size to construct an ImageResponse", async () => {
     await CvOgImage({ params: Promise.resolve({ lang: "en" }) });
 
-    const imageResponseMock = vi.mocked(ImageResponse);
-    expect(imageResponseMock).toHaveBeenCalledTimes(1);
-    const [element, init] = imageResponseMock.mock.calls[0] as [
-      React.ReactElement,
-      { width: number; height: number },
-    ];
+    expect(mockInstances).toHaveLength(1);
+    const { element, init } = mockInstances[0] as {
+      element: React.ReactElement;
+      init: { width: number; height: number };
+    };
 
     // Assert we pass through the expected size configuration
     expect(init.width).toBe(cvSize.width);
@@ -120,24 +135,22 @@ describe("CV OG image route", () => {
   it("uses the new standardized CV description", async () => {
     await CvOgImage({ params: Promise.resolve({ lang: "en" }) });
 
-    const imageResponseMock = vi.mocked(ImageResponse);
-    const [element] = imageResponseMock.mock.calls[0] as [
-      React.ReactElement,
-      unknown,
-    ];
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as {
+      element: React.ReactElement;
+    };
 
     const textContent = findTextContent(element).join(" ");
-    expect(textContent).toContain(cvDescription);
+    expect(textContent).toContain(getCvDescription("en"));
   });
 
   it("renders Spanish translations when lang is es", async () => {
     await CvOgImage({ params: Promise.resolve({ lang: "es" }) });
 
-    const imageResponseMock = vi.mocked(ImageResponse);
-    const [element] = imageResponseMock.mock.calls[0] as [
-      React.ReactElement,
-      unknown,
-    ];
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as {
+      element: React.ReactElement;
+    };
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain("Currículum Vitae");
@@ -148,7 +161,7 @@ describe("CV OG image route", () => {
 
 describe("Root OG image translations", () => {
   beforeEach(() => {
-    vi.mocked(ImageResponse).mockClear();
+    mockInstances.length = 0;
   });
 
   afterEach(() => {
@@ -158,11 +171,10 @@ describe("Root OG image translations", () => {
   it("renders English translations when lang is en", async () => {
     await RootOgImage({ params: Promise.resolve({ lang: "en" }) });
 
-    const imageResponseMock = vi.mocked(ImageResponse);
-    const [element] = imageResponseMock.mock.calls[0] as [
-      React.ReactElement,
-      unknown,
-    ];
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as {
+      element: React.ReactElement;
+    };
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain("Design Systems");
@@ -173,11 +185,10 @@ describe("Root OG image translations", () => {
   it("renders Spanish translations when lang is es", async () => {
     await RootOgImage({ params: Promise.resolve({ lang: "es" }) });
 
-    const imageResponseMock = vi.mocked(ImageResponse);
-    const [element] = imageResponseMock.mock.calls[0] as [
-      React.ReactElement,
-      unknown,
-    ];
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as {
+      element: React.ReactElement;
+    };
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain("Design Systems");

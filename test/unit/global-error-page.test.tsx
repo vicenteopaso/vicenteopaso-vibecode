@@ -14,7 +14,12 @@ describe("GlobalError page", () => {
     const error = new Error("Global render failure");
     const reset = vi.fn();
 
+    // Suppress hydration warning for <html> element in test environment
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     render(<GlobalError error={error} reset={reset} />);
+
+    consoleSpy.mockRestore();
 
     expect(Sentry.captureException).toHaveBeenCalledWith(error);
   });

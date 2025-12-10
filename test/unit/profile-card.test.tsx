@@ -28,11 +28,15 @@ vi.mock("next/image", () => {
       alt,
       src,
       onError,
+      fill,
+      priority,
       ...rest
     }: {
       alt: string;
       src: string;
       onError?: () => void;
+      fill?: boolean;
+      priority?: boolean;
     }) => (
       // eslint-disable-next-line @next/next/no-img-element
       <img
@@ -40,6 +44,8 @@ vi.mock("next/image", () => {
         src={src}
         onError={onError}
         data-testid="profile-image"
+        {...(fill !== undefined && { "data-fill": String(fill) })}
+        {...(priority !== undefined && { "data-priority": String(priority) })}
         {...rest}
       />
     ),
