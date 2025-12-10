@@ -13,7 +13,7 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 - **Next.js 15** — App Router with React Server Components (RSC), static site generation (SSG), and typed routes
 - **React 18.3** — UI library with server components and progressive enhancement
 - **TypeScript 5.6** — Strict type checking end-to-end
-- **Node.js 22** — Runtime environment (LTS)
+- **Node.js 24** — Runtime environment (LTS)
 
 ## Styling & UI Components
 

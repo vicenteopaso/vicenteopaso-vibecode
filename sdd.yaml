@@ -15,7 +15,7 @@ principles:
   - tool-agnostic-governance
 
 stack:
-  runtime: node-lts
+  runtime: node-24-lts
   framework: nextjs-app-router
   language: typescript
   styling:

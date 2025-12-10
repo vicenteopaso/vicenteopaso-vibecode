@@ -36,11 +36,16 @@ import RootLayout from "../../app/layout";
 
 describe("RootLayout", () => {
   it("wraps children in main content area and includes shell components", () => {
+    // Suppress hydration warning for <html> element in test environment
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
     render(
       <RootLayout>
         <div data-testid="child">Hello world</div>
       </RootLayout>,
     );
+
+    consoleSpy.mockRestore();
 
     expect(screen.getByTestId("theme-provider")).toBeInTheDocument();
     expect(screen.getByTestId("header")).toBeInTheDocument();

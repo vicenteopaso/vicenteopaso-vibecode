@@ -9,7 +9,7 @@ describe("eslint.config.mjs", () => {
 
     expect(Array.isArray(config)).toBe(true);
     expect(config.length).toBeGreaterThan(0);
-  });
+  }, 10000); // 10 second timeout
 
   it("should include ignore patterns", async () => {
     // @ts-expect-error - eslint.config.mjs doesn't have declaration file

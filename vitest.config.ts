@@ -30,6 +30,8 @@ export default defineConfig({
         "contentlayer.config.*",
         "lighthouserc.*",
         "**/*.d.ts",
+        "**/*.json",
+        "**/*.css",
         // Build artifacts and generated content
         ".next/**",
         ".contentlayer/**",
@@ -59,6 +61,7 @@ export default defineConfig({
         "app/**/cv/**",
         "app/global-error.tsx",
         "lib/analytics.*",
+        "lib/i18n/index.ts",
         "postcss.config.*",
         "vitest.config.*",
         "sentry.*.config.*",

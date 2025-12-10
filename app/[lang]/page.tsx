@@ -1,5 +1,6 @@
 import fs from "fs";
 import matter from "gray-matter";
+import type { Metadata } from "next";
 import path from "path";
 import ReactMarkdown from "react-markdown";
 
@@ -8,6 +9,7 @@ import {
   aboutPageComponents,
   introComponents,
 } from "@/lib/markdown-components";
+import { ogCacheVersion, siteConfig } from "@/lib/seo";
 
 import { GetInTouchSection } from "../components/GetInTouchSection";
 import { GitHubIcon, LinkedInIcon, XIcon } from "../components/icons";
@@ -18,6 +20,40 @@ export const dynamic = "force-static";
 
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "es" }];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = getLocaleFromParams({ lang });
+
+  return {
+    openGraph: {
+      type: "website",
+      url: `${siteConfig.url}/${locale}`,
+      title: siteConfig.name,
+      description: siteConfig.description,
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: `/${locale}/opengraph-image?v=${ogCacheVersion}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: siteConfig.name,
+      description: siteConfig.description,
+      site: "@vicenteopaso",
+      creator: "@vicenteopaso",
+      images: [`/${locale}/opengraph-image?v=${ogCacheVersion}`],
+    },
+  };
 }
 
 interface PageProps {

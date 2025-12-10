@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 import type { Locale } from "../../../lib/i18n/locales";
-import { cvDescription, siteConfig } from "../../../lib/seo";
+import { getCvDescription, siteConfig } from "../../../lib/seo";
 
 export const runtime = "edge";
 export const revalidate = 3600; // 1 hour
@@ -20,6 +20,7 @@ type Props = {
 export default async function Image({ params }: Props) {
   const { lang } = await params;
   const title = `${siteConfig.name} · CV`;
+  const description = getCvDescription(lang);
   const badge = lang === "es" ? "Currículum Vitae" : "Curriculum Vitae";
   const footer =
     lang === "es"
@@ -88,7 +89,7 @@ export default async function Image({ params }: Props) {
               color: "#cbd5f5",
             }}
           >
-            {cvDescription}
+            {description}
           </p>
         </div>
       </div>
