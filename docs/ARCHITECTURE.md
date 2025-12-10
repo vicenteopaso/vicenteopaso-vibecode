@@ -536,6 +536,7 @@ Do I have a new metadata route (opengraph image, RSS feed, etc.)?
   │       Example: app/[lang]/opengraph-image.tsx
   │       Render translated content based on lang param
   └─ NO: You're good
+```
 
 ## Related Documentation
 
@@ -546,4 +547,3 @@ Do I have a new metadata route (opengraph image, RSS feed, etc.)?
 - **[SECURITY_POLICY.md](./SECURITY_POLICY.md)** — Security headers and defense-in-depth
 - **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** — Error handling and observability
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** — Development workflow and standards
-```
