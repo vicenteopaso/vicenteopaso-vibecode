@@ -640,6 +640,7 @@ For deeper context, see:
 - **[docs/components/README.md](./docs/components/README.md)** — Component documentation catalog
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** — Code style, linting, testing guidelines, and PR process
 - **[docs/RELEASE_PROCESS.md](./docs/RELEASE_PROCESS.md)** — Versioning, changelog, and release workflow
+- **[CHANGELOG.md](./CHANGELOG.md)** — Version history and release notes
 
 ---
 
