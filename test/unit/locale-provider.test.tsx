@@ -153,10 +153,7 @@ describe("LocaleProvider and useLocale", () => {
         return (
           <div>
             <div data-testid="locale">{locale}</div>
-            <button
-              data-testid="change-btn"
-              onClick={() => setLocale("es")}
-            >
+            <button data-testid="change-btn" onClick={() => setLocale("es")}>
               Change
             </button>
           </div>
