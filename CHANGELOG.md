@@ -7,23 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.1] - 2025-12-12
 
-### Release Notes
+### Changed
 
-Initial tagged release of the vicenteopaso-vibecode project.
+- **Dependencies**: Updated Next.js from 16.0.8 to 16.0.10 ([#211](https://github.com/vicenteopaso/vicenteopaso-vibecode/pull/211), [#213](https://github.com/vicenteopaso/vicenteopaso-vibecode/pull/213))
+- **Node Version**: Updated Node.js requirement to v23.5.0 in `.nvmrc`
+- **Internationalization**: Made Open Graph images locale-aware with translated badge, subtitle, and footer text for English and Spanish ([#205](https://github.com/vicenteopaso/vicenteopaso-vibecode/pull/205))
 
-This release includes:
+### Fixed
 
-- Complete Next.js App Router application with TypeScript
-- Internationalization support (English and Spanish)
-- CV and About pages with markdown content
-- Contact form with Cloudflare Turnstile protection
-- Comprehensive testing setup (unit, E2E, and visual regression)
-- CI/CD workflows for quality assurance
-- Accessibility and performance optimizations
-- Sentry error tracking integration
-- Complete documentation suite
+- Improved test reliability by refactoring page component tests and fixing markdown formatting
 
-For detailed changes and PR history, see the [GitHub Releases page](https://github.com/vicenteopaso/vicenteopaso-vibecode/releases).
+### Removed
+
+- Deleted deprecated unit tests for accessibility, home, tech-stack, and technical governance pages to reduce maintenance overhead
+- Removed ERROR_HANDLING_SUMMARY.md as error handling is now documented in the main documentation
+
+### Documentation
+
+- Updated CONTRIBUTING.md and README.md with improved clarity
+- Enhanced SEO metadata handling documentation
+- Added comprehensive CHANGELOG following Keep a Changelog format
 
 ## [1.0.0] - 2025-12-02
 
