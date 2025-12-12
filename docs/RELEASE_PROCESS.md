@@ -24,3 +24,5 @@ This project uses a lightweight release process suitable for a personal site.
 
 - Release notes are drafted automatically using Release Drafter, based on PR labels (features, fixes, docs, dependencies, etc.).
 - Semantic versioning concepts (major/minor/patch) are applied informally through PR labeling and generated release notes.
+- Version history is tracked in `CHANGELOG.md` at the repository root.
+- The application version is maintained in `package.json` and follows [Semantic Versioning](https://semver.org/).
