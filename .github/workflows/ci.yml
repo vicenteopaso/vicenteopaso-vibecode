@@ -84,10 +84,11 @@ jobs:
             
             if (labels.includes('architecture-change')) {
               const body = pr.body || '';
+              // ADR numbering format: 4 digits (0001, 0002, etc.) as documented in docs/adr/README.md
               const hasAdrLink = body.match(/docs\/adr\/\d{4}-/i) || body.match(/ADR-\d{4}/i);
               
               if (!hasAdrLink) {
-                core.setFailed('PR labeled as "architecture-change" must link to an ADR in docs/adr/');
+                core.setFailed('PR labeled as "architecture-change" must link to an ADR in docs/adr/ (format: ADR-0001 or docs/adr/0001-)');
               } else {
                 console.log('✅ ADR link found for architecture change');
               }

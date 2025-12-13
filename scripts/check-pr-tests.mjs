@@ -152,9 +152,9 @@ function main() {
     console.error(`\nCode changes in ${CODE_PATHS.join(", ")} require accompanying tests in:`);
     TEST_PATHS.forEach((path) => console.error(`   - ${path}`));
     console.error(`\nPlease add or update tests that cover your changes.`);
-    console.error(
-      `If this is a docs-only or config-only change, this check should not have triggered.`,
-    );
+    console.error(`\nIf you believe this is a false positive (e.g., pure refactoring with no`);
+    console.error(`behavioral changes), you can set SKIP_TEST_CHECK=true, but document your`);
+    console.error(`reasoning in the PR description.`);
     console.error(`\nFor more information, see docs/TESTING.md`);
     process.exit(1);
   }

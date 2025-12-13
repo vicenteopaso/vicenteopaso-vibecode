@@ -1,4 +1,6 @@
-# ADR-NNNN: [Short Title]
+# ADR-0000: [Short Title]
+
+<!-- Replace 0000 with the next sequential 4-digit number (e.g., 0001, 0002, 0003) -->
 
 **Status:** [Proposed | Accepted | Deprecated | Superseded by ADR-XXXX]
 
