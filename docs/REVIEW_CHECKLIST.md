@@ -140,7 +140,7 @@ This checklist helps reviewers consistently evaluate AI-authored and human-autho
   - `WebSite` schema on all pages (via `SeoJsonLd` component).
   - `Person` schema on homepage and CV page (controlled by `usePathname` in `SeoJsonLd`).
   - Use Google's [Rich Results Test](https://search.google.com/test/rich-results) to validate.
-- [ ] **Sitemap**: New routes are added to `next-sitemap.config.js` if they should be indexed.
+- [ ] **Sitemap**: New routes are added to the sitemap configuration (`./next-sitemap.config.js` in project root) if they should be indexed.
 - [ ] **URL structure**: URLs are clean, descriptive, and human-readable (e.g., `/cv`, `/accessibility`, not `/page?id=123`).
 - [ ] **No duplicate content**: Avoid multiple URLs serving identical content without canonical tags.
 - [ ] **Page speed**: Changes do not introduce unnecessary client-side JavaScript or large assets that hurt Core Web Vitals.
@@ -167,7 +167,7 @@ This checklist helps reviewers consistently evaluate AI-authored and human-autho
 - [ ] **Image optimization**: Images use `next/image` with appropriate `width`, `height`, and `priority` props.
   - Hero images have `priority={true}`.
   - Below-the-fold images use lazy loading (default).
-- [ ] **Font optimization**: Fonts are loaded via `next/font` (e.g., `next/font/google`) with `display: swap`.
+- [ ] **Font optimization**: Fonts are loaded via `next/font` (e.g., `next/font/google` for Next.js 13.2+) with `display: swap`.
 - [ ] **Bundle size**: Changes do not significantly increase bundle size without justification. Run `pnpm build` and check `.next/static/chunks/` sizes.
 - [ ] **Core Web Vitals**: Changes do not regress:
   - **LCP** (Largest Contentful Paint): <2.5s
