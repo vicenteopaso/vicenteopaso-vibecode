@@ -78,19 +78,44 @@ export default [
       ],
 
       // Banned syntax patterns (see docs/FORBIDDEN_PATTERNS.md)
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector: "TSTypeReference[typeName.name='any']",
-          message:
-            "Don't use 'any' type. Use 'unknown' with type guards or define proper types. See docs/FORBIDDEN_PATTERNS.md",
-        },
-        {
-          selector: "TSAsExpression > TSAnyKeyword",
-          message:
-            "Don't cast to 'any'. Use proper type assertions or type guards. See docs/FORBIDDEN_PATTERNS.md",
-        },
-      ],
+        "no-restricted-syntax": [
+          "error",
+          {
+            selector: "TSTypeReference[typeName.name='any']",
+            message:
+              "Don't use 'any' type. Use 'unknown' with type guards or define proper types. See docs/FORBIDDEN_PATTERNS.md",
+          },
+          {
+            selector: "TSAsExpression > TSAnyKeyword",
+            message:
+              "Don't cast to 'any'. Use proper type assertions or type guards. See docs/FORBIDDEN_PATTERNS.md",
+          },
+          // Detect hardcoded secrets and sensitive data
+          {
+            selector: "Literal[value=/ghp_[a-zA-Z0-9]{36,}/]",
+            message: "Potential GitHub Personal Access Token detected. Use environment variables instead.",
+          },
+          {
+            selector: "Literal[value=/ghs_[a-zA-Z0-9]{36,}/]",
+            message: "Potential GitHub OAuth Token detected. Use environment variables instead.",
+          },
+          {
+            selector: "Literal[value=/sk-[a-zA-Z0-9]{20,}/]",
+            message: "Potential OpenAI API Key detected. Use environment variables instead.",
+          },
+          {
+            selector: "Literal[value=/AKIA[0-9A-Z]{16}/]",
+            message: "Potential AWS Access Key ID detected. Use environment variables instead.",
+          },
+          {
+            selector: "Literal[value=/xox[baprs]-[0-9a-zA-Z]{10,}/]",
+            message: "Potential Slack token detected. Use environment variables instead.",
+          },
+          {
+            selector: "Literal[value=/^[a-f0-9]{128,}$/]",
+            message: "Very long hexadecimal string detected. If this is a secret, use environment variables."
+          },
+        ],
 
       // Security rules (see docs/FORBIDDEN_PATTERNS.md for rationale)
       "security/detect-unsafe-regex": "error",
@@ -106,32 +131,7 @@ export default [
       "security/detect-possible-timing-attacks": "warn",
       "security/detect-object-injection": "off",
       "security/detect-non-literal-fs-filename": "off",
-      // Detect hardcoded secrets and sensitive data
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector: "Literal[value=/ghp_[a-zA-Z0-9]{36,}/]",
-          message: "Potential GitHub Personal Access Token detected. Use environment variables instead.",
-        },
-        {
-          selector: "Literal[value=/ghs_[a-zA-Z0-9]{36,}/]",
-          message: "Potential GitHub OAuth Token detected. Use environment variables instead.",
-        },
-        {
-          selector: "Literal[value=/sk-[a-zA-Z0-9]{20,}/]",
-          message: "Potential OpenAI API Key detected. Use environment variables instead.",
-        },
-        {
-          selector: "Literal[value=/AKIA[0-9A-Z]{16}/]",
-          message: "Potential AWS Access Key ID detected. Use environment variables instead.",
-        },
-        {
-          selector: "Literal[value=/xox[baprs]-[0-9a-zA-Z]{10,}/]",
-          message: "Potential Slack token detected. Use environment variables instead.",
-        },
-        {
-          selector: "Literal[value=/^[a-f0-9]{128,}$/]",
-          message: "Very long hexadecimal string detected. If this is a secret, use environment variables.",
+
       // Warn on empty catch blocks to prevent silent failures
       "no-empty": [
         "warn",
