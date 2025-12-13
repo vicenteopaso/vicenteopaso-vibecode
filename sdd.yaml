@@ -114,7 +114,7 @@ devex:
     coverage-thresholds:
       lines: 90
       statements: 90
-      branches: 85  # Lower threshold: branches are harder to cover due to edge cases
+      branches: 85 # Lower threshold: branches are harder to cover due to edge cases
       functions: 90
       enforcement: fail-on-violation
       config-file: vitest.config.ts
