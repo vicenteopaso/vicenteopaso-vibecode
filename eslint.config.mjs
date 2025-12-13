@@ -143,11 +143,7 @@ export default [
     },
   },
   {
-    files: [
-      "test/**/*.{ts,tsx}",
-      "**/*.test.{ts,tsx}",
-      "**/*.spec.{ts,tsx}",
-    ],
+    files: ["test/**/*.{ts,tsx}", "**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
     rules: {
       // Tests can use console for debugging
       "no-console": "off",
