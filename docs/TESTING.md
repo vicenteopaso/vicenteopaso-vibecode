@@ -47,11 +47,13 @@ This project enforces **AI Guardrails** in CI to ensure code quality and prevent
 **Automated Check**: `scripts/check-pr-tests.mjs`
 
 All changes to code files in `app/` or `lib/` **must** include corresponding test changes in:
+
 - `test/unit/` (unit tests)
 - `test/e2e/` (end-to-end tests)
 - `test/visual/` (visual regression tests)
 
 **CI Enforcement**: The `test-coverage-check` job in `.github/workflows/ci.yml` runs this verification on every PR and will fail if:
+
 - Code files are modified without test updates
 - New features lack test coverage
 - Bug fixes don't include regression tests
@@ -61,6 +63,7 @@ All changes to code files in `app/` or `lib/` **must** include corresponding tes
 ### Required Quality Checks
 
 All PRs must pass:
+
 - ✅ Lint (`pnpm lint`)
 - ✅ Typecheck (`pnpm typecheck`)
 - ✅ Unit tests (`pnpm test`)
@@ -70,6 +73,7 @@ All PRs must pass:
 ### PR Template Compliance
 
 The PR template includes mandatory checkboxes for:
+
 - **Accessibility**: Keyboard navigation, ARIA, focus management
 - **SEO**: Metadata updates, content changes
 - **Security**: Input validation, XSS prevention

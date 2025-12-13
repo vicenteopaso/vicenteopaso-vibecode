@@ -22,6 +22,7 @@ PRs labeled with `architecture-change` **must** link to an ADR.
 Use the template in `adr-template.md` to create new ADRs.
 
 ADRs should be numbered sequentially:
+
 - `0001-choose-nextjs-app-router.md`
 - `0002-adopt-tailwind-v4.md`
 - `0003-implement-ai-guardrails.md`

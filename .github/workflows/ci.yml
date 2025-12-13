@@ -56,7 +56,7 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             const body = pr.body || '';
-            
+
             // Check for required sections in PR template
             const requiredSections = [
               'Type of Change',
@@ -64,11 +64,11 @@ jobs:
               'Quality Checks',
               'Additional Verification'
             ];
-            
+
             const missingSections = requiredSections.filter(section => 
               !body.includes(section)
             );
-            
+
             if (missingSections.length > 0) {
               core.setFailed(`PR template missing required sections: ${missingSections.join(', ')}`);
             } else {
@@ -81,7 +81,7 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             const labels = pr.labels.map(label => label.name);
-            
+
             if (labels.includes('architecture-change')) {
               const body = pr.body || '';
               // ADR numbering format: 4 digits (0001, 0002, etc.) as documented in docs/adr/README.md

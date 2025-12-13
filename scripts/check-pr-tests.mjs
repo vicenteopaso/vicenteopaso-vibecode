@@ -133,12 +133,16 @@ function main() {
   const codeFiles = filterCodeFiles(changedFiles);
   const testFiles = filterTestFiles(changedFiles);
 
-  console.log(`\n📝 Code files changed (${CODE_PATHS.join(", ")}): ${codeFiles.length}`);
+  console.log(
+    `\n📝 Code files changed (${CODE_PATHS.join(", ")}): ${codeFiles.length}`,
+  );
   if (codeFiles.length > 0) {
     codeFiles.forEach((file) => console.log(`   - ${file}`));
   }
 
-  console.log(`\n🧪 Test files changed (${TEST_PATHS.join(", ")}): ${testFiles.length}`);
+  console.log(
+    `\n🧪 Test files changed (${TEST_PATHS.join(", ")}): ${testFiles.length}`,
+  );
   if (testFiles.length > 0) {
     testFiles.forEach((file) => console.log(`   - ${file}`));
   }
@@ -149,11 +153,17 @@ function main() {
 
   if (!result.passed) {
     console.error(`\n❌ AI Guardrails Check Failed!`);
-    console.error(`\nCode changes in ${CODE_PATHS.join(", ")} require accompanying tests in:`);
+    console.error(
+      `\nCode changes in ${CODE_PATHS.join(", ")} require accompanying tests in:`,
+    );
     TEST_PATHS.forEach((path) => console.error(`   - ${path}`));
     console.error(`\nPlease add or update tests that cover your changes.`);
-    console.error(`\nIf you believe this is a false positive (e.g., pure refactoring with no`);
-    console.error(`behavioral changes), you can set SKIP_TEST_CHECK=true, but document your`);
+    console.error(
+      `\nIf you believe this is a false positive (e.g., pure refactoring with no`,
+    );
+    console.error(
+      `behavioral changes), you can set SKIP_TEST_CHECK=true, but document your`,
+    );
     console.error(`reasoning in the PR description.`);
     console.error(`\nFor more information, see docs/TESTING.md`);
     process.exit(1);

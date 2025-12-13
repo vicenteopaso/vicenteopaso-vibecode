@@ -23,6 +23,7 @@
 <!-- Example: See [ADR-0001: Implement AI Guardrails](../docs/adr/0001-implement-ai-guardrails.md) -->
 
 **Architecture Change?**
+
 - [ ] Yes (add `architecture-change` label and link ADR above)
 - [ ] No
 

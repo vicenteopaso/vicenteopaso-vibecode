@@ -11,6 +11,7 @@
 ## Context
 
 Without automated CI gates for AI-generated changes:
+
 - AI-generated changes may lack tests or only pass lint by accident
 - Architectural decisions can be merged without documented rationale
 - Reviewers lack a machine-enforced checklist (a11y, SEO, error handling)
@@ -72,18 +73,22 @@ We will implement AI guardrails through:
 ## Alternatives Considered
 
 ### 1. Manual Code Review Only
+
 - **Rejected**: Too inconsistent; relies on reviewer availability and attention
 - Human reviewers can still miss things; automation provides baseline
 
 ### 2. Post-Merge Quality Checks
+
 - **Rejected**: Allows issues into main branch; harder to revert
 - Prefer blocking at PR stage to keep main stable
 
 ### 3. Lightweight Checks (lint/typecheck only)
+
 - **Rejected**: Insufficient; many quality issues only caught by runtime tests
 - Visual regressions and e2e flows require actual test execution
 
 ### 4. Require 100% Code Coverage
+
 - **Rejected**: Too strict; coverage percentage doesn't guarantee quality
 - Instead, require test file changes to accompany code changes
 
