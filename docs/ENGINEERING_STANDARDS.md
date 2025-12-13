@@ -136,14 +136,14 @@ This document captures the engineering intent for this repository. It is a **nor
 
 **Hard requirements** enforced in both `ci.yml` and `coverage.yml` workflows:
 
-- **Lines**: ≥90% (currently 97.31%)
-- **Statements**: ≥90% (currently 97.31%)
-- **Branches**: ≥85% (currently 90.41%)
-- **Functions**: ≥90% (currently 96.2%)
+- **Lines**: ≥90%
+- **Statements**: ≥90%
+- **Branches**: ≥85%
+- **Functions**: ≥90%
 
 **Purpose**: Prevents AI-generated code and manual changes from having high pass rates but low actual test coverage. Coverage gates ensure every change is tested, not just syntactically correct.
 
-**Configuration**: Thresholds defined in `vitest.config.ts` and enforced via `pnpm coverage` in CI.
+**Configuration**: Thresholds defined in `vitest.config.ts` and enforced via `pnpm coverage` in CI. Run `pnpm coverage` locally to check current coverage percentages.
 
 ### 5.3 Coverage by Test Type
 

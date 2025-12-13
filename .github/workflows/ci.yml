@@ -42,9 +42,6 @@ jobs:
       - name: Validate internal links
         run: pnpm validate:links
 
-      - name: Unit tests
-        run: pnpm test
-
       - name: Unit tests with coverage
         run: pnpm coverage
 

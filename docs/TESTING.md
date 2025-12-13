@@ -535,14 +535,16 @@ test.describe("Component Visual Regression", () => {
 
 The following minimum coverage thresholds are configured in `vitest.config.ts` and enforced in CI:
 
-| Category   | Minimum | Current |
-| ---------- | ------- | ------- |
-| Lines      | 90%     | 97.31%  |
-| Statements | 90%     | 97.31%  |
-| Branches   | 85%     | 90.41%  |
-| Functions  | 90%     | 96.2%   |
+| Category   | Minimum |
+| ---------- | ------- |
+| Lines      | 90%     |
+| Statements | 90%     |
+| Branches   | 85%     |
+| Functions  | 90%     |
 
 **CI Integration**: Both the main CI workflow and the dedicated coverage workflow run `pnpm coverage`, which fails if any threshold is not met.
+
+**Check Current Coverage**: Run `pnpm coverage` locally to see current coverage percentages and detailed reports.
 
 ### Current Coverage
 
