@@ -16,3 +16,4 @@ If you discover a security issue:
 - Dependencies should be kept up to date.
 - Secrets are never committed to the repository.
 - Environment variables are managed via `.env` files and Vercel project settings.
+- Security-critical patterns that must be avoided are documented in [Forbidden APIs and Patterns](./FORBIDDEN_PATTERNS.md).
