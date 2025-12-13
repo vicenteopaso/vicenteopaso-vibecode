@@ -518,14 +518,19 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Runs on pushes to `main` and all PRs.
   - Uses pnpm caching via `actions/setup-node` for faster builds.
   - Includes concurrency control to cancel redundant runs.
-  - Installs dependencies with pnpm, then runs:
+  - **AI Guardrails** (PR-only checks):
+    - `test-coverage-check`: Verifies code changes in `app/` or `lib/` have corresponding tests
+    - `pr-template-check`: Validates PR template compliance and ADR links for architecture changes
+  - Quality gates (all builds):
     - `pnpm lint`
     - `pnpm typecheck`
     - `pnpm validate:links` (fails CI on broken internal markdown links)
     - `pnpm test`
     - `npx playwright install --with-deps`
     - `pnpm test:e2e`
+    - `pnpm test:visual` (visual regression tests)
     - `pnpm build`
+  - Uploads Playwright artifacts on failure for debugging
 - `coverage.yml`:
   - Runs unit tests with coverage reporting.
   - Uploads coverage artifacts.
