@@ -66,6 +66,13 @@ export default [
       "security/detect-possible-timing-attacks": "warn",
       "security/detect-object-injection": "off",
       "security/detect-non-literal-fs-filename": "off",
+      // Warn on empty catch blocks to prevent silent failures
+      "no-empty": [
+        "warn",
+        {
+          allowEmptyCatch: false,
+        },
+      ],
     },
   },
   {
