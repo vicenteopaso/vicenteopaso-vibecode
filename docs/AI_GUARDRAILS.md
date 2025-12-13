@@ -57,16 +57,32 @@ export default [
       // TypeScript guardrails
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
 
       // Console guardrails
-      'no-console': ['error', { allow: [] }],
+      'no-console': 'error',
 
       // DOM access guardrails
       'no-restricted-globals': [...],
 
       // Pattern guardrails
       'no-restricted-syntax': [...],
+    }
+  },
+
+  // Type-aware TypeScript rules (separate config with parserOptions)
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: { attributes: false } }
+      ],
     }
   },
 
@@ -220,32 +236,56 @@ function MyComponent() {
 
 ```typescript
 // ❌ Bad - HTML anchor
-<a href="/about">About</a>
+function BadComponent() {
+  return <a href="/about">About</a>;
+}
 
 // ✅ Good - Next.js Link
 import Link from 'next/link';
-<Link href="/about">About</Link>
 
+function GoodComponent() {
+  return <Link href="/about">About</Link>;
+}
+```
+
+```typescript
 // ❌ Bad - HTML img
-<img src="/logo.png" alt="Logo" />
+function BadImage() {
+  return <img src="/logo.png" alt="Logo" />;
+}
 
 // ✅ Good - Next.js Image
 import Image from 'next/image';
-<Image src="/logo.png" alt="Logo" width={100} height={100} />
 
+function GoodImage() {
+  return <Image src="/logo.png" alt="Logo" width={100} height={100} />;
+}
+```
+
+```typescript
 // ❌ Bad - async event handler without error handling
-<button onClick={async () => { await save(); }}>Save</button>
+function BadButton() {
+  return <button onClick={async () => { await save(); }}>Save</button>;
+}
 
 // ✅ Good - wrapped async with error handling
-<button onClick={() => {
-  void (async () => {
-    try {
-      await save();
-    } catch (error) {
-      logError(error, { component: 'SaveButton', action: 'save' });
-    }
-  })();
-}}>Save</button>
+import { logError } from '@/lib/error-logging';
+
+function GoodButton() {
+  return (
+    <button onClick={() => {
+      void (async () => {
+        try {
+          await save();
+        } catch (error) {
+          logError(error, { component: 'SaveButton', action: 'save' });
+        }
+      })();
+    }}>
+      Save
+    </button>
+  );
+}
 ```
 
 ### 5. Accessibility (A11y)

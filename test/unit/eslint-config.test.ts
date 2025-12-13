@@ -246,6 +246,66 @@ describe("eslint.config.mjs", () => {
     expect(errorLoggingConfig?.rules?.["no-console"]).toBe("off");
   });
 
+  it("should enforce AI guardrails: no-misused-promises", async () => {
+    // @ts-expect-error - eslint.config.mjs doesn't have declaration file
+    const eslintConfig = await import("../../eslint.config.mjs");
+    const config = eslintConfig.default;
+
+    const misusedPromisesConfig = config.find(
+      (c: { rules?: Record<string, unknown> }) =>
+        c.rules?.["@typescript-eslint/no-misused-promises"] !== undefined,
+    );
+    expect(misusedPromisesConfig).toBeDefined();
+    const rule = misusedPromisesConfig?.rules?.[
+      "@typescript-eslint/no-misused-promises"
+    ] as unknown[];
+    expect(rule[0]).toBe("error");
+    expect(
+      (rule[1] as { checksVoidReturn: { attributes: boolean } })
+        .checksVoidReturn.attributes,
+    ).toBe(false);
+  });
+
+  it("should enforce AI guardrails: no-restricted-syntax", async () => {
+    // @ts-expect-error - eslint.config.mjs doesn't have declaration file
+    const eslintConfig = await import("../../eslint.config.mjs");
+    const config = eslintConfig.default;
+
+    const restrictedSyntaxConfig = config.find(
+      (c: { rules?: Record<string, unknown> }) =>
+        Array.isArray(c.rules?.["no-restricted-syntax"]) &&
+        c.rules["no-restricted-syntax"][0] === "error",
+    );
+    expect(restrictedSyntaxConfig).toBeDefined();
+    const syntaxRules = restrictedSyntaxConfig?.rules?.[
+      "no-restricted-syntax"
+    ] as unknown[];
+    expect(syntaxRules.length).toBeGreaterThan(1);
+    // Verify it includes rules for 'any' type patterns
+    const hasAnyTypeRule = syntaxRules.some(
+      (rule: { selector?: string }) =>
+        rule.selector?.includes("TSTypeReference") ||
+        rule.selector?.includes("TSAnyKeyword"),
+    );
+    expect(hasAnyTypeRule).toBe(true);
+  });
+
+  it("should have Sentry instrumentation files override for console", async () => {
+    // @ts-expect-error - eslint.config.mjs doesn't have declaration file
+    const eslintConfig = await import("../../eslint.config.mjs");
+    const config = eslintConfig.default;
+
+    const sentryConfig = config.find(
+      (c: { files?: string[] }) =>
+        c.files?.includes("instrumentation.ts") ?? false,
+    );
+    expect(sentryConfig).toBeDefined();
+    expect(sentryConfig?.files).toContain("instrumentation.ts");
+    expect(sentryConfig?.files).toContain("instrumentation-client.ts");
+    expect(sentryConfig?.files).toContain("sentry.*.config.ts");
+    expect(sentryConfig?.rules?.["no-console"]).toBe("off");
+  });
+
   it("should have specific component overrides for window access", async () => {
     // @ts-expect-error - eslint.config.mjs doesn't have declaration file
     const eslintConfig = await import("../../eslint.config.mjs");

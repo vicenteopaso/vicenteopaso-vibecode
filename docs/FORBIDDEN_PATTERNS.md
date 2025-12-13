@@ -110,9 +110,7 @@ logWarning("Deprecated feature used", {
 **ESLint Configuration:**
 
 ```javascript
-'no-console': ['error', {
-  allow: [] // No console allowed by default
-}]
+'no-console': 'error'
 ```
 
 ---
@@ -285,7 +283,7 @@ import Image from "next/image";
 
 ### ❌ Missing Metadata Exports
 
-**Discouraged in `app/[lang]/**/page.tsx`:**
+**Discouraged in `app/[lang]/**/page.tsx`:\*\*
 
 ```tsx
 // page.tsx without metadata export
