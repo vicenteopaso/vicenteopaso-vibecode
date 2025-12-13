@@ -41,10 +41,17 @@ export default [
       security,
     },
     rules: {
+      // Type safety rules (see docs/FORBIDDEN_PATTERNS.md)
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-explicit-any": "warn", // Upgrade to error in future
+      "@typescript-eslint/no-non-null-assertion": "warn",
+      
+      // Import organization
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+      
+      // Unused variables
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -53,6 +60,8 @@ export default [
           varsIgnorePattern: "^_",
         },
       ],
+      
+      // Security rules (see docs/FORBIDDEN_PATTERNS.md for rationale)
       "security/detect-unsafe-regex": "error",
       "security/detect-buffer-noassert": "error",
       "security/detect-child-process": "warn",
@@ -66,16 +75,20 @@ export default [
       "security/detect-possible-timing-attacks": "warn",
       "security/detect-object-injection": "off",
       "security/detect-non-literal-fs-filename": "off",
+      
+      // Console usage (prefer centralized logging from lib/error-logging)
+      "no-console": ["warn", { allow: ["warn", "error", "info"] }],
     },
   },
   {
-    files: ["scripts/**/*.mjs", "*.config.{js,mjs,ts}"],
+    files: ["scripts/**/*.mjs", "*.config.{js,mjs,ts}", "instrumentation*.ts", "sentry.*.config.ts"],
     rules: {
       "security/detect-non-literal-require": "off",
       "security/detect-child-process": "off",
       "security/detect-non-literal-fs-filename": "off",
       "security/detect-non-literal-regexp": "off",
       "security/detect-unsafe-regex": "off",
+      "no-console": "off", // Scripts and instrumentation can use console
     },
   },
   {

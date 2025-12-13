@@ -182,6 +182,7 @@ When creating or modifying UI components:
 - **Import ordering**: Imports are automatically sorted by `eslint-plugin-simple-import-sort`. Run `pnpm lint:fix` to auto-sort imports.
 - **Security**: The security plugin will warn about potential security issues. Most checks are errors, but some are warnings to avoid noise. Review and address security warnings appropriately.
 - **Type imports**: Use `import type` for type-only imports to satisfy `@typescript-eslint/consistent-type-imports`.
+- **Forbidden patterns**: Review [Forbidden APIs and Patterns](./docs/FORBIDDEN_PATTERNS.md) for security-critical and quality-related patterns that must be avoided. This includes bypassing Turnstile/rate limiting, hard-coding secrets, unsafe sanitization, and more.
 
 ### Error handling guidelines
 
