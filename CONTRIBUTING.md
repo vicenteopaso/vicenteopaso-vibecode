@@ -95,15 +95,17 @@ These scripts simplify common developer workflows:
 For changes that affect architecture, cross-cutting concerns, or developer workflows:
 
 1. Propose the change by updating `sdd.yaml` (source of truth) and relevant docs in `docs/`.
-2. Open a PR referencing the issue and summarizing the intent and scope.
-3. Implement code changes aligned to the updated SDD and standards.
-4. Update issue/PR templates if the change affects contribution workflows.
-5. Ensure CI is green (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, visual tests when UI changes).
+2. **For architectural decisions**, create an ADR (Architecture Decision Record) documenting the context, decision, alternatives, and consequences. See `docs/adr/README.md` for guidance.
+3. Open a PR referencing the issue and summarizing the intent and scope. Link to any ADRs in the PR description.
+4. Implement code changes aligned to the updated SDD and standards.
+5. Update issue/PR templates if the change affects contribution workflows.
+6. Ensure CI is green (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, visual tests when UI changes).
 
 Notes:
 
 - Solution-agnostic: the SDD encodes principles and boundaries; tech choices can evolve as long as principles hold.
 - Definition of Done includes updated docs and SDD alignment.
+- **Architectural decisions** require an ADR to capture context and rationale for future reference.
 
 ## Before opening a PR
 
