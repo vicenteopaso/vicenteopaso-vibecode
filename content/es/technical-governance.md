@@ -36,7 +36,7 @@ Define principios, toma de decisiones, proceso de cambio, thresholds de cobertur
 
 #### Documentos adicionales
 
-Incluye Design System, Accessibility Guidelines, SEO Guide, Error Handling y Security Policy.
+Incluye Architecture Decision Records (ADRs), Design System, Accessibility Guidelines, SEO Guide, Error Handling y Security Policy.
 
 ## Desarrollo Asistido por IA
 
@@ -74,6 +74,10 @@ Las herramientas IA pueden:
 ## Estructura de Documentación
 
 docs/
+├── adr/                      # Architecture Decision Records
+│   ├── README.md
+│   ├── 0000-adr-template.md
+│   └── 0001-adopt-architecture-decision-records.md
 ├── ENGINEERING_STANDARDS.md
 ├── ARCHITECTURE.md
 ├── CONSTITUTION.md

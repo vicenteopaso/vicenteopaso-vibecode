@@ -18,6 +18,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 - This document describes the current implementation. The authoritative, solution-agnostic specification is `../sdd.yaml`.
 - Architecture principles (composition, separation of concerns, a11y/SEO/perf/security baselines) apply regardless of the chosen framework or libraries.
 - Changes that impact system boundaries, critical flows, or cross-cutting concerns must update `sdd.yaml` and the relevant documentation.
+- **Significant architectural decisions** should be captured as Architecture Decision Records (ADRs) in `docs/adr/`. See [ADR README](./adr/README.md) for guidance.
 
 ## Stack
 
@@ -540,6 +541,7 @@ Do I have a new metadata route (opengraph image, RSS feed, etc.)?
 
 ## Related Documentation
 
+- **[ADR Directory](./adr/README.md)** — Architecture Decision Records with context and rationale
 - **[WARP.md](../WARP.md)** — High-level project overview and structure
 - **[README.md](../README.md)** — Setup instructions and quick start
 - **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** — Accessibility strategy

@@ -6,6 +6,15 @@
 
 <!-- Link to the related issue if applicable: Fixes #123, Closes #456 -->
 
+## Architecture Decision Records (ADRs)
+
+<!-- If this PR makes an architectural decision, link to the ADR(s) here -->
+<!-- Example: Implements ADR-0042 (Use React Server Components for Data Fetching) -->
+<!-- See docs/adr/README.md for guidance on when to write an ADR -->
+
+- [ ] N/A - No architectural decisions in this PR
+- [ ] ADR(s) linked: [ADR-XXXX](../docs/adr/XXXX-title.md)
+
 ## Type of Change
 
 - [ ] `feat` — New feature or enhancement
