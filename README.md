@@ -522,6 +522,14 @@ pnpm clean
     - Detects unsafe regex, eval usage, insecure buffer operations, and other security anti-patterns.
     - Some rules tuned to avoid noise (e.g., `detect-object-injection` and `detect-non-literal-fs-filename` are disabled).
     - Script and config files have relaxed security rules to allow necessary filesystem and child process operations.
+  - **AI Guardrails**: Strict rules to ensure safe AI-assisted development:
+    - **Type safety**: `@typescript-eslint/no-explicit-any` bans `any` types (use `unknown` with type guards instead).
+    - **Event handlers**: `@typescript-eslint/no-misused-promises` prevents unhandled promise rejections in React event handlers.
+    - **Logging**: `no-console` disallows direct console usage in production code (use `lib/error-logging.ts` instead).
+    - **DOM access**: `no-restricted-globals` prevents direct `document`/`window` access in React components (use refs or state).
+    - **Pattern bans**: `no-restricted-syntax` prevents `as any` casts and `any` type references.
+    - **Overrides**: Test files, scripts, API routes, and specific components have pragmatic exceptions where needed.
+    - See [`docs/AI_GUARDRAILS.md`](./docs/AI_GUARDRAILS.md) and [`docs/FORBIDDEN_PATTERNS.md`](./docs/FORBIDDEN_PATTERNS.md) for detailed documentation.
 - **Prettier**:
   - Used for `.ts`, `.tsx`, `.js`, `.jsx`, `.md`, `.mdx`, `.json`, `.css`.
 - **lint-staged**:
@@ -543,14 +551,19 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Runs on pushes to `main` and all PRs.
   - Uses pnpm caching via `actions/setup-node` for faster builds.
   - Includes concurrency control to cancel redundant runs.
-  - Installs dependencies with pnpm, then runs:
+  - **AI Guardrails** (PR-only checks):
+    - `test-coverage-check`: Verifies code changes in `app/` or `lib/` have corresponding tests
+    - `pr-template-check`: Validates PR template compliance and ADR links for architecture changes
+  - Quality gates (all builds):
     - `pnpm lint`
     - `pnpm typecheck`
     - `pnpm validate:links` (fails CI on broken internal markdown links)
     - `pnpm test`
     - `npx playwright install --with-deps`
     - `pnpm test:e2e`
+    - `pnpm test:visual` (visual regression tests)
     - `pnpm build`
+  - Uploads Playwright artifacts on failure for debugging
 - `coverage.yml`:
   - Runs unit tests with coverage reporting.
   - Uploads coverage artifacts.
@@ -661,6 +674,7 @@ For deeper context, see:
 - **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, build skip logic, and environment configuration
 - **[docs/VERCEL_BUILD_SKIP_SETUP.md](./docs/VERCEL_BUILD_SKIP_SETUP.md)** — Step-by-step Vercel build skip configuration guide
 - **[docs/ENGINEERING_STANDARDS.md](./docs/ENGINEERING_STANDARDS.md)** — Cross-cutting architecture, quality, a11y, security, and governance intent
+- **[docs/AI_GUARDRAILS.md](./docs/AI_GUARDRAILS.md)** — AI coding rules: required practices, forbidden patterns, and review checklist
 - **[docs/TESTING.md](./docs/TESTING.md)** — Comprehensive testing guide (unit, E2E, visual regression)
 - **[docs/VISUAL_REGRESSION_TESTING.md](./docs/VISUAL_REGRESSION_TESTING.md)** — Visual regression testing strategy with Playwright
 - **[docs/ACCESSIBILITY.md](./docs/ACCESSIBILITY.md)** — Accessibility (a11y) strategy and checklist

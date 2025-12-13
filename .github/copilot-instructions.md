@@ -61,6 +61,24 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 - Hard-code secrets, API keys, or credentials.
 - Introduce changes that obviously regress accessibility, SEO, or performance without justification and tests.
 
+## AI Guardrails: Must/Avoid
+
+> **Full documentation**: See [`docs/AI_GUARDRAILS.md`](../docs/AI_GUARDRAILS.md) for comprehensive ESLint-enforced guardrails and [`docs/FORBIDDEN_PATTERNS.md`](../docs/FORBIDDEN_PATTERNS.md) for anti-patterns to avoid.
+
+These guidelines help AI assistants avoid common pitfalls specific to this repository:
+
+### Must Do
+
+- **Preserve CV JSON parsing**: The CV page (`app/[lang]/cv/page.tsx`) parses a JSON object from `content/[locale]/cv.md`. Keep the parsing logic, error handling, and graceful fallback UI intact.
+- **Validate contact flow security**: The contact form uses a multi-layer defense (honeypot, Cloudflare Turnstile verification, rate limiting via `lib/rate-limit.ts`, origin/domain checks). Never weaken these checks or bypass Turnstile verification.
+- **Use visual test utilities**: When updating visual regression tests, use shared utilities from `test/visual/utils.ts` (`waitForStableHeight`, `freezeCarouselInteractions`, etc.) and mask dynamic content with `homepageMasks()` or `cvPageMasks()`.
+- **Maintain i18n semantics**: Use utilities from `lib/i18n/` for locale detection and translation. Keep content parsing behavior consistent with existing patterns.
+
+### Avoid
+
+- **Breaking CV JSON parsing**: Do not change how `content/[locale]/cv.md` is parsed or remove the error fallback UI. This JSON must remain valid and parsable.
+- **Inline waits in visual tests**: Do not use arbitrary `page.waitForTimeout()` in Playwright visual tests. Use shared utilities from `test/visual/utils.ts` instead.
+
 ## Files and directories overview
 
 - `app/`:
@@ -106,3 +124,10 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 - If a PR is safe for auto-merge, add the `copilot-automerge` label (an auto-merge workflow will only act on such PRs once required checks pass).
 
 Tip: For more granular behavior in the future, you can add path-specific instruction files under `.github/instructions/*.instructions.md` with `applyTo` globs.
+
+## Related Documentation
+
+- [`docs/AI_GUARDRAILS.md`](../docs/AI_GUARDRAILS.md) – Comprehensive ESLint-enforced guardrails and patterns
+- [`docs/FORBIDDEN_PATTERNS.md`](../docs/FORBIDDEN_PATTERNS.md) – Anti-patterns to avoid with examples
+- [`docs/REVIEW_CHECKLIST.md`](../docs/REVIEW_CHECKLIST.md) – Comprehensive reviewer checklist for all PRs
+- [`docs/adr/0001-implement-ai-guardrails.md`](../docs/adr/0001-implement-ai-guardrails.md) – ADR documenting the AI guardrails implementation
