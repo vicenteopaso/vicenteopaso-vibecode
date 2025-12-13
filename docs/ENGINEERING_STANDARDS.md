@@ -147,7 +147,7 @@ This document captures the engineering intent for this repository. It is a **nor
 
 ### 5.3 Coverage by Test Type
 
-- **Unit/Integration tests**: >90% statement coverage with enforced thresholds
+- **Unit/Integration tests**: Enforced thresholds (lines: 90%, statements: 90%, branches: 85%, functions: 90%)
 - **E2E tests**: All critical user journeys covered
 - **Visual regression**: All pages and key component variants
 - **Type safety**: 100% via TypeScript strict mode

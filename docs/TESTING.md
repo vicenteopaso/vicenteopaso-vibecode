@@ -544,15 +544,13 @@ The following minimum coverage thresholds are configured in `vitest.config.ts` a
 
 **CI Integration**: Both the main CI workflow and the dedicated coverage workflow run `pnpm coverage`, which fails if any threshold is not met.
 
-**Check Current Coverage**: Run `pnpm coverage` locally to see current coverage percentages and detailed reports.
+### Viewing Coverage Reports
 
-### Current Coverage
-
-Check latest coverage with:
+Check current coverage and detailed reports:
 
 ```bash
-pnpm coverage
-open coverage/unit/lcov-report/index.html
+pnpm coverage                                # Run tests with coverage
+open coverage/unit/lcov-report/index.html   # View HTML report
 ```
 
 ### Increasing Coverage
