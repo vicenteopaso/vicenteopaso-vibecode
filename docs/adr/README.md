@@ -134,7 +134,7 @@ If you're unsure whether something needs an ADR or have questions about the proc
 - Review the template for guidance
 - Ask in your PR or issue
 - Refer to `CONTRIBUTING.md` for the broader documentation workflow
-This directory contains Architecture Decision Records (ADRs) for this project.
+  This directory contains Architecture Decision Records (ADRs) for this project.
 
 ## What is an ADR?
 

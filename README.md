@@ -67,6 +67,39 @@ The project is optimized for readability, accessibility, and maintainability, wi
 
 ---
 
+## AI Governance
+
+This project embraces **AI-first development with strong guardrails**. AI tools (GitHub Copilot, Cursor) accelerate development while comprehensive documentation and automated checks ensure quality, security, and maintainability.
+
+### How AI-Assisted Development Works
+
+- **Documentation-First**: AI tools reference comprehensive governance documents (`sdd.yaml`, `docs/ENGINEERING_STANDARDS.md`, `docs/ARCHITECTURE.md`) to understand intent, patterns, and constraints.
+- **Quality Gates**: All AI-generated code must pass the same rigorous CI checks as human-written code: linting, type checking, unit tests (90% coverage), E2E tests, accessibility audits, security scans, and Lighthouse performance budgets.
+- **Security Constraints**: AI cannot bypass security controls (Turnstile verification, rate limiting, input validation, HTML sanitization) or introduce vulnerabilities. All changes are scanned by CodeQL and dependency audits.
+- **Human Oversight**: Architectural decisions remain human-driven. Security-sensitive changes require manual review. AI suggestions are validated against documented patterns.
+
+### Governance Documentation
+
+- **[docs/AI_GUARDRAILS.md](./docs/AI_GUARDRAILS.md)** — Constraints, safety measures, and mandatory quality gates for AI-assisted development
+- **[docs/FORBIDDEN_PATTERNS.md](./docs/FORBIDDEN_PATTERNS.md)** — Anti-patterns and prohibited changes (security, accessibility, architecture)
+- **[docs/REVIEW_CHECKLIST.md](./docs/REVIEW_CHECKLIST.md)** — Pre-merge validation checklist for all changes (AI or human)
+- **[content/en/technical-governance.md](./content/en/technical-governance.md)** — How documentation-first engineering enables AI assistance
+
+### Contributing Safely
+
+When contributing to this repo (as a human or AI):
+
+1. **Read the governance docs** — Understand constraints, patterns, and quality expectations
+2. **Follow the review checklist** — Validate your changes before opening a PR
+3. **Respect security boundaries** — Never bypass spam protection, rate limiting, or input validation
+4. **Maintain accessibility** — WCAG 2.1 AA is a minimum, not optional
+5. **Keep CI green** — All automated checks must pass; fix failures, don't disable checks
+6. **Update documentation** — Keep docs in sync with code changes
+
+**Escalation**: Security issues should be reported privately via GitHub Security Advisories. For questions, open a discussion or issue.
+
+---
+
 ## Project structure
 
 High‑level layout:

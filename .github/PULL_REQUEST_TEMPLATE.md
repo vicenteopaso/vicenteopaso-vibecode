@@ -46,6 +46,18 @@
 - [ ] Component documentation added/updated (if applicable)
 - [ ] README updated (if behavior changes)
 
+## AI Governance (if applicable)
+
+> **Note**: If this PR includes AI-generated code, ensure compliance with AI governance requirements.
+
+- [ ] Reviewed [AI Guardrails](../docs/AI_GUARDRAILS.md) — Security constraints respected
+- [ ] Reviewed [Forbidden Patterns](../docs/FORBIDDEN_PATTERNS.md) — No anti-patterns introduced
+- [ ] Completed [Review Checklist](../docs/REVIEW_CHECKLIST.md) — All applicable items verified
+- [ ] Security controls maintained (Turnstile, rate limiting, input validation, HTML sanitization)
+- [ ] No secrets or credentials hard-coded
+- [ ] Accessibility standards maintained (WCAG 2.1 AA)
+- [ ] Architecture boundaries respected (no cross-layer imports)
+
 ## Quality Checks
 
 - [ ] `pnpm lint` passes
