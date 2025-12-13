@@ -55,7 +55,7 @@ This document enumerates APIs, patterns, and practices that **must not** be used
 
 **Reference:**
 - Implementation: `lib/rate-limit.ts`
-- Usage: `app/api/contact/route.ts` lines 63-80
+- Usage: `app/api/contact/route.ts` lines 62-80
 - ESLint: No automatic enforcement (code review required)
 
 ---
@@ -155,7 +155,7 @@ import { sanitizeRichText } from "@/lib/sanitize-html";
 
 **Reference:**
 - TypeScript config: `tsconfig.json` (strict mode enabled)
-- ESLint: Enforced as warning by `@typescript-eslint/no-explicit-any` (to be upgraded to error once codebase is fully migrated away from `any` types)
+- ESLint: Enforced as error by `@typescript-eslint/no-explicit-any`
 
 **Example:**
 ```typescript
@@ -527,7 +527,7 @@ try {
 
 **Reference:**
 - Error utilities: `lib/error-logging.ts`
-- Documentation: `docs/ERROR_HANDLING.md` lines 49
+- Documentation: See the "User-Facing Error Messages" section in `docs/ERROR_HANDLING.md`
 
 ---
 
