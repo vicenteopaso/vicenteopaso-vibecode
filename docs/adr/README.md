@@ -37,32 +37,40 @@ Create an ADR when making decisions about:
 
 ```markdown
 # ADR-XXXX: [Title]
+
 **Status**: Proposed | Accepted | Deprecated | Superseded
 **Date**: YYYY-MM-DD
 **Deciders**: [Who made this decision]
 **Technical Context**: [Area of system]
 
 ## Context and Problem Statement
+
 [What problem are we solving?]
 
 ## Decision Drivers
+
 [What factors influenced the decision?]
 
 ## Considered Options
+
 [What alternatives did we consider?]
 
 ## Decision Outcome
+
 [What did we decide and why?]
 
 ### Consequences
+
 - Positive: [Benefits]
 - Negative: [Costs/limitations]
 - Neutral: [Things to monitor]
 
 ## Pros and Cons of the Options
+
 [Detailed comparison of alternatives]
 
 ## References
+
 [Links to issues, RFCs, documentation]
 ```
 
@@ -75,9 +83,9 @@ Create an ADR when making decisions about:
 
 ## ADR Index
 
-| ADR | Title | Status | Date |
-|-----|-------|--------|------|
-| [0000](./0000-adr-template.md) | ADR Template | Template | - |
+| ADR                                                   | Title                               | Status   | Date       |
+| ----------------------------------------------------- | ----------------------------------- | -------- | ---------- |
+| [0000](./0000-adr-template.md)                        | ADR Template                        | Template | -          |
 | [0001](./0001-adopt-architecture-decision-records.md) | Adopt Architecture Decision Records | Accepted | 2025-12-13 |
 
 ## Process Integration

@@ -74,10 +74,10 @@ Las herramientas IA pueden:
 ## Estructura de Documentación
 
 docs/
-├── adr/                      # Architecture Decision Records
-│   ├── README.md
-│   ├── 0000-adr-template.md
-│   └── 0001-adopt-architecture-decision-records.md
+├── adr/ # Architecture Decision Records
+│ ├── README.md
+│ ├── 0000-adr-template.md
+│ └── 0001-adopt-architecture-decision-records.md
 ├── ENGINEERING_STANDARDS.md
 ├── ARCHITECTURE.md
 ├── CONSTITUTION.md
