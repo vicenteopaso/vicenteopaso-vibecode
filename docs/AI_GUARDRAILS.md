@@ -26,6 +26,7 @@ These practices are **mandatory** for all code changes. Violations should be cau
 **Rationale**: Satisfies ESLint rule `@typescript-eslint/consistent-type-imports`, reduces bundle size, and clarifies intent.
 
 **Good**:
+
 ```typescript
 import type { NextRequest } from "next/server";
 import type { Metadata } from "next";
@@ -33,6 +34,7 @@ import { NextResponse } from "next/server";
 ```
 
 **Bad**:
+
 ```typescript
 import { NextRequest, NextResponse } from "next/server"; // Mixes types and values
 import { Metadata } from "next"; // Type-only import without 'type' keyword
@@ -47,6 +49,7 @@ import { Metadata } from "next"; // Type-only import without 'type' keyword
 **Rationale**: Meets WCAG 2.1 AA standards, improves screen reader experience, and enhances SEO.
 
 **Good**:
+
 ```tsx
 <main id="main-content">
   <h1>Page Title</h1>
@@ -58,8 +61,11 @@ import { Metadata } from "next"; // Type-only import without 'type' keyword
 ```
 
 **Bad**:
+
 ```tsx
-<div className="main"> {/* Should be <main> */}
+<div className="main">
+  {" "}
+  {/* Should be <main> */}
   <div className="heading">Page Title</div> {/* Should be <h1> */}
   <div>
     <div className="subheading">Section</div> {/* Should be <h2> */}
@@ -68,6 +74,7 @@ import { Metadata } from "next"; // Type-only import without 'type' keyword
 ```
 
 **Additional requirements**:
+
 - All images must have `alt` text (or explicit `alt=""` for decorative images)
 - Interactive elements must be keyboard accessible (focus visible, no traps)
 - Use ARIA attributes sparingly and correctly
@@ -82,6 +89,7 @@ import { Metadata } from "next"; // Type-only import without 'type' keyword
 **Rationale**: Ensures proper indexing, social sharing, and search visibility. Aligns with `docs/SEO_GUIDE.md`.
 
 **Good**:
+
 ```typescript
 // app/[lang]/example/page.tsx
 import type { Metadata } from "next";
@@ -98,6 +106,7 @@ export const metadata: Metadata = {
 ```
 
 **Bad**:
+
 ```typescript
 // Missing metadata export
 export default function ExamplePage() {
@@ -114,6 +123,7 @@ export default function ExamplePage() {
 **Rationale**: Centralizes error tracking, integrates with Sentry, and provides structured logging for Vercel. Aligns with `docs/ERROR_HANDLING.md`.
 
 **Good**:
+
 ```tsx
 import { logError } from "@/lib/error-logging";
 
@@ -136,6 +146,7 @@ async function fetchData() {
 ```
 
 **Bad**:
+
 ```typescript
 async function fetchData() {
   try {
@@ -148,6 +159,7 @@ async function fetchData() {
 ```
 
 **Additional requirements**:
+
 - Client-side errors must fail gracefully without exposing internal details
 - Preserve user context (avoid losing form data on errors)
 - Use `ErrorBoundary` wrapper for component trees that might throw
@@ -161,15 +173,23 @@ async function fetchData() {
 **Rationale**: Improves performance (no client-side waterfalls), enhances SEO (content is server-rendered), and reduces bundle size.
 
 **Good**:
+
 ```tsx
 // app/[lang]/posts/page.tsx (Server Component)
 async function PostsPage() {
   const posts = await fetchPosts(); // Direct fetch in Server Component
-  return <div>{posts.map(post => <Post key={post.id} {...post} />)}</div>;
+  return (
+    <div>
+      {posts.map((post) => (
+        <Post key={post.id} {...post} />
+      ))}
+    </div>
+  );
 }
 ```
 
 **Bad**:
+
 ```tsx
 "use client";
 import { useEffect, useState } from "react";
@@ -177,9 +197,17 @@ import { useEffect, useState } from "react";
 function PostsPage() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    fetch("/api/posts").then(r => r.json()).then(setPosts); // Fetch in Client Component
+    fetch("/api/posts")
+      .then((r) => r.json())
+      .then(setPosts); // Fetch in Client Component
   }, []);
-  return <div>{posts.map(post => <Post key={post.id} {...post} />)}</div>;
+  return (
+    <div>
+      {posts.map((post) => (
+        <Post key={post.id} {...post} />
+      ))}
+    </div>
+  );
 }
 ```
 
@@ -192,6 +220,7 @@ function PostsPage() {
 **Rationale**: Maintains consistency with the design system, ensures theme support, and follows `docs/DESIGN_SYSTEM.md`.
 
 **Good**:
+
 ```tsx
 <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
   Click Me
@@ -199,8 +228,11 @@ function PostsPage() {
 ```
 
 **Bad**:
+
 ```tsx
-<button style={{ backgroundColor: "#0070f3", color: "white", padding: "8px 16px" }}>
+<button
+  style={{ backgroundColor: "#0070f3", color: "white", padding: "8px 16px" }}
+>
   Click Me
 </button>
 ```
@@ -214,6 +246,7 @@ function PostsPage() {
 **Rationale**: Ensures all routes are locale-aware, supports English and Spanish, and follows `sdd.yaml` i18n-routing principles.
 
 **Good**:
+
 ```tsx
 // app/[lang]/example/page.tsx
 import type { Locale } from "@/lib/i18n";
@@ -230,6 +263,7 @@ export default async function ExamplePage({
 ```
 
 **Bad**:
+
 ```tsx
 export default function ExamplePage() {
   const content = getContent("en"); // Hardcoded locale
@@ -238,6 +272,7 @@ export default function ExamplePage() {
 ```
 
 **Additional requirements**:
+
 - All user-visible text must be i18n-aware (use UI string dictionaries in `i18n/[locale]/ui.json`)
 - Links must include locale prefix: `/en/about`, not `/about`
 - Metadata and OG images must accept `lang` param for translations
@@ -251,6 +286,7 @@ export default function ExamplePage() {
 **Rationale**: The CV page parses a JSON object from markdown at build time. Breaking this breaks the entire CV page.
 
 **Good** (when modifying CV parsing):
+
 ```typescript
 try {
   const cvData = JSON.parse(cvJsonString);
@@ -266,6 +302,7 @@ try {
 ```
 
 **Bad**:
+
 ```typescript
 const cvData = JSON.parse(cvJsonString); // No error handling or validation
 ```
@@ -279,6 +316,7 @@ const cvData = JSON.parse(cvJsonString); // No error handling or validation
 **Rationale**: Protects against spam, CSRF, and abuse. Removing these checks opens the site to attacks. Aligns with `docs/SECURITY_POLICY.md`.
 
 **Good** (when modifying contact route):
+
 ```typescript
 // Validate Turnstile token
 const turnstileResponse = await fetch(
@@ -291,7 +329,7 @@ const turnstileResponse = await fetch(
       response: data.turnstileToken,
       remoteip: clientIp,
     }),
-  }
+  },
 );
 const turnstileResult = await turnstileResponse.json();
 if (!turnstileResult.success) {
@@ -300,6 +338,7 @@ if (!turnstileResult.success) {
 ```
 
 **Bad**:
+
 ```typescript
 // Commented out or removed Turnstile verification
 // if (!data.turnstileToken) { ... }
@@ -315,6 +354,7 @@ await forwardToFormspree(data); // No verification
 **Rationale**: Prevents XSS attacks. The CV references contain HTML strings that must be sanitized before rendering.
 
 **Good**:
+
 ```tsx
 import { sanitizeRichText } from "@/lib/sanitize-html";
 
@@ -324,6 +364,7 @@ function Reference({ html }: { html: string }) {
 ```
 
 **Bad**:
+
 ```tsx
 function Reference({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />; // No sanitization
@@ -355,6 +396,7 @@ These patterns are **prohibited**. They violate security, performance, or archit
 **Exception**: Very rare cases where a third-party library has incorrect types. Must be documented with a `// @ts-expect-error` comment explaining why.
 
 **Example**:
+
 ```typescript
 // Bad
 function processData(data: any) {
@@ -381,6 +423,7 @@ function processData(data: DataType) {
 **Exception**: Build scripts, config files, and non-production debugging (must be removed before commit via lint-staged).
 
 **Example**:
+
 ```typescript
 // Bad
 try {
@@ -408,6 +451,7 @@ try {
 **Exception**: Very rare cases like integrating third-party libraries that require DOM access (e.g., Turnstile widget). Must be wrapped in `useEffect` and documented.
 
 **Example**:
+
 ```typescript
 // Bad
 function Component() {
@@ -433,6 +477,7 @@ function Component() {
 **Exception**: None for color values. Acceptable for truly dynamic layout values (e.g., `width: ${calculated}px` for dynamic sizing).
 
 **Example**:
+
 ```tsx
 // Bad
 <div style={{ color: "#000", backgroundColor: "#fff" }}>Content</div>
@@ -462,6 +507,7 @@ function Component() {
 **Exception**: None. Use `.env.local` for local development and Vercel project settings for production.
 
 **Example**:
+
 ```typescript
 // Bad
 const FORMSPREE_KEY = "xyzabc123";
@@ -507,11 +553,13 @@ Exceptions to the above rules must be **rare, justified, and documented**. Alway
 ### Documentation Required
 
 When making an exception, include:
+
 - A code comment explaining **why** the exception is necessary
 - A reference to the library, bug, or constraint that requires it
 - A plan to remove the exception if possible
 
 **Example**:
+
 ```tsx
 "use client";
 import { useEffect } from "react";
@@ -536,6 +584,7 @@ export function TurnstileWidget() {
 Before submitting a PR with AI-assisted changes, verify:
 
 ### Code Quality
+
 - [ ] All `import type` statements used for type-only imports
 - [ ] TypeScript strict mode satisfied (no `any`, no type errors)
 - [ ] No `console.*` outside `lib/error-logging` (except scripts/config)
@@ -543,6 +592,7 @@ Before submitting a PR with AI-assisted changes, verify:
 - [ ] Prettier formatting applied (`pnpm format:fix`)
 
 ### Accessibility
+
 - [ ] Semantic HTML used (`<main>`, `<nav>`, `<h1>`-`<h6>`, etc.)
 - [ ] Heading hierarchy maintained (single `<h1>`, logical `<h2>`-`<h6>` nesting)
 - [ ] All images have `alt` text or explicit `alt=""`
@@ -550,44 +600,52 @@ Before submitting a PR with AI-assisted changes, verify:
 - [ ] ARIA attributes used sparingly and correctly
 
 ### SEO
+
 - [ ] `metadata` export defined in new pages
 - [ ] Title, description, and Open Graph tags provided
 - [ ] Descriptive link text (avoid "click here")
 - [ ] OG images locale-aware (accept `lang` param)
 
 ### Error Handling
+
 - [ ] `logError()` or `logWarning()` used for all caught errors
 - [ ] `ErrorBoundary` wraps component trees that might throw
 - [ ] User-friendly error messages (no stack traces exposed)
 - [ ] Form data preserved on errors
 
 ### Security
+
 - [ ] No hardcoded secrets or credentials
 - [ ] HTML sanitized before `dangerouslySetInnerHTML` (use `lib/sanitize-html.ts`)
 - [ ] Turnstile, honeypot, rate limiting preserved in `/api/contact`
 - [ ] No new XSS, CSRF, or injection vulnerabilities
 
 ### Internationalization
+
 - [ ] Locale read from `params.lang` in App Router pages
 - [ ] No hardcoded English-only content (use `i18n/[locale]/ui.json`)
 - [ ] Links include locale prefix (`/en/about`, not `/about`)
 - [ ] Content loaded based on locale (`content/[locale]/`)
 
 ### Styling
+
 - [ ] Tailwind CSS used (no inline styles with colors)
 - [ ] Light/dark theme support maintained (`next-themes`)
 - [ ] Radix UI primitives used for interactive components
 
 ### Content
+
 - [ ] CV JSON parsing semantics preserved (no breaking changes to `content/[locale]/cv.md`)
 - [ ] About page markdown structure maintained (frontmatter + body sections)
 
 ### Testing
+
 - [ ] Unit tests updated/added if behavior changed (`pnpm test`)
 - [ ] E2E tests pass (`pnpm test:e2e`)
 - [ ] Visual regression baselines updated if UI changed (`pnpm test:visual:update`)
 
 ### Documentation
+
 - [ ] `docs/` updated if architecture or patterns changed
 - [ ] `README.md` updated if setup or commands changed
 - [ ] `sdd.yaml` updated if principles or boundaries changed
