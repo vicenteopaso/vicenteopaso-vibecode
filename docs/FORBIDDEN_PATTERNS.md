@@ -155,7 +155,7 @@ import { sanitizeRichText } from "@/lib/sanitize-html";
 
 **Reference:**
 - TypeScript config: `tsconfig.json` (strict mode enabled)
-- ESLint: Enforced by `@typescript-eslint/no-explicit-any` (currently recommended level)
+- ESLint: Enforced by `@typescript-eslint/no-explicit-any` (currently warning; planned upgrade to error)
 
 **Example:**
 ```typescript
@@ -547,6 +547,8 @@ The following ESLint rules help enforce these forbidden patterns:
 
 #### Type Safety
 - `@typescript-eslint/consistent-type-imports`: Enforced as error
+- `@typescript-eslint/no-explicit-any`: Enforced as warning (planned upgrade to error)
+- `@typescript-eslint/no-non-null-assertion`: Enforced as warning
 - `@typescript-eslint/no-unused-vars`: Enforced as error (with exceptions for `_` prefix)
 
 #### Security
@@ -567,6 +569,9 @@ The following ESLint rules help enforce these forbidden patterns:
 
 #### Accessibility
 - All rules from `eslint-plugin-jsx-a11y` (recommended config)
+
+#### Code Quality
+- `no-console`: Enforced as warning (allows `warn`, `error`, `info`; disabled in scripts and config files)
 
 ### Adding New Rules
 
