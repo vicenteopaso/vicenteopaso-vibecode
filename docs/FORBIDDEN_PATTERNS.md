@@ -453,7 +453,7 @@ export const metadata = createMetadata({
 ```typescript
 // ❌ FORBIDDEN: Synchronous heavy computation in components
 export default function Page() {
-  const result = heavySync Calculation(); // Blocks rendering
+  const result = heavySyncCalculation(); // Blocks rendering
   return <div>{result}</div>;
 }
 
