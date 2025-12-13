@@ -39,6 +39,9 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Scan for secrets
+        run: pnpm audit:secrets
+
       - name: Validate internal links
         run: pnpm validate:links
 

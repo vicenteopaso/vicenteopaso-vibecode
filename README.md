@@ -174,6 +174,61 @@ The main routes are:
 - `/api/contact` – Contact form API route
 - `/api/content/[slug]` – Content API for policy/tech markdown (deprecated, pages now server-side rendered)
 
+### Environment Variables & Security
+
+**⚠️ Never commit secrets to the repository.**
+
+This project uses environment variables for all sensitive configuration. See `.env.example` for the complete list of variables.
+
+**Setup for local development:**
+
+```bash
+# Copy the example file
+cp .env.example .env.local
+
+# Edit .env.local with your actual keys
+# .env.local is in .gitignore and will not be committed
+```
+
+**Required variables for full functionality:**
+
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` – Cloudflare Turnstile public key (contact form)
+- `TURNSTILE_SECRET_KEY` – Cloudflare Turnstile secret key (server-side verification)
+- `NEXT_PUBLIC_FORMSPREE_KEY` – Formspree form ID
+
+**Optional variables:**
+
+- `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` – Sentry error tracking
+- `DEEPL_API_KEY` – DeepL API for translations
+
+**For production deployment (Vercel):**
+
+Add environment variables in your Vercel project settings under "Environment Variables". They are encrypted at rest and injected at build/runtime.
+
+**Security scanning:**
+
+The project includes automated secrets scanning to prevent accidental commits:
+
+```bash
+# Scan all tracked files for potential secrets
+pnpm audit:secrets
+
+# Scan only changed files
+node scripts/scan-secrets.mjs --changed
+```
+
+The CI pipeline automatically scans for secrets on every pull request and will fail if any are detected.
+
+**Best practices:**
+
+- ✅ Use `process.env.VARIABLE_NAME` in code
+- ✅ Use `NEXT_PUBLIC_*` prefix only for client-side variables (they become public in the bundle)
+- ✅ Keep server-side secrets (no prefix) in API routes and server components only
+- ❌ Never hard-code API keys, tokens, or credentials
+- ❌ Never commit `.env.local` or files with real secrets
+
+See **[docs/SECURITY_POLICY.md](./docs/SECURITY_POLICY.md)** for comprehensive security guidance.
+
 ---
 
 ## SEO and sitemaps
@@ -412,6 +467,9 @@ pnpm validate:links
 
 # Run accessibility audit
 pnpm audit:a11y
+
+# Scan for potential secrets in code
+pnpm audit:secrets
 
 # Run security audit (high+ vulnerabilities)
 pnpm audit:security

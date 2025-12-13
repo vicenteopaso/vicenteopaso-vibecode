@@ -31,6 +31,7 @@
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "audit:lighthouse": "node scripts/audit-lighthouse.mjs",
     "audit:security": "pnpm audit --audit-level=high",
+    "audit:secrets": "node scripts/scan-secrets.mjs",
     "sitemap": "next-sitemap --config next-sitemap.config.js",
     "vercel:should-skip": "bash scripts/vercel-ignore-build.sh",
     "test:vercel-skip": "bash scripts/test-vercel-ignore-build.sh",

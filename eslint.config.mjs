@@ -66,6 +66,34 @@ export default [
       "security/detect-possible-timing-attacks": "warn",
       "security/detect-object-injection": "off",
       "security/detect-non-literal-fs-filename": "off",
+      // Detect hardcoded secrets and sensitive data
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "Literal[value=/ghp_[a-zA-Z0-9]{36,}/]",
+          message: "Potential GitHub Personal Access Token detected. Use environment variables instead.",
+        },
+        {
+          selector: "Literal[value=/ghs_[a-zA-Z0-9]{36,}/]",
+          message: "Potential GitHub OAuth Token detected. Use environment variables instead.",
+        },
+        {
+          selector: "Literal[value=/sk-[a-zA-Z0-9]{20,}/]",
+          message: "Potential OpenAI API Key detected. Use environment variables instead.",
+        },
+        {
+          selector: "Literal[value=/AKIA[0-9A-Z]{16}/]",
+          message: "Potential AWS Access Key ID detected. Use environment variables instead.",
+        },
+        {
+          selector: "Literal[value=/xox[baprs]-[0-9a-zA-Z]{10,}/]",
+          message: "Potential Slack token detected. Use environment variables instead.",
+        },
+        {
+          selector: "Literal[value=/^[a-f0-9]{64,}$/]",
+          message: "Long hexadecimal string detected. If this is a secret, use environment variables.",
+        },
+      ],
     },
   },
   {
