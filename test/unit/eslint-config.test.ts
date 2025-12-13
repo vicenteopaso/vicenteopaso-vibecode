@@ -102,10 +102,11 @@ describe("eslint.config.mjs", () => {
 
     const scriptConfig = config.find(
       (c: { files?: string[] }) =>
-        c.files?.some((f: string) => f.includes("scripts/**/*.{js,mjs,ts}")) ??
-        false,
+        c.files?.includes("scripts/**/*.{js,mjs,ts}") ?? false,
     );
     expect(scriptConfig).toBeDefined();
+    expect(scriptConfig?.files).toContain("scripts/**/*.{js,mjs,ts}");
+    expect(scriptConfig?.files).toContain("*.config.{js,mjs,ts}");
     expect(scriptConfig?.rules?.["security/detect-non-literal-require"]).toBe(
       "off",
     );
