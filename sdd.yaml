@@ -95,6 +95,7 @@ devex:
     build: pnpm build
     test-unit: pnpm test
     test-e2e: pnpm test:e2e
+    test-visual: pnpm test:visual
     coverage: pnpm coverage
     lint: pnpm lint
     typecheck: pnpm typecheck
@@ -106,9 +107,16 @@ devex:
       - typecheck
       - test-unit
       - test-e2e
+      - test-visual
       - coverage
       - validate-links
       - audit-a11y
+    coverage-thresholds:
+      lines: 90
+      statements: 90
+      branches: 85
+      functions: 90
+      enforcement: fail-on-violation
   pr:
     template: .github/PULL_REQUEST_TEMPLATE.md
     require:
@@ -136,9 +144,12 @@ ai-governance:
       Business logic and utilities belong in lib/* (no React dependencies, pure functions where possible).
       API routes contain schema validation and external service calls, not business rules.
     testing-expectations: |
-      New features must include unit tests (Vitest) and maintain >95% function coverage.
+      Coverage thresholds are enforced in CI (lines: 90%, statements: 90%, branches: 85%, functions: 90%).
+      New features must include unit tests (Vitest) and maintain coverage thresholds.
+      UI changes require visual regression tests (Playwright) for light/dark mode and mobile/desktop viewports.
       Routes must have E2E tests (Playwright) verifying happy path and error cases.
       Components must test props, event handlers, and accessibility (ARIA, semantic HTML).
+      CI fails if coverage drops below thresholds, preventing low-quality AI-generated or manual changes.
   rules:
     - "Prefer existing patterns and files when adding new functionality."
     - "When adding new dependencies, include justification in the PR description."
