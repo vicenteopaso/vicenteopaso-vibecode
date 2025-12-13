@@ -5,6 +5,7 @@ Comprehensive testing documentation for the portfolio site.
 ## Table of Contents
 
 - [Overview](#overview)
+- [AI Guardrails](#ai-guardrails)
 - [Testing Philosophy](#testing-philosophy)
 - [Test Types](#test-types)
 - [Running Tests](#running-tests)
@@ -36,6 +37,49 @@ The project uses a multi-layered testing approach:
 | Accessibility     | Custom audit script    | WCAG compliance, alt text          |
 | Security          | ESLint security plugin | Common vulnerabilities             |
 | Performance       | Lighthouse CI          | Core Web Vitals, accessibility     |
+
+## AI Guardrails
+
+This project enforces **AI Guardrails** in CI to ensure code quality and prevent regressions.
+
+### Test Coverage Requirements
+
+**Automated Check**: `scripts/check-pr-tests.mjs`
+
+All changes to code files in `app/` or `lib/` **must** include corresponding test changes in:
+- `test/unit/` (unit tests)
+- `test/e2e/` (end-to-end tests)
+- `test/visual/` (visual regression tests)
+
+**CI Enforcement**: The `test-coverage-check` job in `.github/workflows/ci.yml` runs this verification on every PR and will fail if:
+- Code files are modified without test updates
+- New features lack test coverage
+- Bug fixes don't include regression tests
+
+**Bypass**: This check is skipped for documentation-only or configuration-only changes (files not in `app/` or `lib/`).
+
+### Required Quality Checks
+
+All PRs must pass:
+- ✅ Lint (`pnpm lint`)
+- ✅ Typecheck (`pnpm typecheck`)
+- ✅ Unit tests (`pnpm test`)
+- ✅ E2E tests (`pnpm test:e2e`)
+- ✅ Visual regression tests (`pnpm test:visual`)
+
+### PR Template Compliance
+
+The PR template includes mandatory checkboxes for:
+- **Accessibility**: Keyboard navigation, ARIA, focus management
+- **SEO**: Metadata updates, content changes
+- **Security**: Input validation, XSS prevention
+- **Error Handling**: Graceful degradation, user-friendly messages
+
+### Architecture Changes
+
+PRs labeled `architecture-change` **must** link to an Architecture Decision Record (ADR) in `docs/adr/`. See [ADR Documentation](./adr/README.md) for guidelines.
+
+**Example ADR**: [ADR-0001: Implement AI Guardrails](./adr/0001-implement-ai-guardrails.md)
 
 ## Testing Philosophy
 
