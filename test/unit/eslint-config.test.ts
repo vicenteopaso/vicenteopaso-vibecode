@@ -282,11 +282,13 @@ describe("eslint.config.mjs", () => {
     ] as unknown[];
     expect(syntaxRules.length).toBeGreaterThan(1);
     // Verify it includes rules for 'any' type patterns
-    const hasAnyTypeRule = syntaxRules.some(
-      (rule: { selector?: string }) =>
+    const hasAnyTypeRule = syntaxRules.some((value) => {
+      const rule = value as { selector?: string };
+      return (
         rule.selector?.includes("TSTypeReference") ||
-        rule.selector?.includes("TSAnyKeyword"),
-    );
+        rule.selector?.includes("TSAnyKeyword")
+      );
+    });
     expect(hasAnyTypeRule).toBe(true);
   });
 
