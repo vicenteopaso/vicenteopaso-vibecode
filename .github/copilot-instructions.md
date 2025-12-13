@@ -63,6 +63,8 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 ## AI Guardrails: Must/Avoid
 
+> **Full documentation**: See [`docs/AI_GUARDRAILS.md`](../docs/AI_GUARDRAILS.md) for comprehensive ESLint-enforced guardrails and [`docs/FORBIDDEN_PATTERNS.md`](../docs/FORBIDDEN_PATTERNS.md) for anti-patterns to avoid.
+
 These guidelines help AI assistants avoid common pitfalls specific to this repository:
 
 ### Must Do
@@ -136,3 +138,10 @@ These guidelines help AI assistants avoid common pitfalls specific to this repos
 - If a PR is safe for auto-merge, add the `copilot-automerge` label (an auto-merge workflow will only act on such PRs once required checks pass).
 
 Tip: For more granular behavior in the future, you can add path-specific instruction files under `.github/instructions/*.instructions.md` with `applyTo` globs.
+
+## Related Documentation
+
+- [`docs/AI_GUARDRAILS.md`](../docs/AI_GUARDRAILS.md) – Comprehensive ESLint-enforced guardrails and patterns
+- [`docs/FORBIDDEN_PATTERNS.md`](../docs/FORBIDDEN_PATTERNS.md) – Anti-patterns to avoid with examples
+- [`docs/REVIEW_CHECKLIST.md`](../docs/REVIEW_CHECKLIST.md) – Comprehensive reviewer checklist for all PRs
+- [`docs/adr/0001-implement-ai-guardrails.md`](../docs/adr/0001-implement-ai-guardrails.md) – ADR documenting the AI guardrails implementation
