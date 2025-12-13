@@ -117,8 +117,9 @@ Notes:
   - `pnpm test:e2e` (end-to-end tests when relevant)
   - `pnpm test:visual` (visual regression tests when UI changes)
   - `pnpm coverage` to verify coverage stays above 90%
-- Check for security vulnerabilities in dependencies:
-  - `pnpm audit:security` to check for high+ vulnerabilities
+- Check for security issues:
+  - `pnpm audit:secrets` to scan for potential hardcoded secrets
+  - `pnpm audit:security` to check for high+ vulnerabilities in dependencies
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
 - Review your changes against the [Code Review Checklist](./docs/REVIEW_CHECKLIST.md) to ensure quality standards are met.
 - **AI Guardrails**: Ensure your PR satisfies the automated quality checks (see below).

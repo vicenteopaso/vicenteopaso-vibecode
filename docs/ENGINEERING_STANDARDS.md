@@ -123,6 +123,20 @@ This document captures the engineering intent for this repository. It is a **nor
 - Dependency vulnerability checks in CI (e.g., `pnpm audit`, CodeQL).
 - Dependabot (or equivalent) enabled for dependency and workflow updates.
 - Prefer well-maintained and reputable packages; verified publishers when available.
+- **Secrets scanning** in CI: Automated detection of hardcoded secrets, API keys, tokens, and credentials.
+  - Runs via `scripts/scan-secrets.mjs` on every PR.
+  - ESLint rules (`no-restricted-syntax`) flag common secret patterns.
+  - Blocks merges if potential secrets are detected.
+
+### 4.3 Authentication (If Applicable)
+
+- No public tokens in client bundles.
+- Sensitive values provided via encrypted environment variables (e.g., Vercel env).
+- **Never commit secrets to the repository** - enforced by automated scanning.
+- All API keys, tokens, and credentials must use environment variables.
+- Client-side variables (`NEXT_PUBLIC_*`) are public - only use for non-sensitive data.
+- API routes protected as appropriate (rate limits, basic origin checks, edge protections).
+- See **[docs/SECURITY_POLICY.md](./SECURITY_POLICY.md)** for comprehensive secrets handling guidance.
 
 ### 4.4 Runtime Guardrails _(implemented)_
 
@@ -130,12 +144,6 @@ This document captures the engineering intent for this repository. It is a **nor
 - ESLint rules to flag empty catch blocks and encourage structured error handling.
 - Structured error logging with `logError()` and `logWarning()` for observability.
 - See [Error Handling](./ERROR_HANDLING.md) and [AI Guardrails](./AI_GUARDRAILS.md) for detailed guidelines.
-
-### 4.3 Authentication (If Applicable)
-
-- No public tokens in client bundles.
-- Sensitive values provided via encrypted environment variables (e.g., Vercel env).
-- API routes protected as appropriate (rate limits, basic origin checks, edge protections).
 
 ## 5. Testing Strategy _(implemented: >90% coverage maintained and enforced)_
 
