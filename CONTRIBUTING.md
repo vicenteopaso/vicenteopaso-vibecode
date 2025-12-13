@@ -118,6 +118,8 @@ Notes:
 - Check for security vulnerabilities in dependencies:
   - `pnpm audit:security` to check for high+ vulnerabilities
 - Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
+- Review your changes against the [Code Review Checklist](./docs/REVIEW_CHECKLIST.md) to ensure quality standards are met.
+- **AI Guardrails**: Ensure your PR satisfies the automated quality checks (see below).
 
 ### Testing guidelines
 
@@ -159,7 +161,46 @@ pnpm test:visual:update
 - All bug fixes must include regression tests
 - E2E tests required for critical user flows (contact form, CV download, navigation)
 
+#### AI Guardrails (Automated in CI)
+
+This project enforces **AI Guardrails** to ensure consistent quality:
+
+1. **Test Coverage Check**: Changes to `app/` or `lib/` **must** include test changes in `test/unit/`, `test/e2e/`, or `test/visual/`
+   - Automated via `scripts/check-pr-tests.mjs`
+   - Runs in CI on every PR
+   - Ensures no code changes ship without tests
+
+2. **PR Template Compliance**: All PRs must complete the checklist including:
+   - ✅ Accessibility verification
+   - ✅ SEO impact assessment
+   - ✅ Security review
+   - ✅ Error handling verification
+
+3. **Architecture Decision Records (ADRs)**: PRs labeled `architecture-change` must link to an ADR in `docs/adr/`
+   - Use the [ADR template](./docs/adr/adr-template.md)
+   - See [ADR documentation](./docs/adr/README.md) for guidelines
+   - Example: [ADR-0001: Implement AI Guardrails](./docs/adr/0001-implement-ai-guardrails.md)
+
+4. **Quality Gates**: All PRs must pass:
+   - Lint, typecheck, unit tests, E2E tests, visual regression tests
+   - Enforced in `.github/workflows/ci.yml`
+
 See [Testing Guide](./docs/TESTING.md) for detailed best practices and examples.
+
+### Code review checklist
+
+Before requesting review and after making changes based on feedback, review your PR against the [Code Review Checklist](./docs/REVIEW_CHECKLIST.md). This checklist helps ensure consistent quality across:
+
+- **Error handling**: Graceful failures, structured logging, user-friendly messages
+- **Security**: Turnstile verification, rate limiting, input validation, no hardcoded secrets
+- **Accessibility**: Semantic HTML, keyboard navigation, ARIA, color contrast, alt text
+- **SEO**: Metadata exports, canonical URLs, structured data, descriptive link text
+- **Performance**: Server-first rendering, Core Web Vitals, image optimization
+- **i18n/Content**: Locale-aware routes, CV JSON parsing preserved, no hardcoded strings
+- **Testing**: Unit tests, E2E tests, visual regression tests with shared utilities
+- **Code quality**: TypeScript strict mode, import type usage, linting, formatting
+
+The checklist is especially useful for AI-authored changes and complex PRs.
 
 ### Component documentation guidelines
 
