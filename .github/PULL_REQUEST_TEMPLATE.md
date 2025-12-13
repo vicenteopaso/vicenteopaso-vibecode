@@ -17,6 +17,13 @@
 
 > **Note**: Changes limited to documentation (`docs/`, `README.md`, etc.) or tests will skip Vercel builds automatically. See [docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md) for details.
 
+## Architecture Decision Record (ADR)
+
+<!-- If this PR includes architecture changes, link to the ADR -->
+<!-- Example: See [ADR-0001: Implement AI Guardrails](../docs/adr/0001-implement-ai-guardrails.md) -->
+
+**Architecture Change?**: [ ] Yes (add `architecture-change` label and link ADR above) / [x] No
+
 ## Technical Governance Compliance
 
 - [ ] Follows [Engineering Standards](../docs/ENGINEERING_STANDARDS.md)
@@ -35,10 +42,18 @@
 - [ ] `pnpm test:e2e` passes (if UI/routing changes)
 - [ ] Visual tests updated if UI changed (`pnpm test:visual:update`)
 
+## AI Guardrails Compliance
+
+> **Required for all code changes in `app/` or `lib/`**
+
+- [ ] Tests added/updated for code changes (unit, e2e, or visual)
+- [ ] Error handling verified and follows [Error Handling Guide](../docs/ERROR_HANDLING.md)
+- [ ] Accessibility verified (keyboard navigation, ARIA, focus management)
+- [ ] SEO impact assessed and metadata updated if needed
+- [ ] Security considerations reviewed (input validation, XSS prevention)
+
 ## Additional Verification
 
 - [ ] Cross-browser testing completed (if UI changes)
-- [ ] Accessibility verified (keyboard nav, screen reader, ARIA)
 - [ ] Performance impact considered (bundle size, Core Web Vitals)
-- [ ] Security review completed (no secrets, proper input validation)
-- [ ] SEO metadata updated (if content/routing changes)
+- [ ] Mobile responsiveness verified (if UI changes)
