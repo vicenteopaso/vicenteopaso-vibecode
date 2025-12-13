@@ -19,7 +19,6 @@
  */
 
 import { execSync } from "child_process";
-import { existsSync } from "fs";
 
 // Configuration
 const CODE_PATHS = ["app/", "lib/"];
