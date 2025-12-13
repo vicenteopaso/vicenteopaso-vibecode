@@ -129,8 +129,8 @@ jobs:
       - name: Validate internal links
         run: pnpm validate:links
 
-      - name: Unit tests
-        run: pnpm test
+      - name: Unit tests with coverage
+        run: pnpm coverage
 
       - name: Install Playwright
         run: npx playwright install --with-deps
@@ -150,6 +150,5 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
-
       - name: Build
         run: pnpm build

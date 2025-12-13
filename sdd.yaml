@@ -95,6 +95,7 @@ devex:
     build: pnpm build
     test-unit: pnpm test
     test-e2e: pnpm test:e2e
+    test-visual: pnpm test:visual
     coverage: pnpm coverage
     lint: pnpm lint
     typecheck: pnpm typecheck
@@ -110,6 +111,13 @@ devex:
       - coverage
       - validate-links
       - audit-a11y
+    coverage-thresholds:
+      lines: 90
+      statements: 90
+      branches: 85 # Lower threshold: branches are harder to cover due to edge cases
+      functions: 90
+      enforcement: fail-on-violation
+      config-file: vitest.config.ts
     ai-guardrails:
       test-coverage-check: "Verifies code changes in app/ or lib/ have corresponding tests"
       pr-template-check: "Validates PR template compliance and ADR links for architecture changes"
@@ -143,9 +151,12 @@ ai-governance:
       Business logic and utilities belong in lib/* (no React dependencies, pure functions where possible).
       API routes contain schema validation and external service calls, not business rules.
     testing-expectations: |
-      New features must include unit tests (Vitest) and maintain >95% function coverage.
+      Coverage thresholds are enforced in CI (lines: 90%, statements: 90%, branches: 85%, functions: 90%).
+      New features must include unit tests (Vitest) and maintain coverage thresholds.
+      UI changes require visual regression tests (Playwright) for light/dark mode and mobile/desktop viewports.
       Routes must have E2E tests (Playwright) verifying happy path and error cases.
       Components must test props, event handlers, and accessibility (ARIA, semantic HTML).
+      CI fails if coverage drops below thresholds, preventing low-quality AI-generated or manual changes.
       AI Guardrails enforce test coverage: code changes in app/ or lib/ require test updates.
     architecture-decisions: |
       PRs labeled 'architecture-change' must link to an ADR in docs/adr/.
