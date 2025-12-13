@@ -319,6 +319,7 @@ See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRE
   - Deployment flow
 - `CONTRIBUTING.md` for contribution workflow and expectations.
 - `docs/CONSTITUTION.md` for engineering governance.
+- `docs/AI_GUARDRAILS.md` for AI-assisted development rules and review checklist.
 - `SECURITY` policy document.
 - Additional docs for SEO, accessibility, error handling, release process, etc.
 - Public-facing governance and policy pages (`/accessibility`, `/tech-stack`, `/technical-governance`, `/cookie-policy`, `/privacy-policy`) render markdown via a shared ReactMarkdown components map in `lib/markdown-components.tsx` to keep typography and semantics consistent.
