@@ -41,10 +41,11 @@ export default [
       security,
     },
     rules: {
-      // TypeScript guardrails
+      // TypeScript guardrails (see docs/FORBIDDEN_PATTERNS.md and docs/AI_GUARDRAILS.md)
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-non-null-assertion": "warn",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -58,10 +59,10 @@ export default [
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
 
-      // Console guardrails - no console allowed in production code
+      // Console guardrails - no console allowed in production code (see docs/FORBIDDEN_PATTERNS.md)
       "no-console": "error",
 
-      // DOM access guardrails - restrict document/window in React components
+      // DOM access guardrails - restrict document/window in React components (see docs/FORBIDDEN_PATTERNS.md)
       "no-restricted-globals": [
         "error",
         {
@@ -76,7 +77,7 @@ export default [
         },
       ],
 
-      // Banned syntax patterns
+      // Banned syntax patterns (see docs/FORBIDDEN_PATTERNS.md)
       "no-restricted-syntax": [
         "error",
         {
@@ -91,7 +92,7 @@ export default [
         },
       ],
 
-      // Security rules
+      // Security rules (see docs/FORBIDDEN_PATTERNS.md for rationale)
       "security/detect-unsafe-regex": "error",
       "security/detect-buffer-noassert": "error",
       "security/detect-child-process": "warn",
@@ -108,6 +109,7 @@ export default [
     },
   },
   {
+    // Type-aware TypeScript rules (requires project service)
     files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
       parserOptions: {
@@ -128,6 +130,7 @@ export default [
     },
   },
   {
+    // Scripts and config files need special permissions
     files: ["scripts/**/*.{js,mjs,ts}", "*.config.{js,mjs,ts}"],
     rules: {
       // Scripts and config files can use console for CLI output
@@ -143,6 +146,7 @@ export default [
     },
   },
   {
+    // Test files have relaxed rules
     files: ["test/**/*.{ts,tsx}", "**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
     rules: {
       // Tests can use console for debugging
@@ -155,6 +159,7 @@ export default [
     },
   },
   {
+    // API routes have specific logging rules
     files: ["app/api/**/*.ts"],
     rules: {
       // API routes can use console.error for server-side logging
@@ -162,30 +167,32 @@ export default [
     },
   },
   {
+    // Error logging utility needs console access
     files: ["lib/error-logging.ts"],
     rules: {
-      // Error logging utility needs console access
       "no-console": "off",
     },
   },
   {
+    // Instrumentation files need console for debug output
     files: [
       "instrumentation.ts",
       "instrumentation-client.ts",
       "sentry.*.config.ts",
     ],
     rules: {
-      // Sentry instrumentation files need console for debug output
       "no-console": "off",
     },
   },
   {
+    // Next.js type definitions
     files: ["next-env.d.ts"],
     rules: {
       "@typescript-eslint/triple-slash-reference": "off",
     },
   },
   {
+    // Components that legitimately need window/document access
     files: [
       "app/components/GlobalErrorHandler.tsx",
       "app/components/ImpactCards.tsx",

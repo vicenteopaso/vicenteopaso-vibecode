@@ -8,6 +8,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - Documentation-first workflow: update the SDD and relevant docs before (or alongside) code for changes that affect architecture, cross-cutting concerns, or developer workflows.
 - Solution-agnostic intent: standards describe principles and outcomes; specific tools and frameworks may change. If the implementation changes, these principles remain and the SDD should be updated.
 - Definition of Done includes: docs updated, SDD aligned, and templates (issues/PR) respected.
+- **Forbidden patterns**: See [Forbidden APIs and Patterns](./FORBIDDEN_PATTERNS.md) for security-critical and quality-related patterns that must be avoided in all code contributions.
 
 ## 1. Architectural Foundations _(partially implemented)_
 
