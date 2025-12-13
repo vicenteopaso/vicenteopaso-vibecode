@@ -22,7 +22,9 @@
 <!-- If this PR includes architecture changes, link to the ADR -->
 <!-- Example: See [ADR-0001: Implement AI Guardrails](../docs/adr/0001-implement-ai-guardrails.md) -->
 
-**Architecture Change?**: [ ] Yes (add `architecture-change` label and link ADR above) / [x] No
+**Architecture Change?**
+- [ ] Yes (add `architecture-change` label and link ADR above)
+- [ ] No
 
 ## Technical Governance Compliance
 

@@ -89,7 +89,6 @@ We will implement AI guardrails through:
 
 ## References
 
-- [Issue: Add AI Guardrails Spec](https://github.com/vicenteopaso/vicenteopaso-vibecode/issues/XXX)
 - [Engineering Standards](../ENGINEERING_STANDARDS.md)
 - [Testing Documentation](../TESTING.md)
 - [Visual Regression Testing](../VISUAL_REGRESSION_TESTING.md)

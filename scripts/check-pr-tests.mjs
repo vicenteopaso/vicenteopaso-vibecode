@@ -15,7 +15,9 @@
  *
  * Environment variables:
  *   GITHUB_BASE_REF: Base branch for PR comparison (default: main)
- *   SKIP_TEST_CHECK: Set to 'true' to skip this check (for docs-only changes)
+ *   SKIP_TEST_CHECK: Set to 'true' to skip this check
+ *                    Use only for emergency bypasses; not recommended for normal development
+ *                    Consider using docs-only or config-only changes instead
  */
 
 import { execSync } from "child_process";
