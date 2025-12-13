@@ -148,7 +148,6 @@ Document architectural decisions directly in code comments.
 ## References
 
 - [Michael Nygard's ADR template](https://github.com/joelparkerhenderson/architecture-decision-record)
-- [GitHub Issue: Architecture Decision Records](https://github.com/vicenteopaso/vicenteopaso-vibecode/issues/XXX)
 - [Documenting Architecture Decisions by Michael Nygard](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
 - Project's Documentation-First Philosophy: `content/en/technical-governance.md`
 - System Design & Development Specification: `sdd.yaml`

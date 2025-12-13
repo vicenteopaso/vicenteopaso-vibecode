@@ -13,7 +13,7 @@
 <!-- See docs/adr/README.md for guidance on when to write an ADR -->
 
 - [ ] N/A - No architectural decisions in this PR
-- [ ] ADR(s) linked: [ADR-XXXX](../docs/adr/XXXX-title.md)
+- [ ] ADR(s) linked: ADR-XXXX (title)
 
 ## Type of Change
 
