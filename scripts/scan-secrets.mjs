@@ -20,13 +20,16 @@ import { execSync } from "child_process";
 import { existsSync, readFileSync, statSync } from "fs";
 
 // Patterns that indicate potential secrets
+// Note: Patterns use backreferences (\1) to ensure opening and closing quotes match
 const SECRET_PATTERNS = [
   // API Keys and Tokens
   {
+    // Matches: "api_key" = "abc123..." or 'apikey': 'xyz789...' (quotes must match via \1)
     pattern: /(['"`])(?:api[_-]?key|apikey|api[_-]?secret)\1\s*[:=]\s*['"`][a-zA-Z0-9_-]{20,}['"`]/gi,
     description: "API key assignment",
   },
   {
+    // Matches: "password" = "secret123" or 'secret': 'pass456' (quotes must match via \1)
     pattern: /(['"`])(?:secret|password|passwd|pwd)\1\s*[:=]\s*['"`][^\s'"`]{8,}['"`]/gi,
     description: "Password/secret assignment",
   },
@@ -64,6 +67,7 @@ const SECRET_PATTERNS = [
   },
   // Generic high-entropy hex strings (potential secrets) - 128+ chars to reduce false positives
   {
+    // Matches: "abc123def456..." or 'fedcba987654...' (128+ hex chars, quotes must match via \1)
     pattern: /(['"`])[a-f0-9]{128,}\1/gi,
     description: "Very long hexadecimal string (potential secret)",
   },
