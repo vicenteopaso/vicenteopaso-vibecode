@@ -85,8 +85,12 @@ security:
     - cloudflare-turnstile
     - formspree
     - sentry
-  rules:
+  secrets-management:
     - "No secrets checked into the repo; always use environment variables."
+    - "Automated secrets scanning in CI via pnpm audit:secrets"
+    - "ESLint rules detect hardcoded API keys and tokens"
+    - "See docs/SECURITY_POLICY.md for comprehensive guidance"
+  rules:
     - "Do not weaken CSP, CORS, or security headers without explicit justification in PRs."
 
 devex:
@@ -104,6 +108,7 @@ devex:
     required-checks:
       - lint
       - typecheck
+      - audit-secrets
       - test-unit
       - test-e2e
       - coverage
