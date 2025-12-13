@@ -44,6 +44,7 @@
 - [ ] `pnpm test` passes with adequate coverage
 - [ ] `pnpm test:e2e` passes (if UI/routing changes)
 - [ ] Visual tests updated if UI changed (`pnpm test:visual:update`)
+- [ ] Reviewed changes against [Code Review Checklist](../docs/REVIEW_CHECKLIST.md)
 
 ## AI Guardrails Compliance
 
