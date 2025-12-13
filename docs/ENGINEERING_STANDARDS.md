@@ -124,6 +124,13 @@ This document captures the engineering intent for this repository. It is a **nor
 - Dependabot (or equivalent) enabled for dependency and workflow updates.
 - Prefer well-maintained and reputable packages; verified publishers when available.
 
+### 4.4 Runtime Guardrails _(implemented)_
+
+- Runtime assertions (`assertNever`, `invariant`) to prevent silent failures and enforce invariants.
+- ESLint rules to flag empty catch blocks and encourage structured error handling.
+- Structured error logging with `logError()` and `logWarning()` for observability.
+- See [Error Handling](./ERROR_HANDLING.md) and [AI Guardrails](./AI_GUARDRAILS.md) for detailed guidelines.
+
 ### 4.3 Authentication (If Applicable)
 
 - No public tokens in client bundles.
