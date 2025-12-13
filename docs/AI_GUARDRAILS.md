@@ -456,7 +456,9 @@ try {
 // Bad
 function Component() {
   const button = document.querySelector("button");
-  button.addEventListener("click", handleClick);
+  if (button) {
+    button.addEventListener("click", handleClick);
+  }
   return <button>Click</button>;
 }
 
