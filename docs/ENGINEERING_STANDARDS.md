@@ -8,6 +8,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - Documentation-first workflow: update the SDD and relevant docs before (or alongside) code for changes that affect architecture, cross-cutting concerns, or developer workflows.
 - Solution-agnostic intent: standards describe principles and outcomes; specific tools and frameworks may change. If the implementation changes, these principles remain and the SDD should be updated.
 - Definition of Done includes: docs updated, SDD aligned, and templates (issues/PR) respected.
+- **Forbidden patterns**: See [Forbidden APIs and Patterns](./FORBIDDEN_PATTERNS.md) for security-critical and quality-related patterns that must be avoided in all code contributions.
 
 ## 1. Architectural Foundations _(partially implemented)_
 
@@ -36,9 +37,16 @@ This document captures the engineering intent for this repository. It is a **nor
 
 - ESLint configured with at least:
   - Stylistic rules
-  - Accessibility rules
-  - Security-focused rules
-  - Import ordering
+  - Accessibility rules (via `eslint-plugin-jsx-a11y`)
+  - Security-focused rules (via `eslint-plugin-security`)
+  - Import ordering (via `eslint-plugin-simple-import-sort`)
+  - **AI Guardrails** for safe AI-assisted development:
+    - Type safety (`@typescript-eslint/no-explicit-any`, `@typescript-eslint/consistent-type-imports`)
+    - Event handler safety (`@typescript-eslint/no-misused-promises`)
+    - Centralized logging (`no-console` with exceptions for `lib/error-logging.ts`)
+    - React best practices (`no-restricted-globals` for DOM access)
+    - Banned patterns (`no-restricted-syntax` for `any` casts)
+    - See [AI_GUARDRAILS.md](./AI_GUARDRAILS.md) and [FORBIDDEN_PATTERNS.md](./FORBIDDEN_PATTERNS.md) for details
 - Prettier formatting enforced.
 - TypeScript end-to-end (TS/TSX only).
 - Strict TypeScript mode.
@@ -129,7 +137,7 @@ This document captures the engineering intent for this repository. It is a **nor
 - Sensitive values provided via encrypted environment variables (e.g., Vercel env).
 - API routes protected as appropriate (rate limits, basic origin checks, edge protections).
 
-## 5. Testing Strategy _(implemented: >90% coverage maintained)_
+## 5. Testing Strategy _(implemented: >90% coverage maintained and enforced)_
 
 ### 5.1 Testing Philosophy
 
@@ -137,15 +145,29 @@ This document captures the engineering intent for this repository. It is a **nor
 - High confidence: Catch regressions before production
 - Fast feedback: Tests run quickly in development
 - Maintainable: Tests don't break with refactoring
+- **Coverage enforcement**: CI fails if coverage drops below thresholds
 
-### 5.2 Test Coverage Targets
+### 5.2 Test Coverage Thresholds (Enforced in CI)
 
-- **Unit/Integration tests**: >90% statement coverage (currently 97.31%)
+**Hard requirements** enforced in both `ci.yml` and `coverage.yml` workflows:
+
+- **Lines**: ≥90%
+- **Statements**: ≥90%
+- **Branches**: ≥85%
+- **Functions**: ≥90%
+
+**Purpose**: Prevents AI-generated code and manual changes from having high pass rates but low actual test coverage. Coverage gates ensure every change is tested, not just syntactically correct.
+
+**Configuration**: Thresholds defined in `vitest.config.ts` and enforced via `pnpm coverage` in CI. Run `pnpm coverage` locally to check current coverage percentages.
+
+### 5.3 Coverage by Test Type
+
+- **Unit/Integration tests**: Enforced thresholds (lines: 90%, statements: 90%, branches: 85%, functions: 90%)
 - **E2E tests**: All critical user journeys covered
 - **Visual regression**: All pages and key component variants
 - **Type safety**: 100% via TypeScript strict mode
 
-### 5.3 Testing Stack
+### 5.4 Testing Stack
 
 - **Unit tests**: Vitest + React Testing Library
 - **E2E tests**: Playwright (headless browser automation)
@@ -154,9 +176,9 @@ This document captures the engineering intent for this repository. It is a **nor
 - **Linting**: ESLint with security and accessibility plugins
 - **Accessibility audits**: Custom script + Lighthouse CI
 
-### 5.4 Test Requirements
+### 5.5 Test Requirements
 
-- All new features must include tests
+- **All new features must include tests** to maintain coverage thresholds
 - All bug fixes must include regression tests
 - UI changes require visual regression test baseline updates
 - Critical flows must have E2E coverage:
@@ -164,8 +186,9 @@ This document captures the engineering intent for this repository. It is a **nor
   - CV page navigation and download
   - Theme switching
   - Policy page rendering
+- **Coverage enforcement**: PRs will fail CI if coverage drops below thresholds
 
-### 5.5 Visual Regression Testing
+### 5.6 Visual Regression Testing
 
 - **Strategy**: Playwright-based screenshot comparison (no Storybook required)
 - **Rationale**: Lightweight, no additional services, works with existing infrastructure
@@ -278,6 +301,7 @@ See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRE
   - Security
   - Responsive layout
   - Tests
+- Code Review Checklist (`docs/REVIEW_CHECKLIST.md`) for comprehensive review guidance covering error handling, security, a11y, SEO, performance, i18n, testing, and code quality
 
 ### 8.3 Uptime
 
@@ -326,6 +350,7 @@ See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRE
   - Deployment flow
 - `CONTRIBUTING.md` for contribution workflow and expectations.
 - `docs/CONSTITUTION.md` for engineering governance.
+- `docs/AI_GUARDRAILS.md` for AI-assisted development rules and review checklist.
 - `SECURITY` policy document.
 - Additional docs for SEO, accessibility, error handling, release process, etc.
 - Public-facing governance and policy pages (`/accessibility`, `/tech-stack`, `/technical-governance`, `/cookie-policy`, `/privacy-policy`) render markdown via a shared ReactMarkdown components map in `lib/markdown-components.tsx` to keep typography and semantics consistent.

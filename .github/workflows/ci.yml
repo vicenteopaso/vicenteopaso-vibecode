@@ -11,8 +11,93 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
+  # AI Guardrails: Check test coverage for code changes
+  test-coverage-check:
+    name: AI Guardrails - Test Coverage
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check test coverage for code changes
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+        run: node scripts/check-pr-tests.mjs
+
+  # AI Guardrails: Validate PR template compliance
+  pr-template-check:
+    name: AI Guardrails - PR Template
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Check PR body for required sections
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+
+            // Check for required sections in PR template
+            const requiredSections = [
+              'Type of Change',
+              'Architecture Decision Record (ADR)',
+              'Technical Governance Compliance',
+              'Quality Checks',
+              'AI Guardrails Compliance',
+              'Additional Verification'
+            ];
+
+            const missingSections = requiredSections.filter(section => 
+              !body.includes(section)
+            );
+
+            if (missingSections.length > 0) {
+              core.setFailed(`PR template missing required sections: ${missingSections.join(', ')}`);
+            } else {
+              console.log('✅ PR template structure validated');
+            }
+
+      - name: Check for ADR link if architecture-change label present
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const labels = pr.labels.map(label => label.name);
+
+            if (labels.includes('architecture-change')) {
+              const body = pr.body || '';
+              // ADR numbering format: 4 digits (0001, 0002, etc.) as documented in docs/adr/README.md
+              const hasAdrLink = body.match(/docs\/adr\/\d{4}-/i) || body.match(/ADR-\d{4}/i);
+              
+              if (!hasAdrLink) {
+                core.setFailed('PR labeled as "architecture-change" must link to an ADR in docs/adr/ (format: ADR-0001 or docs/adr/0001-)');
+              } else {
+                console.log('✅ ADR link found for architecture change');
+              }
+            } else {
+              console.log('ℹ️  No architecture-change label, ADR not required');
+            }
+
   verify:
     name: Build & Verify
     runs-on: ubuntu-latest
@@ -20,6 +105,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Enable Corepack (pnpm)
         run: corepack enable
@@ -42,8 +129,8 @@ jobs:
       - name: Validate internal links
         run: pnpm validate:links
 
-      - name: Unit tests
-        run: pnpm test
+      - name: Unit tests with coverage
+        run: pnpm coverage
 
       - name: Install Playwright
         run: npx playwright install --with-deps
@@ -51,5 +138,17 @@ jobs:
       - name: E2E tests
         run: pnpm test:e2e
 
+      - name: Visual regression tests
+        run: pnpm test:visual
+
+      - name: Upload Playwright artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
       - name: Build
         run: pnpm build
