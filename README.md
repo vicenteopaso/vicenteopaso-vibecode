@@ -489,6 +489,14 @@ pnpm clean
     - Detects unsafe regex, eval usage, insecure buffer operations, and other security anti-patterns.
     - Some rules tuned to avoid noise (e.g., `detect-object-injection` and `detect-non-literal-fs-filename` are disabled).
     - Script and config files have relaxed security rules to allow necessary filesystem and child process operations.
+  - **AI Guardrails**: Strict rules to ensure safe AI-assisted development:
+    - **Type safety**: `@typescript-eslint/no-explicit-any` bans `any` types (use `unknown` with type guards instead).
+    - **Event handlers**: `@typescript-eslint/no-misused-promises` prevents unhandled promise rejections in React event handlers.
+    - **Logging**: `no-console` disallows direct console usage in production code (use `lib/error-logging.ts` instead).
+    - **DOM access**: `no-restricted-globals` prevents direct `document`/`window` access in React components (use refs or state).
+    - **Pattern bans**: `no-restricted-syntax` prevents `as any` casts and `any` type references.
+    - **Overrides**: Test files, scripts, API routes, and specific components have pragmatic exceptions where needed.
+    - See [`docs/AI_GUARDRAILS.md`](./docs/AI_GUARDRAILS.md) and [`docs/FORBIDDEN_PATTERNS.md`](./docs/FORBIDDEN_PATTERNS.md) for detailed documentation.
 - **Prettier**:
   - Used for `.ts`, `.tsx`, `.js`, `.jsx`, `.md`, `.mdx`, `.json`, `.css`.
 - **lint-staged**:

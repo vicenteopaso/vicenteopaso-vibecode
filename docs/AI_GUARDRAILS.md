@@ -1,359 +1,585 @@
 # AI Guardrails
 
-This document defines explicit rules and patterns for AI-authored code changes in this repository. These guardrails ensure consistency with the project's architecture, quality standards, and governance principles.
+This document describes the guardrails in place to ensure safe and high-quality AI-assisted development in this codebase. These guardrails are implemented through a combination of ESLint rules, TypeScript strict mode, automated tests, and documentation.
 
-## Purpose and Scope
+## Table of Contents
 
-AI tools (GitHub Copilot, Cursor, ChatGPT, etc.) assist with code generation, refactoring, and documentation. These guardrails:
-
-- **Enforce consistency** with `sdd.yaml`, `docs/ENGINEERING_STANDARDS.md`, and other governance documents
-- **Prevent regressions** in accessibility, SEO, performance, security, and error handling
-- **Preserve critical behavior** in content parsing, i18n routing, and contact flow
-- **Guide decision-making** when implementing new features or refactoring existing code
-
-**Scope**: All AI-generated or AI-assisted code changes must comply with these rules. Human reviewers should verify compliance during code review.
+- [Philosophy](#philosophy)
+- [ESLint Configuration](#eslint-configuration)
+- [Guardrail Categories](#guardrail-categories)
+- [Working with Guardrails](#working-with-guardrails)
+- [Exception Handling](#exception-handling)
 
 ---
 
-## Must: Required Practices
+## Philosophy
 
-These practices are **mandatory** for all code changes. Violations should be caught in code review or CI.
+AI coding assistants are powerful tools that can accelerate development, but they require guardrails to ensure:
 
-### 1. TypeScript and Type Safety
+1. **Type Safety**: Strong TypeScript typing prevents runtime errors
+2. **Accessibility**: Automated checks ensure WCAG compliance
+3. **Security**: Prevent common vulnerabilities and unsafe patterns
+4. **Maintainability**: Enforce consistent patterns and best practices
+5. **Performance**: Optimize for Core Web Vitals and user experience
 
-**Rule**: Use `import type` for type-only imports.
-
-**Rationale**: Satisfies ESLint rule `@typescript-eslint/consistent-type-imports`, reduces bundle size, and clarifies intent.
-
-**Good**:
-
-```typescript
-import type { NextRequest } from "next/server";
-import type { Metadata } from "next";
-import { NextResponse } from "next/server";
-```
-
-**Bad**:
-
-```typescript
-import { NextRequest, NextResponse } from "next/server"; // Mixes types and values
-import { Metadata } from "next"; // Type-only import without 'type' keyword
-```
+The guardrails in this project are designed to **guide** rather than **block** AI assistants, providing clear feedback when patterns deviate from established conventions.
 
 ---
 
-### 2. Semantic HTML and Accessibility
+## ESLint Configuration
 
-**Rule**: Use semantic HTML elements, maintain heading hierarchy, and ensure keyboard navigation.
+All guardrails are configured in `eslint.config.mjs`. The configuration includes:
 
-**Rationale**: Meets WCAG 2.1 AA standards, improves screen reader experience, and enhances SEO.
+### Core Plugins
 
-**Good**:
+- `@typescript-eslint`: TypeScript-specific rules and type checking
+- `eslint-plugin-jsx-a11y`: Accessibility rules for JSX
+- `@next/eslint-plugin-next`: Next.js best practices
+- `eslint-plugin-security`: Security vulnerability detection
+- `eslint-plugin-simple-import-sort`: Consistent import ordering
 
-```tsx
-<main id="main-content">
-  <h1>Page Title</h1>
-  <section aria-labelledby="section-heading">
-    <h2 id="section-heading">Section Title</h2>
-    <p>Content here...</p>
-  </section>
-</main>
-```
+### Configuration Structure
 
-**Bad**:
+```javascript
+export default [
+  // Ignores
+  { ignores: ['**/.next/**', '**/node_modules/**', ...] },
 
-```tsx
-<div className="main">
-  {" "}
-  {/* Should be <main> */}
-  <div className="heading">Page Title</div> {/* Should be <h1> */}
-  <div>
-    <div className="subheading">Section</div> {/* Should be <h2> */}
-  </div>
-</div>
-```
+  // Base configs
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  nextPlugin.configs['core-web-vitals'],
+  jsxA11y.flatConfigs.recommended,
 
-**Additional requirements**:
+  // Custom rules
+  {
+    rules: {
+      // TypeScript guardrails
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
 
-- All images must have `alt` text (or explicit `alt=""` for decorative images)
-- Interactive elements must be keyboard accessible (focus visible, no traps)
-- Use ARIA attributes sparingly and correctly
-- Maintain sufficient color contrast (4.5:1 for body text)
+      // Console guardrails
+      'no-console': 'error',
 
----
+      // DOM access guardrails
+      'no-restricted-globals': [...],
 
-### 3. Metadata and SEO
-
-**Rule**: Export `metadata` objects in pages, use descriptive titles and descriptions, and maintain canonical URLs.
-
-**Rationale**: Ensures proper indexing, social sharing, and search visibility. Aligns with `docs/SEO_GUIDE.md`.
-
-**Good**:
-
-```typescript
-// app/[lang]/example/page.tsx
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Example Page | Vicente Opaso",
-  description: "A clear, descriptive summary of this page's content.",
-  openGraph: {
-    title: "Example Page",
-    description: "A clear, descriptive summary of this page's content.",
-    url: "https://opa.so/en/example",
-  },
-};
-```
-
-**Bad**:
-
-```typescript
-// Missing metadata export
-export default function ExamplePage() {
-  return <div>Content</div>;
-}
-```
-
----
-
-### 4. Error Handling
-
-**Rule**: Use `ErrorBoundary` for component errors, `logError()` and `logWarning()` from `lib/error-logging` for all caught errors.
-
-**Rationale**: Centralizes error tracking, integrates with Sentry, and provides structured logging for Vercel. Aligns with `docs/ERROR_HANDLING.md`.
-
-**Good**:
-
-```tsx
-import { logError } from "@/lib/error-logging";
-
-async function fetchData() {
-  try {
-    const response = await fetch("/api/data");
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      // Pattern guardrails
+      'no-restricted-syntax': [...],
     }
-    return await response.json();
-  } catch (error) {
-    logError(error, {
-      component: "DataFetcher",
-      action: "fetchData",
-      metadata: { url: "/api/data" },
-    });
-    throw error; // Re-throw if caller should handle it
-  }
-}
+  },
+
+  // Type-aware TypeScript rules (separate config with parserOptions)
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: { attributes: false } }
+      ],
+    }
+  },
+
+  // Overrides for specific contexts
+  { files: ['test/**', 'scripts/**'], rules: {...} },
+];
 ```
 
-**Bad**:
+---
+
+## Guardrail Categories
+
+### 1. TypeScript Type Safety
+
+**Goal**: Prevent `any` types that bypass type checking
+
+**Rules**:
+
+- `@typescript-eslint/no-explicit-any`: Error on explicit `any` types
+- `@typescript-eslint/consistent-type-imports`: Enforce `import type` for type-only imports
+
+**Why**:
+
+- AI assistants may default to `any` when uncertain about types
+- Type safety is our first line of defense against runtime errors
+- `import type` helps with tree-shaking and bundle size
+
+**Example**:
 
 ```typescript
-async function fetchData() {
-  try {
-    const response = await fetch("/api/data");
-    return await response.json();
-  } catch (error) {
-    console.error(error); // Should use logError()
+// ❌ Bad
+function process(data: any) {
+  return data.value;
+}
+
+// ✅ Good
+function process(data: unknown) {
+  if (typeof data === "object" && data !== null && "value" in data) {
+    return (data as { value: unknown }).value;
+  }
+  throw new Error("Invalid data structure");
+}
+
+// ✅ Good - type-only import
+import type { User } from "@/types/user";
+```
+
+### 2. Logging and Debugging
+
+**Goal**: Centralize logging through `lib/error-logging.ts`
+
+**Rules**:
+
+- `no-console`: Disallow direct console usage in production code
+
+**Why**:
+
+- AI assistants often add `console.log` for debugging
+- Direct console usage can leak sensitive information
+- Centralized logging enables monitoring and error tracking via Sentry
+
+**Example**:
+
+```typescript
+// ❌ Bad
+console.log("Processing user data", userData);
+
+// ✅ Good
+import { logError, logWarning } from "@/lib/error-logging";
+
+try {
+  processData(userData);
+} catch (error) {
+  logError(error, {
+    component: "DataProcessor",
+    action: "process-user-data",
+    metadata: { userId: userData.id },
+  });
+}
+```
+
+**Exceptions**:
+
+- `lib/error-logging.ts`: Console usage is the purpose of this file
+- `test/**`: Console usage allowed for test debugging
+- `scripts/**`: Console usage allowed for CLI output
+
+### 3. DOM Manipulation
+
+**Goal**: Prevent direct DOM access that bypasses React
+
+**Rules**:
+
+- `no-restricted-globals`: Restrict `document` and `window` in React components
+
+**Why**:
+
+- AI assistants may suggest direct DOM manipulation as a quick fix
+- Direct DOM access breaks React's virtual DOM
+- Can introduce XSS vulnerabilities
+- Makes code harder to test
+
+**Example**:
+
+```typescript
+// ❌ Bad - direct DOM manipulation
+function MyComponent() {
+  useEffect(() => {
+    document.getElementById('header').style.color = 'red';
+  }, []);
+}
+
+// ✅ Good - use React refs
+function MyComponent() {
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (headerRef.current) {
+      headerRef.current.style.color = 'red';
+    }
+  }, []);
+
+  return <div ref={headerRef}>Header</div>;
+}
+```
+
+**Exceptions**:
+
+- `test/**`: DOM access needed for test assertions
+- `test/visual/utils.ts`: Purpose is DOM manipulation for visual tests
+- Global event listeners in effects (when properly cleaned up)
+- Third-party library integration (e.g., Turnstile widget)
+
+### 4. React & Next.js Best Practices
+
+**Goal**: Enforce Next.js patterns and prevent anti-patterns
+
+**Rules**:
+
+- `@next/next/no-html-link-for-pages`: Enforce `next/link` for internal navigation
+- `@next/next/no-img-element`: Enforce `next/image` for optimized images
+- `@typescript-eslint/no-misused-promises`: Prevent async event handlers without proper error handling
+
+**Why**:
+
+- AI assistants may use standard HTML patterns instead of Next.js optimized components
+- Async event handlers can silently fail without proper error handling
+- Next.js components provide automatic optimization
+
+**Example**:
+
+```typescript
+// ❌ Bad - HTML anchor
+function BadComponent() {
+  return <a href="/about">About</a>;
+}
+
+// ✅ Good - Next.js Link
+import Link from 'next/link';
+
+function GoodComponent() {
+  return <Link href="/about">About</Link>;
+}
+```
+
+```typescript
+// ❌ Bad - HTML img
+function BadImage() {
+  return <img src="/logo.png" alt="Logo" />;
+}
+
+// ✅ Good - Next.js Image
+import Image from 'next/image';
+
+function GoodImage() {
+  return <Image src="/logo.png" alt="Logo" width={100} height={100} />;
+}
+```
+
+```typescript
+// ❌ Bad - async event handler without error handling
+function BadButton() {
+  return <button onClick={async () => { await save(); }}>Save</button>;
+}
+
+// ✅ Good - wrapped async with error handling
+import { logError } from '@/lib/error-logging';
+
+function GoodButton() {
+  return (
+    <button onClick={() => {
+      void (async () => {
+        try {
+          await save();
+        } catch (error) {
+          logError(error, { component: 'SaveButton', action: 'save' });
+        }
+      })();
+    }}>
+      Save
+    </button>
+  );
+}
+```
+
+### 5. Accessibility (A11y)
+
+**Goal**: Maintain WCAG 2.1 AA compliance
+
+**Rules**:
+
+- `jsx-a11y/recommended`: Full suite of accessibility rules
+  - Proper heading hierarchy
+  - Alt text on images
+  - Keyboard navigation support
+  - ARIA labels and roles
+  - Focus management
+  - Color contrast
+
+**Why**:
+
+- AI assistants may generate visually correct but inaccessible markup
+- Accessibility is a legal requirement and moral imperative
+- Good accessibility improves UX for all users
+
+**Example**:
+
+```typescript
+// ❌ Bad - missing alt text, no keyboard support
+<div onClick={handleClick}>
+  <img src="/icon.png" />
+</div>
+
+// ✅ Good - semantic button with alt text
+<button onClick={handleClick}>
+  <Image src="/icon.png" alt="Settings" width={24} height={24} />
+  <span className="sr-only">Settings</span>
+</button>
+```
+
+### 6. Security
+
+**Goal**: Prevent common security vulnerabilities
+
+**Rules**:
+
+- `security/detect-unsafe-regex`: Prevent ReDoS attacks
+- `security/detect-eval-with-expression`: Prevent eval usage
+- `security/detect-non-literal-regexp`: Warn on dynamic regex
+- Custom restrictions on dangerous APIs
+
+**Why**:
+
+- AI assistants may not consider security implications
+- Security vulnerabilities can have severe consequences
+- Prevention is easier than remediation
+
+**Example**:
+
+```typescript
+// ❌ Bad - unsafe HTML injection
+element.innerHTML = userInput;
+
+// ✅ Good - sanitized HTML
+import sanitizeHtml from 'sanitize-html';
+const clean = sanitizeHtml(userInput);
+<div dangerouslySetInnerHTML={{ __html: clean }} />
+```
+
+---
+
+## Working with Guardrails
+
+### Development Workflow
+
+1. **Write code**: AI assistant generates code
+2. **Lint**: Run `pnpm lint` to check for violations
+3. **Fix**: Address any ESLint errors
+4. **Commit**: Pre-commit hooks run linting automatically
+5. **CI**: GitHub Actions verify all checks pass
+
+### Common Patterns
+
+#### Pattern 1: Replacing Console Statements
+
+```bash
+# Find all console usage
+grep -r "console\." app/ lib/
+```
+
+Replace with:
+
+```typescript
+import { logError, logWarning } from "@/lib/error-logging";
+```
+
+#### Pattern 2: Fixing `any` Types
+
+```bash
+# Find all any types
+grep -r ": any\|as any" app/ lib/
+```
+
+Replace with proper types or `unknown` with type guards.
+
+#### Pattern 3: Converting HTML to Next.js Components
+
+Search and replace:
+
+- `<a href="` → `<Link href="`
+- `<img src="` → `<Image src="`
+
+---
+
+## Exception Handling
+
+### When to Allow Exceptions
+
+Exceptions should be **rare** and **justified**. Valid reasons include:
+
+1. **Third-party library constraints**: Untyped legacy libraries
+2. **Test utilities**: DOM access for test assertions
+3. **Performance-critical code**: After profiling shows a real benefit
+4. **Temporary migration**: With a TODO and issue number
+
+### How to Document Exceptions
+
+Always use ESLint disable comments with clear justification:
+
+```typescript
+// ❌ Bad - no justification
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const data: any = getValue();
+
+// ✅ Good - clear justification
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Turnstile library has no type definitions; types would require significant maintenance
+const turnstileWidget: any = window.turnstile;
+```
+
+### Exception Comment Template
+
+```typescript
+// eslint-disable-next-line [rule-name] -- [Reason]: [What you tried]. [Link to issue if applicable]
+```
+
+Examples:
+
+```typescript
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy API: no types available; refactor tracked in #123
+const legacyResult: any = oldAPI.getData();
+
+// eslint-disable-next-line no-console -- Error logging: this is the centralized error logging utility
+console.error("Application Error:", error);
+
+// eslint-disable-next-line no-restricted-globals -- Test utility: DOM access required for Playwright visual regression baseline
+const height = document.body.scrollHeight;
+```
+
+---
+
+## Guardrail Override Patterns
+
+### Test Files
+
+Test files have relaxed rules for pragmatic testing:
+
+```javascript
+{
+  files: ['test/**/*.{ts,tsx}', '**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+  rules: {
+    'no-console': 'off',
+    'no-restricted-globals': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   }
 }
 ```
 
-**Additional requirements**:
+### Scripts
 
-- Client-side errors must fail gracefully without exposing internal details
-- Preserve user context (avoid losing form data on errors)
-- Use `ErrorBoundary` wrapper for component trees that might throw
+Build and utility scripts have pragmatic overrides:
 
----
-
-### 5. Server-Side Data Fetching
-
-**Rule**: Fetch data in Server Components, API route handlers, or `getServerSideProps` (if using Pages Router). Avoid fetching in Client Components.
-
-**Rationale**: Improves performance (no client-side waterfalls), enhances SEO (content is server-rendered), and reduces bundle size.
-
-**Good**:
-
-```tsx
-// app/[lang]/posts/page.tsx (Server Component)
-async function PostsPage() {
-  const posts = await fetchPosts(); // Direct fetch in Server Component
-  return (
-    <div>
-      {posts.map((post) => (
-        <Post key={post.id} {...post} />
-      ))}
-    </div>
-  );
+```javascript
+{
+  files: ['scripts/**/*.{js,mjs,ts}', '*.config.{js,mjs,ts}'],
+  rules: {
+    'no-console': 'off',
+    'security/detect-non-literal-fs-filename': 'off',
+    'security/detect-child-process': 'off',
+  }
 }
 ```
 
-**Bad**:
+### API Routes
 
-```tsx
-"use client";
-import { useEffect, useState } from "react";
+API routes allow server-side patterns:
 
-function PostsPage() {
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    fetch("/api/posts")
-      .then((r) => r.json())
-      .then(setPosts); // Fetch in Client Component
-  }, []);
-  return (
-    <div>
-      {posts.map((post) => (
-        <Post key={post.id} {...post} />
-      ))}
-    </div>
-  );
+```javascript
+{
+  files: ['app/api/**/*.ts'],
+  rules: {
+    // API routes can use console.error for server-side logging
+    'no-console': ['error', { allow: ['error'] }],
+  }
 }
 ```
 
 ---
 
-### 6. Styling and Theming
+## Continuous Improvement
 
-**Rule**: Use Tailwind CSS utility classes and Radix UI primitives. Respect `next-themes` for light/dark mode. Avoid inline styles that break theming.
+These guardrails are **living documentation**. They evolve as:
 
-**Rationale**: Maintains consistency with the design system, ensures theme support, and follows `docs/DESIGN_SYSTEM.md`.
+1. **New patterns emerge**: Add rules for new anti-patterns
+2. **False positives**: Refine rules to reduce noise
+3. **Technology changes**: Update for new Next.js features
+4. **Team learning**: Incorporate lessons from code reviews
 
-**Good**:
+### Feedback Loop
 
-```tsx
-<button className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
-  Click Me
-</button>
-```
+1. **Observe**: Notice patterns in AI-generated code
+2. **Document**: Add to [FORBIDDEN_PATTERNS.md](./FORBIDDEN_PATTERNS.md)
+3. **Automate**: Add ESLint rule if possible
+4. **Educate**: Update this document
 
-**Bad**:
+### Measuring Success
 
-```tsx
-<button
-  style={{ backgroundColor: "#0070f3", color: "white", padding: "8px 16px" }}
->
-  Click Me
-</button>
-```
-
----
-
-### 7. Internationalization (i18n)
-
-**Rule**: Use `lib/i18n` utilities for locale detection and translations. Read locale from `params.lang` in App Router pages. Never hardcode locale or language-specific content.
-
-**Rationale**: Ensures all routes are locale-aware, supports English and Spanish, and follows `sdd.yaml` i18n-routing principles.
-
-**Good**:
-
-```tsx
-// app/[lang]/example/page.tsx
-import type { Locale } from "@/lib/i18n";
-
-export default async function ExamplePage({
-  params,
-}: {
-  params: Promise<{ lang: Locale }>;
-}) {
-  const { lang } = await params;
-  const content = await getContent(lang); // Load locale-specific content
-  return <div>{content.title}</div>;
-}
-```
-
-**Bad**:
-
-```tsx
-export default function ExamplePage() {
-  const content = getContent("en"); // Hardcoded locale
-  return <div>{content.title}</div>;
-}
-```
-
-**Additional requirements**:
-
-- All user-visible text must be i18n-aware (use UI string dictionaries in `i18n/[locale]/ui.json`)
-- Links must include locale prefix: `/en/about`, not `/about`
-- Metadata and OG images must accept `lang` param for translations
+- **Lint pass rate**: Should be 100% on main branch
+- **CI failure rate**: Track ESLint-related CI failures
+- **Code review feedback**: Reduce manual catch of pattern violations
+- **Runtime errors**: Decrease in production errors
 
 ---
 
-### 8. Content Parsing Semantics
+## Resources
 
-**Rule**: Preserve CV JSON parsing behavior in `content/[locale]/cv.md`. Do not break existing error handling or validation.
+- [FORBIDDEN_PATTERNS.md](./FORBIDDEN_PATTERNS.md) - Detailed pattern catalog
+- [ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md) - Overall engineering guidelines
+- [ACCESSIBILITY.md](./ACCESSIBILITY.md) - A11y requirements
+- [SECURITY_POLICY.md](./SECURITY_POLICY.md) - Security practices
+- `eslint.config.mjs` - ESLint configuration source
 
-**Rationale**: The CV page parses a JSON object from markdown at build time. Breaking this breaks the entire CV page.
+---
 
-**Good** (when modifying CV parsing):
+## Summary
+
+AI guardrails in this project:
+
+1. ✅ **Prevent common mistakes** through automated linting
+2. ✅ **Guide AI assistants** toward best practices
+3. ✅ **Maintain quality** across AI-assisted and human contributions
+4. ✅ **Enable fast iteration** with quick feedback loops
+5. ✅ **Ensure consistency** across the entire codebase
+
+When AI assistants are properly constrained by these guardrails, they become powerful force multipliers that maintain high code quality while accelerating development velocity.
+
+---
+
+## Project-Specific Best Practices
+
+Beyond ESLint rules, these practices are specific to this codebase:
+
+### Content Parsing
+
+**Preserve CV JSON parsing behavior**: The `content/[locale]/cv.md` file contains a JSON object that must be parsed correctly:
 
 ```typescript
 try {
   const cvData = JSON.parse(cvJsonString);
-  // Validate structure
   if (!cvData.basics || !cvData.work) {
     throw new Error("Invalid CV structure");
   }
   return cvData;
 } catch (error) {
   logError(error, { component: "CVParser", action: "parseCV" });
-  return null; // Graceful fallback
+  return null;
 }
 ```
 
-**Bad**:
+### Contact Flow Security
 
-```typescript
-const cvData = JSON.parse(cvJsonString); // No error handling or validation
-```
+**Never bypass security checks**: The `/api/contact` route has critical security measures that must be preserved:
 
----
+- Turnstile verification
+- Honeypot check
+- Domain validation
+- Rate limiting
 
-### 9. Contact Flow Security
+### i18n Requirements
 
-**Rule**: Preserve Turnstile verification, honeypot check, domain validation, and rate limiting in `/api/contact`.
+- Read locale from `params.lang` in App Router pages
+- Never hardcode locale or language-specific content
+- All links must include locale prefix: `/en/about`, not `/about`
+- Use UI string dictionaries in `i18n/[locale]/ui.json`
 
-**Rationale**: Protects against spam, CSRF, and abuse. Removing these checks opens the site to attacks. Aligns with `docs/SECURITY_POLICY.md`.
+### HTML Sanitization
 
-**Good** (when modifying contact route):
-
-```typescript
-// Validate Turnstile token
-const turnstileResponse = await fetch(
-  "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      secret: TURNSTILE_SECRET_KEY,
-      response: data.turnstileToken,
-      remoteip: clientIp,
-    }),
-  },
-);
-const turnstileResult = await turnstileResponse.json();
-if (!turnstileResult.success) {
-  return NextResponse.json({ error: "Verification failed." }, { status: 400 });
-}
-```
-
-**Bad**:
-
-```typescript
-// Commented out or removed Turnstile verification
-// if (!data.turnstileToken) { ... }
-await forwardToFormspree(data); // No verification
-```
-
----
-
-### 10. HTML Sanitization
-
-**Rule**: Use `lib/sanitize-html.ts` for sanitizing user-generated or content-sourced HTML. Never use `dangerouslySetInnerHTML` without sanitization.
-
-**Rationale**: Prevents XSS attacks. The CV references contain HTML strings that must be sanitized before rendering.
-
-**Good**:
+Always use `lib/sanitize-html.ts` for user-generated or content-sourced HTML:
 
 ```tsx
 import { sanitizeRichText } from "@/lib/sanitize-html";
@@ -363,307 +589,53 @@ function Reference({ html }: { html: string }) {
 }
 ```
 
-**Bad**:
-
-```tsx
-function Reference({ html }: { html: string }) {
-  return <div dangerouslySetInnerHTML={{ __html: html }} />; // No sanitization
-}
-```
-
 ---
 
-## Avoid: Forbidden Patterns
+## PR Review Checklist
 
-These patterns are **prohibited**. They violate security, performance, or architecture principles.
+Before submitting a PR with AI-assisted changes:
 
-### 1. Bypassing Verification or Rate Limiting
+**Code Quality:**
 
-**Pattern**: Commenting out or removing Turnstile, honeypot, domain checks, or rate limiting in `/api/contact`.
-
-**Why forbidden**: Opens the site to spam, abuse, and CSRF attacks.
-
-**Exception**: None. These checks are security-critical.
-
----
-
-### 2. Using `any` Type
-
-**Pattern**: Using TypeScript's `any` type instead of proper types.
-
-**Why forbidden**: Defeats the purpose of TypeScript, hides type errors, and reduces code quality.
-
-**Exception**: Very rare cases where a third-party library has incorrect types. Must be documented with a `// @ts-expect-error` comment explaining why.
-
-**Example**:
-
-```typescript
-// Bad
-function processData(data: any) {
-  return data.someProperty;
-}
-
-// Good
-interface DataType {
-  someProperty: string;
-}
-function processData(data: DataType) {
-  return data.someProperty;
-}
-```
-
----
-
-### 3. Direct `console.*` Outside Structured Logging
-
-**Pattern**: Using `console.log()`, `console.error()`, or `console.warn()` directly instead of `logError()` or `logWarning()`.
-
-**Why forbidden**: Prevents integration with Sentry, loses context, and makes debugging harder.
-
-**Exception**: Build scripts, config files, and non-production debugging (must be removed before commit via lint-staged).
-
-**Example**:
-
-```typescript
-// Bad
-try {
-  await fetchData();
-} catch (error) {
-  console.error("Fetch failed:", error);
-}
-
-// Good
-try {
-  await fetchData();
-} catch (error) {
-  logError(error, { component: "DataFetcher", action: "fetchData" });
-}
-```
-
----
-
-### 4. Direct DOM Manipulation
-
-**Pattern**: Using `document.querySelector()`, `document.getElementById()`, or similar DOM APIs in React components.
-
-**Why forbidden**: Breaks React's virtual DOM, causes hydration mismatches, and makes components hard to test.
-
-**Exception**: Very rare cases like integrating third-party libraries that require DOM access (e.g., Turnstile widget). Must be wrapped in `useEffect` and documented.
-
-**Example**:
-
-```typescript
-// Bad
-function Component() {
-  const button = document.querySelector("button");
-  if (button) {
-    button.addEventListener("click", handleClick);
-  }
-  return <button>Click</button>;
-}
-
-// Good
-function Component() {
-  return <button onClick={handleClick}>Click</button>;
-}
-```
-
----
-
-### 5. Inline Styles That Break Theming
-
-**Pattern**: Using `style` prop with hardcoded colors, fonts, or spacing values.
-
-**Why forbidden**: Breaks light/dark theme support, creates inconsistency with the design system.
-
-**Exception**: None for color values. Acceptable for truly dynamic layout values (e.g., `width: ${calculated}px` for dynamic sizing).
-
-**Example**:
-
-```tsx
-// Bad
-<div style={{ color: "#000", backgroundColor: "#fff" }}>Content</div>
-
-// Good
-<div className="text-foreground bg-background">Content</div>
-```
-
----
-
-### 6. Custom Sanitization
-
-**Pattern**: Writing custom HTML sanitization logic instead of using `lib/sanitize-html.ts`.
-
-**Why forbidden**: High risk of introducing XSS vulnerabilities. `lib/sanitize-html.ts` uses a battle-tested library with a conservative whitelist.
-
-**Exception**: If the whitelist in `lib/sanitize-html.ts` needs expansion, modify that file (with security review) rather than creating a new sanitizer.
-
----
-
-### 7. Hardcoded Secrets or Credentials
-
-**Pattern**: Committing API keys, tokens, passwords, or other secrets to the repository.
-
-**Why forbidden**: Security risk. Secrets should always be environment variables.
-
-**Exception**: None. Use `.env.local` for local development and Vercel project settings for production.
-
-**Example**:
-
-```typescript
-// Bad
-const FORMSPREE_KEY = "xyzabc123";
-
-// Good
-const FORMSPREE_KEY = process.env.NEXT_PUBLIC_FORMSPREE_KEY;
-```
-
----
-
-### 8. Breaking Changes to Content Structure
-
-**Pattern**: Changing `content/[locale]/about.md` or `content/[locale]/cv.md` frontmatter or body structure without updating parsers.
-
-**Why forbidden**: Breaks the About and CV pages, which are the core of the site.
-
-**Exception**: If refactoring is necessary, ensure feature parity and update all parsers, types, and error handling in the same PR.
-
----
-
-## Exceptions: When Rules Can Be Bent
-
-Exceptions to the above rules must be **rare, justified, and documented**. Always include a code comment explaining why the exception is necessary.
-
-### Acceptable Exceptions
-
-1. **Third-party library integration** that requires direct DOM access or violates patterns (e.g., Turnstile widget)
-   - Must be wrapped in `useEffect` or similar lifecycle hook
-   - Must include a comment explaining the library's requirements
-
-2. **Performance optimization** that requires inline styles for dynamic layout calculations
-   - Only for non-color values (e.g., `width`, `height`, `transform`)
-   - Must not break theming
-
-3. **Build scripts and config files** that need `console.log` or filesystem access
-   - Limited to `scripts/` directory and config files
-   - Must not run in production
-
-4. **Temporary debugging** code during development
-   - Must be removed before commit (enforced by lint-staged)
-   - Use `// TODO: Remove before commit` comment
-
-### Documentation Required
-
-When making an exception, include:
-
-- A code comment explaining **why** the exception is necessary
-- A reference to the library, bug, or constraint that requires it
-- A plan to remove the exception if possible
-
-**Example**:
-
-```tsx
-"use client";
-import { useEffect } from "react";
-
-export function TurnstileWidget() {
-  useEffect(() => {
-    // Exception: Turnstile requires direct DOM manipulation for widget insertion.
-    // This is the only way to integrate Cloudflare Turnstile with React.
-    // See: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/
-    const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    document.head.appendChild(script);
-  }, []);
-  return <div className="cf-turnstile" />;
-}
-```
-
----
-
-## Review Checklist for PR Authors
-
-Before submitting a PR with AI-assisted changes, verify:
-
-### Code Quality
-
-- [ ] All `import type` statements used for type-only imports
-- [ ] TypeScript strict mode satisfied (no `any`, no type errors)
-- [ ] No `console.*` outside `lib/error-logging` (except scripts/config)
+- [ ] `import type` used for type-only imports
+- [ ] No `any` types (except with justification)
+- [ ] No `console.*` outside `lib/error-logging`
 - [ ] ESLint passes (`pnpm lint`)
-- [ ] Prettier formatting applied (`pnpm format:fix`)
+- [ ] TypeScript passes (`pnpm typecheck`)
 
-### Accessibility
+**Security:**
 
-- [ ] Semantic HTML used (`<main>`, `<nav>`, `<h1>`-`<h6>`, etc.)
-- [ ] Heading hierarchy maintained (single `<h1>`, logical `<h2>`-`<h6>` nesting)
-- [ ] All images have `alt` text or explicit `alt=""`
-- [ ] Keyboard navigation works (focus visible, no traps, logical tab order)
-- [ ] ARIA attributes used sparingly and correctly
+- [ ] No hardcoded secrets
+- [ ] HTML sanitized before rendering
+- [ ] Security checks preserved in `/api/contact`
 
-### SEO
+**Accessibility:**
 
-- [ ] `metadata` export defined in new pages
-- [ ] Title, description, and Open Graph tags provided
-- [ ] Descriptive link text (avoid "click here")
-- [ ] OG images locale-aware (accept `lang` param)
+- [ ] Semantic HTML used
+- [ ] Proper heading hierarchy
+- [ ] Alt text on images
+- [ ] Keyboard navigation works
 
-### Error Handling
+**Testing:**
 
-- [ ] `logError()` or `logWarning()` used for all caught errors
-- [ ] `ErrorBoundary` wraps component trees that might throw
-- [ ] User-friendly error messages (no stack traces exposed)
-- [ ] Form data preserved on errors
+- [ ] Tests pass (`pnpm test`)
+- [ ] Visual baselines updated if UI changed
 
-### Security
+**Documentation:**
 
-- [ ] No hardcoded secrets or credentials
-- [ ] HTML sanitized before `dangerouslySetInnerHTML` (use `lib/sanitize-html.ts`)
-- [ ] Turnstile, honeypot, rate limiting preserved in `/api/contact`
-- [ ] No new XSS, CSRF, or injection vulnerabilities
-
-### Internationalization
-
-- [ ] Locale read from `params.lang` in App Router pages
-- [ ] No hardcoded English-only content (use `i18n/[locale]/ui.json`)
-- [ ] Links include locale prefix (`/en/about`, not `/about`)
-- [ ] Content loaded based on locale (`content/[locale]/`)
-
-### Styling
-
-- [ ] Tailwind CSS used (no inline styles with colors)
-- [ ] Light/dark theme support maintained (`next-themes`)
-- [ ] Radix UI primitives used for interactive components
-
-### Content
-
-- [ ] CV JSON parsing semantics preserved (no breaking changes to `content/[locale]/cv.md`)
-- [ ] About page markdown structure maintained (frontmatter + body sections)
-
-### Testing
-
-- [ ] Unit tests updated/added if behavior changed (`pnpm test`)
-- [ ] E2E tests pass (`pnpm test:e2e`)
-- [ ] Visual regression baselines updated if UI changed (`pnpm test:visual:update`)
-
-### Documentation
-
-- [ ] `docs/` updated if architecture or patterns changed
-- [ ] `README.md` updated if setup or commands changed
-- [ ] `sdd.yaml` updated if principles or boundaries changed
+- [ ] Updated if behavior changed
+- [ ] `sdd.yaml` updated if principles changed
 
 ---
 
-## References
+## Additional References
 
-This document consolidates rules from:
+For comprehensive governance guidelines, see:
 
-- **`sdd.yaml`** — Authoritative source of truth for principles, boundaries, and CI expectations
-- **`docs/ENGINEERING_STANDARDS.md`** — North-star engineering intent and quality standards
-- **`docs/SECURITY_POLICY.md`** — Security practices and vulnerability reporting
-- **`docs/ERROR_HANDLING.md`** — Error handling patterns and observability stack
-- **`docs/SEO_GUIDE.md`** — SEO implementation and metadata best practices
-- **`docs/ACCESSIBILITY.md`** — Accessibility strategy and WCAG compliance
-- **`.github/copilot-instructions.md`** — High-level guidance for AI assistants
-
-When in doubt, consult these documents. If a rule conflicts with this guide, `sdd.yaml` and `docs/ENGINEERING_STANDARDS.md` take precedence.
+- **[FORBIDDEN_PATTERNS.md](./FORBIDDEN_PATTERNS.md)** — Detailed catalog of banned patterns
+- **[ENGINEERING_STANDARDS.md](./ENGINEERING_STANDARDS.md)** — Overall engineering standards
+- **[SECURITY_POLICY.md](./SECURITY_POLICY.md)** — Security practices
+- **[ERROR_HANDLING.md](./ERROR_HANDLING.md)** — Error handling patterns
+- **[SEO_GUIDE.md](./SEO_GUIDE.md)** — SEO implementation
+- **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** — Accessibility requirements
+- **`sdd.yaml`** — Authoritative source of truth for principles and boundaries
