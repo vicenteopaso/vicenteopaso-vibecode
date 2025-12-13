@@ -67,6 +67,7 @@ Establishes how the repository is run and maintained:
 
 #### Additional Governance Documents
 
+- **AI Guardrails** (`docs/AI_GUARDRAILS.md`) — AI coding rules, required practices, forbidden patterns, and review checklist
 - **Design System** (`docs/DESIGN_SYSTEM.md`) — Visual design tokens, component patterns, usage guidelines
 - **Accessibility Guidelines** (`docs/ACCESSIBILITY.md`) — Technical accessibility practices and tooling
 - **SEO Guide** (`docs/SEO_GUIDE.md`) — SEO implementation patterns and best practices
