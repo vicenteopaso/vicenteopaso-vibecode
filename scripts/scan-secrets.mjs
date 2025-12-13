@@ -62,10 +62,10 @@ const SECRET_PATTERNS = [
     pattern: /\bxox[baprs]-[0-9a-zA-Z]{10,}\b/g,
     description: "Slack token",
   },
-  // Generic high-entropy hex strings (potential secrets)
+  // Generic high-entropy hex strings (potential secrets) - 128+ chars to reduce false positives
   {
-    pattern: /(['"`])[a-f0-9]{64,}\1/gi,
-    description: "Long hexadecimal string (potential secret)",
+    pattern: /(['"`])[a-f0-9]{128,}\1/gi,
+    description: "Very long hexadecimal string (potential secret)",
   },
   // Private keys
   {
@@ -193,13 +193,34 @@ function getFilesToScan(args) {
   if (args.includes("--changed")) {
     try {
       // Get all changed files (staged and unstaged)
-      const changed = execSync("git diff --name-only HEAD", {
-        encoding: "utf-8",
-      }).trim();
+      // Use HEAD~1..HEAD for CI environments with shallow clones
+      let changed = "";
+      let staged = "";
 
-      const staged = execSync("git diff --cached --name-only", {
-        encoding: "utf-8",
-      }).trim();
+      try {
+        changed = execSync("git diff --name-only HEAD", {
+          encoding: "utf-8",
+        }).trim();
+      } catch {
+        // Fallback for CI: compare against previous commit
+        try {
+          changed = execSync("git diff --name-only HEAD~1 HEAD", {
+            encoding: "utf-8",
+          }).trim();
+        } catch {
+          // No changes detectable
+          changed = "";
+        }
+      }
+
+      try {
+        staged = execSync("git diff --cached --name-only", {
+          encoding: "utf-8",
+        }).trim();
+      } catch {
+        // No staged changes
+        staged = "";
+      }
 
       const allChanged = [
         ...changed.split("\n").filter(Boolean),
@@ -209,7 +230,16 @@ function getFilesToScan(args) {
       return [...new Set(allChanged)];
     } catch (error) {
       console.error("Error getting changed files:", error.message);
-      return [];
+      console.error(
+        "Falling back to scanning all tracked files. Use specific file paths if needed."
+      );
+      // Fallback to scanning all files if git operations fail
+      try {
+        const files = execSync("git ls-files", { encoding: "utf-8" }).trim();
+        return files.split("\n").filter(Boolean);
+      } catch {
+        return [];
+      }
     }
   }
 

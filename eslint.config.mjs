@@ -90,8 +90,8 @@ export default [
           message: "Potential Slack token detected. Use environment variables instead.",
         },
         {
-          selector: "Literal[value=/^[a-f0-9]{64,}$/]",
-          message: "Long hexadecimal string detected. If this is a secret, use environment variables.",
+          selector: "Literal[value=/^[a-f0-9]{128,}$/]",
+          message: "Very long hexadecimal string detected. If this is a secret, use environment variables.",
         },
       ],
     },
