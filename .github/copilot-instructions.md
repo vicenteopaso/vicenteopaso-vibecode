@@ -69,28 +69,14 @@ These guidelines help AI assistants avoid common pitfalls specific to this repos
 
 ### Must Do
 
-- **Import types correctly**: Always use `import type` for type-only imports to satisfy ESLint rule `@typescript-eslint/consistent-type-imports`.
 - **Preserve CV JSON parsing**: The CV page (`app/[lang]/cv/page.tsx`) parses a JSON object from `content/[locale]/cv.md`. Keep the parsing logic, error handling, and graceful fallback UI intact.
-- **Validate contact flow security**: The contact form uses a multi-layer defense:
-  - Honeypot field (if filled, silently accept without forwarding)
-  - Cloudflare Turnstile verification (client-side widget + server-side token verification)
-  - Rate limiting via `lib/rate-limit.ts` (per-IP, best-effort)
-  - Origin/domain checks in the route handler
-  - Never weaken these checks or bypass Turnstile verification.
-- **Handle errors gracefully**: Use `ErrorBoundary` for component errors and `logError()`/`logWarning()` from `lib/error-logging` for structured logging. Never expose stack traces or internal details to users.
-- **Keep side effects server-side**: API routes and server components should handle sensitive operations (e.g., Turnstile verification, Formspree forwarding). Client components should only handle UI state and user interactions.
+- **Validate contact flow security**: The contact form uses a multi-layer defense (honeypot, Cloudflare Turnstile verification, rate limiting via `lib/rate-limit.ts`, origin/domain checks). Never weaken these checks or bypass Turnstile verification.
 - **Use visual test utilities**: When updating visual regression tests, use shared utilities from `test/visual/utils.ts` (`waitForStableHeight`, `freezeCarouselInteractions`, etc.) and mask dynamic content with `homepageMasks()` or `cvPageMasks()`.
 - **Maintain i18n semantics**: Use utilities from `lib/i18n/` for locale detection and translation. Keep content parsing behavior consistent with existing patterns.
-- **Follow server-first principles**: Prefer server-side rendering (SSR) or static generation (SSG) over client-side data fetching. Avoid heavy client-side effects that could hurt performance.
 
 ### Avoid
 
-- **Breaking CV JSON parsing**: Do not change how `content/[locale]/cv.md` is parsed or remove the error fallback UI. This JSON must remain valid and parseable.
-- **Weakening security checks**: Do not remove or simplify Turnstile verification, honeypot checks, rate limiting, or origin validation in the contact flow.
-- **Hardcoding values**: Do not hardcode API keys, secrets, domain names, or environment-specific values. Use environment variables and the `siteConfig` object in `lib/seo.ts`.
-- **Ignoring accessibility**: Do not remove semantic HTML, skip keyboard navigation, ignore focus states, or reduce color contrast. All changes must maintain WCAG 2.1 AA compliance.
-- **Skipping tests**: Do not make changes without updating or adding corresponding tests. All new features need unit tests; critical flows need E2E tests; UI changes need visual regression tests.
-- **Bypassing linting**: Do not disable ESLint rules or ignore linting errors. Fix issues or discuss exceptions in PR comments.
+- **Breaking CV JSON parsing**: Do not change how `content/[locale]/cv.md` is parsed or remove the error fallback UI. This JSON must remain valid and parsable.
 - **Inline waits in visual tests**: Do not use arbitrary `page.waitForTimeout()` in Playwright visual tests. Use shared utilities from `test/visual/utils.ts` instead.
 
 ## Files and directories overview
