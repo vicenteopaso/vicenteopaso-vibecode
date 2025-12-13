@@ -36,7 +36,7 @@ Define principios, toma de decisiones, proceso de cambio, thresholds de cobertur
 
 #### Documentos adicionales
 
-Incluye Design System, Accessibility Guidelines, SEO Guide, Error Handling y Security Policy.
+Incluye AI Guardrails, Design System, Accessibility Guidelines, SEO Guide, Error Handling y Security Policy.
 
 ## Desarrollo Asistido por IA
 
