@@ -67,33 +67,74 @@ Establishes how the repository is run and maintained:
 
 #### Additional Governance Documents
 
+- **Architecture Decision Records** (`docs/adr/`) — Lightweight records of architectural decisions with context, alternatives, and consequences
+- **AI Guardrails** (`docs/AI_GUARDRAILS.md`) — AI coding rules, required practices, forbidden patterns, and review checklist
 - **Design System** (`docs/DESIGN_SYSTEM.md`) — Visual design tokens, component patterns, usage guidelines
 - **Accessibility Guidelines** (`docs/ACCESSIBILITY.md`) — Technical accessibility practices and tooling
 - **SEO Guide** (`docs/SEO_GUIDE.md`) — SEO implementation patterns and best practices
 - **Error Handling** (`docs/ERROR_HANDLING.md`) — Error boundaries, logging, and monitoring strategies
 - **Security Policy** (`docs/SECURITY_POLICY.md`) — Security practices and vulnerability reporting
 
+## Architecture Decision Records (ADRs)
+
+To complement the comprehensive documentation, this project uses **Architecture Decision Records (ADRs)** to capture significant architectural decisions with their context and consequences.
+
+### Purpose
+
+ADRs provide lightweight, searchable documentation that:
+
+- **Captures Context** — Documents why decisions were made, not just what was implemented
+- **Preserves Rationale** — Prevents future contributors from undoing good decisions
+- **Shows Alternatives** — Records what options were considered and why they weren't chosen
+- **Tracks Consequences** — Explicitly documents trade-offs and known limitations
+- **Enables AI Context** — Provides structured architectural context for AI-assisted development
+
+### When to Write an ADR
+
+Create an ADR for decisions about:
+
+- **Architecture changes** — System structure, boundaries, or patterns
+- **Technology choices** — Adopting new libraries, frameworks, or tools
+- **Cross-cutting concerns** — Error handling, logging, security, performance
+- **Breaking changes** — API changes, contract modifications
+- **Design patterns** — New patterns or deprecation of existing ones
+
+See `docs/adr/README.md` for the complete ADR process and template.
+
+### ADR Integration
+
+ADRs integrate with the development workflow:
+
+1. **Propose Decision** — Draft ADR with status "Proposed" before implementation
+2. **Open PR** — Link to ADR in PR description
+3. **Review Together** — Review both code and ADR
+4. **Accept Decision** — Update ADR status to "Accepted" after merge
+5. **Reference Later** — Future PRs and AI agents reference ADRs for context
+
 ## How AI-Assisted Development Works
 
 ### Context-Aware Development
 
-With comprehensive documentation in place, AI tools can:
+With comprehensive documentation and ADRs in place, AI tools can:
 
 1. **Understand Intent** — By reading `ENGINEERING_STANDARDS.md`, AI understands the quality bar, architectural patterns, and coding standards
-2. **Maintain Consistency** — When suggesting code, AI references the design system, accessibility guidelines, and testing standards
-3. **Enforce Governance** — AI can flag deviations from documented standards and suggest corrections
-4. **Generate Tests** — Coverage thresholds and testing patterns guide AI to generate appropriate test suites
-5. **Document Decisions** — AI helps maintain documentation as code evolves
+2. **Learn from Decisions** — By reading ADRs, AI understands past architectural decisions and their rationale
+3. **Maintain Consistency** — When suggesting code, AI references the design system, accessibility guidelines, and testing standards
+4. **Enforce Governance** — AI can flag deviations from documented standards and suggest corrections
+5. **Generate Tests** — Coverage thresholds and testing patterns guide AI to generate appropriate test suites
+6. **Document Decisions** — AI helps maintain documentation and write ADRs as code evolves
 
 ### Example Workflow
 
 When implementing a new feature:
 
 1. **Reference Standards** — AI reads `ENGINEERING_STANDARDS.md` to understand component patterns, accessibility requirements, and testing expectations
-2. **Check Architecture** — AI consults `ARCHITECTURE.md` to ensure the implementation aligns with system design
-3. **Apply Design System** — AI uses `DESIGN_SYSTEM.md` to suggest appropriate design tokens and component patterns
-4. **Generate Tests** — AI creates tests that meet coverage thresholds defined in `CONSTITUTION.md`
-5. **Maintain Documentation** — AI helps update relevant docs if the feature introduces new patterns
+2. **Review Past Decisions** — AI consults ADRs in `docs/adr/` to understand previous architectural choices and their rationale
+3. **Check Architecture** — AI consults `ARCHITECTURE.md` to ensure the implementation aligns with system design
+4. **Apply Design System** — AI uses `DESIGN_SYSTEM.md` to suggest appropriate design tokens and component patterns
+5. **Document Decision** — If the feature requires an architectural decision, AI helps draft an ADR
+6. **Generate Tests** — AI creates tests that meet coverage thresholds defined in `CONSTITUTION.md`
+7. **Maintain Documentation** — AI helps update relevant docs if the feature introduces new patterns
 
 ## Benefits of This Approach
 
@@ -126,6 +167,10 @@ All governance documents live in the `docs/` directory:
 
 ```
 docs/
+├── adr/                      # Architecture Decision Records
+│   ├── README.md            # ADR process and index
+│   ├── 0000-adr-template.md # Template for new ADRs
+│   └── 0001-adopt-architecture-decision-records.md
 ├── ENGINEERING_STANDARDS.md  # North-star engineering intent
 ├── ARCHITECTURE.md           # Technical architecture
 ├── CONSTITUTION.md           # Repository governance
@@ -155,6 +200,116 @@ All documentation is:
 - **Reviewable** — Changes go through PR review
 - **Linked** — Documents reference each other for context
 - **Living** — Updated as the project evolves
+
+## AI Governance Model
+
+### Principles
+
+This project embraces **AI-first development with strong guardrails**:
+
+1. **AI as Accelerator, Not Decision Maker** — AI tools suggest implementations, but architectural decisions remain human-driven and documented
+2. **Documentation as AI Context** — Comprehensive docs enable AI to understand intent and maintain consistency
+3. **Quality Gates Are Non-Negotiable** — All AI-generated code must pass the same rigorous checks as human code
+4. **Security Constraints Are Mandatory** — AI cannot bypass security controls or introduce vulnerabilities
+5. **Human Oversight for Critical Changes** — Security-sensitive and architectural changes require manual review
+
+### Responsibilities
+
+**AI Tools (Copilot, Cursor):**
+
+- Reference governance docs for context (`sdd.yaml`, `ENGINEERING_STANDARDS.md`, `ARCHITECTURE.md`)
+- Suggest code following documented patterns
+- Generate tests meeting coverage requirements
+- Update documentation when introducing new patterns
+- Run validation checks before committing
+
+**Human Reviewers:**
+
+- Verify architectural alignment
+- Assess security implications
+- Validate maintainability
+- Approve/reject AI suggestions
+- Update governance docs as needed
+
+**Automated CI/CD:**
+
+- Enforce linting, type checking, test coverage
+- Run security scans (CodeQL, dependency audits)
+- Validate accessibility (WCAG 2.1 AA)
+- Check performance (Lighthouse budgets)
+- Block merge on failures
+
+### Guardrails and Constraints
+
+**Mandatory guardrails** prevent AI from:
+
+- Bypassing security controls (Turnstile, rate limiting, input validation)
+- Weakening accessibility (keyboard nav, ARIA, color contrast)
+- Violating architecture boundaries (cross-layer imports, shared mutable state)
+- Introducing forbidden patterns (hard-coded secrets, unsanitized HTML, skipped tests)
+
+**Quality gates** that all changes must pass:
+
+- Linting (`pnpm lint`) and formatting (Prettier)
+- Type checking (`pnpm typecheck`) in strict mode
+- Unit tests with 90% line coverage
+- E2E tests for user-facing changes
+- Accessibility audit
+- Security scanning (CodeQL, npm audit)
+- Lighthouse performance ≥90, accessibility ≥90, SEO ≥95
+
+See **[AI Guardrails](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/AI_GUARDRAILS.md)** for complete constraints.
+
+### Review Process
+
+**All PRs** (AI or human) follow the same review workflow:
+
+1. **Self-Review** — Author validates changes against [Review Checklist](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/REVIEW_CHECKLIST.md)
+2. **CI Validation** — Automated checks must pass (see `.github/workflows/`)
+3. **Human Review** — Architectural and security review (required for sensitive changes)
+4. **Merge Decision** — Auto-merge eligible for safe changes, manual approval otherwise
+
+**Auto-merge eligible** (with `copilot-automerge` label):
+
+- Documentation-only changes
+- Dependency updates (Dependabot)
+- Test updates without behavior changes
+- Formatting/linting fixes
+
+**Requires manual review:**
+
+- Security-related changes (API routes, auth, validation)
+- Architecture changes (boundaries, patterns)
+- Breaking changes
+- New dependencies
+
+### Escalation Path
+
+**When things go wrong:**
+
+1. **CI Failure** — Review logs, fix locally, re-run checks, push fixes
+2. **Security Vulnerability** — Stop immediately, review [Security Policy](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/SECURITY_POLICY.md), fix vulnerability, re-scan
+3. **Accessibility Regression** — Review [Accessibility Guidelines](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ACCESSIBILITY.md), test with keyboard/screen reader, fix
+4. **Architecture Violation** — Review `sdd.yaml` and `ARCHITECTURE.md`, refactor to align, get human approval
+
+**Emergency stop conditions:**
+
+- High/critical security vulnerabilities
+- Production errors spike
+- Severe accessibility breakage
+- Data loss or corruption
+- Secrets exposed in commits
+
+**Escalation contacts:**
+
+- Repository owner: @vicenteopaso
+- Security issues: GitHub Security Advisories (private reporting)
+
+### Governance Documentation
+
+- **[AI Guardrails](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/AI_GUARDRAILS.md)** — Constraints and quality gates for AI development
+- **[Forbidden Patterns](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/FORBIDDEN_PATTERNS.md)** — Anti-patterns and prohibited changes
+- **[Review Checklist](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/REVIEW_CHECKLIST.md)** — Pre-merge validation checklist
 
 ## Future Considerations
 
@@ -191,4 +346,4 @@ See `.github/ISSUE_TEMPLATE/` for template definitions and usage guidelines.
 
 ## Last Updated
 
-This technical governance documentation was last reviewed and updated on December 2, 2025.
+This technical governance documentation was last reviewed and updated on December 13, 2024.

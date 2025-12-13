@@ -132,3 +132,6 @@ If a secret is accidentally committed:
 6. ❌ **DON'T**: Commit `.env.local` or other environment files with real values
 
 The CI pipeline will automatically reject code with potential secrets.
+- Secrets are never committed to the repository.
+- Environment variables are managed via `.env` files and Vercel project settings.
+- Security-critical patterns that must be avoided are documented in [Forbidden APIs and Patterns](./FORBIDDEN_PATTERNS.md).
