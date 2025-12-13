@@ -8,7 +8,9 @@ import {
 } from "../utils";
 
 test.describe("Homepage Screenshots for README", () => {
-  test("homepage light mode - desktop (masked portrait)", async ({ page }) => {
+  test("homepage light mode - desktop (masked portrait for README)", async ({
+    page,
+  }) => {
     await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
@@ -22,7 +24,9 @@ test.describe("Homepage Screenshots for README", () => {
     });
   });
 
-  test("homepage dark mode - desktop (masked portrait)", async ({ page }) => {
+  test("homepage dark mode - desktop (masked portrait for README)", async ({
+    page,
+  }) => {
     await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
