@@ -36,9 +36,16 @@ This document captures the engineering intent for this repository. It is a **nor
 
 - ESLint configured with at least:
   - Stylistic rules
-  - Accessibility rules
-  - Security-focused rules
-  - Import ordering
+  - Accessibility rules (via `eslint-plugin-jsx-a11y`)
+  - Security-focused rules (via `eslint-plugin-security`)
+  - Import ordering (via `eslint-plugin-simple-import-sort`)
+  - **AI Guardrails** for safe AI-assisted development:
+    - Type safety (`@typescript-eslint/no-explicit-any`, `@typescript-eslint/consistent-type-imports`)
+    - Event handler safety (`@typescript-eslint/no-misused-promises`)
+    - Centralized logging (`no-console` with exceptions for `lib/error-logging.ts`)
+    - React best practices (`no-restricted-globals` for DOM access)
+    - Banned patterns (`no-restricted-syntax` for `any` casts)
+    - See [AI_GUARDRAILS.md](./AI_GUARDRAILS.md) and [FORBIDDEN_PATTERNS.md](./FORBIDDEN_PATTERNS.md) for details
 - Prettier formatting enforced.
 - TypeScript end-to-end (TS/TSX only).
 - Strict TypeScript mode.
@@ -319,6 +326,7 @@ See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRE
   - Deployment flow
 - `CONTRIBUTING.md` for contribution workflow and expectations.
 - `docs/CONSTITUTION.md` for engineering governance.
+- `docs/AI_GUARDRAILS.md` for AI-assisted development rules and review checklist.
 - `SECURITY` policy document.
 - Additional docs for SEO, accessibility, error handling, release process, etc.
 - Public-facing governance and policy pages (`/accessibility`, `/tech-stack`, `/technical-governance`, `/cookie-policy`, `/privacy-policy`) render markdown via a shared ReactMarkdown components map in `lib/markdown-components.tsx` to keep typography and semantics consistent.
