@@ -271,6 +271,7 @@ See [Testing Guide](./TESTING.md) and [Visual Regression Testing](./VISUAL_REGRE
   - Security
   - Responsive layout
   - Tests
+- Code Review Checklist (`docs/REVIEW_CHECKLIST.md`) for comprehensive review guidance covering error handling, security, a11y, SEO, performance, i18n, testing, and code quality
 
 ### 8.3 Uptime
 
