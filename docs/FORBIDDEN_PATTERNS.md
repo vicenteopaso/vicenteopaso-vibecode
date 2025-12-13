@@ -155,7 +155,7 @@ import { sanitizeRichText } from "@/lib/sanitize-html";
 
 **Reference:**
 - TypeScript config: `tsconfig.json` (strict mode enabled)
-- ESLint: Enforced by `@typescript-eslint/no-explicit-any` (currently warning; planned upgrade to error)
+- ESLint: Enforced as warning by `@typescript-eslint/no-explicit-any` (to be upgraded to error once codebase is fully migrated away from `any` types)
 
 **Example:**
 ```typescript
@@ -192,7 +192,7 @@ const data = schema.parse(await response.json());
 
 **Reference:**
 - TypeScript strict mode enforces `strictNullChecks`
-- ESLint: Partially enforced by TypeScript compiler
+- ESLint: Enforced as warning by `@typescript-eslint/no-non-null-assertion`
 
 ---
 
@@ -535,7 +535,7 @@ try {
 
 **Reference:**
 - Documentation: `docs/SEO_GUIDE.md`
-- ESLint: Enforced by Lighthouse CI (lines 91-93 in ENGINEERING_STANDARDS.md)
+- Automated checks: Lighthouse CI audits (see lines 91-93 in ENGINEERING_STANDARDS.md for enforcement details)
 
 ---
 

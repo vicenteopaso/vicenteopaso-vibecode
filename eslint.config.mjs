@@ -81,6 +81,7 @@ export default [
     },
   },
   {
+    // Scripts, config files, and observability setup are exempt from some rules
     files: ["scripts/**/*.mjs", "*.config.{js,mjs,ts}", "instrumentation*.ts", "sentry.*.config.ts"],
     rules: {
       "security/detect-non-literal-require": "off",
@@ -88,7 +89,7 @@ export default [
       "security/detect-non-literal-fs-filename": "off",
       "security/detect-non-literal-regexp": "off",
       "security/detect-unsafe-regex": "off",
-      "no-console": "off", // Scripts and instrumentation can use console
+      "no-console": "off", // Scripts and instrumentation setup require console for diagnostics
     },
   },
   {
