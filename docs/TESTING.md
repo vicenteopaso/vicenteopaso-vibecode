@@ -81,9 +81,9 @@ The PR template includes mandatory checkboxes for:
 
 ### Architecture Changes
 
-PRs labeled `architecture-change` **must** link to an Architecture Decision Record (ADR) in `docs/adr/`. See [ADR Documentation](./adr/README.md) for guidelines.
+PRs labeled `architecture-change` **must** link to an Architecture Decision Record (ADR) in `docs/adr/`. See [ADR Documentation](../adr/README.md) for guidelines.
 
-**Example ADR**: [ADR-0001: Implement AI Guardrails](./adr/0001-implement-ai-guardrails.md)
+**Example ADR**: [ADR-0001: Implement AI Guardrails](../adr/0001-implement-ai-guardrails.md)
 
 ## Testing Philosophy
 

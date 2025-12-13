@@ -25,7 +25,7 @@ ADRs should be numbered sequentially:
 
 - `0001-choose-nextjs-app-router.md`
 - `0002-adopt-tailwind-v4.md`
-- `0003-implement-ai-guardrails.md`
+- `0003-migrate-to-new-database.md`
 
 ## ADR Lifecycle
 
