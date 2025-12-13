@@ -416,6 +416,7 @@ Every PR should be reviewed against this checklist before merging. Some items ar
 2. **Include in PR**: Note which items verified
 3. **Self-review**: If checklist reveals issues, fix before submitting
 4. **Learn**: Update AI context with lessons from failed checks
+
 # Code Review Checklist
 
 This checklist helps reviewers consistently evaluate AI-authored and human-authored changes. Use it to ensure changes meet the project's quality standards across error handling, security, accessibility, SEO, performance, i18n, and testing.
@@ -750,6 +751,7 @@ This checklist evolves with the project:
 - Lessons from production issues are incorporated
 
 **Last updated**: December 13, 2024
+
 - [Engineering Standards](./ENGINEERING_STANDARDS.md) – Overall quality goals and architecture principles
 - [Copilot Instructions](../.github/copilot-instructions.md) – AI-specific guidance and conventions
 - [Contributing Guide](../CONTRIBUTING.md) – Workflow, commands, and PR expectations

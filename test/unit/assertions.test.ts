@@ -7,7 +7,9 @@ describe("assertions", () => {
   let logErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    logErrorSpy = vi.spyOn(errorLogging, "logError").mockImplementation(() => {});
+    logErrorSpy = vi
+      .spyOn(errorLogging, "logError")
+      .mockImplementation(() => {});
   });
 
   afterEach(() => {

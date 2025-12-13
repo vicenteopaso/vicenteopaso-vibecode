@@ -681,6 +681,7 @@ If you discover a new anti-pattern:
 - [Architecture](./ARCHITECTURE.md) — System boundaries
 
 **Last updated**: December 13, 2024
+
 # Forbidden APIs and Patterns
 
 This document enumerates APIs, patterns, and practices that **must not** be used in this codebase. Each entry includes a rationale and recommended alternatives. These restrictions help maintain security, accessibility, performance, and code quality standards.

@@ -292,6 +292,7 @@ This document evolves with the project:
 - Feedback from CI failures informs updates
 
 **Last updated**: December 13, 2024
+
 # AI Guardrails: Runtime Assertions and Error Handling
 
 This document provides guidelines for AI-assisted code generation to ensure robust error handling and prevent silent failures.
@@ -491,11 +492,11 @@ import { ErrorBoundary } from "@/app/components/ErrorBoundary";
 
 The following ESLint rules help enforce error handling best practices:
 
-| Rule | Level | Purpose |
-|------|-------|---------|
-| `no-empty` | `warn` | Prevents empty catch blocks that swallow errors |
-| `@typescript-eslint/no-unused-vars` | `error` | Prevents unused error variables (suggests intentional ignoring) |
-| `security/detect-*` | `error/warn` | Various security-focused rules to catch common vulnerabilities |
+| Rule                                | Level        | Purpose                                                         |
+| ----------------------------------- | ------------ | --------------------------------------------------------------- |
+| `no-empty`                          | `warn`       | Prevents empty catch blocks that swallow errors                 |
+| `@typescript-eslint/no-unused-vars` | `error`      | Prevents unused error variables (suggests intentional ignoring) |
+| `security/detect-*`                 | `error/warn` | Various security-focused rules to catch common vulnerabilities  |
 
 ## Common Pitfalls
 
@@ -768,6 +769,7 @@ export function aggregateTotal(products: Product[]): number {
 **Last updated**: 2025-12-13  
 **Purpose**: Provide guardrails for AI-assisted development to prevent silent failures and ensure robust error handling  
 **Audience**: AI code generation tools, developers, code reviewers
+
 # AI Guardrails
 
 This document describes the guardrails in place to ensure safe and high-quality AI-assisted development in this codebase. These guardrails are implemented through a combination of ESLint rules, TypeScript strict mode, automated tests, and documentation.
