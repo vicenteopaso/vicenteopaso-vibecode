@@ -76,9 +76,12 @@ test.describe("Contact dialog - mobile viewport", () => {
   test.use({ viewport: { width: 375, height: 667 } }); // iPhone 8/SE dimensions
 
   test("modal content is scrollable on mobile", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
     await page.waitForLoadState("domcontentloaded");
-
+    // Wait for Contact button to be visible before opening dialog
+    await expect(
+      page.getByRole("button", { name: "Contact", exact: true }),
+    ).toBeVisible();
     const dialog = await openContactDialog(page);
 
     // Verify the dialog has overflow-y-auto (scrollable) - check CSS property
@@ -89,9 +92,11 @@ test.describe("Contact dialog - mobile viewport", () => {
   });
 
   test("body scroll is locked when modal is open", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
     await page.waitForLoadState("domcontentloaded");
-
+    await expect(
+      page.getByRole("button", { name: "Contact", exact: true }),
+    ).toBeVisible();
     await openContactDialog(page);
 
     // Assert 1: Check that body has scroll lock (Radix adds data-scroll-locked)
@@ -111,9 +116,11 @@ test.describe("Contact dialog - mobile viewport", () => {
   });
 
   test("dialog renders correctly on mobile viewport", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
     await page.waitForLoadState("domcontentloaded");
-
+    await expect(
+      page.getByRole("button", { name: "Contact", exact: true }),
+    ).toBeVisible();
     await openContactDialog(page);
 
     // All form fields should be visible
@@ -164,8 +171,10 @@ test.describe("Contact dialog - error handling", () => {
 // Accessibility tests
 test.describe("Contact dialog - accessibility", () => {
   test("dialog has proper aria attributes", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
-
+    await page.goto("/en", { waitUntil: "load" });
+    await expect(
+      page.getByRole("button", { name: "Contact", exact: true }),
+    ).toBeVisible();
     const dialog = await openContactDialog(page);
 
     // Dialog should have proper aria-labelledby
