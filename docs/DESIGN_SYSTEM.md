@@ -36,7 +36,8 @@ See the [Component Documentation Index](./components/README.md) for a complete c
 - Layout components (Header, Footer)
 - UI components (Modal, ContactDialog, ProfileCard)
 - Content components (ImpactCards, ReferencesCarousel)
-- Policy modals (Cookie, Privacy, TechStack)
+
+- Policy content pages (Cookie Policy, Privacy Policy, Tech Stack)
 
 Each component doc includes props, states, accessibility notes, usage examples, and testing information.
 
@@ -490,28 +491,15 @@ Error messages styled in accent color:
 
 ### Modals & Dialogs
 
-Uses Radix UI Dialog with overlay and content styling:
+The base Modal component is used for dialogs such as ContactDialog. **Policy content (Cookie Policy, Privacy Policy, Tech Stack) is now shown as standalone pages, not in modals.**
 
-**Overlay:**
+**Modal overlay and content styling:**
 
-```tsx
-className = "fixed inset-0 z-50 bg-black/50 backdrop-blur-sm";
-```
+Overlay: `fixed inset-0 z-50 bg-black/50 backdrop-blur-sm`
 
-**Content:**
+Content: `fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] p-6 shadow-2xl`
 
-```tsx
-className =
-  "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] p-6 shadow-2xl";
-```
-
-**Characteristics:**
-
-- Fixed positioning with centering transforms
-- Dark overlay with blur
-- High z-index (`z-50`)
-- Responsive max-width
-- Strong shadow for elevation
+See [Modal](./components/Modal.md) for details.
 
 ---
 

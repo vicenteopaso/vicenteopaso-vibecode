@@ -289,9 +289,6 @@ Always include a way to close the modal:
 ## Components Using Modal
 
 - **ContactDialog** - Contact form modal with Turnstile
-- **CookiePolicyModal** - Cookie policy content modal
-- **PrivacyPolicyModal** - Privacy policy content modal
-- **TechStackModal** - Tech stack information modal
 
 ## Related Documentation
 
