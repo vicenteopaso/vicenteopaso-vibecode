@@ -17,8 +17,26 @@ export function Footer() {
         <p className="text-center lg:text-left">
           {t("footer.copyright", {
             year,
-            warp: t("footer.warp"),
-            cursor: t("footer.cursor"),
+            warp: (
+              <a
+                href="https://app.warp.dev/referral/8X3W39"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[color:var(--link-hover)]"
+              >
+                {t("footer.warp")}
+              </a>
+            ),
+            cursor: (
+              <a
+                href="https://cursor.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[color:var(--link-hover)]"
+              >
+                {t("footer.cursor")}
+              </a>
+            ),
           })}
         </p>
 
