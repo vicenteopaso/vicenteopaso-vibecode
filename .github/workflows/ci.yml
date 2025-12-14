@@ -138,8 +138,11 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Playwright E2E and visual tests (with web server)
-        run: npx playwright test
+      - name: Playwright E2E tests (with web server)
+        run: pnpm test:e2e
+
+      - name: Playwright visual regression tests (with web server)
+        run: pnpm test:visual
 
       - name: Upload Playwright artifacts on failure
         if: failure()
