@@ -67,6 +67,39 @@ The project is optimized for readability, accessibility, and maintainability, wi
 
 ---
 
+## AI Governance
+
+This project embraces **AI-first development with strong guardrails**. AI tools (GitHub Copilot, Cursor) accelerate development while comprehensive documentation and automated checks ensure quality, security, and maintainability.
+
+### How AI-Assisted Development Works
+
+- **Documentation-First**: AI tools reference comprehensive governance documents (`sdd.yaml`, `docs/ENGINEERING_STANDARDS.md`, `docs/ARCHITECTURE.md`) to understand intent, patterns, and constraints.
+- **Quality Gates**: All AI-generated code must pass the same rigorous CI checks as human-written code: linting, type checking, unit tests (90% coverage), E2E tests, accessibility audits, security scans, and Lighthouse performance budgets.
+- **Security Constraints**: AI cannot bypass security controls (Turnstile verification, rate limiting, input validation, HTML sanitization) or introduce vulnerabilities. All changes are scanned by CodeQL and dependency audits.
+- **Human Oversight**: Architectural decisions remain human-driven. Security-sensitive changes require manual review. AI suggestions are validated against documented patterns.
+
+### Governance Documentation
+
+- **[docs/AI_GUARDRAILS.md](./docs/AI_GUARDRAILS.md)** — Constraints, safety measures, and mandatory quality gates for AI-assisted development
+- **[docs/FORBIDDEN_PATTERNS.md](./docs/FORBIDDEN_PATTERNS.md)** — Anti-patterns and prohibited changes (security, accessibility, architecture)
+- **[docs/REVIEW_CHECKLIST.md](./docs/REVIEW_CHECKLIST.md)** — Pre-merge validation checklist for all changes (AI or human)
+- **[content/en/technical-governance.md](./content/en/technical-governance.md)** — How documentation-first engineering enables AI assistance
+
+### Contributing Safely
+
+When contributing to this repo (as a human or AI):
+
+1. **Read the governance docs** — Understand constraints, patterns, and quality expectations
+2. **Follow the review checklist** — Validate your changes before opening a PR
+3. **Respect security boundaries** — Never bypass spam protection, rate limiting, or input validation
+4. **Maintain accessibility** — WCAG 2.1 AA is a minimum, not optional
+5. **Keep CI green** — All automated checks must pass; fix failures, don't disable checks
+6. **Update documentation** — Keep docs in sync with code changes
+
+**Escalation**: Security issues should be reported privately via GitHub Security Advisories. For questions, open a discussion or issue.
+
+---
+
 ## Project structure
 
 High‑level layout:
@@ -88,13 +121,15 @@ High‑level layout:
     - `ProfileCard.tsx` – Hero/profile card, with stable portraits by theme and initials fallback.
     - `Modal.tsx` – Shared Radix dialog wrapper with consistent styling and optional Vercel Analytics tracking on open.
     - `ContactDialog.tsx` – Contact form dialog implemented on top of `Modal`, including Turnstile integration.
-    - `CookiePolicyModal.tsx`, `PrivacyPolicyModal.tsx`, `TechStackModal.tsx` – Footer modals that fetch markdown content via `/api/content/[slug]` and render with `react-markdown` using shared `markdownComponents` from `lib/markdown-components.tsx`.
+
     - `ImpactCards.tsx` – Rotating impact cards for the Home page, rendering markdown snippets with subtle animations.
     - `ReferencesCarousel.tsx` – Auto‑rotating carousel for CV references.
     - `ThemeProvider.tsx` – Wraps `next-themes` configuration.
     - `icons.tsx` – Shared icon primitives (GitHub, LinkedIn, X, download, and small glyph icons).
+
   - `api/contact/route.ts` – Validates and forwards contact form submissions (Turnstile verification + Formspree).
-  - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by modals and pages.
+  - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by pages.
+
 - `content/`
   - `en/` – English content (source of truth)
     - `about.md` – Frontmatter + markdown body for the Home page.
@@ -173,6 +208,61 @@ The main routes are:
 - `/es/technical-governance` – Spanish technical governance documentation
 - `/api/contact` – Contact form API route
 - `/api/content/[slug]` – Content API for policy/tech markdown (deprecated, pages now server-side rendered)
+
+### Environment Variables & Security
+
+**⚠️ Never commit secrets to the repository.**
+
+This project uses environment variables for all sensitive configuration. See `.env.example` for the complete list of variables.
+
+**Setup for local development:**
+
+```bash
+# Copy the example file
+cp .env.example .env.local
+
+# Edit .env.local with your actual keys
+# .env.local is in .gitignore and will not be committed
+```
+
+**Required variables for full functionality:**
+
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` – Cloudflare Turnstile public key (contact form)
+- `TURNSTILE_SECRET_KEY` – Cloudflare Turnstile secret key (server-side verification)
+- `NEXT_PUBLIC_FORMSPREE_KEY` – Formspree form ID
+
+**Optional variables:**
+
+- `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` – Sentry error tracking
+- `DEEPL_API_KEY` – DeepL API for translations
+
+**For production deployment (Vercel):**
+
+Add environment variables in your Vercel project settings under "Environment Variables". They are encrypted at rest and injected at build/runtime.
+
+**Security scanning:**
+
+The project includes automated secrets scanning to prevent accidental commits:
+
+```bash
+# Scan all tracked files for potential secrets
+pnpm audit:secrets
+
+# Scan only changed files
+node scripts/scan-secrets.mjs --changed
+```
+
+The CI pipeline automatically scans for secrets on every pull request and will fail if any are detected.
+
+**Best practices:**
+
+- ✅ Use `process.env.VARIABLE_NAME` in code
+- ✅ Use `NEXT_PUBLIC_*` prefix only for client-side variables (they become public in the bundle)
+- ✅ Keep server-side secrets (no prefix) in API routes and server components only
+- ❌ Never hard-code API keys, tokens, or credentials
+- ❌ Never commit `.env.local` or files with real secrets
+
+See **[docs/SECURITY_POLICY.md](./docs/SECURITY_POLICY.md)** for comprehensive security guidance.
 
 ---
 
@@ -413,6 +503,9 @@ pnpm validate:links
 # Run accessibility audit
 pnpm audit:a11y
 
+# Scan for potential secrets in code
+pnpm audit:secrets
+
 # Run security audit (high+ vulnerabilities)
 pnpm audit:security
 
@@ -458,7 +551,7 @@ Coverage reports are written to `coverage/unit` and enforced with minimum thresh
 Some low-level infrastructure and static content wrappers are intentionally excluded from coverage (see `vitest.config.ts`), including:
 
 - Build artifacts, scripts, and config files.
-- Static content pages and their modals for cookie policy, privacy policy, and tech stack (`app/api/content/**`, `app/cookie-policy/**`, `app/privacy-policy/**`, and the corresponding footer modals).
+- Static content pages for cookie policy, privacy policy, and tech stack (`app/api/content/**`, `app/cookie-policy/**`, `app/privacy-policy/**`).
 - Visual-only components such as `ImpactCards` where behavior is also validated via higher-level tests.
 
 Before running Playwright tests locally, ensure:
@@ -489,6 +582,14 @@ pnpm clean
     - Detects unsafe regex, eval usage, insecure buffer operations, and other security anti-patterns.
     - Some rules tuned to avoid noise (e.g., `detect-object-injection` and `detect-non-literal-fs-filename` are disabled).
     - Script and config files have relaxed security rules to allow necessary filesystem and child process operations.
+  - **AI Guardrails**: Strict rules to ensure safe AI-assisted development:
+    - **Type safety**: `@typescript-eslint/no-explicit-any` bans `any` types (use `unknown` with type guards instead).
+    - **Event handlers**: `@typescript-eslint/no-misused-promises` prevents unhandled promise rejections in React event handlers.
+    - **Logging**: `no-console` disallows direct console usage in production code (use `lib/error-logging.ts` instead).
+    - **DOM access**: `no-restricted-globals` prevents direct `document`/`window` access in React components (use refs or state).
+    - **Pattern bans**: `no-restricted-syntax` prevents `as any` casts and `any` type references.
+    - **Overrides**: Test files, scripts, API routes, and specific components have pragmatic exceptions where needed.
+    - See [`docs/AI_GUARDRAILS.md`](./docs/AI_GUARDRAILS.md) and [`docs/FORBIDDEN_PATTERNS.md`](./docs/FORBIDDEN_PATTERNS.md) for detailed documentation.
 - **Prettier**:
   - Used for `.ts`, `.tsx`, `.js`, `.jsx`, `.md`, `.mdx`, `.json`, `.css`.
 - **lint-staged**:
@@ -510,14 +611,19 @@ GitHub Actions workflows in `.github/workflows/` include:
   - Runs on pushes to `main` and all PRs.
   - Uses pnpm caching via `actions/setup-node` for faster builds.
   - Includes concurrency control to cancel redundant runs.
-  - Installs dependencies with pnpm, then runs:
+  - **AI Guardrails** (PR-only checks):
+    - `test-coverage-check`: Verifies code changes in `app/` or `lib/` have corresponding tests
+    - `pr-template-check`: Validates PR template compliance and ADR links for architecture changes
+  - Quality gates (all builds):
     - `pnpm lint`
     - `pnpm typecheck`
     - `pnpm validate:links` (fails CI on broken internal markdown links)
     - `pnpm test`
     - `npx playwright install --with-deps`
     - `pnpm test:e2e`
+    - `pnpm test:visual` (visual regression tests)
     - `pnpm build`
+  - Uploads Playwright artifacts on failure for debugging
 - `coverage.yml`:
   - Runs unit tests with coverage reporting.
   - Uploads coverage artifacts.
@@ -628,6 +734,7 @@ For deeper context, see:
 - **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, build skip logic, and environment configuration
 - **[docs/VERCEL_BUILD_SKIP_SETUP.md](./docs/VERCEL_BUILD_SKIP_SETUP.md)** — Step-by-step Vercel build skip configuration guide
 - **[docs/ENGINEERING_STANDARDS.md](./docs/ENGINEERING_STANDARDS.md)** — Cross-cutting architecture, quality, a11y, security, and governance intent
+- **[docs/AI_GUARDRAILS.md](./docs/AI_GUARDRAILS.md)** — AI coding rules: required practices, forbidden patterns, and review checklist
 - **[docs/TESTING.md](./docs/TESTING.md)** — Comprehensive testing guide (unit, E2E, visual regression)
 - **[docs/VISUAL_REGRESSION_TESTING.md](./docs/VISUAL_REGRESSION_TESTING.md)** — Visual regression testing strategy with Playwright
 - **[docs/ACCESSIBILITY.md](./docs/ACCESSIBILITY.md)** — Accessibility (a11y) strategy and checklist

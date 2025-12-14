@@ -8,12 +8,17 @@ test("home page has title and navigation links", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "CV", exact: true }),
   ).toBeVisible();
+
+  // Wait for the Contact button to be visible
   await expect(
     page.getByRole("button", { name: "Contact", exact: true }),
   ).toBeVisible();
-  // Sanity: header is clickable
+
+  // Scroll to top, then re-query the button to ensure it is attached
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page
-    .getByRole("button", { name: "Contact", exact: true })
-    .click({ force: true });
+  const contactButton = page.getByRole("button", {
+    name: "Contact",
+    exact: true,
+  });
+  await contactButton.click();
 });

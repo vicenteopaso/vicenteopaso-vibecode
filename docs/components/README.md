@@ -24,9 +24,9 @@ This directory contains detailed documentation for all reusable components in th
 - **[ContactInfo](./ContactInfo.md)** - Contact information display (location, phone, email)
 - **[GetInTouchSection](./GetInTouchSection.md)** - Call-to-action section with contact dialog
 
-### Policy Modals
+### Policy Content Pages
 
-- **[PolicyModals](./PolicyModals.md)** - Cookie, Privacy, and Tech Stack modal components
+- **Cookie Policy, Privacy Policy, and Tech Stack** are now rendered as standalone pages and linked from the site footer. See [Footer](./Footer.md) and [Policy Content Pages](./PolicyContentPages.md) for details.
 
 ### Utility Components
 

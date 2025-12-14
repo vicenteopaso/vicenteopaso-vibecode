@@ -5,6 +5,7 @@ Comprehensive testing documentation for the portfolio site.
 ## Table of Contents
 
 - [Overview](#overview)
+- [AI Guardrails](#ai-guardrails)
 - [Testing Philosophy](#testing-philosophy)
 - [Test Types](#test-types)
 - [Running Tests](#running-tests)
@@ -36,6 +37,53 @@ The project uses a multi-layered testing approach:
 | Accessibility     | Custom audit script    | WCAG compliance, alt text          |
 | Security          | ESLint security plugin | Common vulnerabilities             |
 | Performance       | Lighthouse CI          | Core Web Vitals, accessibility     |
+
+## AI Guardrails
+
+This project enforces **AI Guardrails** in CI to ensure code quality and prevent regressions.
+
+### Test Coverage Requirements
+
+**Automated Check**: `scripts/check-pr-tests.mjs`
+
+All changes to code files in `app/` or `lib/` **must** include corresponding test changes in:
+
+- `test/unit/` (unit tests)
+- `test/e2e/` (end-to-end tests)
+- `test/visual/` (visual regression tests)
+
+**CI Enforcement**: The `test-coverage-check` job in `.github/workflows/ci.yml` runs this verification on every PR and will fail if:
+
+- Code files are modified without test updates
+- New features lack test coverage
+- Bug fixes don't include regression tests
+
+**Bypass**: This check is skipped for documentation-only or configuration-only changes (files not in `app/` or `lib/`).
+
+### Required Quality Checks
+
+All PRs must pass:
+
+- ✅ Lint (`pnpm lint`)
+- ✅ Typecheck (`pnpm typecheck`)
+- ✅ Unit tests (`pnpm test`)
+- ✅ E2E tests (`pnpm test:e2e`)
+- ✅ Visual regression tests (`pnpm test:visual`)
+
+### PR Template Compliance
+
+The PR template includes mandatory checkboxes for:
+
+- **Accessibility**: Keyboard navigation, ARIA, focus management
+- **SEO**: Metadata updates, content changes
+- **Security**: Input validation, XSS prevention
+- **Error Handling**: Graceful degradation, user-friendly messages
+
+### Architecture Changes
+
+PRs labeled `architecture-change` **must** link to an Architecture Decision Record (ADR) in `docs/adr/`. See [ADR Documentation](../adr/README.md) for guidelines.
+
+**Example ADR**: [ADR-0001: Implement AI Guardrails](../adr/0001-implement-ai-guardrails.md)
 
 ## Testing Philosophy
 
@@ -381,6 +429,67 @@ pnpm full:local
 
 ## Writing Tests
 
+### When to Add Tests
+
+**Required for all code changes** to maintain coverage thresholds:
+
+#### New UI Components
+
+1. **Unit tests**: Component rendering, props, conditional logic
+2. **Visual tests**: Light/dark mode, mobile/desktop viewports
+3. **E2E tests** (if interactive): User flows, form submissions, navigation
+
+**Example**: Adding a new `FeatureCard` component
+
+```bash
+# 1. Create component
+touch app/components/FeatureCard.tsx
+
+# 2. Write unit tests
+touch test/unit/feature-card.test.tsx
+
+# 3. Add visual regression tests (if applicable)
+touch test/visual/components/feature-card.visual.spec.ts
+
+# 4. Run tests locally
+pnpm test test/unit/feature-card.test.tsx
+pnpm coverage  # Verify coverage thresholds
+pnpm test:visual test/visual/components/feature-card.visual.spec.ts
+```
+
+#### New Business Logic
+
+1. **Unit tests**: All functions, edge cases, error handling
+2. **E2E tests**: If logic affects user-visible behavior
+
+**Example**: Adding a new utility function
+
+```bash
+# 1. Create utility
+touch lib/format-date.ts
+
+# 2. Write comprehensive unit tests
+touch test/unit/format-date.test.ts
+
+# 3. Test edge cases
+# - Valid inputs
+# - Invalid inputs
+# - Boundary conditions
+# - Error handling
+
+# 4. Verify coverage
+pnpm coverage
+```
+
+#### Changing Existing Code
+
+When modifying existing code:
+
+1. **Run existing tests**: `pnpm test` - ensure they still pass
+2. **Update tests**: If behavior changes, update test expectations
+3. **Add missing coverage**: If coverage drops, add tests for new branches
+4. **Visual regression**: Update baselines with `pnpm test:visual:update` if UI changes are intentional
+
 ### Unit Test Template
 
 ```typescript
@@ -466,25 +575,31 @@ test.describe("Component Visual Regression", () => {
 
 ## Test Coverage
 
-### Current Coverage
+### Coverage Enforcement
 
-Check latest coverage with:
+**Coverage thresholds are enforced in CI** and will fail the build if not met. This ensures every change maintains high test coverage and prevents regressions.
+
+#### Enforced Thresholds
+
+The following minimum coverage thresholds are configured in `vitest.config.ts` and enforced in CI:
+
+| Category   | Minimum |
+| ---------- | ------- |
+| Lines      | 90%     |
+| Statements | 90%     |
+| Branches   | 85%     |
+| Functions  | 90%     |
+
+**CI Integration**: Both the main CI workflow and the dedicated coverage workflow run `pnpm coverage`, which fails if any threshold is not met.
+
+### Viewing Coverage Reports
+
+Check current coverage and detailed reports:
 
 ```bash
-pnpm coverage
-open coverage/unit/lcov-report/index.html
+pnpm coverage                                # Run tests with coverage
+open coverage/unit/lcov-report/index.html   # View HTML report
 ```
-
-**Target**: >90% statement coverage
-
-### Coverage by Category
-
-| Category   | Target | Current |
-| ---------- | ------ | ------- |
-| Statements | >90%   | 97.31%  |
-| Branches   | >85%   | 90.41%  |
-| Functions  | >90%   | 96.2%   |
-| Lines      | >90%   | 97.31%  |
 
 ### Increasing Coverage
 
@@ -698,27 +813,39 @@ pnpm test:e2e -- --headed --pause-on-failure
 
 Tests run automatically in CI on:
 
-- **Pull requests**: All tests
+- **Pull requests**: All tests with coverage enforcement
 - **Push to main**: All tests + deployment
 
-### GitHub Actions Workflow
+### GitHub Actions Workflows
 
-```yaml
-- name: Run tests
-  run: pnpm test
+#### Main CI Workflow (`.github/workflows/ci.yml`)
 
-- name: Run E2E tests
-  run: pnpm test:e2e
+The main CI workflow runs on every PR and push to main, executing:
 
-- name: Run visual regression tests
-  run: pnpm test:visual
+1. **Lint**: Code style and quality checks
+2. **Typecheck**: TypeScript type checking
+3. **Validate Links**: Internal link validation
+4. **Unit Tests**: Fast unit tests (`pnpm test`)
+5. **Coverage Check**: Unit tests with coverage enforcement (`pnpm coverage`) - **fails if thresholds not met**
+6. **E2E Tests**: End-to-end user flow tests (`pnpm test:e2e`)
+7. **Visual Regression Tests**: Screenshot-based UI consistency checks (`pnpm test:visual`)
+8. **Build**: Production build verification
 
-- name: Check coverage
-  run: pnpm coverage
+#### Coverage Workflow (`.github/workflows/coverage.yml`)
 
-- name: Upload coverage
-  uses: codecov/codecov-action@v3
-```
+Dedicated coverage workflow that:
+
+1. Runs unit tests with coverage (`pnpm coverage`)
+2. **Enforces coverage thresholds** (lines: 90%, statements: 90%, branches: 85%, functions: 90%)
+3. Uploads coverage reports as artifacts for review
+
+### Coverage Gates
+
+Coverage thresholds are **hard requirements**:
+
+- **Local development**: `pnpm coverage` will fail locally if thresholds are not met
+- **CI/CD**: Both `ci.yml` and `coverage.yml` workflows will fail if coverage drops below thresholds
+- **Purpose**: Ensures AI-generated code and manual changes maintain high test coverage, preventing regressions that only appear in production
 
 ## Related Documentation
 
