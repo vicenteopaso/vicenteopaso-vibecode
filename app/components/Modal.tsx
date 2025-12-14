@@ -4,6 +4,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { track } from "@vercel/analytics";
 import type { ReactNode } from "react";
 
+import { assertNever } from "@/lib/assertions";
+
 export type ModalSize = "sm" | "md" | "lg";
 
 // Use the exact metadata type expected by Vercel Analytics `track`.
@@ -29,11 +31,12 @@ function getSizeClasses(size: ModalSize = "md") {
   switch (size) {
     case "sm":
       return "w-[92vw] max-w-md";
+    case "md":
+      return "w-[92vw] max-w-xl";
     case "lg":
       return "w-[94vw] max-w-3xl";
-    case "md":
     default:
-      return "w-[92vw] max-w-xl";
+      return assertNever(size);
   }
 }
 

@@ -51,6 +51,8 @@ This site uses **Vercel's built-in observability** tools for monitoring and erro
 3. **Handle client-side locally**: Use React state to manage UI errors (forms, modals, fetch failures)
 4. **Validate inputs**: Use Zod schemas to catch bad data early (e.g., contact form)
 5. **Preserve user context**: Avoid losing form data or user progress on errors
+6. **Prevent silent failures**: Use runtime assertions and structured logging to catch bugs early
+7. **Enforce invariants**: Use `invariant()` for critical preconditions that must be true
 
 ## Client-Side Errors
 
@@ -112,6 +114,59 @@ Captures unhandled errors and promise rejections globally.
 - Prevents default browser error handling
 - Logs errors with structured context (component, action, metadata)
 - Errors are captured by Vercel logs in production
+
+### Runtime Assertions
+
+**Location**: `lib/assertions.ts`
+
+Runtime assertion helpers that enforce expected invariants and catch unreachable code paths.
+
+```typescript
+import { assertNever, invariant } from "@/lib/assertions";
+
+// Exhaustiveness checking in switch statements
+type Status = "idle" | "loading" | "success";
+
+function handleStatus(status: Status) {
+  switch (status) {
+    case "idle":
+      return "Not started";
+    case "loading":
+      return "In progress";
+    case "success":
+      return "Complete";
+    default:
+      // If Status type is extended but switch isn't updated, this will catch it
+      return assertNever(status);
+  }
+}
+
+// Enforcing critical invariants
+function processUser(user: User | null) {
+  invariant(user !== null, "User must be logged in to process");
+  // TypeScript now knows user is non-null
+  return user.name;
+}
+
+function calculateDiscount(price: number, percentage: number) {
+  invariant(price >= 0, "Price must be non-negative");
+  invariant(percentage >= 0 && percentage <= 100, "Percentage must be 0-100");
+  return price * (percentage / 100);
+}
+```
+
+**Benefits**:
+
+- Catches bugs early rather than causing silent failures downstream
+- TypeScript-friendly with proper type narrowing support
+- Automatically logs errors with context for observability
+- Makes code assumptions explicit and self-documenting
+
+**When to use**:
+
+- `assertNever()`: In switch statement defaults to catch unhandled enum/union cases
+- `invariant()`: For critical preconditions and business logic constraints
+- Both functions always throw in production, ensuring bugs are caught early
 
 ### Structured Error Logging
 
@@ -350,6 +405,53 @@ if (!TURNSTILE_SECRET_KEY) {
 
 **Note**: These logs appear in Vercel Logs, not in the client browser console.
 
+## Preventing Silent Failures
+
+### ESLint Rules for Error Handling
+
+The project's ESLint configuration includes rules to prevent common error-handling mistakes:
+
+**Empty catch blocks** (`no-empty` rule):
+
+```typescript
+// ❌ Bad: Silent failure
+try {
+  riskyOperation();
+} catch {
+  // Empty catch block swallows the error
+}
+
+// ✅ Good: Log the error or add a comment explaining why it's safe to ignore
+try {
+  riskyOperation();
+} catch (error) {
+  logError(error, { component: "MyComponent", action: "riskyOperation" });
+}
+
+// ✅ Also acceptable: Explicit comment when safe to ignore
+try {
+  const data = JSON.parse(response);
+} catch {
+  // Ignore JSON parse errors and use default fallback value
+  return defaultValue;
+}
+```
+
+**Benefits**:
+
+- Prevents errors from being silently swallowed
+- Makes error handling explicit and intentional
+- Helps with debugging by ensuring errors are logged
+- Encourages developers to think about error cases
+
+### Best Practices
+
+1. **Always log unexpected errors** using `logError()` from `lib/error-logging.ts`
+2. **Use runtime assertions** (`invariant`, `assertNever`) to catch programming errors early
+3. **Add comments** when intentionally ignoring errors to explain why it's safe
+4. **Prefer structured error handling** over empty catch blocks
+5. **Test error paths** to ensure they work as expected
+
 ## Monitoring & Debugging
 
 ### Where to Check for Errors
@@ -390,6 +492,8 @@ if (!TURNSTILE_SECRET_KEY) {
 
 Unit tests cover error scenarios:
 
+- **Runtime Assertions**: `test/unit/assertions.test.ts`
+  - Exhaustiveness checking with `assertNever`, invariant violations, type narrowing
 - **Error Boundary**: `test/unit/error-boundary.test.tsx`
   - Component error catching, fallback UI rendering, custom fallback, onError callback
 - **Error Logging**: `test/unit/error-logging.test.ts`

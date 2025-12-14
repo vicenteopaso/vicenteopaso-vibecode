@@ -6,6 +6,15 @@
 
 <!-- Link to the related issue if applicable: Fixes #123, Closes #456 -->
 
+## Architecture Decision Records (ADRs)
+
+<!-- If this PR makes an architectural decision, link to the ADR(s) here -->
+<!-- Example: Implements ADR-0042 (Use React Server Components for Data Fetching) -->
+<!-- See docs/adr/README.md for guidance on when to write an ADR -->
+
+- [ ] N/A - No architectural decisions in this PR
+- [ ] ADR(s) linked: ADR-XXXX (title)
+
 ## Type of Change
 
 - [ ] `feat` — New feature or enhancement
@@ -17,6 +26,16 @@
 
 > **Note**: Changes limited to documentation (`docs/`, `README.md`, etc.) or tests will skip Vercel builds automatically. See [docs/DEPLOYMENT.md](../docs/DEPLOYMENT.md) for details.
 
+## Architecture Decision Record (ADR)
+
+<!-- If this PR includes architecture changes, link to the ADR -->
+<!-- Example: See [ADR-0001: Implement AI Guardrails](../docs/adr/0001-implement-ai-guardrails.md) -->
+
+**Architecture Change?**
+
+- [ ] Yes (add `architecture-change` label and link ADR above)
+- [ ] No
+
 ## Technical Governance Compliance
 
 - [ ] Follows [Engineering Standards](../docs/ENGINEERING_STANDARDS.md)
@@ -27,6 +46,18 @@
 - [ ] Component documentation added/updated (if applicable)
 - [ ] README updated (if behavior changes)
 
+## AI Governance (if applicable)
+
+> **Note**: If this PR includes AI-generated code, ensure compliance with AI governance requirements.
+
+- [ ] Reviewed [AI Guardrails](../docs/AI_GUARDRAILS.md) — Security constraints respected
+- [ ] Reviewed [Forbidden Patterns](../docs/FORBIDDEN_PATTERNS.md) — No anti-patterns introduced
+- [ ] Completed [Review Checklist](../docs/REVIEW_CHECKLIST.md) — All applicable items verified
+- [ ] Security controls maintained (Turnstile, rate limiting, input validation, HTML sanitization)
+- [ ] No secrets or credentials hard-coded
+- [ ] Accessibility standards maintained (WCAG 2.1 AA)
+- [ ] Architecture boundaries respected (no cross-layer imports)
+
 ## Quality Checks
 
 - [ ] `pnpm lint` passes
@@ -34,11 +65,20 @@
 - [ ] `pnpm test` passes with adequate coverage
 - [ ] `pnpm test:e2e` passes (if UI/routing changes)
 - [ ] Visual tests updated if UI changed (`pnpm test:visual:update`)
+- [ ] Reviewed changes against [Code Review Checklist](../docs/REVIEW_CHECKLIST.md)
+
+## AI Guardrails Compliance
+
+> **Required for all code changes in `app/` or `lib/`**
+
+- [ ] Tests added/updated for code changes (unit, e2e, or visual)
+- [ ] Error handling verified and follows [Error Handling Guide](../docs/ERROR_HANDLING.md)
+- [ ] Accessibility verified (keyboard navigation, ARIA, focus management)
+- [ ] SEO impact assessed and metadata updated if needed
+- [ ] Security considerations reviewed (input validation, XSS prevention)
 
 ## Additional Verification
 
 - [ ] Cross-browser testing completed (if UI changes)
-- [ ] Accessibility verified (keyboard nav, screen reader, ARIA)
 - [ ] Performance impact considered (bundle size, Core Web Vitals)
-- [ ] Security review completed (no secrets, proper input validation)
-- [ ] SEO metadata updated (if content/routing changes)
+- [ ] Mobile responsiveness verified (if UI changes)

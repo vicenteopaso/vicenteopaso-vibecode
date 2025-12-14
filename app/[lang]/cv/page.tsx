@@ -3,6 +3,7 @@ import matter from "gray-matter";
 import type { Metadata } from "next";
 import path from "path";
 
+import { invariant } from "@/lib/assertions";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { sanitizeRichText } from "@/lib/sanitize-html";
 import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
@@ -175,6 +176,10 @@ export default async function CVPage({ params }: PageProps) {
   const work = cv.work ?? [];
 
   const basics = cv.basics ?? { name: "", label: "" };
+  invariant(
+    basics.name || data.name || title,
+    "CV must have a name in basics, frontmatter, or title",
+  );
   const profileName = basics.name || (data.name as string) || title;
   const profileTagline = basics.label || tagline;
 

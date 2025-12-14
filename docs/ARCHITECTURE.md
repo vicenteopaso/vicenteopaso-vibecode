@@ -18,6 +18,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 - This document describes the current implementation. The authoritative, solution-agnostic specification is `../sdd.yaml`.
 - Architecture principles (composition, separation of concerns, a11y/SEO/perf/security baselines) apply regardless of the chosen framework or libraries.
 - Changes that impact system boundaries, critical flows, or cross-cutting concerns must update `sdd.yaml` and the relevant documentation.
+- **Significant architectural decisions** should be captured as Architecture Decision Records (ADRs) in `docs/adr/`. See [ADR README](./adr/README.md) for guidance.
 
 ## Stack
 
@@ -212,15 +213,24 @@ Client shows confirmation or error message
 
 - Unit tests are written with Vitest and run in a jsdom environment.
 - Playwright handles end-to-end tests under `test/e2e`, targeting `http://localhost:3000`.
+- Visual regression tests under `test/visual` use Playwright with masking utilities for deterministic screenshots.
 - Coverage is collected via Vitest with thresholds set around 80% for lines, statements, branches, and functions.
-- CI runs linting, typechecking, unit tests, coverage, E2E tests, accessibility checks, and CodeQL analysis on PRs and pushes to `main`.
+- CI runs linting, typechecking, unit tests, coverage, E2E tests, visual tests, accessibility checks, and CodeQL analysis on PRs and pushes to `main`.
+
+**AI Guardrails:**
+
+- Code changes in `app/` or `lib/` must include corresponding test changes (enforced by `scripts/check-pr-tests.mjs` in CI).
+- PRs labeled `architecture-change` must link to an ADR in `docs/adr/` (enforced by PR template validation).
+- All PRs must complete quality checkboxes: accessibility, SEO, security, error handling.
+- See [ADR-0001](./adr/0001-implement-ai-guardrails.md) for rationale and [TESTING.md](./TESTING.md) for details.
 
 **Test Commands:**
 
 ```bash
 pnpm test              # Run Vitest unit tests
 pnpm test:e2e          # Run Playwright E2E tests
-pnpm test:coverage     # Run tests with coverage report
+pnpm test:visual       # Run Playwright visual regression tests
+pnpm coverage          # Run tests with coverage report
 ```
 
 ## Security Architecture
@@ -540,6 +550,7 @@ Do I have a new metadata route (opengraph image, RSS feed, etc.)?
 
 ## Related Documentation
 
+- **[ADR Directory](./adr/README.md)** — Architecture Decision Records with context and rationale
 - **[WARP.md](../WARP.md)** — High-level project overview and structure
 - **[README.md](../README.md)** — Setup instructions and quick start
 - **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** — Accessibility strategy
