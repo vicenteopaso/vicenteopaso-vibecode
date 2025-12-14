@@ -1,4 +1,4 @@
-# ADR-0001: Implement AI Guardrails in CI
+# ADR-0002: Implement AI Guardrails in CI
 
 **Status:** Accepted
 

@@ -120,7 +120,6 @@ ADRs are part of the documentation-first workflow described in `CONTRIBUTING.md`
 
 ## Resources
 
-- [ADR Template](./0000-adr-template.md)
 - [Michael Nygard's Blog Post on ADRs](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
 - [ADR GitHub Organization](https://adr.github.io/)
 - [Project Architecture Documentation](../ARCHITECTURE.md)
@@ -153,7 +152,7 @@ PRs labeled with `architecture-change` **must** link to an ADR.
 
 ## ADR Format
 
-Use the template in `adr-template.md` to create new ADRs.
+Use the template in `0000-adr-template.md` to create new ADRs.
 
 ADRs should be numbered sequentially:
 
