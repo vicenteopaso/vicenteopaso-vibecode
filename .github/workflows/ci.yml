@@ -60,7 +60,7 @@ jobs:
             // Check for required sections in PR template
             const requiredSections = [
               'Type of Change',
-              'Architecture Decision Record (ADR)',
+              'Architecture Decision Record',
               'Technical Governance Compliance',
               'Quality Checks',
               'AI Guardrails Compliance',
