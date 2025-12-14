@@ -121,13 +121,15 @@ High‑level layout:
     - `ProfileCard.tsx` – Hero/profile card, with stable portraits by theme and initials fallback.
     - `Modal.tsx` – Shared Radix dialog wrapper with consistent styling and optional Vercel Analytics tracking on open.
     - `ContactDialog.tsx` – Contact form dialog implemented on top of `Modal`, including Turnstile integration.
-    - `CookiePolicyModal.tsx`, `PrivacyPolicyModal.tsx`, `TechStackModal.tsx` – Footer modals that fetch markdown content via `/api/content/[slug]` and render with `react-markdown` using shared `markdownComponents` from `lib/markdown-components.tsx`.
+
     - `ImpactCards.tsx` – Rotating impact cards for the Home page, rendering markdown snippets with subtle animations.
     - `ReferencesCarousel.tsx` – Auto‑rotating carousel for CV references.
     - `ThemeProvider.tsx` – Wraps `next-themes` configuration.
     - `icons.tsx` – Shared icon primitives (GitHub, LinkedIn, X, download, and small glyph icons).
+
   - `api/contact/route.ts` – Validates and forwards contact form submissions (Turnstile verification + Formspree).
-  - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by modals and pages.
+  - `api/content/[slug]/route.ts` – Serves markdown content (cookie policy, privacy policy, tech stack) as JSON `{ title, body }` for use by pages.
+
 - `content/`
   - `en/` – English content (source of truth)
     - `about.md` – Frontmatter + markdown body for the Home page.
@@ -549,7 +551,7 @@ Coverage reports are written to `coverage/unit` and enforced with minimum thresh
 Some low-level infrastructure and static content wrappers are intentionally excluded from coverage (see `vitest.config.ts`), including:
 
 - Build artifacts, scripts, and config files.
-- Static content pages and their modals for cookie policy, privacy policy, and tech stack (`app/api/content/**`, `app/cookie-policy/**`, `app/privacy-policy/**`, and the corresponding footer modals).
+- Static content pages for cookie policy, privacy policy, and tech stack (`app/api/content/**`, `app/cookie-policy/**`, `app/privacy-policy/**`).
 - Visual-only components such as `ImpactCards` where behavior is also validated via higher-level tests.
 
 Before running Playwright tests locally, ensure:

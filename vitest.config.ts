@@ -45,9 +45,7 @@ export default defineConfig({
         "app/components/ThemeProvider.tsx",
         // Static content and policy surfaces that are covered indirectly via E2E
         "app/api/content/**",
-        "app/components/CookiePolicyModal.tsx",
-        "app/components/PrivacyPolicyModal.tsx",
-        "app/components/TechStackModal.tsx",
+
         "app/components/ImpactCards.tsx",
         "app/components/GetInTouchSection.tsx",
         "app/**/cookie-policy/**",
