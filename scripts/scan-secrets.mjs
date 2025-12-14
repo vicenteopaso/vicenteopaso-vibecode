@@ -2,15 +2,15 @@
 
 /**
  * Secrets Scanner
- * 
+ *
  * Scans files for potential secrets and sensitive data patterns.
  * This is a lightweight security check to prevent accidental secret commits.
- * 
+ *
  * Usage:
  *   node scripts/scan-secrets.mjs                    # Scan all tracked files
  *   node scripts/scan-secrets.mjs --changed          # Scan only changed files (git diff)
  *   node scripts/scan-secrets.mjs file1.js file2.ts  # Scan specific files
- * 
+ *
  * Exit codes:
  *   0 - No secrets found
  *   1 - Secrets detected or scan error
@@ -25,12 +25,14 @@ const SECRET_PATTERNS = [
   // API Keys and Tokens
   {
     // Matches: "api_key" = "abc123..." or 'apikey': 'xyz789...' (quotes must match via \1)
-    pattern: /(['"`])(?:api[_-]?key|apikey|api[_-]?secret)\1\s*[:=]\s*['"`][a-zA-Z0-9_-]{20,}['"`]/gi,
+    pattern:
+      /(['"`])(?:api[_-]?key|apikey|api[_-]?secret)\1\s*[:=]\s*['"`][a-zA-Z0-9_-]{20,}['"`]/gi,
     description: "API key assignment",
   },
   {
     // Matches: "password" = "secret123" or 'secret': 'pass456' (quotes must match via \1)
-    pattern: /(['"`])(?:secret|password|passwd|pwd)\1\s*[:=]\s*['"`][^\s'"`]{8,}['"`]/gi,
+    pattern:
+      /(['"`])(?:secret|password|passwd|pwd)\1\s*[:=]\s*['"`][^\s'"`]{8,}['"`]/gi,
     description: "Password/secret assignment",
   },
   {
@@ -130,7 +132,7 @@ function shouldIgnoreFile(filePath) {
 
 function isAllowlisted(content) {
   return ALLOWLIST.some((allowed) =>
-    content.toLowerCase().includes(allowed.toLowerCase())
+    content.toLowerCase().includes(allowed.toLowerCase()),
   );
 }
 
@@ -153,7 +155,9 @@ function scanFile(filePath) {
     const findings = [];
 
     for (const { pattern, description } of SECRET_PATTERNS) {
-      const matches = content.matchAll(new RegExp(pattern.source, pattern.flags));
+      const matches = content.matchAll(
+        new RegExp(pattern.source, pattern.flags),
+      );
 
       for (const match of matches) {
         const matchedText = match[0];
@@ -235,7 +239,7 @@ function getFilesToScan(args) {
     } catch (error) {
       console.error("Error getting changed files:", error.message);
       console.error(
-        "Falling back to scanning all tracked files. Use specific file paths if needed."
+        "Falling back to scanning all tracked files. Use specific file paths if needed.",
       );
       // Fallback to scanning all files if git operations fail
       try {

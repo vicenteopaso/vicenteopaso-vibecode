@@ -9,14 +9,16 @@ test("home page has title and navigation links", async ({ page }) => {
     page.getByRole("link", { name: "CV", exact: true }),
   ).toBeVisible();
 
+  // Wait for the Contact button to be visible
+  await expect(
+    page.getByRole("button", { name: "Contact", exact: true }),
+  ).toBeVisible();
+
+  // Scroll to top, then re-query the button to ensure it is attached
+  await page.evaluate(() => window.scrollTo(0, 0));
   const contactButton = page.getByRole("button", {
     name: "Contact",
     exact: true,
   });
-  await expect(contactButton).toBeVisible();
-
-  // Ensure page is scrolled to top and button is in view
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await contactButton.scrollIntoViewIfNeeded();
   await contactButton.click();
 });

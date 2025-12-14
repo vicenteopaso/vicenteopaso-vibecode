@@ -63,6 +63,7 @@ These rules provide immediate feedback in your editor and during lint checks.
 **Local Development:**
 
 1. Copy `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -70,10 +71,11 @@ These rules provide immediate feedback in your editor and during lint checks.
 2. Never commit `.env.local` - it's in `.gitignore`
 
 3. Access environment variables in code:
+
    ```typescript
    // Client-side (public variables only, prefixed with NEXT_PUBLIC_)
    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-   
+
    // Server-side (API routes, server components)
    const secretKey = process.env.TURNSTILE_SECRET_KEY;
    ```
@@ -85,7 +87,8 @@ These rules provide immediate feedback in your editor and during lint checks.
 3. Add your secrets (they are encrypted at rest)
 4. Secrets are injected at build time and runtime
 
-**Important:** 
+**Important:**
+
 - Client-side variables (`NEXT_PUBLIC_*`) are bundled into the JavaScript and are **publicly visible**
 - Server-side variables (no prefix) are only available in API routes and server components
 - Never expose sensitive values through client-side variables
@@ -132,6 +135,7 @@ If a secret is accidentally committed:
 6. ❌ **DON'T**: Commit `.env.local` or other environment files with real values
 
 The CI pipeline will automatically reject code with potential secrets.
+
 - Secrets are never committed to the repository.
 - Environment variables are managed via `.env` files and Vercel project settings.
 - Security-critical patterns that must be avoided are documented in [Forbidden APIs and Patterns](./FORBIDDEN_PATTERNS.md).
