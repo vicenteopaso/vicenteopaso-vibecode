@@ -45,16 +45,8 @@ jobs:
           if-no-files-found: warn
 
       - name: Report coverage as PR comment
-        uses: VitestLabs/vitest-coverage-report-action@v2
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: coverage/unit/lcov.info
-          pr-number: ${{ github.event.pull_request.number }}
-          min-coverage: 90
-          fail-on-error: true
-          title: "Vitest Coverage Report"
-          update-comment: true
-          hide-summary: false
-          hide-details: false
-          badge: true
-          indicators: true
+          json-summary-path: coverage/unit/coverage-summary.json
+          json-final-path: coverage/unit/coverage-final.json
