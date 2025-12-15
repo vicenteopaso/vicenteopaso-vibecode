@@ -1,71 +1,36 @@
 # Engineering Constitution
 
-This document defines how this repository is run and maintained.
+## Supremacy
 
-## Purpose
+In case of conflict, the following precedence applies:
 
-- Treat this personal site like a well-governed product.
-- Make decisions explicit.
-- Keep quality high without slowing down iteration.
+1. `docs/CONSTITUTION.md`
+2. `sdd.yaml`
+3. ADRs (`docs/adr/`)
+4. Other documentation
+5. Code
 
-## Principles
+Any artifact that violates this Constitution is invalid by definition.
 
-1. **Single Source of Truth** — The main branch reflects the canonical state of the site.
-2. **Quality Over Volume** — Fewer, higher-quality pages instead of many shallow ones.
-3. **Accessibility First** — Features must be keyboard- and screen-reader friendly.
-4. **SEO as a Feature** — Structured data, metadata, and performance are first-class.
-5. **Continuous Improvement** — Small, frequent improvements beat big rewrites.
-6. **Standards-Driven Engineering** — Architecture, testing, a11y, performance, and governance follow the intent captured in `docs/ENGINEERING_STANDARDS.md`.
+## Immutable Invariants
 
-## Decision-Making
+The Constitution contains only stable invariants expressed as MUST / MUST NOT / NEVER statements. Each invariant is uniquely identified for machine and human reference.
 
-- Architectural decisions are documented inline in code comments or in `ARCHITECTURE.md`.
-- Changes to governance or policies are made via PRs that clearly state intent.
+CONSTITUTION-01: All changes (human or AI) MUST comply with this Constitution.
+CONSTITUTION-02: The System Design & Development Spec (`sdd.yaml`) MUST remain machine-readable and MUST be kept consistent with the implementation.
+CONSTITUTION-03: Architectural boundaries MUST be enforced. Cross-layer imports MUST NOT be introduced.
+CONSTITUTION-04: UI code MUST NOT perform infrastructure concerns (e.g., filesystem access, environment secret access).
+CONSTITUTION-05: Domain/content logic MUST be framework-agnostic where practical (pure helpers in `lib/` with tests).
+CONSTITUTION-06: New architectural layers MUST NOT be introduced without an explicit ADR and corresponding SDD updates.
+CONSTITUTION-07: Security controls MUST NOT be weakened.
+CONSTITUTION-08: Secrets and credentials MUST NEVER be committed to the repository.
+CONSTITUTION-09: Accessibility MUST NOT regress (WCAG 2.1 AA minimum).
+CONSTITUTION-10: SEO-critical behavior MUST NOT regress (metadata, canonical URLs, structured data, performance budgets).
+CONSTITUTION-11: All user-facing routes and user-visible text MUST be locale-aware.
 
-## Change Process
+# Normalized Rule Identifiers for Future Invariants
 
-1. Open an issue using the appropriate template (bug report, feature request, or documentation) or write a short rationale in the PR description.
-2. Run linting, tests, and accessibility checks locally where possible.
-3. Use small, focused PRs that are easy to review.
+## Example (add new invariants below as needed)
 
-## Quality Gates & CI
-
-- `main` must always be in a deployable state.
-- All PRs are expected to keep the following checks green:
-- - `pnpm lint`
-- - `pnpm typecheck`
-- - `pnpm test` (unit tests)
-- - `pnpm test:e2e` when UI or routing changes are involved
-- - `pnpm coverage` for unit test coverage
-- GitHub Actions CI mirrors these expectations and also runs accessibility and security checks (CodeQL).
-
-## Coverage & Testing Expectations
-
-- Unit tests are the default; new features should ship with tests and bug fixes should include regression tests.
-- Vitest coverage thresholds are set to a minimum of ~80% for lines, statements, branches, and functions.
-- Coverage reports live in `coverage/unit`; treat noticeable drops in coverage as a reason to add or improve tests.
-
-## Automation & Bots
-
-- Dependabot manages dependency and GitHub Actions updates.
-- Auto-merge is allowed only for:
-  - Dependabot PRs labeled `dependencies` (and `github-actions` where relevant) once required checks pass.
-  - PRs authored by `vicenteopaso` that are explicitly labeled `copilot-automerge`.
-- Release notes are drafted automatically based on PR labels (features, fixes, docs, dependencies, etc.).
-
-## Labels
-
-Repository labels are managed declaratively via `.github/labels.yml` and synced automatically by the `sync-labels` workflow. This ensures:
-
-- Required labels for Dependabot (`dependencies`, `github-actions`) always exist.
-- Labels for Release Drafter categorization are consistent.
-- New labels can be added by updating the configuration file.
-
-To add or modify labels, edit `.github/labels.yml` and merge to `main`. The workflow runs automatically on changes to that file or can be triggered manually.
-
-## Branch & PR Policy
-
-- `main` is protected and changes land via Pull Requests.
-- PRs should be small, focused, and easy to review.
-- Documentation should be updated alongside behavior or workflow changes (including CI, coverage, and scripts).
-- Secrets must never be committed; environment configuration is documented instead.
+CONSTITUTION-12: [Reserved for future invariant]
+CONSTITUTION-13: [Reserved for future invariant]
