@@ -6,6 +6,7 @@
   <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/accessibility.yml/badge.svg?branch=main" />
   <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/security-audit.yml/badge.svg?branch=main" />
   <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/codeql.yml/badge.svg?branch=main" />
+  <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/sdd-check.yml/badge.svg?branch=main" />
   <img src="https://github.com/vicenteopaso/vicenteopaso-vibecode/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main" />
 </div>
 <br />

@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   coverage:
@@ -42,3 +43,16 @@ jobs:
           name: unit-test-coverage
           path: coverage/unit
           if-no-files-found: warn
+
+      - name: Report coverage as PR comment
+        uses: davelosert/coverage-report-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: coverage/unit/lcov.info
+          title: "Vitest Coverage Report"
+          update-comment: true
+          hide-summary: false
+          hide-details: false
+          badge: true
+          indicators: true
+          threshold-alert: true

@@ -153,5 +153,6 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
+
       - name: Build
         run: pnpm build
