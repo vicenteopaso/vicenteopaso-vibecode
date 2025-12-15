@@ -1,11 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import {
-  getPortraitMask,
-  setThemeDark,
-  setThemeLight,
-  waitForHomepage,
-} from "../utils";
+import { setThemeDark, setThemeLight, waitForHomepage } from "../utils";
 
 test.describe("Homepage Screenshots for README", () => {
   test("homepage light mode - desktop (masked portrait for README)", async ({
@@ -20,7 +15,6 @@ test.describe("Homepage Screenshots for README", () => {
       fullPage: false,
       animations: "disabled",
       timeout: 15000,
-      mask: [getPortraitMask(page)],
     });
   });
 
@@ -36,7 +30,6 @@ test.describe("Homepage Screenshots for README", () => {
       fullPage: false,
       animations: "disabled",
       timeout: 15000,
-      mask: [getPortraitMask(page)],
     });
   });
 });

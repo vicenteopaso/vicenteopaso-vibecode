@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   coverage:
@@ -42,3 +43,10 @@ jobs:
           name: unit-test-coverage
           path: coverage/unit
           if-no-files-found: warn
+
+      - name: Report coverage as PR comment
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
