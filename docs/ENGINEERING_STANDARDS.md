@@ -4,7 +4,8 @@ This document captures the engineering intent for this repository. It is a **nor
 
 ## 0. Documentation-First & SDD Alignment
 
-- Source of truth: the machine-readable SDD at `../sdd.yaml` defines principles, boundaries, and CI expectations.
+- Supremacy: `docs/CONSTITUTION.md` is the highest-precedence governance document.
+- Source of truth: the machine-readable SDD at `../sdd.yaml` defines principles, boundaries, and CI expectations within the constraints of the Constitution.
 - Documentation-first workflow: update the SDD and relevant docs before (or alongside) code for changes that affect architecture, cross-cutting concerns, or developer workflows.
 - Solution-agnostic intent: standards describe principles and outcomes; specific tools and frameworks may change. If the implementation changes, these principles remain and the SDD should be updated.
 - Definition of Done includes: docs updated, SDD aligned, and templates (issues/PR) respected.

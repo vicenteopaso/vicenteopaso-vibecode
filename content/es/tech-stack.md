@@ -128,7 +128,7 @@ Este proyecto sigue los principios de [Spec-Driven Development (SDD)](/en/techni
 
 - **[Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md)** — Intención de ingeniería y estándares guía
 - **[Architecture Overview](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ARCHITECTURE.md)** — Arquitectura técnica y diseño del sistema
-- **[Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md)** — Gobernanza del repositorio y quality gates
+- **[Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md)** — Invariantes de gobernanza y precedencia
 
 Para más detalles sobre cómo estos documentos guían el desarrollo y habilitan flujos asistidos por IA, consulta la página de [Technical Governance](/en/technical-governance).
 

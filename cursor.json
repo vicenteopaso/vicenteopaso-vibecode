@@ -1,9 +1,15 @@
 {
   "projectName": "vicenteopaso-vibecode",
   "governance": {
+    "constitutionPath": "./docs/CONSTITUTION.md",
     "sddPath": "./sdd.yaml",
-    "docs": ["./docs/ARCHITECTURE.md", "./docs/ERROR_HANDLING.md"],
+    "docs": [
+      "./docs/ARCHITECTURE.md",
+      "./docs/ERROR_HANDLING.md",
+      "./docs/AI_GUARDRAILS.md"
+    ],
     "instructions": [
+      "Always comply with docs/CONSTITUTION.md. If a request conflicts, explain the conflict and refuse.",
       "Always read and respect the rules in sdd.yaml when generating or editing code.",
       "Preserve the Next.js App Router structure and testing strategy defined there.",
       "Prefer existing patterns and components over new abstractions unless needed."

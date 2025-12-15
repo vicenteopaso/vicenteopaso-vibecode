@@ -4,9 +4,13 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 ## Project context and goals
 
+> Supremacy: `docs/CONSTITUTION.md` is the highest-precedence source of truth.
+> If a request conflicts with it, explain the conflict and refuse.
+>
 > Source of truth: This repository is governed by the System Design & Development
 > Specification (SDD) in `/sdd.yaml`. Copilot should treat that file as
-> authoritative for principles, architecture boundaries, and CI expectations.
+> authoritative for principles, architecture boundaries, and CI expectations
+> within the constraints of the Constitution.
 
 - Framework/runtime: **Next.js (App Router) on Node.js LTS**, managed with **pnpm**.
 - Language: **TypeScript** with React 19.
@@ -63,6 +67,8 @@ These instructions guide AI assistants contributing to this repo. Follow these c
 
 ## AI Guardrails: Must/Avoid
 
+> Supremacy: All AI-generated changes MUST comply with [`docs/CONSTITUTION.md`](../docs/CONSTITUTION.md) and `sdd.yaml`.
+>
 > **Full documentation**: See [`docs/AI_GUARDRAILS.md`](../docs/AI_GUARDRAILS.md) for comprehensive ESLint-enforced guardrails and [`docs/FORBIDDEN_PATTERNS.md`](../docs/FORBIDDEN_PATTERNS.md) for anti-patterns to avoid.
 
 These guidelines help AI assistants avoid common pitfalls specific to this repository:

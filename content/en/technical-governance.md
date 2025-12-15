@@ -39,9 +39,10 @@ A comprehensive **north-star** document that captures engineering intent across:
 
 This document serves as the **single source of truth** for what "good" looks like in this codebase.
 
-### Solution-Agnostic Policy and SDD
+### Solution-Agnostic Policy, Constitution, and SDD
 
-- The machine-readable SDD at `/sdd.yaml` is authoritative for principles, boundaries, and CI expectations.
+- **Supremacy**: `docs/CONSTITUTION.md` defines the immutable invariants and conflict-resolution precedence for this repo.
+- Within those constraints, the machine-readable SDD at `/sdd.yaml` is authoritative for principles, boundaries, and CI expectations.
 - Governance and standards are solution-agnostic: technology choices may evolve, but the principles must remain intact.
 - Any change that affects architecture or cross-cutting concerns should update the SDD and relevant documentation in the same PR.
 
@@ -57,13 +58,10 @@ Defines the technical architecture including:
 
 #### Engineering Constitution (`docs/CONSTITUTION.md`)
 
-Establishes how the repository is run and maintained:
+Defines the repo’s **immutable invariants** and the governance **precedence order**.
 
-- **Principles** — Single Source of Truth, Quality Over Volume, Accessibility First, SEO as a Feature
-- **Decision-Making** — How architectural decisions are documented and made
-- **Change Process** — PR workflow, quality gates, and CI expectations
-- **Coverage & Testing** — Minimum thresholds (90% lines, 85% branches, 90% functions)
-- **Automation & Bots** — Dependabot, auto-merge policies, release notes
+- It is intentionally short and stable (MUST / MUST NOT / NEVER statements only).
+- The SDD (`sdd.yaml`) and ADRs provide the changeable details and rationale.
 
 #### Additional Governance Documents
 
@@ -121,7 +119,7 @@ With comprehensive documentation and ADRs in place, AI tools can:
 2. **Learn from Decisions** — By reading ADRs, AI understands past architectural decisions and their rationale
 3. **Maintain Consistency** — When suggesting code, AI references the design system, accessibility guidelines, and testing standards
 4. **Enforce Governance** — AI can flag deviations from documented standards and suggest corrections
-5. **Generate Tests** — Coverage thresholds and testing patterns guide AI to generate appropriate test suites
+5. **Generate Tests** — Testing expectations and coverage thresholds in the SDD/CI guide AI to generate appropriate test suites
 6. **Document Decisions** — AI helps maintain documentation and write ADRs as code evolves
 
 ### Example Workflow
@@ -133,7 +131,7 @@ When implementing a new feature:
 3. **Check Architecture** — AI consults `ARCHITECTURE.md` to ensure the implementation aligns with system design
 4. **Apply Design System** — AI uses `DESIGN_SYSTEM.md` to suggest appropriate design tokens and component patterns
 5. **Document Decision** — If the feature requires an architectural decision, AI helps draft an ADR
-6. **Generate Tests** — AI creates tests that meet coverage thresholds defined in `CONSTITUTION.md`
+6. **Generate Tests** — AI creates tests that meet coverage thresholds enforced in the SDD/CI
 7. **Maintain Documentation** — AI helps update relevant docs if the feature introduces new patterns
 
 ## Benefits of This Approach
@@ -217,7 +215,7 @@ This project embraces **AI-first development with strong guardrails**:
 
 **AI Tools (Copilot, Cursor):**
 
-- Reference governance docs for context (`sdd.yaml`, `ENGINEERING_STANDARDS.md`, `ARCHITECTURE.md`)
+- Reference governance docs for context (`docs/CONSTITUTION.md`, `sdd.yaml`, `ENGINEERING_STANDARDS.md`, `ARCHITECTURE.md`)
 - Suggest code following documented patterns
 - Generate tests meeting coverage requirements
 - Update documentation when introducing new patterns

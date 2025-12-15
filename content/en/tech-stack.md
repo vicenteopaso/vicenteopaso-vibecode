@@ -128,7 +128,7 @@ This project follows [Spec-Driven Development (SDD)](/en/technical-governance) p
 
 - **[Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md)** — North-star engineering intent
 - **[Architecture Overview](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ARCHITECTURE.md)** — Technical architecture and system design
-- **[Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md)** — Repository governance and quality gates
+- **[Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md)** — Immutable governance invariants and precedence
 
 For more details on how these governance documents guide development and enable AI-assisted workflows, see the [Technical Governance](/en/technical-governance) page.
 

@@ -23,7 +23,8 @@ The project is optimized for readability, accessibility, and maintainability, wi
 
 ## System Design & Development (SDD)
 
-- The machine-readable System Design & Development Spec lives at `./sdd.yaml` and is the authoritative source of truth for principles, boundaries, and CI expectations.
+- **Supreme rules**: See `./docs/CONSTITUTION.md` for the immutable governance invariants and conflict-resolution precedence.
+- The machine-readable System Design & Development Spec lives at `./sdd.yaml` and is the authoritative source of truth for principles, boundaries, and CI expectations **within the constraints of the Constitution**.
 - Documentation-first: propose changes by updating the SDD (`sdd.yaml`) and relevant docs before (or alongside) code.
 - Solution-agnostic: architecture principles and governance in the SDD apply regardless of specific frameworks or libraries; the tech stack described below reflects the current implementation, not a mandate.
 - PRs that change architecture or cross-cutting behavior should update `sdd.yaml` and relevant docs.
@@ -70,7 +71,11 @@ The project is optimized for readability, accessibility, and maintainability, wi
 
 ## AI Governance
 
-This project embraces **AI-first development with strong guardrails**. AI tools (GitHub Copilot, Cursor) accelerate development while comprehensive documentation and automated checks ensure quality, security, and maintainability.
+This project embraces **AI-first development with strong guardrails**.
+
+All AI-generated changes MUST comply with `./docs/CONSTITUTION.md` and `./sdd.yaml`. If a request conflicts with the Constitution, the assistant must explain the conflict and refuse.
+
+AI tools (GitHub Copilot, Cursor) accelerate development while comprehensive documentation and automated checks ensure quality, security, and maintainability.
 
 ### How AI-Assisted Development Works
 

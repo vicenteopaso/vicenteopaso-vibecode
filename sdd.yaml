@@ -140,6 +140,7 @@ devex:
 
 ai-governance:
   sources-of-truth:
+    - ./docs/CONSTITUTION.md
     - ./sdd.yaml
     - ./docs/ARCHITECTURE.md
     - ./docs/ERROR_HANDLING.md
