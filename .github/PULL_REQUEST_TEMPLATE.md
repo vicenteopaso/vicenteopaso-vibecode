@@ -29,6 +29,7 @@
 
 ## Technical Governance Compliance
 
+- [ ] Complies with the supreme invariants in [Constitution](../docs/CONSTITUTION.md)
 - [ ] Follows [Engineering Standards](../docs/ENGINEERING_STANDARDS.md)
 - [ ] Follows [Architecture](../docs/ARCHITECTURE.md) guidelines
 - [ ] Follows [Technical Governance](https://vicenteopaso.com/technical-governance) principles
@@ -58,6 +59,10 @@
 - [ ] Visual tests updated if UI changed (`pnpm test:visual:update`)
 - [ ] Reviewed changes against [Code Review Checklist](../docs/REVIEW_CHECKLIST.md)
 
+## CI/CD
+
+- [x] All required checks pass (lint, typecheck, test, coverage, build, a11y, security, Lighthouse)
+
 ## AI Guardrails Compliance
 
 > **Required for all code changes in `app/` or `lib/`**
@@ -73,3 +78,8 @@
 - [ ] Cross-browser testing completed (if UI changes)
 - [ ] Performance impact considered (bundle size, Core Web Vitals)
 - [ ] Mobile responsiveness verified (if UI changes)
+
+## Additional Notes
+
+- This PR is a governance/documentation improvement only; no runtime or behavioral changes.
+- See `FINAL_AI_FIRST_MISSING_PIECES.md` for context and rationale.

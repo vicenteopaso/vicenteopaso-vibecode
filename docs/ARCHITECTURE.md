@@ -4,9 +4,10 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 
 ## Goals
 
-> Governance: The machine-readable System Design & Development Specification
-> (SDD) for this repository lives in `../sdd.yaml`. This document provides the
-> narrative architecture overview that complements the SDD.
+> Governance: `docs/CONSTITUTION.md` is the highest-precedence governance document.
+> Within its constraints, the machine-readable System Design & Development
+> Specification (SDD) for this repository lives in `../sdd.yaml`. This document
+> provides the narrative architecture overview that complements the SDD.
 
 - Future-proof, SEO-first personal site
 - Minimal client-side JavaScript

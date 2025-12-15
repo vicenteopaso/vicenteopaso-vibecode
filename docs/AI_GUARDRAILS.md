@@ -2,6 +2,8 @@
 
 This document defines the constraints, safety measures, and quality gates that govern AI-assisted development in this repository.
 
+> Supremacy: All AI-generated changes MUST comply with `docs/CONSTITUTION.md` and `sdd.yaml`. If a request conflicts, the assistant must explain the conflict and refuse.
+
 ## Overview
 
 This project embraces AI-first development with strong guardrails to ensure code quality, security, and maintainability. AI tools (GitHub Copilot, Cursor, etc.) are used extensively, but their outputs are subject to rigorous validation and review processes.

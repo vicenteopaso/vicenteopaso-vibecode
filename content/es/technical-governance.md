@@ -20,6 +20,9 @@ En lugar de escribir código primero y documentar después, este proyecto invier
 
 ## Spec-Driven Development (SDD) en Práctica
 
+- **Supremacía**: `docs/CONSTITUTION.md` define las reglas inmutables y el orden de precedencia.
+- Dentro de esas restricciones, `sdd.yaml` es la especificación autoritativa de principios, límites y expectativas de CI.
+
 ### Documentos Clave de Gobernanza
 
 #### Engineering Standards (`docs/ENGINEERING_STANDARDS.md`)
@@ -32,7 +35,7 @@ Define la arquitectura técnica, el stack tecnológico, la arquitectura de conte
 
 #### Engineering Constitution (`docs/CONSTITUTION.md`)
 
-Define principios, toma de decisiones, proceso de cambio, thresholds de cobertura y automatización.
+Define los invariantes inmutables (MUST / MUST NOT / NEVER) y la precedencia de gobernanza.
 
 #### Documentos adicionales
 
