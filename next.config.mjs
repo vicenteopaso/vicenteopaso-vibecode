@@ -156,7 +156,12 @@ const sentryWebpackPluginOptions = {
   widenClientFileUpload: true,
   tunnelRoute: "/monitoring",
   hideSourceMaps: true,
-  disableLogger: true,
+  // disableLogger is deprecated; use webpack.treeshake.removeDebugLogging instead
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
 };
 
 // Only apply Sentry config if the minimum required env vars are set
