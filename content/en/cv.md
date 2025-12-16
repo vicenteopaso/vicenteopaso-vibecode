@@ -483,6 +483,18 @@ slug: cv
 ],
 "publications": [
 {
+"name": "Hardening Agentic Experience (AX) in an AI-First Codebase",
+"publisher": "LinkedIn",
+"releaseDate": "2025-12-16",
+"url": "https://www.linkedin.com/pulse/hardening-agentic-experience-ax-ai-first-codebase-vicente-opaso-7ktae"
+},
+{
+"name": "Building My Website Through Spec-Driven Development: A Real-World Experiment in AI-Governed Engineering",
+"publisher": "LinkedIn",
+"releaseDate": "2025-12-12",
+"url": "https://www.linkedin.com/pulse/building-my-website-through-spec-driven-development-real-world-opaso-5wyse"
+},
+{
 "name": "Empowering Design Systems: How Communities of Practice Drive Innovation and Scalability",
 "publisher": "LinkedIn",
 "releaseDate": "2024-10-02",
