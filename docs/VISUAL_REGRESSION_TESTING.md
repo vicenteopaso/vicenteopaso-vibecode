@@ -547,6 +547,28 @@ Update baselines when:
 4. Commit updated baselines with descriptive message
 5. Link to related design change PR or issue
 
+### GitHub Actions baseline update workflow (manual)
+
+This repo includes a manual workflow for updating committed Playwright baselines:
+
+- Workflow: `.github/workflows/update-visual-snapshots.yml` ("Update Playwright Visual Snapshots")
+- What it does: checks out the selected branch, runs `pnpm test:visual:update`, commits snapshot changes, and pushes back to the same branch.
+
+When you manually trigger it via the GitHub Actions UI:
+
+1. Select the branch you want to update.
+2. Optional: enable **Allow CI to run on PRs for the snapshot update commit**.
+   - If enabled: the workflow commits **without** `[skip ci]`, so if the branch has an open PR, the normal PR-triggered `CI` run will execute on the new commit.
+   - If disabled (default): it commits with `[skip ci]`, so the update will _not_ trigger CI even if the branch has an open PR.
+
+Notes:
+
+- The workflow commit message includes `[skip ci]` to avoid implicitly triggering other push-based workflows; the optional CI dispatch is the explicit way to run CI after baselines update.
+
+**Exception (README snapshots):**
+
+The tests in `test/visual/pages/homepage-readme.visual.spec.ts` generate the screenshots embedded in `README.md`. Those comparisons are intentionally **non-blocking**: diffs are still produced in the Playwright report, but mismatches do not fail CI.
+
 ### Cleanup
 
 Periodically review and remove:
@@ -610,6 +632,6 @@ A: Yes! Navigate to pages that render component variations, or create dedicated 
 
 ---
 
-**Last updated**: December 1, 2025  
+**Last updated**: December 19, 2025  
 **Status**: ✅ Phase 2 complete - Component visual tests implemented  
 **Owner**: Vicente Opaso

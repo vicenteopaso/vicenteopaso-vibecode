@@ -1,1 +1,4 @@
-pnpm lint-staged
+#!/usr/bin/env sh
+
+# Use Corepack so we run the repo-pinned pnpm version (see package.json#packageManager).
+corepack pnpm lint-staged
