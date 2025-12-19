@@ -1,26 +1,26 @@
 name: DeepL Translation
 
-# Trigger only when English source content changes.
+# Manual-only translation workflow.
 #
 # Behavior:
-# - On push to main/develop: Runs translation and auto-commits results
-# - On pull_request: Runs translation for validation only (no auto-commit)
-#   This allows PR authors to verify translations work without unexpected commits
+# - Trigger manually via GitHub Actions (workflow_dispatch)
+# - Detects English source changes by diffing against an optional base ref
+# - Optionally commits/pushes updated translations back to the repo
 on:
-  push:
-    branches:
-      - main
-      - develop
-    paths:
-      - "content/en/**"
-      - "i18n/en/**"
-      - "scripts/translate.mjs"
-  pull_request:
-    paths:
-      - "content/en/**"
-      - "i18n/en/**"
-      - "scripts/translate.mjs"
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      base_ref:
+        description: "Git ref/sha to diff against (e.g. origin/main~5). Leave empty to use HEAD^."
+        required: false
+        default: "HEAD^"
+      force:
+        description: "Run translation even if no English content changes are detected"
+        type: boolean
+        default: false
+      commit:
+        description: "Commit and push generated translations back to the repo"
+        type: boolean
+        default: true
 
 permissions:
   contents: write # Required to push translations back to the repo
@@ -32,8 +32,6 @@ concurrency:
 jobs:
   translate:
     runs-on: ubuntu-latest
-    # Skip translation on PRs from forks (they won't have access to secrets)
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
 
     steps:
       - name: Checkout repository
@@ -57,29 +55,32 @@ jobs:
       - name: Detect English content changes
         id: diff
         run: |
-          # For pull requests, compare against the base branch
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            BASE_REF="${{ github.event.pull_request.base.sha }}"
-          else
-            # For push events, compare against previous commit (if it exists)
-            if git rev-parse HEAD^ >/dev/null 2>&1; then
-              BASE_REF="HEAD^"
-            else
-              # First commit on branch, compare against empty tree
-              BASE_REF="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
-            fi
+          BASE_REF="${{ github.event.inputs.base_ref }}"
+          if [ -z "$BASE_REF" ]; then
+            BASE_REF="HEAD^"
+          fi
+
+          # If the provided base ref doesn't exist (e.g. first commit / shallow refs),
+          # fall back to the empty tree.
+          if ! git rev-parse "$BASE_REF" >/dev/null 2>&1; then
+            echo "Base ref '$BASE_REF' not found; falling back to empty tree"
+            BASE_REF="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
           fi
 
           # Check if any English content files changed
-          CHANGED=$(git diff --name-only $BASE_REF HEAD | grep -E "^(content/en|i18n/en|scripts/translate\.mjs)" || true)
+          CHANGED=$(git diff --name-only "$BASE_REF" HEAD | grep -E "^(content/en|i18n/en|scripts/translate\.mjs)" || true)
 
-          if [ -z "$CHANGED" ]; then
+          if [ -z "$CHANGED" ] && [ "${{ github.event.inputs.force }}" != "true" ]; then
             echo "no_changes=true" >> $GITHUB_OUTPUT
             echo "No English content changes detected"
           else
             echo "no_changes=false" >> $GITHUB_OUTPUT
-            echo "English content changes detected:"
-            echo "$CHANGED"
+            if [ "${{ github.event.inputs.force }}" == "true" ]; then
+              echo "Force run enabled; continuing even though no changes were detected"
+            else
+              echo "English content changes detected:"
+              echo "$CHANGED"
+            fi
           fi
 
       - name: Skip if no English content changes
@@ -122,7 +123,7 @@ jobs:
           fi
 
       - name: Commit and push translated files
-        if: steps.diff.outputs.no_changes == 'false' && steps.check_changes.outputs.has_changes == 'true' && github.event_name == 'push'
+        if: steps.diff.outputs.no_changes == 'false' && steps.check_changes.outputs.has_changes == 'true' && github.event.inputs.commit == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

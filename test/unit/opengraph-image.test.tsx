@@ -33,10 +33,11 @@ import CvOgImage, {
   contentType as cvContentType,
   size as cvSize,
 } from "../../app/[lang]/cv/opengraph-image";
-import RootOgImage, {
-  contentType as rootContentType,
-  size as rootSize,
-} from "../../app/[lang]/opengraph-image";
+import LocalizedOgImage from "../../app/[lang]/opengraph-image";
+import UnlocalizedOgImage, {
+  contentType as unlocalizedContentType,
+  size as unlocalizedSize,
+} from "../../app/opengraph-image";
 import { baseMetadata, getCvDescription, siteConfig } from "../../lib/seo";
 
 // Helper function to traverse React element tree and extract text content
@@ -57,7 +58,7 @@ function findTextContent(el: React.ReactElement | string): string[] {
   return [];
 }
 
-describe("Root OG image route", () => {
+describe("Unlocalized (root) OG image route", () => {
   beforeEach(() => {
     mockInstances.length = 0;
   });
@@ -67,7 +68,7 @@ describe("Root OG image route", () => {
   });
 
   it("uses siteConfig and size to construct an ImageResponse", async () => {
-    await RootOgImage({ params: Promise.resolve({ lang: "en" }) });
+    await UnlocalizedOgImage();
 
     expect(mockInstances).toHaveLength(1);
     const { element, init } = mockInstances[0] as {
@@ -76,12 +77,12 @@ describe("Root OG image route", () => {
     };
 
     // Assert we pass through the expected size configuration
-    expect(init.width).toBe(rootSize.width);
-    expect(init.height).toBe(rootSize.height);
+    expect(init.width).toBe(unlocalizedSize.width);
+    expect(init.height).toBe(unlocalizedSize.height);
 
     // Sanity check that the exported size and content type are wired as expected
-    expect(rootSize).toEqual({ width: 1200, height: 630 });
-    expect(rootContentType).toBe("image/png");
+    expect(unlocalizedSize).toEqual({ width: 1200, height: 630 });
+    expect(unlocalizedContentType).toBe("image/png");
 
     // Basic shape check: outer element is a <div>
     expect(element.type).toBe("div");
@@ -159,7 +160,7 @@ describe("CV OG image route", () => {
   });
 });
 
-describe("Root OG image translations", () => {
+describe("Localized (/[lang]) OG image translations", () => {
   beforeEach(() => {
     mockInstances.length = 0;
   });
@@ -169,7 +170,7 @@ describe("Root OG image translations", () => {
   });
 
   it("renders English translations when lang is en", async () => {
-    await RootOgImage({ params: Promise.resolve({ lang: "en" }) });
+    await LocalizedOgImage({ params: Promise.resolve({ lang: "en" }) });
 
     expect(mockInstances).toHaveLength(1);
     const { element } = mockInstances[0] as {
@@ -183,7 +184,7 @@ describe("Root OG image translations", () => {
   });
 
   it("renders Spanish translations when lang is es", async () => {
-    await RootOgImage({ params: Promise.resolve({ lang: "es" }) });
+    await LocalizedOgImage({ params: Promise.resolve({ lang: "es" }) });
 
     expect(mockInstances).toHaveLength(1);
     const { element } = mockInstances[0] as {

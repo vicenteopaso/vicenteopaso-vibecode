@@ -547,6 +547,10 @@ Update baselines when:
 4. Commit updated baselines with descriptive message
 5. Link to related design change PR or issue
 
+**Exception (README snapshots):**
+
+The tests in `test/visual/pages/homepage-readme.visual.spec.ts` generate the screenshots embedded in `README.md`. Those comparisons are intentionally **non-blocking**: diffs are still produced in the Playwright report, but mismatches do not fail CI.
+
 ### Cleanup
 
 Periodically review and remove:

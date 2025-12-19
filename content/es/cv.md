@@ -483,6 +483,18 @@ slug: cv
 ],
 "publications": [
 {
+"name": "Hardening Agentic Experience (AX) in an AI-First Codebase",
+"publisher": "LinkedIn",
+"releaseDate": "2025-12-16",
+"url": "https://www.linkedin.com/pulse/hardening-agentic-experience-ax-ai-first-codebase-vicente-opaso-7ktae"
+},
+{
+"name": "Building My Website Through Spec-Driven Development: A Real-World Experiment in AI-Governed Engineering",
+"publisher": "LinkedIn",
+"releaseDate": "2025-12-12",
+"url": "https://www.linkedin.com/pulse/building-my-website-through-spec-driven-development-real-world-opaso-5wyse"
+},
+{
 "name": "Empowering Design Systems: How Communities of Practice Drive Innovation and Scalability",
 "publisher": "LinkedIn",
 "releaseDate": "2024-10-02",
@@ -530,6 +542,10 @@ slug: cv
 }
 ],
 "references": [
+{
+"name": "<a href='https://www.linkedin.com/in/carvido1'>Carlos Vicent Domenech</a> | Líder de Ingeniería de Site Reliability @ Nexthink",
+"reference": "He tenido la oportunidad de trabajar dos veces con Vicente en diferentes empresas. En nuestra primera etapa juntos, trabajando en Carlsberg, formábamos parte de dos equipos distintos responsables de diferentes productos/plataformas. Vicente estaba a cargo del equipo responsable del diseño y el framework de la plataforma para incorporar nuevos mercados a Carlsberg. Crearon Carlsberg Malty, un sistema de diseño open source para estandarizar los componentes que se utilizarían en los distintos escaparates y mercados. Como viajábamos regularmente a Lisboa para reunirnos con nuestros compañeros del Carlsberg Digital Hub, siempre teníamos tiempo para charlar y debatir sobre tecnología durante interminables tardes y noches. Estas conversaciones nos ayudaron a comprender diferentes puntos de vista técnicos y a mejorar la comprensión del trabajo en curso entre los distintos grupos.<br /><br />En nuestra segunda etapa juntos, Vicente se incorporó a Nexthink como Web Engineering Manager. A pesar del corto periodo trabajando nuevamente con Vicente, retomamos conversaciones más centradas en la gestión de ingeniería, decisiones clave y puntos de fricción en equipos de rápido crecimiento. Esto me confirma que el liderazgo y el deseo de destacar en el trabajo siguen siendo habilidades muy sólidas que Vicente posee.<br /><br />Reafirmo mi confianza en Vicente y en sus capacidades para liderar la creación de plataformas que mejoren la Developer Experience y aceleren el desarrollo y la entrega de productos tangibles."
+},
 {
 "name": "<a href='https://www.linkedin.com/in/peterbirkholmbuch'>Peter Birkholm-Buch</a> | Director of Software Engineering in Growth Products & Data @ Carlsberg Group",
 "reference": "Ha sido un privilegio tener a Vicente como parte de mi Leadership Team en Carlsberg Group. Como Frontend Solutions Architect, desempeñó un papel crítico en la definición de nuestra estrategia frontend, especialmente con el desarrollo del Malty Design System, que transformó nuestra aproximación a soluciones frontend globales.<br /><br />Su experiencia en JavaScript, TypeScript, React y tecnologías frontend, junto con su liderazgo en establecer una Community of Practice, mejoró significativamente DevEx y la calidad del código en toda la organización. Sus contribuciones fueron fundamentales para impulsar nuestro crecimiento e-commerce por encima de €1B anuales.<br /><br />Recomiendo ampliamente a Vicente por su liderazgo, creatividad y habilidades técnicas. Sería un activo excepcional para cualquier equipo."
