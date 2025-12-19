@@ -2,6 +2,11 @@ name: Update Playwright Visual Snapshots
 
 on:
   workflow_dispatch:
+    inputs:
+      trigger_ci:
+        description: "Allow CI to run on PRs for the snapshot update commit"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -22,7 +27,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add test/visual/**/*.spec.ts-snapshots/
-          git commit -m "ci: update Playwright visual snapshots [skip ci]" || exit 0
+
+          if [[ "${{ inputs.trigger_ci }}" == "true" ]]; then
+            # No [skip ci] => if this branch has an open PR, CI will run normally on that PR.
+            COMMIT_MESSAGE="ci: update Playwright visual snapshots"
+          else
+            # Add [skip ci] so the snapshot-only update doesn't consume CI minutes.
+            COMMIT_MESSAGE="ci: update Playwright visual snapshots [skip ci]"
+          fi
+
+          git commit -m "$COMMIT_MESSAGE" || exit 0
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

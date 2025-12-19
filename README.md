@@ -615,6 +615,7 @@ GitHub Actions workflows in `.github/workflows/` include:
 
 - `ci.yml`:
   - Runs on pushes to `main` and all PRs.
+  - Can also be triggered manually (workflow dispatch), which is useful for running CI on a non-PR branch.
   - Uses pnpm caching via `actions/setup-node` for faster builds.
   - Includes concurrency control to cancel redundant runs.
   - **AI Guardrails** (PR-only checks):
@@ -630,6 +631,9 @@ GitHub Actions workflows in `.github/workflows/` include:
     - `pnpm test:visual` (visual regression tests)
     - `pnpm build`
   - Uploads Playwright artifacts on failure for debugging
+- `update-visual-snapshots.yml`:
+  - Manual workflow to update Playwright visual baselines by running `pnpm test:visual:update` and committing/pushing the updated snapshots.
+  - Has an optional checkbox that controls whether the snapshot update commit includes `[skip ci]` (i.e., whether CI runs on an open PR for that branch).
 - `coverage.yml`:
   - Runs unit tests with coverage reporting.
   - Uploads coverage artifacts.
