@@ -63,7 +63,7 @@
     "sanitize-html": "^2.13.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.0.0",
-    "zod": "^4.2.0"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -83,8 +83,8 @@
     "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.50.1",
-    "@typescript-eslint/parser": "^8.50.1",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "@vitest/coverage-v8": "^4.0.15",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.1.1",
@@ -103,7 +103,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^4.0.2",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.50.1",
+    "typescript-eslint": "^8.51.0",
     "vitest": "^4.0.15"
   },
   "lint-staged": {
