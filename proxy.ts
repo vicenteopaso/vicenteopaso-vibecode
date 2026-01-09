@@ -65,7 +65,7 @@ export function proxy(req: NextRequest) {
 
   // Handle all paths without locale prefix for automatic language detection
   const langHeader = req.headers.get("accept-language") || "";
-  const preferredLang = langHeader.split(",")[0]?.slice(0, 2);
+  const preferredLang = langHeader.split(",")[0]?.slice(0, 2) || "";
 
   // Redirect Spanish-locale browsers to /es, others to /en
   const targetLocale = preferredLang === "es" ? "es" : "en";
