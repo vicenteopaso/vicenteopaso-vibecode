@@ -18,7 +18,12 @@ export async function register() {
 
   if (process.env.NEXT_RUNTIME === "nodejs") {
     // Node.js (server) runtime
-    await import("./sentry.server.config");
+    // Only initialize Sentry on the server in production. In development and
+    // test environments, this can introduce brittle interactions with local
+    // tooling and is not required for error visibility.
+    if (process.env.NODE_ENV === "production") {
+      await import("./sentry.server.config");
+    }
   }
 
   if (process.env.NEXT_RUNTIME === "edge") {

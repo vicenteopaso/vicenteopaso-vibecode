@@ -91,7 +91,7 @@ test.describe("Error Handling", () => {
       });
     });
 
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
     await page.waitForLoadState("domcontentloaded");
 
     // Open contact dialog - use exact button name from navigation
