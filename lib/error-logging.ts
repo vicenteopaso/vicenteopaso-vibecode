@@ -65,26 +65,17 @@ export function logError(error: Error | unknown, context?: ErrorContext): void {
  * Log a warning with optional context information.
  *
  * @param message - The warning message
- * @param context - Additional context about the warning
+ * @param context - Additional context about where/when the warning occurred
  */
 export function logWarning(message: string, context?: ErrorContext): void {
   const logEntry = {
     timestamp: new Date().toISOString(),
     level: "warning",
     message,
-    ...context,
+    ...(context?.component && { component: context.component }),
+    ...(context?.action && { action: context.action }),
+    ...(context?.metadata && { metadata: context.metadata }),
   };
-
-  // Send structured breadcrumbs to Sentry to enrich subsequent errors
-  Sentry.addBreadcrumb({
-    level: "warning",
-    category: context?.component ?? "application",
-    message,
-    data: {
-      action: context?.action,
-      metadata: context?.metadata,
-    },
-  });
 
   // eslint-disable-next-line no-console
   console.warn("Application Warning:", JSON.stringify(logEntry, null, 2));
