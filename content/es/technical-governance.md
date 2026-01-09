@@ -7,7 +7,7 @@ description: Cómo Spec-Driven Development (SDD) y la ingeniería basada en docu
 
 ## Ingeniería Basada en Documentación
 
-Este proyecto se construyó utilizando un enfoque de **Documentación-First**, en el cual documentos comprehensivos de gobernanza, especificaciones de arquitectura y estándares de ingeniería se redactaron antes y durante el desarrollo. Estos documentos sirven como base tanto para la toma de decisiones humanas como para la implementación asistida por IA.
+Este proyecto se construyó utilizando un enfoque de **Documentación-First**, en el cual documentos exhaustivos de gobernanza, especificaciones de arquitectura y estándares de ingeniería se redactaron antes y durante el desarrollo. Estos documentos sirven como base tanto para la toma de decisiones humanas como para la implementación asistida por IA.
 
 ### La Filosofía
 
@@ -26,7 +26,7 @@ La gobernanza técnica del proyecto se define a través de varios documentos cla
 
 #### Engineering Standards (`docs/ENGINEERING_STANDARDS.md`)
 
-Un documento **north-star** comprehensivo que captura la intención de ingeniería en:
+Un documento **north-star** exhaustivo que captura la intención de ingeniería en:
 
 - **Fundamentos Arquitectónicos** — Principios de arquitectura modular basada en componentes
 - **Estándares de Ingeniería Frontend** — Calidad de código, ingeniería de componentes y guías de design system
@@ -206,7 +206,7 @@ Toda la documentación es:
 Este proyecto abraza **desarrollo IA-first con guardrails fuertes**:
 
 1. **IA como Acelerador, No Tomador de Decisiones** — Las herramientas de IA sugieren implementaciones, pero las decisiones arquitectónicas permanecen guiadas por humanos y documentadas
-2. **Documentación como Contexto IA** — Documentos comprehensivos permiten a la IA entender la intención y mantener consistencia
+2. **Documentación como Contexto IA** — Documentos exhaustivos permiten a la IA entender la intención y mantener consistencia
 3. **Quality Gates Son No-Negociables** — Todo código generado por IA debe pasar los mismos checks rigurosos que el código humano
 4. **Restricciones de Seguridad Son Obligatorias** — La IA no puede evadir controles de seguridad o introducir vulnerabilidades
 5. **Supervisión Humana para Cambios Críticos** — Cambios sensibles a seguridad y arquitectónicos requieren revisión manual
