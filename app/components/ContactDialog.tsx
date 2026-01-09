@@ -5,7 +5,7 @@ import type { FormEvent, ReactNode } from "react";
 import React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useTranslations } from "@/lib/i18n/useTranslations";
+import { useTranslations } from "@/lib/i18n";
 
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
