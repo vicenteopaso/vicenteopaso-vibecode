@@ -313,7 +313,7 @@ Ver **[AI Guardrails](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob
 
 Este enfoque documentation-first escala bien:
 
-- **Crecimiento del Equipo** — Nuevos miembros del equipo pueden onboarding rápidamente
+- **Crecimiento del Equipo** — Nuevos miembros del equipo pueden incorporarse rápidamente
 - **Evolución IA** — A medida que las herramientas de IA mejoran, un contexto más rico produce mejores resultados
 - **Preservación de Conocimiento** — El conocimiento institucional se captura, no se pierde
 - **Cumplimiento** — Los estándares pueden ser auditados y verificados
