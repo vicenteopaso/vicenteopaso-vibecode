@@ -140,16 +140,20 @@ export default async function CVPage({ params }: PageProps) {
   const locale = getLocaleFromParams({ lang });
   const t = getTranslations(locale);
 
-  const filePath = path.join(process.cwd(), "content", locale, "cv.md");
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContents);
+  // Frontmatter (title, name, tagline) still comes from the markdown file
+  const metaPath = path.join(process.cwd(), "content", locale, "cv.md");
+  const metaContents = fs.readFileSync(metaPath, "utf8");
+  const { data } = matter(metaContents);
 
   const title = (data.title as string) || "CV";
   const tagline = (data.tagline as string) || "";
 
+  // Structured CV data now comes from a separate JSON file (cv.json)
   let cv: CvJson | null = null;
   try {
-    cv = JSON.parse(content) as CvJson;
+    const jsonPath = path.join(process.cwd(), "content", locale, "cv.json");
+    const jsonContents = fs.readFileSync(jsonPath, "utf8");
+    cv = JSON.parse(jsonContents) as CvJson;
   } catch {
     cv = null;
   }
@@ -166,8 +170,9 @@ export default async function CVPage({ params }: PageProps) {
           </p>
         )}
         <p className="text-xs text-red-400 sm:text-sm">
-          CV data could not be loaded. Please check that the JSON body in
-          <code className="ml-1">content/en/cv.md</code> is valid.
+          CV data could not be loaded. Please check that the CV JSON file in
+          <code className="ml-1">{`content/${locale}/cv.json`}</code> is present
+          and valid.
         </p>
       </div>
     );
