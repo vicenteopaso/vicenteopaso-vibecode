@@ -189,7 +189,7 @@ importers:
         specifier: ^27.4.0
         version: 27.4.0
       lint-staged:
-        specifier: 16.2.7
+        specifier: ^16.2.7
         version: 16.2.7
       postcss:
         specifier: ^8.5.6
