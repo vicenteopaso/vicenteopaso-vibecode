@@ -14,6 +14,17 @@ export function GlobalErrorHandler() {
   useEffect(() => {
     // Handle uncaught errors
     const handleError = (event: ErrorEvent) => {
+      // Ignore cross-origin script errors (e.g., from Turnstile widget)
+      // These appear as "Script error." with no filename/line info
+      if (
+        event.message === "Script error." &&
+        !event.filename &&
+        event.lineno === 0 &&
+        event.colno === 0
+      ) {
+        return;
+      }
+
       event.preventDefault(); // Prevent default browser error handling
 
       logError(event.error, {
