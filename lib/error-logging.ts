@@ -74,6 +74,7 @@ export function logWarning(message: string, context?: ErrorContext): void {
     message,
     ...(context?.component && { component: context.component }),
     ...(context?.action && { action: context.action }),
+    ...(context?.userId && { userId: context.userId }),
     ...(context?.metadata && { metadata: context.metadata }),
   };
 
