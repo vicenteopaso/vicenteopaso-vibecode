@@ -52,3 +52,9 @@ blob-report
 # Editor settings (optional)
 .vscode
 .idea
+
+# Local pnpm store
+.pnpm-store/
+
+# Extracted CV JSON files
+content/**/cv.json
