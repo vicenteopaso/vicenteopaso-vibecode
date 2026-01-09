@@ -91,6 +91,6 @@ export const config = {
      * - API routes
      * - Next.js metadata routes (opengraph-image, etc.)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|robots.txt|sitemap.xml|sitemap-0.xml|site.webmanifest|opengraph-image).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|sitemap-0.xml|news_sitemap.xml|opengraph-image|.*\\..*|robots.txt|sitemap.xml|site.webmanifest).*)",
   ],
 };
