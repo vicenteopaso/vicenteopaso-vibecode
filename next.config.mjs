@@ -75,6 +75,9 @@ const nextConfig = {
     // is this directory. This avoids mis-inferring /app as the root when resolving.
     root: __dirname,
   },
+  // Enable browser source maps in production builds to support debugging
+  // stack traces with original TypeScript line numbers (see docs/ERROR_HANDLING.md).
+  productionBrowserSourceMaps: true,
   images: {
     localPatterns: [
       {
