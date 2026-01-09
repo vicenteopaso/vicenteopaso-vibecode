@@ -33,6 +33,43 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 
 ## System Map
 
+### High-Level System Architecture
+
+```mermaid
+graph TB
+    subgraph Vercel["Vercel (CDN + Edge Network)"]
+        subgraph NextJS["Next.js App Router (SSR + SSG)"]
+            App["app/<br/>(routes & layouts)"]
+            Components["app/components/<br/>(UI components)"]
+            API["app/api/<br/>(API routes)"]
+            Lib["lib/<br/>(utilities & services)"]
+        end
+
+        Content["content/<br/>(markdown)"]
+        Security["Security Headers<br/>- CSP<br/>- COOP/COEP"]
+    end
+
+    subgraph External["External Services"]
+        Turnstile["Cloudflare<br/>Turnstile"]
+        Formspree["Formspree"]
+        Sentry["Sentry<br/>(errors)"]
+    end
+
+    BuildTime["Build Time<br/>(Contentlayer optional)"]
+
+    Content --> NextJS
+    NextJS --> Security
+    NextJS --> External
+    Content --> BuildTime
+
+    style Vercel fill:#e1f5ff
+    style NextJS fill:#fff4e6
+    style External fill:#ffe6f0
+    style BuildTime fill:#f0f0f0
+```
+
+**ASCII representation (for terminals without Mermaid support):**
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                   Vercel (CDN + Edge Network)                │
@@ -87,6 +124,37 @@ introduced only where interactivity is required.
 
 **Content Rendering Flow:**
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant NextJS as Next.js Page<br/>(SSG at build)
+    participant FS as Filesystem<br/>(content/[locale]/)
+    participant Parser as gray-matter /<br/>JSON.parse
+    participant Markdown as ReactMarkdown
+    participant Sanitizer as sanitize-html
+    participant Browser
+
+    User->>NextJS: Request /en/about or /es/cv
+    NextJS->>NextJS: Extract locale from [lang] param
+    NextJS->>FS: fs.readFileSync(content/[locale]/*.md)
+    FS-->>NextJS: Markdown file content
+    NextJS->>Parser: Parse frontmatter
+    Parser-->>NextJS: Frontmatter data
+
+    alt CV Page
+        NextJS->>Parser: JSON.parse(body)
+        Parser-->>NextJS: CV JSON object
+    end
+
+    NextJS->>Markdown: Render with component mappings
+    Markdown-->>NextJS: HTML output
+    NextJS->>Sanitizer: Apply sanitization
+    Sanitizer-->>NextJS: Safe HTML
+    NextJS->>Browser: Return HTML to client
+```
+
+**Text representation:**
+
 ```
 User requests /en/about or /es/cv
   ↓
@@ -125,6 +193,56 @@ Return HTML to client
 The contact form implements defense-in-depth with multiple validation layers:
 
 **Contact Form Submission Flow:**
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Dialog as ContactDialog<br/>(Client Component)
+    participant Turnstile as Cloudflare<br/>Turnstile
+    participant API as /api/contact<br/>(API Route)
+    participant RateLimit as Rate Limiter
+    participant Formspree
+    participant Client
+
+    User->>Dialog: Open contact dialog
+    Dialog->>Turnstile: Load Turnstile widget
+    Turnstile-->>Dialog: Widget loaded
+    User->>Dialog: Fill form (email, message, phone?)
+    User->>Turnstile: Complete challenge
+    Turnstile-->>Dialog: Token received
+    Dialog->>API: POST with form data + token
+
+    API->>API: Validate request origin
+    API->>API: Check honeypot field
+    API->>RateLimit: Check rate limit (per-IP)
+
+    alt Rate limit exceeded
+        RateLimit-->>API: 429 Too Many Requests
+        API-->>Client: Error: Too many requests
+    else Rate limit OK
+        RateLimit-->>API: OK
+        API->>Turnstile: Verify token
+
+        alt Token invalid
+            Turnstile-->>API: Invalid
+            API-->>Client: 400 Bad Request
+        else Token valid
+            Turnstile-->>API: Valid
+            API->>API: Validate schema (Zod)
+
+            alt Schema invalid
+                API-->>Client: 400 Validation Error
+            else Schema valid
+                API->>Formspree: Forward form data
+                Formspree-->>API: Success/Error
+                API-->>Client: Return success/error
+                Client-->>User: Show confirmation or error
+            end
+        end
+    end
+```
+
+**Text representation:**
 
 ```
 User opens contact dialog
@@ -166,6 +284,33 @@ Client shows confirmation or error message
 - Content Security Policy (CSP) headers
 
 **Data Flow Diagram:**
+
+```mermaid
+graph LR
+    User([User Browser])
+    Dialog[ContactDialog<br/>Component]
+    Turnstile[Cloudflare<br/>Turnstile]
+    API[/api/contact<br/>Route]
+    Verify[Token<br/>Verification]
+    Formspree[Formspree<br/>Email API]
+
+    User -->|Opens dialog| Dialog
+    Dialog <-->|Challenge/Token| Turnstile
+    Dialog -->|POST form data| API
+    API -->|Verify token| Verify
+    Verify -->|Valid| API
+    API -->|Forward email| Formspree
+    Formspree -->|Confirmation| API
+    API -->|Success/Error| User
+
+    style User fill:#e1f5ff
+    style Dialog fill:#fff4e6
+    style Turnstile fill:#ffe6f0
+    style API fill:#fff4e6
+    style Formspree fill:#e6ffe6
+```
+
+**Text representation:**
 
 ```
 ┌──────────┐      ┌──────────────┐      ┌─────────────┐
@@ -320,6 +465,46 @@ pnpm test:e2e         # Run Playwright E2E tests
 
 ### CI/CD (GitHub Actions → Vercel)
 
+```mermaid
+flowchart TD
+    Start([Git push to main]) --> GHA[GitHub Actions triggered]
+
+    subgraph CI["CI Checks (GitHub Actions)"]
+        GHA --> Lint[Run linters<br/>ESLint, Prettier]
+        Lint --> TypeCheck[Type checks<br/>TypeScript]
+        TypeCheck --> UnitTests[Unit tests<br/>Vitest]
+        UnitTests --> E2ETests[E2E tests<br/>Playwright]
+        E2ETests --> A11y[Accessibility audit]
+    end
+
+    A11y --> CheckPass{All checks<br/>pass?}
+
+    CheckPass -->|No| Fail([❌ Build fails])
+    CheckPass -->|Yes| Vercel[Vercel deployment triggered]
+
+    subgraph Deploy["Vercel Deployment"]
+        Vercel --> Install[Install dependencies]
+        Install --> Build[Run build command]
+        Build --> Deploy1[Deploy to edge network]
+        Deploy1 --> Preview{Branch?}
+
+        Preview -->|PR| PreviewURL[Assign preview URL]
+        Preview -->|main| Production[Promote to production]
+    end
+
+    PreviewURL --> Live1([✅ Preview live])
+    Production --> Live2([✅ Live at opa.so])
+
+    style Start fill:#e1f5ff
+    style CI fill:#fff4e6
+    style Deploy fill:#e6ffe6
+    style Fail fill:#ffe6e6
+    style Live1 fill:#e6ffe6
+    style Live2 fill:#e6ffe6
+```
+
+**Text representation:**
+
 ```
 Git push to main branch
   ↓
@@ -358,6 +543,93 @@ Live at opa.so
 See [`docs/SENTRY_SETUP.md`](./SENTRY_SETUP.md) for detailed Sentry configuration instructions.
 
 ## Directory Structure
+
+### Project Organization
+
+```mermaid
+graph TD
+    Root["/"]
+
+    subgraph App["app/ (Next.js App Router)"]
+        Layout["layout.tsx<br/>(Root layout + providers)"]
+        Lang["[lang]/<br/>(Locale routes)"]
+        LangLayout["[lang]/layout.tsx"]
+        LangPage["[lang]/page.tsx<br/>(About page)"]
+        CV["[lang]/cv/page.tsx"]
+        Policies["[lang]/accessibility/<br/>[lang]/privacy-policy/<br/>etc."]
+        APIRoutes["api/contact/route.ts<br/>api/content/[slug]/route.ts"]
+        Components["components/<br/>(Shared UI)"]
+    end
+
+    subgraph Content["content/ (Markdown + JSON)"]
+        EN["en/<br/>(English content)"]
+        ES["es/<br/>(Spanish content)"]
+        ENAbout["about.md<br/>cv.md<br/>cv.json<br/>policies..."]
+        ESAbout["about.md<br/>cv.md<br/>cv.json<br/>policies..."]
+    end
+
+    subgraph Lib["lib/ (Utilities)"]
+        I18n["i18n/<br/>(Locale detection)"]
+        SEO["seo.ts<br/>(Metadata helpers)"]
+        ErrorLog["error-logging.ts<br/>(Sentry integration)"]
+        RateLimit["rate-limit.ts"]
+        Markdown["markdown-components.tsx"]
+        Sanitize["sanitize-html.ts"]
+    end
+
+    subgraph Test["test/ (Testing)"]
+        Unit["unit/<br/>(Vitest)"]
+        E2E["e2e/<br/>(Playwright)"]
+        Visual["visual/<br/>(Playwright screenshots)"]
+    end
+
+    subgraph Docs["docs/ (Governance)"]
+        ADR["adr/<br/>(Architecture decisions)"]
+        Standards["ENGINEERING_STANDARDS.md<br/>ARCHITECTURE.md<br/>etc."]
+    end
+
+    Root --> App
+    Root --> Content
+    Root --> Lib
+    Root --> Test
+    Root --> Docs
+
+    App --> Layout
+    App --> Lang
+    App --> APIRoutes
+    App --> Components
+    Lang --> LangLayout
+    Lang --> LangPage
+    Lang --> CV
+    Lang --> Policies
+
+    Content --> EN
+    Content --> ES
+    EN --> ENAbout
+    ES --> ESAbout
+
+    Lib --> I18n
+    Lib --> SEO
+    Lib --> ErrorLog
+    Lib --> RateLimit
+    Lib --> Markdown
+    Lib --> Sanitize
+
+    Test --> Unit
+    Test --> E2E
+    Test --> Visual
+
+    Docs --> ADR
+    Docs --> Standards
+
+    style App fill:#fff4e6
+    style Content fill:#e1f5ff
+    style Lib fill:#f0f0f0
+    style Test fill:#ffe6f0
+    style Docs fill:#e6ffe6
+```
+
+**Text representation:**
 
 ```
 app/
