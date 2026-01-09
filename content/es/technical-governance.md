@@ -163,7 +163,7 @@ Al implementar una nueva característica:
 
 Todos los documentos de gobernanza viven en el directorio `docs/`:
 
-\`\`\`
+```
 docs/
 ├── adr/ # Architecture Decision Records
 │ ├── README.md # Proceso de ADR e índice
@@ -177,7 +177,7 @@ docs/
 ├── SEO_GUIDE.md # Prácticas SEO
 ├── ERROR_HANDLING.md # Gestión de errores
 └── SECURITY_POLICY.md # Prácticas de seguridad
-\`\`\`
+```
 
 ### Integración CI/CD
 
