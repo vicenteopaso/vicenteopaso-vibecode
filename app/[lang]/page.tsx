@@ -87,7 +87,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <header className="section-card flex flex-col gap-6 sm:flex-row sm:items-center">
+      <header className="glass-card page-card flex flex-col gap-6 sm:flex-row sm:items-center">
         <ProfileCard
           name={name}
           tagline={tagline}
@@ -181,7 +181,7 @@ export default async function HomePage({ params }: PageProps) {
           }
 
           renderedSections.push(
-            <section key={index} className="section-card space-y-4">
+            <section key={index} className="glass-card section-card space-y-4">
               <ReactMarkdown components={aboutPageComponents}>
                 {section}
               </ReactMarkdown>
@@ -200,7 +200,7 @@ export default async function HomePage({ params }: PageProps) {
           target="_blank"
           rel="noreferrer"
           aria-label="GitHub profile"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
         >
           <GitHubIcon className="h-4 w-4" />
         </a>
@@ -210,7 +210,7 @@ export default async function HomePage({ params }: PageProps) {
           target="_blank"
           rel="noreferrer"
           aria-label="LinkedIn profile"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
         >
           <LinkedInIcon className="h-4 w-4" />
         </a>
@@ -220,7 +220,7 @@ export default async function HomePage({ params }: PageProps) {
           target="_blank"
           rel="noreferrer"
           aria-label="X (Twitter) profile"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
         >
           <XIcon className="h-4 w-4" />
         </a>

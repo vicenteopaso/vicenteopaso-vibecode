@@ -1,0 +1,541 @@
+{
+  "name": "Vicente Opaso",
+  "title": "Vicente Opaso",
+  "slug": "cv",
+  "basics": {
+    "name": "Vicente Opaso",
+    "label": "Web Engineering Manager y Frontend Architect. Composable Platforms, Design Systems y Developer Experience. Más de 25 años entregando productos digitales de alto impacto.",
+    "summary": "Soy Web Engineering Manager y Frontend Architect con más de 25 años diseñando, escalando y manteniendo plataformas digitales de alto rendimiento en entornos empresariales, de comercio electrónico y de misión crítica. Me especializo en arquitectura composable, Design Systems y Developer Experience (DevEx), alineando tecnología, diseño y estrategia para entregar productos accesibles, performantes y mantenibles. He liderado equipos multifuncionales, modernizado CI/CD y la gobernanza del código, y fortalecido la cultura técnica mediante mentoría y Communities of Practice. Mi enfoque combina arquitectura técnica con empatía de diseño y disciplina operativa para lograr resultados duraderos y alineados al negocio.",
+    "highlights": [
+      {
+        "title": "Web Engineering Manager en Nexthink",
+        "content": "Lideré la arquitectura y entrega de nexthink.com, un sitio corporativo composable a escala global, dirigiendo un equipo multifuncional centrado en rendimiento, accesibilidad, localización y alineación estratégica."
+      },
+      {
+        "title": "Technical Application Owner en EUROCONTROL",
+        "content": "Lideré la gobernanza y modernización frontend para plataformas de aviación (NMUI, EDS), alineando seguridad, cumplimiento normativo y entrega a gran escala."
+      },
+      {
+        "title": "Design System Architect (EDS & Malty)",
+        "content": "Impulsé la consistencia de UI, la accesibilidad y la reutilización mediante librerías de componentes y modelos de contribución a nivel enterprise."
+      },
+      {
+        "title": "Solutions Architect",
+        "content": "Para plataformas B2B empresariales en Carlsberg Group (≥ €1B de facturación anual) y frameworks globales de marketing."
+      },
+      {
+        "title": "CoP Builder",
+        "content": "Fundé y escalé Communities of Practice para elevar estándares, compartir conocimiento y mejorar DevEx."
+      },
+      {
+        "title": "Agile Leader",
+        "content": "Guío equipos multifuncionales mediante entrega iterativa, documentación y métricas accionables."
+      },
+      {
+        "title": "Co-fundador de Agencia Digital",
+        "content": "Entregué soluciones web y móviles full-stack para clientes Fortune 500 y sector público."
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "Nexthink",
+      "location": "Híbrido",
+      "positions": [
+        {
+          "position": "Manager of Web Engineering",
+          "startDate": "2025-07",
+          "endDate": "2025-11",
+          "summary": "Lideré el equipo detrás de nexthink.com—la plataforma web composable global que respalda marca, marketing y estrategia de producto. Me enfoqué en estructura de equipo, DevEx y colaboración diseño-ingeniería para ofrecer experiencias escalables, fiables y localizadas.",
+          "highlights": [
+            "Lideré un equipo distribuido en EU/EE.UU./India; aumenté el throughput de desarrollo en 20–30% mediante automatización DevEx.",
+            "Integré pipelines Vercel + GitHub + Hygraph, reduciendo tiempos de release en 40%.",
+            "Mejoré Core Web Vitals en seis mercados localizados en 25%.",
+            "Introduje gobernanza (CodeQL, plantillas de PR, protecciones de ramas) reduciendo defectos productivos en más de 30%.",
+            "Fui responsable de la arquitectura y entrega de un stack composable: Next.js, GraphQL, Tailwind CSS, Hygraph CMS—desplegado en Vercel e integrado con GitHub.",
+            "Implementé guardrails y gobernanza: CodeQL, Copilot, branch protections, PR templates y checks automatizados para mejorar calidad y confiabilidad.",
+            "Integramos workflows Vercel–GitHub–Hygraph para releases más rápidas y seguras; estandarizamos pipelines con GitHub Actions (CI/CD).",
+            "Gestioné un equipo multifuncional (3 developers, 1 UX designer) centrado en rendimiento, accesibilidad, mantenibilidad y velocidad de contenido.",
+            "Mejoré ciclos de retroalimentación diseño ↔ desarrollo con componentes compartidos, design tokens y documentación.",
+            "Coordiné localización y entrega de campañas en seis idiomas con stakeholders de marca, contenido y demand-gen."
+          ],
+          "skills": [
+            "Frontend Architecture",
+            "Composable Web Platforms",
+            "Developer Experience",
+            "CI/CD Automation",
+            "Web Performance Optimization",
+            "Team Leadership",
+            "Next.js",
+            "GraphQL",
+            "Tailwind CSS",
+            "Hygraph CMS",
+            "Vercel",
+            "CodeQL",
+            "GitHub Actions"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "EUROCONTROL",
+      "location": "Bruselas, Bélgica (Onsite)",
+      "positions": [
+        {
+          "position": "Technical Application Owner (User Domain)",
+          "startDate": "2025-02",
+          "endDate": "2025-07",
+          "summary": "Responsable de la Frontend Architecture, gobernanza y cumplimiento para frameworks orientados al usuario que soportan el Network Manager Operations Centre (NMOC). Creé puentes entre ingeniería, producto y stakeholders regulatorios en un entorno crítico para la seguridad aérea.",
+          "highlights": [
+            "Modernicé el stack frontend utilizado por más de 5.000 actores de aviación en Europa.",
+            "Reduje el payload de páginas en 40%, mejorando tiempos de carga en regiones de baja conectividad.",
+            "Re-arquitecté flujos legacy en componentes modulares, reduciendo costes de mantenimiento en 30%.",
+            "Mantuve documentación formal para cumplir estándares de seguridad, regulación e ingeniería.",
+            "Proporcioné liderazgo técnico para NMUI (framework de microfrontends) permitiendo multitarea e interoperabilidad entre aplicaciones críticas.",
+            "Guié la estrategia e implementación del EUROCONTROL Design System (EDS) para UI/UX accesible y consistente.",
+            "Secundé mejoras de DevEx: modernización CI/CD, automatización, onboarding y gestión de accesos para acelerar la entrega.",
+            "Actué como enlace técnico alineando arquitectura con preparación operativa y requisitos de cumplimiento.",
+            "Establecí flujos de documentación y bases para una Developer Experience sostenible entre equipos."
+          ],
+          "skills": [
+            "Software Architecture",
+            "Technical Governance",
+            "Design Systems",
+            "Solution Architecture",
+            "Information Architecture",
+            "Engineering Leadership",
+            "Agile Leadership",
+            "Documentation",
+            "Front End Engineering Design (FEED)",
+            "Microfrontends"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Carlsberg Group",
+      "location": "Lisboa, Portugal (Híbrido)",
+      "positions": [
+        {
+          "position": "Frontend Solutions Architect",
+          "startDate": "2022-12",
+          "endDate": "2024-12",
+          "summary": "Lideré el diseño y entrega de arquitecturas frontend escalables para plataformas globales B2B y de marketing, alineando ingeniería con prioridades comerciales y madurez DevEx.",
+          "highlights": [
+            "Definí la arquitectura de componentes que impulsa múltiples sitios de marca en Europa Occidental.",
+            "Establecí workflows DevEx que redujeron el onboarding de nuevos ingenieros en 50%.",
+            "Introduje frameworks de accesibilidad garantizando un baseline AA en productos.",
+            "Arquitecté plataformas web que soportan más de €1B en facturación anual; mejoré rendimiento, fiabilidad y accesibilidad.",
+            "Modernicé CI/CD con GitHub Actions y feature toggles, reduciendo fricción en despliegues.",
+            "Definí documentación y flujos de onboarding para aumentar transparencia y consistencia entre equipos distribuidos.",
+            "Colaboré con diseño y marketing para alinear UX, cumplimiento y rendimiento con objetivos de marca y crecimiento.",
+            "Miembro del Software Engineering Leadership Team, definiendo estándares y gobernanza."
+          ],
+          "skills": [
+            "Frontend Architecture",
+            "Enterprise Platforms",
+            "DevEx Maturity",
+            "Documentation Standards",
+            "Onboarding Design",
+            "GitHub Actions",
+            "Feature Toggles",
+            "Global Compliance",
+            "Stakeholder Management"
+          ]
+        },
+        {
+          "position": "Solutions Architect – Digital Marketing & Consumer Tech",
+          "startDate": "2022-12",
+          "endDate": "2024-07",
+          "summary": "Diseñé y entregué soluciones globales de marketing (Cookie Consent, Age Gateway, Global Policies) con TypeScript/React y CMS headless (principalmente Umbraco), equilibrando cumplimiento, localización (i18n) y rendimiento.",
+          "highlights": [
+            "Implementé frameworks de privacidad/cumplimiento desplegados en múltiples mercados.",
+            "Construí integraciones de analítica para mejorar decisiones basadas en datos.",
+            "Alineé tecnología con estrategias de marca y crecimiento.",
+            "Entregué arquitecturas modulares y seguras para escalar entre mercados."
+          ],
+          "skills": [
+            "Privacy Compliance",
+            "i18n Localization",
+            "TypeScript",
+            "React",
+            "Headless CMS",
+            "Marketing Tech",
+            "Analytics Integration",
+            "Data Strategy Alignment"
+          ]
+        },
+        {
+          "position": "Lead Developer & Architect – Malty Design System",
+          "startDate": "2021-01",
+          "endDate": "2022-12",
+          "summary": "Lideré la arquitectura, desarrollo y adopción de Malty—un Design System React/TypeScript empresarial con modelo de inner-sourcing. Escalé contribución, gobernanza y documentación para habilitar la reutilización entre productos.",
+          "highlights": [
+            "Establecí gobernanza, versionado y guías de contribución; integré Figma + Storybook + CI/CD.",
+            "Estandaricé componentes y accesibilidad (WCAG 2.1) para productos B2B y de consumo.",
+            "Impulsé la adopción global mediante documentación y materiales de onboarding."
+          ],
+          "skills": [
+            "Design Systems",
+            "Inner-sourcing",
+            "Governance Models",
+            "Figma Integration",
+            "Storybook",
+            "CI/CD Integration",
+            "WCAG 2.1 Compliance",
+            "Reusable Components"
+          ]
+        },
+        {
+          "position": "Principal Frontend Developer",
+          "startDate": "2021-03",
+          "endDate": "2022-12",
+          "summary": "Responsable de la entrega de aplicaciones clave dentro del ecosistema de Carlsberg, co-gestionando CarlShop+ (B2B, €1B+ ingresos) y liderando el frontend para CADI (CRM interno), mientras mentoraba desarrolladores y mejoraba prácticas de entrega.",
+          "highlights": [
+            "Co-gestioné arquitectura y entrega de CarlShop+ (B2B, €1B+).",
+            "Lideré frontend para CADI CRM; aseguré rendimiento, integridad de datos y cumplimiento de seguridad.",
+            "Avancé el Malty Design System y Lean Sign-up para mejorar onboarding y consistencia UI."
+          ],
+          "skills": [
+            "B2B Platforms",
+            "CRM Development",
+            "Mentorship",
+            "Security Compliance",
+            "Scalable UI Systems",
+            "Delivery Ownership",
+            "Frontend Optimization"
+          ]
+        },
+        {
+          "position": "Lead Frontend Developer",
+          "startDate": "2020-01",
+          "endDate": "2021-03",
+          "summary": "Me uní al equipo digital de Carlsberg para co-crear una plataforma interna de microfrontends Single-SPA con TypeScript/React en AWS, y establecer automatización CI/CD con GitHub Actions.",
+          "highlights": [
+            "Co-creé la plataforma interna Single-SPA con boilerplates reutilizables.",
+            "Implementé pipelines CI/CD automatizados con GitHub Actions.",
+            "Comencé la documentación para apps existentes y estándares de plataforma."
+          ],
+          "skills": [
+            "Microfrontends",
+            "Single-SPA",
+            "AWS Infrastructure",
+            "CI/CD Automation",
+            "Codebase Documentation",
+            "Reusable Boilerplates"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Greygoo",
+      "location": "Naperville, IL, USA",
+      "positions": [
+        {
+          "position": "Co-founder & Principal",
+          "startDate": "2012-03",
+          "endDate": "2019-06",
+          "summary": "Co-fundé un estudio digital entregando plataformas web y móviles para clientes enterprise y sector público, incluyendo General Motors, GO GROUND (NCAA) y el Paulson Institute. Supervisé ingeniería, UX y operaciones de entrega, mentorando un equipo multifuncional.",
+          "highlights": [
+            "Definí y ejecuté estrategia técnica y de entrega con altos estándares de rendimiento, accesibilidad y confiabilidad.",
+            "Construí y gestioné equipos frontend y móviles, fomentando colaboración y excelencia técnica.",
+            "Introduje automatización CI/CD, flujos de documentación y QA, mejorando consistencia y mantenibilidad.",
+            "Implementé prácticas de entrega ágil alineando ejecución técnica con objetivos del cliente.",
+            "Lideré proyectos multiphase superiores a $200K, equilibrando calidad técnica y expectativas de stakeholders."
+          ],
+          "skills": [
+            "Web Architecture",
+            "React Native",
+            "Ionic",
+            "CI/CD",
+            "Team Leadership",
+            "Mobile Development",
+            "Agile Delivery"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Opaso LLC",
+      "location": "Remoto | Chicago, IL",
+      "positions": [
+        {
+          "position": "Senior Frontend Developer",
+          "startDate": "2018-12",
+          "endDate": "2019-06",
+          "summary": "Lideré un equipo distribuido entregando una plataforma sanitaria personalizada en Angular. Supervisé UX, diseño de base de datos y UI. Gestioné relación con clientes, documentación y entrega Agile.",
+          "highlights": [
+            "Diseñé arquitectura Angular/TypeScript escalable con componentes reutilizables.",
+            "Lideré entrega end-to-end incluyendo gestión de sprints, QA y alineación con stakeholders.",
+            "Gestioné comunicaciones y expectativas del cliente asegurando alta satisfacción."
+          ],
+          "skills": [
+            "Angular",
+            "TypeScript",
+            "UI Architecture",
+            "Team Leadership",
+            "Agile Delivery",
+            "Healthcare Platforms"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Cro Metrics",
+      "location": "Remoto | Chicago, IL",
+      "positions": [
+        {
+          "position": "A/B Testing Developer",
+          "startDate": "2018-06",
+          "endDate": "2018-11",
+          "summary": "Construí y desplegué experimentos A/B y multivariante para clientes globales de e-commerce, mejorando engagement y conversión mediante iteración UX y diseño basado en analítica.",
+          "highlights": [
+            "Desarrollé variantes de tests web y móvil de alto rendimiento.",
+            "Colaboré con analistas y PMs para alinear experimentos con objetivos de negocio.",
+            "Documenté lógica, resultados y aprendizajes para mejorar prácticas del equipo."
+          ],
+          "skills": [
+            "A/B Testing",
+            "Conversion Rate Optimization",
+            "Analytics",
+            "JavaScript",
+            "Performance Optimization"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Upshot Agency",
+      "location": "Chicago, IL",
+      "positions": [
+        {
+          "position": "Frontend Developer",
+          "startDate": "2011-04",
+          "endDate": "2012-04",
+          "summary": "Entregué micrositios y herramientas internas de alta calidad para clientes como Hilton Hotels, Anheuser-Busch y Omron. Enfocado en interfaces responsivas, accesibles y optimizadas para SEO.",
+          "highlights": [
+            "Lideré frontend de una plataforma interna de seis meses para Hilton Hotels.",
+            "Construí micrositios responsivos optimizados para rendimiento y accesibilidad.",
+            "Colaboré con diseñadores y estrategas para cumplir lineamientos de marca."
+          ],
+          "skills": [
+            "HTML5",
+            "CSS3",
+            "Responsive Design",
+            "Accessibility",
+            "SEO Optimization"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Nokia Networks",
+      "location": "Estados Unidos (viajando)",
+      "positions": [
+        {
+          "position": "Contracting Engineer",
+          "startDate": "2001-10",
+          "endDate": "2011-03",
+          "summary": "Gestioné despliegues nacionales de telecomunicaciones para clientes como T-Mobile, AT&T y Alascom. Dirigí equipos de ingeniería, aseguré cumplimiento y mantuve relaciones con clientes.",
+          "highlights": [
+            "Entregué proyectos nacionales, incluido un despliegue 4G de $10M para T-Mobile.",
+            "Coordiné más de 20 equipos de campo y equipos RF en múltiples estados.",
+            "Mantuve documentación y cumplimiento rigurosos acorde a estándares de telecomunicaciones."
+          ],
+          "skills": [
+            "Telecommunications",
+            "Project Management",
+            "Team Leadership",
+            "Compliance",
+            "Technical Documentation"
+          ]
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "JavaScript",
+      "level": "Master",
+      "keywords": ["TypeScript", "Node.js", "ECMAScript", "Micro Frontends"]
+    },
+    {
+      "name": "Frontend Development",
+      "level": "Master",
+      "keywords": [
+        "React",
+        "Next.js",
+        "Angular",
+        "React Native",
+        "Gatsby",
+        "Progressive Web Apps",
+        "SPA",
+        "Server-Side Rendering",
+        "Static Site Generation",
+        "Headless CMS",
+        "GraphQL",
+        "REST",
+        "Service Workers"
+      ]
+    },
+    {
+      "name": "Design Systems",
+      "level": "Master",
+      "keywords": [
+        "Figma",
+        "Storybook",
+        "Design Tokens",
+        "Inner-sourcing",
+        "Governance"
+      ]
+    },
+    {
+      "name": "Developer Experience",
+      "level": "Master",
+      "keywords": [
+        "CI/CD Optimization",
+        "GitHub Actions",
+        "CodeQL",
+        "Onboarding Automation",
+        "Tooling Workflows",
+        "DX Strategy"
+      ]
+    },
+    {
+      "name": "AWS",
+      "level": "Advanced",
+      "keywords": ["S3", "CloudFront", "Lambda", "CloudWatch", "Amplify"]
+    },
+    {
+      "name": "GitHub",
+      "level": "Advanced",
+      "keywords": [
+        "GitHub Actions",
+        "Pages",
+        "Packages",
+        "GHAS",
+        "Branch Protections"
+      ]
+    },
+    {
+      "name": "HTML",
+      "level": "Master",
+      "keywords": [
+        "HTML5",
+        "Web Components",
+        "HTML Modules",
+        "Canvas",
+        "Semantic HTML"
+      ]
+    },
+    {
+      "name": "CSS",
+      "level": "Master",
+      "keywords": ["Tailwind CSS", "Sass", "Less", "CSS-in-JS"]
+    },
+    {
+      "name": "Testing",
+      "level": "Basic",
+      "keywords": ["Jest", "Cypress", "React Testing Library"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Universidad del Pacífico",
+      "area": "Diseño Gráfico",
+      "studyType": "Bachelor",
+      "startDate": "1998-03",
+      "endDate": "1998-12"
+    }
+  ],
+  "languages": [
+    {
+      "language": "Spanish",
+      "fluency": "Nativo"
+    },
+    {
+      "language": "English",
+      "fluency": "Dominio Bilingüe (C2)"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Hardening Agentic Experience (AX) in an AI-First Codebase",
+      "publisher": "LinkedIn",
+      "releaseDate": "2025-12-16",
+      "url": "https://www.linkedin.com/pulse/hardening-agentic-experience-ax-ai-first-codebase-vicente-opaso-7ktae"
+    },
+    {
+      "name": "Building My Website Through Spec-Driven Development: A Real-World Experiment in AI-Governed Engineering",
+      "publisher": "LinkedIn",
+      "releaseDate": "2025-12-12",
+      "url": "https://www.linkedin.com/pulse/building-my-website-through-spec-driven-development-real-world-opaso-5wyse"
+    },
+    {
+      "name": "Empowering Design Systems: How Communities of Practice Drive Innovation and Scalability",
+      "publisher": "LinkedIn",
+      "releaseDate": "2024-10-02",
+      "url": "https://www.linkedin.com/pulse/empowering-design-systems-how-communities-practice-drive-opaso-j0icf/"
+    },
+    {
+      "name": "Driving Innovation from the Ground Up: The Power of Communities of Practice",
+      "publisher": "LinkedIn",
+      "releaseDate": "2024-09-30",
+      "url": "https://www.linkedin.com/pulse/driving-innovation-from-ground-up-power-communities-practice-opaso-3msef/"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Acuarios de Agua Salada",
+      "keywords": [
+        "Coral",
+        "Reef",
+        "Marine",
+        "Invertebrates",
+        "Fishkeeping",
+        "Clownfish"
+      ]
+    },
+    {
+      "name": "DIY IoT Maker",
+      "keywords": [
+        "Raspberry Pi",
+        "Arduino",
+        "Magic Mirror",
+        "OpenHAB",
+        "Home Automation",
+        "Homebridge"
+      ]
+    },
+    {
+      "name": "Crypto",
+      "keywords": ["Bitcoin", "Ethereum", "NFT", "BCube", "Web3"]
+    }
+  ],
+  "references": [
+    {
+      "name": "<a href='https://www.linkedin.com/in/carvido1'>Carlos Vicent Domenech</a> | Líder de Ingeniería de Site Reliability @ Nexthink",
+      "reference": "He tenido la oportunidad de trabajar dos veces con Vicente en diferentes empresas. En nuestra primera etapa juntos, trabajando en Carlsberg, formábamos parte de dos equipos distintos responsables de diferentes productos/plataformas. Vicente estaba a cargo del equipo responsable del diseño y el framework de la plataforma para incorporar nuevos mercados a Carlsberg. Crearon Carlsberg Malty, un sistema de diseño open source para estandarizar los componentes que se utilizarían en los distintos escaparates y mercados. Como viajábamos regularmente a Lisboa para reunirnos con nuestros compañeros del Carlsberg Digital Hub, siempre teníamos tiempo para charlar y debatir sobre tecnología durante interminables tardes y noches. Estas conversaciones nos ayudaron a comprender diferentes puntos de vista técnicos y a mejorar la comprensión del trabajo en curso entre los distintos grupos.<br /><br />En nuestra segunda etapa juntos, Vicente se incorporó a Nexthink como Web Engineering Manager. A pesar del corto periodo trabajando nuevamente con Vicente, retomamos conversaciones más centradas en la gestión de ingeniería, decisiones clave y puntos de fricción en equipos de rápido crecimiento. Esto me confirma que el liderazgo y el deseo de destacar en el trabajo siguen siendo habilidades muy sólidas que Vicente posee.<br /><br />Reafirmo mi confianza en Vicente y en sus capacidades para liderar la creación de plataformas que mejoren la Developer Experience y aceleren el desarrollo y la entrega de productos tangibles."
+    },
+    {
+      "name": "<a href='https://www.linkedin.com/in/peterbirkholmbuch'>Peter Birkholm-Buch</a> | Director of Software Engineering in Growth Products & Data @ Carlsberg Group",
+      "reference": "Ha sido un privilegio tener a Vicente como parte de mi Leadership Team en Carlsberg Group. Como Frontend Solutions Architect, desempeñó un papel crítico en la definición de nuestra estrategia frontend, especialmente con el desarrollo del Malty Design System, que transformó nuestra aproximación a soluciones frontend globales.<br /><br />Su experiencia en JavaScript, TypeScript, React y tecnologías frontend, junto con su liderazgo en establecer una Community of Practice, mejoró significativamente DevEx y la calidad del código en toda la organización. Sus contribuciones fueron fundamentales para impulsar nuestro crecimiento e-commerce por encima de €1B anuales.<br /><br />Recomiendo ampliamente a Vicente por su liderazgo, creatividad y habilidades técnicas. Sería un activo excepcional para cualquier equipo."
+    },
+    {
+      "name": "<a href='https://www.linkedin.com/in/razvan-mihai-margauan'>Razvan Margauan</a> | iNM Programme Director @ EUROCONTROL",
+      "reference": "Tuve la oportunidad de trabajar estrechamente con Vicente durante mi liderazgo del USER Domain en EUROCONTROL. Vicente desempeñó un papel clave en la dirección técnica del framework NMUI y del Eurocontrol Design System (EDS), dos iniciativas fundamentales para nuestras plataformas operativas.<br /><br />Aportó claridad y consistencia, ya fuera alineando trabajo arquitectónico con requisitos regulatorios o mejorando workflows de desarrollo. Su capacidad para fomentar colaboración entre disciplinas lo convirtió en un miembro confiable del equipo.<br /><br />Su trabajo tuvo un impacto notable en la estabilidad y escalabilidad de nuestros sistemas, y aprecié su enfoque pragmático y constante."
+    },
+    {
+      "name": "<a href='https://www.linkedin.com/in/samuel-silva-olv'>Samuel Silva</a> | Senior Frontend Developer @ Carlsberg Group",
+      "reference": "Trabajar con Vicente en varios proyectos durante dos años ha sido un verdadero placer. Como Solutions Architect, demuestra dedicación para entregar soluciones que cumplen necesidades de negocio mientras valora la experiencia del equipo.<br /><br />Más allá de sus habilidades técnicas, es un team player que crea un entorno colaborativo y positivo. Su apoyo continuo y voluntad de compartir conocimiento han elevado nuestras prácticas internas.<br /><br />Recomiendo a Vicente para cualquier proyecto que requiera un Solutions Architect talentoso y comprometido."
+    },
+    {
+      "name": "<a href='https://www.linkedin.com/in/tmota-design'>Thiago Mota</a> | Senior Product Designer @ Carlsberg Group",
+      "reference": "Colaborar con Vicente, Solutions Architect y Lead Developer del Malty Design System, demostró su experiencia y profesionalismo excepcionales. Su profundo conocimiento y enfoque colaborativo garantizaron escalabilidad y éxito para el proyecto.<br /><br />Vicente conecta la complejidad técnica con la visión de diseño, aportando rigor y claridad a cada entrega."
+    },
+    {
+      "name": "<a href='https://www.linkedin.com/in/brunomptorres'>Bruno Torres</a> | Senior Frontend Developer @ Carlsberg Group",
+      "reference": "Es un verdadero placer expresar mi admiración por Vicente, un Frontend Solutions Architect increíblemente talentoso. Trabajar con él ha sido una experiencia de crecimiento profesional y personal.<br /><br />Vicente destaca por su dominio técnico y su compromiso con construir una comunidad frontend sólida. Bajo su liderazgo, el equipo se ha sentido apoyado y unido.<br /><br />Su enfoque de mentoría y colaboración ha elevado mis habilidades y ha creado un ambiente de trabajo positivo.<br /><br />Recomiendo a Vicente no solo como líder técnico, sino como alguien que valora humanidad y trabajo en equipo tanto como excelencia técnica."
+    }
+  ]
+}

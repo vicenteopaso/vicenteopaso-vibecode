@@ -3,6 +3,25 @@ import { NextResponse } from "next/server";
 
 import { locales } from "./lib/i18n/locales";
 
+// Block common attack vectors and bot probes
+const SUSPICIOUS_PATTERNS = [
+  "/wp-login.php",
+  "/wp-admin",
+  "/xmlrpc.php",
+  "/wp-content",
+  "/wp-includes",
+  "/.env",
+  "/.git",
+  "/admin",
+  "/phpmyadmin",
+  "/administrator",
+  "/user/login",
+  "/sites/default",
+  "/config.php",
+  "/typo3",
+  "/cgi-bin",
+] as const;
+
 /**
  * Proxy to handle locale-based routing and redirects.
  *
@@ -23,31 +42,14 @@ export function proxy(req: NextRequest) {
     pathname === "/en/news_sitemap.xml" ||
     pathname === "/es/news_sitemap.xml"
   ) {
-    return NextResponse.redirect(new URL("/sitemap.xml", req.url), {
+    const url = req.nextUrl.clone();
+    url.pathname = "/sitemap.xml";
+    return NextResponse.redirect(url, {
       status: 301,
     });
   }
 
-  // Block common attack vectors and bot probes
-  const suspiciousPatterns = [
-    "/wp-login.php",
-    "/wp-admin",
-    "/xmlrpc.php",
-    "/wp-content",
-    "/wp-includes",
-    "/.env",
-    "/.git",
-    "/admin",
-    "/phpmyadmin",
-    "/administrator",
-    "/user/login",
-    "/sites/default",
-    "/config.php",
-    "/typo3",
-    "/cgi-bin",
-  ];
-
-  if (suspiciousPatterns.some((pattern) => pathname.startsWith(pattern))) {
+  if (SUSPICIOUS_PATTERNS.some((pattern) => pathname.startsWith(pattern))) {
     return new NextResponse(null, { status: 404 });
   }
 
@@ -63,7 +65,7 @@ export function proxy(req: NextRequest) {
 
   // Handle all paths without locale prefix for automatic language detection
   const langHeader = req.headers.get("accept-language") || "";
-  const preferredLang = langHeader.split(",")[0]?.slice(0, 2);
+  const preferredLang = langHeader.split(",")[0]?.slice(0, 2) || "";
 
   // Redirect Spanish-locale browsers to /es, others to /en
   const targetLocale = preferredLang === "es" ? "es" : "en";
@@ -71,7 +73,7 @@ export function proxy(req: NextRequest) {
   // Handle root path specially to avoid double slash
   url.pathname =
     pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
-  return NextResponse.redirect(url);
+  return NextResponse.redirect(url, { status: 307 });
 }
 
 /**
@@ -89,6 +91,6 @@ export const config = {
      * - API routes
      * - Next.js metadata routes (opengraph-image, etc.)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|robots.txt|sitemap.xml|sitemap-0.xml|site.webmanifest|opengraph-image).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|sitemap-0.xml|news_sitemap.xml|opengraph-image|.*\\..*|robots.txt|sitemap.xml|site.webmanifest).*)",
   ],
 };

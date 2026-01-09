@@ -46,7 +46,8 @@ export default defineConfig({
     : {
         command: process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ?? "pnpm dev",
         url: BASE_URL,
-        timeout: 120_000,
+        // Allow extra time for Next.js dev server cold start before visual tests
+        timeout: 300_000,
         reuseExistingServer: !process.env.CI,
       },
 });

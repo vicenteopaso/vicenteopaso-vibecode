@@ -198,7 +198,7 @@ export function ImpactCards({
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
-              className="impact-card flex flex-col items-center justify-center rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-6 py-4 text-center shadow-sm"
+              className="glass-card impact-card flex flex-col items-center justify-center rounded-2xl px-6 py-4 text-center"
             >
               <ReactMarkdown components={impactCardComponents}>
                 {content}
@@ -216,7 +216,7 @@ export function ImpactCards({
           return (
             <div
               key={slot}
-              className={`impact-card ${stateClass} flex flex-col items-center justify-center rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-6 py-4 text-center shadow-sm`}
+              className={`glass-card impact-card ${stateClass} flex flex-col items-center justify-center rounded-2xl px-6 py-4 text-center`}
               style={maxHeight ? { minHeight: maxHeight } : undefined}
             >
               <ReactMarkdown components={impactCardComponents}>

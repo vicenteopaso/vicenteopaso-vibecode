@@ -7,7 +7,7 @@ export function GetInTouchSection({ locale }: { locale: Locale }) {
   const t = getTranslations(locale);
 
   return (
-    <section className="section-card space-y-4">
+    <section className="glass-card section-card space-y-4">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
           {t("getInTouch.title")}
@@ -16,7 +16,7 @@ export function GetInTouchSection({ locale }: { locale: Locale }) {
           trigger={
             <button
               type="button"
-              className="text-sm font-medium text-[color:var(--accent)] hover:text-[color:var(--accent-hover)] hover:underline underline-offset-4 cursor-pointer"
+              className="btn-primary h-8 px-4 text-sm font-semibold"
             >
               {t("getInTouch.contactButton")}
             </button>

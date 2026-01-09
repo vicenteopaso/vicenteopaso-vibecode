@@ -15,8 +15,8 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/");
       await waitForHomepage(page);
 
-      // Target the header section which contains the ProfileCard
-      const profileSection = page.locator("header.section-card");
+      // Target the hero header which contains the ProfileCard on the homepage
+      const profileSection = page.locator("header.page-card");
       await expect(profileSection).toBeVisible();
 
       // Mask the portrait image since it's randomly selected
@@ -36,7 +36,7 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/");
       await waitForHomepage(page);
 
-      const profileSection = page.locator("header.section-card");
+      const profileSection = page.locator("header.page-card");
       await expect(profileSection).toBeVisible();
 
       const portraitMask = getPortraitMask(page);
@@ -55,7 +55,7 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/");
       await waitForHomepage(page);
 
-      const profileSection = page.locator("header.section-card");
+      const profileSection = page.locator("header.page-card");
       await expect(profileSection).toBeVisible();
 
       const portraitMask = getPortraitMask(page);
