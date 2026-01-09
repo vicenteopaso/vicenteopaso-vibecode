@@ -22,7 +22,7 @@ const securityHeaders = [
       "font-src 'self' data:",
       // Allow Turnstile frames
       "frame-src https://challenges.cloudflare.com",
-      // XHR/fetch endpoints (includes Sentry error reporting)
+      // XHR/fetch endpoints (includes Sentry error reporting via global/EU/DE ingest endpoints)
       "connect-src 'self' https://challenges.cloudflare.com https://formspree.io https://*.ingest.sentry.io https://*.ingest.eu.sentry.io https://*.ingest.de.sentry.io",
       // Where forms can POST to
       "form-action 'self' https://formspree.io",
