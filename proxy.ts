@@ -3,6 +3,25 @@ import { NextResponse } from "next/server";
 
 import { locales } from "./lib/i18n/locales";
 
+// Block common attack vectors and bot probes
+const SUSPICIOUS_PATTERNS = [
+  "/wp-login.php",
+  "/wp-admin",
+  "/xmlrpc.php",
+  "/wp-content",
+  "/wp-includes",
+  "/.env",
+  "/.git",
+  "/admin",
+  "/phpmyadmin",
+  "/administrator",
+  "/user/login",
+  "/sites/default",
+  "/config.php",
+  "/typo3",
+  "/cgi-bin",
+] as const;
+
 /**
  * Proxy to handle locale-based routing and redirects.
  *
@@ -30,26 +49,7 @@ export function proxy(req: NextRequest) {
     });
   }
 
-  // Block common attack vectors and bot probes
-  const suspiciousPatterns = [
-    "/wp-login.php",
-    "/wp-admin",
-    "/xmlrpc.php",
-    "/wp-content",
-    "/wp-includes",
-    "/.env",
-    "/.git",
-    "/admin",
-    "/phpmyadmin",
-    "/administrator",
-    "/user/login",
-    "/sites/default",
-    "/config.php",
-    "/typo3",
-    "/cgi-bin",
-  ];
-
-  if (suspiciousPatterns.some((pattern) => pathname.startsWith(pattern))) {
+  if (SUSPICIOUS_PATTERNS.some((pattern) => pathname.startsWith(pattern))) {
     return new NextResponse(null, { status: 404 });
   }
 
