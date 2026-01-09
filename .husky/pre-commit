@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 
-# Run lint-staged with pnpm. Using pnpm directly here avoids relying on the
-# standalone `corepack` CLI, which may not be available in GUI Git environments
-# such as GitHub Desktop, while still respecting the configured package manager.
-pnpm lint-staged
+# Run lint-staged using the repo-pinned pnpm version when possible.
+# Prefer Corepack (which enforces the pnpm version from package.json),
+# but fall back to plain pnpm in environments where the `corepack` CLI
+# is not available (e.g. some GUI Git clients).
+if command -v corepack >/dev/null 2>&1; then
+  corepack pnpm lint-staged
+else
+  pnpm lint-staged
+fi
