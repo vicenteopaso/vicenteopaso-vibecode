@@ -69,9 +69,9 @@ export function Modal({
     <Dialog.Root {...dialogProps}>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+        <Dialog.Overlay className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm" />
         <Dialog.Content
-          className={`${getSizeClasses(size)} fixed left-1/2 top-1/2 max-h-[90dvh] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden rounded-2xl border border-[color:var(--border-strong)] bg-[color:var(--bg-surface)]/95 p-6 text-sm text-[color:var(--text-primary)] shadow-[0_18px_60px_rgba(15,23,42,0.9)] outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60`}
+          className={`${getSizeClasses(size)} fixed left-1/2 top-1/2 z-[70] -translate-x-1/2 -translate-y-1/2 overflow-y-auto overflow-x-hidden rounded-2xl border border-[color:var(--border-strong)] bg-[color:var(--bg-surface)]/95 p-6 text-sm text-[color:var(--text-primary)] shadow-[0_18px_60px_rgba(15,23,42,0.9)] outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/60 max-h-[85vh] sm:max-h-[90dvh] max-sm:top-4 max-sm:translate-y-0 max-sm:w-[calc(100vw-2rem)] max-sm:max-w-none max-sm:h-[calc(100vh-2rem)]`}
           data-testid={testId}
         >
           {children}

@@ -1,5 +1,9 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import { withContentlayer } from "next-contentlayer";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -19,7 +23,7 @@ const securityHeaders = [
       // Allow Turnstile frames
       "frame-src https://challenges.cloudflare.com",
       // XHR/fetch endpoints (includes Sentry error reporting)
-      "connect-src 'self' https://challenges.cloudflare.com https://formspree.io https://*.ingest.sentry.io",
+      "connect-src 'self' https://challenges.cloudflare.com https://formspree.io https://*.ingest.sentry.io https://*.ingest.eu.sentry.io https://*.ingest.de.sentry.io",
       // Where forms can POST to
       "form-action 'self' https://formspree.io",
       // Disallow changing base URL
@@ -66,8 +70,11 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   typedRoutes: true,
-  turbopack: {},
-  productionBrowserSourceMaps: true,
+  turbopack: {
+    // Explicitly tell Turbopack that the project root (where next/package.json lives)
+    // is this directory. This avoids mis-inferring /app as the root when resolving.
+    root: __dirname,
+  },
   images: {
     localPatterns: [
       {

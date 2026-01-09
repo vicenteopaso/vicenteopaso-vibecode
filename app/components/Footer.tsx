@@ -29,7 +29,7 @@ export function Footer() {
                 href="https://app.warp.dev/referral/8X3W39"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-[color:var(--link-hover)]"
+                className="text-[color:var(--link)] underline hover:text-[color:var(--link-hover)]"
               >
                 {t("footer.warp")}
               </a>
@@ -39,7 +39,7 @@ export function Footer() {
                 href="https://cursor.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-[color:var(--link-hover)]"
+                className="text-[color:var(--link)] underline hover:text-[color:var(--link-hover)]"
               >
                 {t("footer.cursor")}
               </a>

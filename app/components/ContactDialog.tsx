@@ -5,7 +5,7 @@ import type { FormEvent, ReactNode } from "react";
 import React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useTranslations } from "@/lib/i18n";
+import { useTranslations } from "@/lib/i18n/useTranslations";
 
 import { ContactInfo } from "./ContactInfo";
 import { Modal } from "./Modal";
@@ -323,7 +323,7 @@ export function ContactDialog({
   const triggerNode = trigger ?? (
     <button
       type="button"
-      className="inline-flex items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)]/90 px-3.5 py-1.5 text-xs font-medium text-[color:var(--text-primary)] shadow-sm shadow-black/5 transition hover:border-[color:var(--accent)]/50 hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 cursor-pointer"
+      className="btn-outline px-3.5 py-1.5 text-xs font-medium bg-[color:var(--bg-surface)]/90 shadow-black/5 hover:border-[color:var(--accent)]/50 hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
     >
       {triggerLabel}
     </button>
@@ -490,14 +490,14 @@ export function ContactDialog({
 
         <div className="mt-4 flex justify-end gap-2 border-t border-[color:var(--border-subtle)] pt-3 text-sm">
           <Dialog.Close
-            className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-app)]/60 px-4 py-1.5 text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--link-hover)] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+            className="btn-outline px-4 py-1.5 bg-[color:var(--bg-app)]/60 text-[color:var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-60"
             disabled={formState === "submitting"}
           >
             {t("contact.closeButton")}
           </Dialog.Close>
           <button
             type="submit"
-            className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+            className="btn-primary px-4 py-1.5 font-semibold disabled:cursor-not-allowed disabled:opacity-60"
             disabled={isSubmitDisabled}
           >
             {formState === "submitting"

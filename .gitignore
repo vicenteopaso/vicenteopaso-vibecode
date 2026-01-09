@@ -17,6 +17,7 @@ package-lock.json
 # misc
 .DS_Store
 *.pem
+.pnpm-store
 
 # debug
 npm-debug.log*
@@ -55,6 +56,3 @@ blob-report
 
 # Local pnpm store
 .pnpm-store/
-
-# Extracted CV JSON files
-content/**/cv.json

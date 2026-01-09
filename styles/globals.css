@@ -3,6 +3,12 @@
 @plugin "tailwindcss-radix";
 @plugin "@tailwindcss/typography";
 
+@theme {
+  /* Tailwind default color tokens - these reference Tailwind's built-in colors */
+  --color-white: #ffffff; /* Tailwind's default white */
+  --color-neutral-900: #171717; /* Tailwind's default neutral-900 */
+}
+
 /* Custom fonts */
 @font-face {
   font-family: "Inter";
@@ -50,28 +56,6 @@
   --font-size-code: 0.78rem;
   --line-height-body: 1.625; /* matches Tailwind leading-relaxed */
 
-  /* Radius scale */
-  /* --radius-xs: 0.125rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem; */
-  --radius-xs: 0;
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-3xl: 0;
-  --radius-4xl: 0;
-  --radius-5xl: 0;
-  --radius-6xl: 0;
-  --radius-7xl: 0;
-  --radius-8xl: 0;
-  --radius-9xl: 0;
-  --radius-10xl: 0;
-  --radius-full: 9999px;
-
   /* Shadows */
   --shadow-page-card: 0 18px 60px rgba(15, 23, 42, 0.9);
   --shadow-skip-link: 0 18px 40px rgba(15, 23, 42, 0.7);
@@ -87,6 +71,12 @@
   --bg-elevated: #e5e7eb; /* gray-200 */
   --bg-muted: #e5e7eb;
   --surface-subtle: #fef2f2; /* subtle accent-tinted surface */
+
+  /* Card glass backgrounds (light theme) */
+  --card-bg-from: rgba(255, 255, 255, 0.92);
+  --card-bg-to: rgba(248, 250, 252, 0.78);
+  --card-border: rgba(148, 163, 184, 0.55);
+  --card-highlight: rgba(255, 255, 255, 0.7);
 
   /* Background gradients (light theme) */
   --bg-gradient-top: radial-gradient(
@@ -138,6 +128,12 @@
   --bg-muted: #05070a;
   --surface-subtle: #0f172a; /* subtle lifted surface for accent hovers */
 
+  /* Card glass backgrounds (dark theme) */
+  --card-bg-from: rgba(15, 23, 42, 0.88);
+  --card-bg-to: rgba(15, 23, 42, 0.7);
+  --card-border: rgba(148, 163, 184, 0.4);
+  --card-highlight: rgba(255, 255, 255, 0.06);
+
   /* Text colors (dark theme) */
   --text-primary: #f9fafb; /* slate-50 */
   --text-muted: #9ca3af; /* gray-400 */
@@ -183,17 +179,152 @@ body {
     @apply mx-auto w-full max-w-4xl px-4;
   }
 
-  .page-card {
-    @apply rounded-3xl p-6 sm:p-8 backdrop-blur;
+  /* ======================================================
+     Base Glass Card (NO blur yet — SSR & Safari safe)
+     ====================================================== */
+  .glass-card {
+    @apply relative z-0 overflow-hidden rounded-2xl p-4 bg-white/80 dark:bg-neutral-900/80 border border-black/5 dark:border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.08)];
+    contain: paint;
+    transition: none;
+  }
+
+  /* ======================================================
+     Progressive Enhancement: Backdrop Blur
+     ====================================================== */
+  @supports (
+    (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))
+  ) {
+    .glass-card {
+      background-color: rgba(255, 255, 255, 0.15);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      backdrop-filter: blur(18px) saturate(150%);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .dark .glass-card {
+      background-color: rgba(24, 24, 27, 0.6);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  /* ======================================================
+     iOS-style Light Gradient Tint
+     ====================================================== */
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0.02)
+    );
+  }
+
+  .dark .glass-card::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.015),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  /* No hover lift; glass should feel stable */
+  /* .glass-card:hover {
+    transform: none;
+    box-shadow: inherit;
+  } */
+
+  /* ======================================================
+     Accessibility & Performance Guards
+     ====================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .glass-card {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .glass-card {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      background-color: var(--color-white);
+    }
+
+    .dark .glass-card {
+      background-color: var(--color-neutral-900);
+    }
+
+    .glass-card::before {
+      display: none;
+    }
+  }
+
+  /* Optional thickness modifiers */
+  .glass-thin {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-thick {
+    -webkit-backdrop-filter: blur(28px);
+    backdrop-filter: blur(28px);
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center cursor-pointer select-none rounded-full px-4 py-2 text-xs font-semibold shadow-sm;
+    border: 1px solid var(--accent);
+    background-color: var(--accent);
+    color: #f9fafb;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.35);
+    transition:
+      background-color var(--transition-fast) ease,
+      border-color var(--transition-fast) ease,
+      color var(--transition-fast) ease;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .btn-primary:active:not(:disabled) {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center cursor-pointer select-none rounded-full border px-4 py-2 text-xs font-semibold shadow-sm;
+    border-color: var(--border-subtle);
     background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-page-card);
+    color: var(--text-primary);
+    transition:
+      background-color var(--transition-fast) ease,
+      border-color var(--transition-fast) ease,
+      color var(--transition-fast) ease;
+  }
+
+  .btn-outline:hover:not(:disabled) {
+    background-color: var(--surface-subtle);
+    border-color: var(--border-strong);
+  }
+
+  .btn-outline:active:not(:disabled) {
+    background-color: var(--bg-surface);
+    border-color: var(--border-subtle);
+  }
+
+  .page-card {
+    @apply rounded-3xl p-6 sm:p-8;
   }
 
   .section-card {
-    @apply rounded-2xl p-4 sm:p-6 shadow-sm;
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
+    @apply rounded-2xl p-4 sm:p-6;
   }
 
   .skip-link {
@@ -225,7 +356,7 @@ body {
     outline-offset: 2px;
   }
 
-  /* Subtle animation for Home page impact cards (root /) */
+  /* Subtle animation + glass chrome for Home page impact cards (root /) */
   .impact-card {
     will-change: opacity, transform;
   }
@@ -265,6 +396,18 @@ body {
 }
 
 @layer base {
+  /* Global link styles */
+  a {
+    color: var(--link);
+    text-decoration-line: underline;
+    text-underline-offset: 0.15em;
+    transition: color var(--transition-fast) ease;
+  }
+
+  a:hover {
+    color: var(--link-hover);
+  }
+
   /* Headings */
   h1 {
     @apply text-4xl md:text-5xl font-semibold tracking-tight;
@@ -360,16 +503,6 @@ body {
   ul li::marker,
   ol li::marker {
     color: var(--secondary);
-  }
-
-  /* Links */
-  a {
-    @apply underline-offset-4 hover:underline;
-    color: var(--link);
-  }
-
-  a:hover {
-    color: var(--link-hover);
   }
 
   /* Form placeholders */
