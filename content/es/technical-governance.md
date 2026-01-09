@@ -344,4 +344,4 @@ Ver `.github/ISSUE_TEMPLATE/` para definiciones de plantillas y guías de uso.
 
 ## Última Actualización
 
-Esta documentación de gobernanza técnica fue revisada y actualizada por última vez el 13 de diciembre de 2024.
+Esta documentación de gobernanza técnica fue revisada y actualizada por última vez el 15 de enero de 2025.
