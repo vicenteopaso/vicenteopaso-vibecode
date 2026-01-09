@@ -7,7 +7,7 @@ description: Cómo Spec-Driven Development (SDD) y la ingeniería basada en docu
 
 ## Ingeniería Basada en Documentación
 
-Este proyecto se construyó utilizando un enfoque de **Documentación-First**, en el cual documentos comprehensivos de gobernanza, especificaciones de arquitectura y estándares de ingeniería se redactaron antes y durante el desarrollo. Estos documentos sirven como base tanto para la toma de decisiones humanas como para la implementación asistida por IA.
+Este proyecto se construyó utilizando un enfoque de **Documentación-First**, en el cual documentos exhaustivos de gobernanza, especificaciones de arquitectura y estándares de ingeniería se redactaron antes y durante el desarrollo. Estos documentos sirven como base tanto para la toma de decisiones humanas como para la implementación asistida por IA.
 
 ### La Filosofía
 
@@ -26,7 +26,7 @@ La gobernanza técnica del proyecto se define a través de varios documentos cla
 
 #### Engineering Standards (`docs/ENGINEERING_STANDARDS.md`)
 
-Un documento **north-star** comprehensivo que captura la intención de ingeniería en:
+Un documento **north-star** exhaustivo que captura la intención de ingeniería en:
 
 - **Fundamentos Arquitectónicos** — Principios de arquitectura modular basada en componentes
 - **Estándares de Ingeniería Frontend** — Calidad de código, ingeniería de componentes y guías de design system
@@ -75,7 +75,7 @@ Define los **invariantes inmutables** del repositorio y el **orden de precedenci
 
 ## Architecture Decision Records (ADRs)
 
-Para complementar la documentación comprehensiva, este proyecto usa **Architecture Decision Records (ADRs)** para capturar decisiones arquitectónicas significativas con su contexto y consecuencias.
+Para complementar la documentación exhaustiva, este proyecto usa **Architecture Decision Records (ADRs)** para capturar decisiones arquitectónicas significativas con su contexto y consecuencias.
 
 ### Propósito
 
@@ -113,7 +113,7 @@ Los ADRs se integran con el flujo de trabajo de desarrollo:
 
 ### Desarrollo Consciente del Contexto
 
-Con documentación comprehensiva y ADRs en su lugar, las herramientas de IA pueden:
+Con documentación exhaustiva y ADRs en su lugar, las herramientas de IA pueden:
 
 1. **Entender la Intención** — Leyendo `ENGINEERING_STANDARDS.md`, la IA entiende el nivel de calidad, patrones arquitectónicos y estándares de codificación
 2. **Aprender de Decisiones** — Leyendo ADRs, la IA entiende decisiones arquitectónicas pasadas y su justificación
@@ -206,7 +206,7 @@ Toda la documentación es:
 Este proyecto abraza **desarrollo IA-first con guardrails fuertes**:
 
 1. **IA como Acelerador, No Tomador de Decisiones** — Las herramientas de IA sugieren implementaciones, pero las decisiones arquitectónicas permanecen guiadas por humanos y documentadas
-2. **Documentación como Contexto IA** — Documentos comprehensivos permiten a la IA entender la intención y mantener consistencia
+2. **Documentación como Contexto IA** — Documentos exhaustivos permiten a la IA entender la intención y mantener consistencia
 3. **Quality Gates Son No-Negociables** — Todo código generado por IA debe pasar los mismos checks rigurosos que el código humano
 4. **Restricciones de Seguridad Son Obligatorias** — La IA no puede evadir controles de seguridad o introducir vulnerabilidades
 5. **Supervisión Humana para Cambios Críticos** — Cambios sensibles a seguridad y arquitectónicos requieren revisión manual
@@ -324,7 +324,7 @@ Este enfoque documentation-first escala bien:
 Para desarrolladores y contribuidores:
 
 - [Tech Stack](/es/tech-stack) — Stack tecnológico completo y resumen de tooling
-- [Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md) — Intención de ingeniería comprehensiva
+- [Engineering Standards](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ENGINEERING_STANDARDS.md) — Intención de ingeniería exhaustiva
 - [Architecture Overview](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/ARCHITECTURE.md) — Arquitectura técnica
 - [Engineering Constitution](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/CONSTITUTION.md) — Gobernanza del repositorio
 - [Design System](https://github.com/vicenteopaso/vicenteopaso-vibecode/blob/main/docs/DESIGN_SYSTEM.md) — Tokens de diseño visual y patrones
