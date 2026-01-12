@@ -565,9 +565,11 @@ When you manually trigger it via the GitHub Actions UI:
 
 To enable automatic CI triggering when the "Allow CI to run" option is enabled, configure a Personal Access Token (PAT):
 
-1. Create a PAT with `repo` and `workflow` scopes at [GitHub Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
+1. Create a classic PAT (recommended) or fine-grained PAT at [GitHub Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
+   - For classic PAT: select `repo` and `workflow` scopes
+   - For fine-grained PAT: grant repository access with `Contents: Read and write` and `Actions: Read and write` permissions
 2. Add it as a repository secret named `PAT_WORKFLOW_TRIGGER` at Settings > Secrets and Variables > Actions
-3. Without this secret, the workflow falls back to `GITHUB_TOKEN`, which cannot trigger CI on pull requests due to GitHub Actions security restrictions.
+3. Without this secret, the workflow falls back to `GITHUB_TOKEN`, which cannot trigger other workflows due to GitHub Actions security restrictions.
 
 Notes:
 
