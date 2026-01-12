@@ -558,12 +558,20 @@ When you manually trigger it via the GitHub Actions UI:
 
 1. Select the branch you want to update.
 2. Optional: enable **Allow CI to run on PRs for the snapshot update commit**.
-   - If enabled: the workflow commits **without** `[skip ci]`, so if the branch has an open PR, the normal PR-triggered `CI` run will execute on the new commit.
+   - If enabled: the workflow commits **without** `[skip ci]`, and CI will trigger on the new commit (requires `PAT_WORKFLOW_TRIGGER` secret configured).
    - If disabled (default): it commits with `[skip ci]`, so the update will _not_ trigger CI even if the branch has an open PR.
+
+**Setup requirements:**
+
+To enable automatic CI triggering when the "Allow CI to run" option is enabled, configure a Personal Access Token (PAT):
+
+1. Create a PAT with `repo` and `workflow` scopes at [GitHub Settings > Developer Settings > Personal Access Tokens](https://github.com/settings/tokens)
+2. Add it as a repository secret named `PAT_WORKFLOW_TRIGGER` at Settings > Secrets and Variables > Actions
+3. Without this secret, the workflow falls back to `GITHUB_TOKEN`, which cannot trigger CI on pull requests due to GitHub Actions security restrictions.
 
 Notes:
 
-- The workflow commit message includes `[skip ci]` to avoid implicitly triggering other push-based workflows; the optional CI dispatch is the explicit way to run CI after baselines update.
+- When using `GITHUB_TOKEN` (fallback), commits from this workflow will not trigger CI even without `[skip ci]`, due to GitHub Actions security restrictions that prevent workflows from triggering other workflows.
 
 **Exception (README snapshots):**
 
