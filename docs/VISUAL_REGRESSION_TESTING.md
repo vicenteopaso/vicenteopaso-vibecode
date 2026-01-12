@@ -573,7 +573,7 @@ To enable automatic CI triggering when the "Allow CI to run" option is enabled, 
 
 Notes:
 
-- When using `GITHUB_TOKEN` (fallback), commits from this workflow will not trigger CI even without `[skip ci]`, due to GitHub Actions security restrictions that prevent workflows from triggering other workflows.
+- When using `GITHUB_TOKEN` (fallback), commits from this workflow cannot trigger other workflows due to GitHub Actions security restrictions. The workflow adds `[skip ci]` when the trigger option is disabled to make this behavior explicit.
 
 **Exception (README snapshots):**
 
