@@ -1,6 +1,15 @@
 ## Summary
 
-<!-- Provide a clear, concise description of the changes in this PR -->
+<!--
+  Provide a clear, concise description of the changes in this PR.
+
+  Governance expectations:
+  - PR titles should follow: `type: short summary` where type is one of
+    `feat`, `fix`, `chore`, `docs`, `refactor`, or `test`.
+  - When using the GitHub CLI (including from AI tools), prefer:
+    `gh pr create --fill` or `gh pr create --template PULL_REQUEST_TEMPLATE.md`
+    so this template is always applied.
+-->
 
 ## Related Issue
 
