@@ -51,29 +51,40 @@ jobs:
     if: github.event_name == 'pull_request'
 
     steps:
-      - name: Check PR body for required sections
+      - name: Check PR title and body for governance compliance
         uses: actions/github-script@v8
         with:
           script: |
             const pr = context.payload.pull_request;
+            const title = pr.title || '';
             const body = pr.body || '';
+
+            // Enforce conventional type-based title prefix
+            const titlePattern = /^(feat|fix|chore|docs|refactor|test): /;
+            if (!titlePattern.test(title)) {
+              core.setFailed(
+                `PR title "${title}" must start with one of: feat:, fix:, chore:, docs:, refactor:, test:`,
+              );
+            }
 
             // Check for required sections in PR template
             const requiredSections = [
               'Type of Change',
-              'Architecture Decision Record',
+              'Architecture Decision Record (ADR)',
               'Technical Governance Compliance',
               'Quality Checks',
               'AI Guardrails Compliance',
-              'Additional Verification'
+              'Additional Verification',
             ];
 
-            const missingSections = requiredSections.filter(section => 
-              !body.includes(section)
+            const missingSections = requiredSections.filter((section) =>
+              !body.includes(section),
             );
 
             if (missingSections.length > 0) {
-              core.setFailed(`PR template missing required sections: ${missingSections.join(', ')}`);
+              core.setFailed(
+                `PR template missing required sections: ${missingSections.join(', ')}`,
+              );
             } else {
               console.log('✅ PR template structure validated');
             }

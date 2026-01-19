@@ -10,6 +10,7 @@ overrides:
   cookie@<0.7.0: '>=0.7.0'
   tmp@<=0.2.3: '>=0.2.4'
   qs@<6.14.1: '>=6.14.1'
+  diff@<8.0.3: '>=8.0.3'
 
 packageExtensionsChecksum: sha256-TPJV6Z4Q+bMg7BYJdKfZXXJ/7Ud/3D0TMrluONUepCE=
 
@@ -3166,8 +3167,8 @@ packages:
   devtools-protocol@0.0.1534754:
     resolution: {integrity: sha512-26T91cV5dbOYnXdJi5qQHoTtUoNEqwkHcAyu/IKtjIAxiEqPMrDiRkDOPWVsGfNZGmlQVHQbZRSjD8sxagWVsQ==}
 
-  diff@5.2.0:
-    resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
+  diff@8.0.3:
+    resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
     engines: {node: '>=0.3.1'}
 
   doctrine@2.1.0:
@@ -9335,7 +9336,7 @@ snapshots:
 
   devtools-protocol@0.0.1534754: {}
 
-  diff@5.2.0: {}
+  diff@8.0.3: {}
 
   doctrine@2.1.0:
     dependencies:
@@ -13025,7 +13026,7 @@ snapshots:
   uvu@0.5.6:
     dependencies:
       dequal: 2.0.3
-      diff: 5.2.0
+      diff: 8.0.3
       kleur: 4.1.5
       sade: 1.8.1
 
