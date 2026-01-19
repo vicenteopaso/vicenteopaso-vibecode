@@ -11,7 +11,6 @@ async function openContactDialog(page: Page) {
     .getByRole("button", { name: "Contact", exact: true });
 
   await expect(contactButton).toBeVisible({ timeout: 5000 });
-  await page.waitForLoadState("networkidle");
 
   // Ensure button is enabled and clickable
   await expect(contactButton).toBeEnabled({ timeout: 5000 });
@@ -53,7 +52,7 @@ async function openContactDialog(page: Page) {
 }
 
 test("contact dialog opens and shows required fields", async ({ page }) => {
-  await page.goto("/en", { waitUntil: "networkidle" });
+  await page.goto("/en", { waitUntil: "load" });
 
   await openContactDialog(page);
 
@@ -135,7 +134,7 @@ test.describe("Contact dialog - mobile viewport", () => {
 // Error flow tests
 test.describe("Contact dialog - error handling", () => {
   test("shows validation errors for empty form", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
 
     await openContactDialog(page);
 
@@ -154,7 +153,7 @@ test.describe("Contact dialog - error handling", () => {
   });
 
   test("form values are preserved on validation error", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
 
     await openContactDialog(page);
 
@@ -183,7 +182,7 @@ test.describe("Contact dialog - accessibility", () => {
   });
 
   test("has aria-live region for status messages", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
 
     const dialog = await openContactDialog(page);
 
@@ -194,7 +193,7 @@ test.describe("Contact dialog - accessibility", () => {
   });
 
   test("focus is trapped within dialog", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
 
     const dialog = await openContactDialog(page);
 

@@ -63,11 +63,12 @@ describe("LanguageToggle", () => {
       renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveClass("inline-flex");
+      // Component uses btn-outline utility class which includes inline-flex, items-center, justify-center, rounded-full via @apply
+      expect(button).toHaveClass("btn-outline");
       expect(button).toHaveClass("h-8");
-      expect(button).toHaveClass("items-center");
-      expect(button).toHaveClass("justify-center");
-      expect(button).toHaveClass("rounded-full");
+      expect(button).toHaveClass("px-3");
+      expect(button).toHaveClass("text-xs");
+      expect(button).toHaveClass("font-medium");
     });
   });
 
@@ -108,9 +109,9 @@ describe("LanguageToggle", () => {
       renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveClass("focus-visible:outline-none");
-      expect(button).toHaveClass("focus-visible:ring-2");
-      expect(button).toHaveClass("focus-visible:ring-sky-400");
+      // Component uses btn-outline utility class which handles focus styles via CSS
+      // Just verify the button is focusable (already tested above)
+      expect(button).toHaveClass("btn-outline");
     });
   });
 
@@ -202,14 +203,16 @@ describe("LanguageToggle", () => {
       renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveClass("transition-colors");
+      // Component uses btn-outline utility class which includes transitions via CSS
+      expect(button).toHaveClass("btn-outline");
     });
 
     it("should have proper shadow styling", () => {
       renderWithProviders(<LanguageToggle />);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveClass("shadow-sm");
+      // Component uses btn-outline utility class which includes shadow-sm via @apply
+      expect(button).toHaveClass("btn-outline");
     });
   });
 });

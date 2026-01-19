@@ -40,7 +40,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               <button
                 type="button"
                 onClick={() => reset()}
-                className="rounded-full bg-[color:var(--accent)] px-4 py-1.5 text-sm font-semibold text-slate-50 shadow-md shadow-[color:var(--accent)]/30 transition hover:bg-[color:var(--accent-hover)] hover:shadow-lg hover:shadow-[color:var(--accent)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                className="btn-primary px-4 py-1.5 text-sm"
               >
                 Try again
               </button>
@@ -52,7 +52,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
                     window.location.reload();
                   }
                 }}
-                className="rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-4 py-1.5 text-sm font-medium text-[color:var(--text-primary)] shadow-sm transition hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                className="btn-outline px-4 py-1.5 text-sm font-medium"
               >
                 Reload
               </button>

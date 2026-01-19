@@ -140,23 +140,27 @@ export default async function CVPage({ params }: PageProps) {
   const locale = getLocaleFromParams({ lang });
   const t = getTranslations(locale);
 
-  const filePath = path.join(process.cwd(), "content", locale, "cv.md");
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContents);
+  // Frontmatter (title, name, tagline) still comes from the markdown file
+  const metaPath = path.join(process.cwd(), "content", locale, "cv.md");
+  const metaContents = fs.readFileSync(metaPath, "utf8");
+  const { data } = matter(metaContents);
 
   const title = (data.title as string) || "CV";
   const tagline = (data.tagline as string) || "";
 
+  // Structured CV data now comes from a separate JSON file (cv.json)
   let cv: CvJson | null = null;
   try {
-    cv = JSON.parse(content) as CvJson;
+    const jsonPath = path.join(process.cwd(), "content", locale, "cv.json");
+    const jsonContents = fs.readFileSync(jsonPath, "utf8");
+    cv = JSON.parse(jsonContents) as CvJson;
   } catch {
     cv = null;
   }
 
   if (!cv) {
     return (
-      <div className="section-card space-y-4">
+      <div className="glass-card section-card space-y-4">
         <h1 className="text-3xl font-bold text-[color:var(--text-primary)] sm:text-4xl">
           {title}
         </h1>
@@ -166,8 +170,9 @@ export default async function CVPage({ params }: PageProps) {
           </p>
         )}
         <p className="text-xs text-red-400 sm:text-sm">
-          CV data could not be loaded. Please check that the JSON body in
-          <code className="ml-1">content/en/cv.md</code> is valid.
+          CV data could not be loaded. Please check that the CV JSON file in
+          <code className="ml-1">{`content/${locale}/cv.json`}</code> is present
+          and valid.
         </p>
       </div>
     );
@@ -220,7 +225,7 @@ export default async function CVPage({ params }: PageProps) {
 
   return (
     <div id="cv-top" className="space-y-6 scroll-mt-28">
-      <header className="section-card">
+      <header className="glass-card section-card">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <ProfileCard
             name={profileName}
@@ -236,7 +241,10 @@ export default async function CVPage({ params }: PageProps) {
         </div>
       </header>
 
-      <section id="summary" className="section-card space-y-4 scroll-mt-28">
+      <section
+        id="summary"
+        className="glass-card section-card space-y-4 scroll-mt-28"
+      >
         {cv.basics?.summary && <HtmlBlock html={cv.basics.summary} />}
         {normalizeHighlights(cv.basics?.highlights).length > 0 && (
           <div className="mt-3 mx-auto">
@@ -262,7 +270,7 @@ export default async function CVPage({ params }: PageProps) {
       {work.length > 0 && (
         <section
           id="experience"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -270,7 +278,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -347,7 +355,7 @@ export default async function CVPage({ params }: PageProps) {
       {cv.education && cv.education.length > 0 && (
         <section
           id="education"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -355,7 +363,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -386,7 +394,7 @@ export default async function CVPage({ params }: PageProps) {
       {cv.languages && cv.languages.length > 0 && (
         <section
           id="languages"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -394,7 +402,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -418,7 +426,7 @@ export default async function CVPage({ params }: PageProps) {
       {cv.skills && cv.skills.length > 0 && (
         <section
           id="skills"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -426,7 +434,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -460,7 +468,7 @@ export default async function CVPage({ params }: PageProps) {
       {cv.publications && cv.publications.length > 0 && (
         <section
           id="publications"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -468,7 +476,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -509,7 +517,7 @@ export default async function CVPage({ params }: PageProps) {
       {cv.interests && cv.interests.length > 0 && (
         <section
           id="interests"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -517,7 +525,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -543,7 +551,7 @@ export default async function CVPage({ params }: PageProps) {
       {cv.references && cv.references.length > 0 && (
         <section
           id="references"
-          className="section-card group space-y-4 scroll-mt-28"
+          className="glass-card section-card group space-y-4 scroll-mt-28"
         >
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
@@ -551,7 +559,7 @@ export default async function CVPage({ params }: PageProps) {
             </h2>
             <a
               href="#cv-top"
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] opacity-0 shadow-sm transition-opacity hover:border-[color:var(--accent)]/40 hover:text-[color:var(--accent)] group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
               aria-label="Back to top"
             >
               ↑
@@ -569,7 +577,7 @@ export default async function CVPage({ params }: PageProps) {
           target="_blank"
           rel="noreferrer"
           aria-label="GitHub profile"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -589,7 +597,7 @@ export default async function CVPage({ params }: PageProps) {
           target="_blank"
           rel="noreferrer"
           aria-label="LinkedIn profile"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -609,7 +617,7 @@ export default async function CVPage({ params }: PageProps) {
           target="_blank"
           rel="noreferrer"
           aria-label="X (Twitter) profile"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

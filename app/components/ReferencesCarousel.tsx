@@ -143,7 +143,7 @@ export function ReferencesCarousel({
               type="button"
               aria-label={`Show reference ${i + 1}`}
               onClick={() => setIndex(i)}
-              className={`h-1.5 w-4 rounded-full transition-colors ${
+              className={`h-1.5 w-4 rounded-full transition-colors cursor-pointer ${
                 i === index
                   ? "bg-[color:var(--secondary)]"
                   : "bg-[color:var(--border-subtle)]"
