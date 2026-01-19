@@ -179,7 +179,7 @@ describe("ContactDialog", () => {
   });
 
   describe("success flow", () => {
-    it("resets form fields and disables inputs after successful submission", async () => {
+    it("resets form fields and disables inputs and send button after successful submission", async () => {
       await openDialogAndWaitForTurnstile();
       fillForm();
 
@@ -209,26 +209,8 @@ describe("ContactDialog", () => {
       expect(emailInput).toBeDisabled();
       expect(messageInput).toBeDisabled();
       expect(phoneInput).toBeDisabled();
-    });
 
-    it("disables send button after successful submission", async () => {
-      await openDialogAndWaitForTurnstile();
-      fillForm();
-
-      const form = screen.getByLabelText(/email/i).closest("form");
-      expect(form).not.toBeNull();
-
-      // Submit the form
-      fireEvent.submit(form as HTMLFormElement);
-
-      // Wait for success message
-      await waitFor(() => {
-        expect(
-          screen.getByText(/message sent/i, { exact: false }),
-        ).toBeInTheDocument();
-      });
-
-      // Send button should be disabled
+      // Send button should also be disabled after a successful submission
       const sendButton = screen.getByRole("button", { name: /send/i });
       expect(sendButton).toBeDisabled();
     });

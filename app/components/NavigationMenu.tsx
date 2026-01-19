@@ -16,10 +16,9 @@ import { LanguageToggle } from "./LanguageToggle";
 import { useLocale } from "./LocaleProvider";
 
 const navLinkBase =
-  "inline-flex h-8 items-center justify-center rounded-full px-3 text-sm font-medium leading-none text-[color:var(--text-primary)] hover:text-[color:var(--link-hover)] hover:underline underline-offset-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
+  "btn-outline h-8 px-3 text-xs font-medium no-underline hover:no-underline hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]";
 
-const navLinkActive =
-  "bg-[color:var(--surface-subtle)] text-[color:var(--text-primary)] hover:text-[color:var(--text-primary)] ring-1 ring-[color:var(--border-subtle)]";
+const navLinkActive = "border-[color:var(--accent)]";
 
 const imageCacheVersion = "1"; // Increment this when logo images are updated
 const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
@@ -98,7 +97,7 @@ export function NavigationMenu() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-xs text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 cursor-pointer"
+            className="btn-outline h-8 w-8 p-0 text-xs hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
             aria-label={t("nav.themeToggle")}
           >
             {displayTheme === "dark" ? <SunIcon /> : <MoonIcon />}
