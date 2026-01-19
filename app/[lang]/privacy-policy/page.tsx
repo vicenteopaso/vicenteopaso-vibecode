@@ -19,11 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return baseMetadata({
     title: "Privacy Policy",
     description:
-      "Privacy Policy for opa.so. Learn how we collect, use, and protect your personal data in compliance with GDPR and Spanish data protection regulations.",
+      "Privacy Policy for opa.so. Learn how your data is collected, used, and protected.",
     openGraph: {
-      title: "Privacy Policy Vicente Opaso",
+      title: "Privacy Policy · Vicente Opaso",
       description:
-        "Privacy Policy for opa.so. Learn how we collect, use, and protect your personal data.",
+        "Privacy Policy for opa.so, detailing data collection, usage, and protection.",
     },
   });
 }

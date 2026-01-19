@@ -50,7 +50,7 @@ export function LanguageToggle() {
       type="button"
       onClick={handleToggle}
       disabled={isLoading}
-      className="inline-flex h-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] px-3 text-xs font-medium text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 cursor-pointer"
+      className="btn-outline h-8 px-3 text-xs font-medium hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] disabled:opacity-50"
       aria-label={t("language.toggle")}
       title={`Switch to ${nextLocale.toUpperCase()}`}
     >
