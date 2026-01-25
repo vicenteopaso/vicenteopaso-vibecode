@@ -160,20 +160,22 @@ export default async function CVPage({ params }: PageProps) {
 
   if (!cv) {
     return (
-      <div className="glass-card section-card space-y-4">
-        <h1 className="text-3xl font-bold text-[color:var(--text-primary)] sm:text-4xl">
-          {title}
-        </h1>
-        {tagline && (
-          <p className="text-base text-[color:var(--text-muted)] sm:text-lg">
-            {tagline}
+      <div className="glass-card">
+        <div className="glass-card-inner section-card space-y-4">
+          <h1 className="text-3xl font-bold text-[color:var(--text-primary)] sm:text-4xl">
+            {title}
+          </h1>
+          {tagline && (
+            <p className="text-base text-[color:var(--text-muted)] sm:text-lg">
+              {tagline}
+            </p>
+          )}
+          <p className="text-xs text-red-400 sm:text-sm">
+            CV data could not be loaded. Please check that the CV JSON file in
+            <code className="ml-1">{`content/${locale}/cv.json`}</code> is
+            present and valid.
           </p>
-        )}
-        <p className="text-xs text-red-400 sm:text-sm">
-          CV data could not be loaded. Please check that the CV JSON file in
-          <code className="ml-1">{`content/${locale}/cv.json`}</code> is present
-          and valid.
-        </p>
+        </div>
       </div>
     );
   }
@@ -225,347 +227,343 @@ export default async function CVPage({ params }: PageProps) {
 
   return (
     <div id="cv-top" className="space-y-6 scroll-mt-28">
-      <header className="glass-card section-card">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <ProfileCard
-            name={profileName}
-            tagline={profileTagline}
-            initials={profileInitials}
-            align="left"
-            showLinks={false}
-            showAvatar={false}
-            showSocialIcons
-            showDownloadIcon
-            sectionLinks={sectionLinks}
-          />
+      <header className="glass-card">
+        <div className="glass-card-inner section-card">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <ProfileCard
+              name={profileName}
+              tagline={profileTagline}
+              initials={profileInitials}
+              align="left"
+              showLinks={false}
+              showAvatar={false}
+              showSocialIcons
+              showDownloadIcon
+              sectionLinks={sectionLinks}
+            />
+          </div>
         </div>
       </header>
 
-      <section
-        id="summary"
-        className="glass-card section-card space-y-4 scroll-mt-28"
-      >
-        {cv.basics?.summary && <HtmlBlock html={cv.basics.summary} />}
-        {normalizeHighlights(cv.basics?.highlights).length > 0 && (
-          <div className="mt-3 mx-auto">
-            <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
-              {normalizeHighlights(cv.basics?.highlights).map((h, idx) => (
-                <li key={idx} className="space-y-1">
-                  {h.title && (
-                    <div
-                      className="font-semibold text-base sm:text-lg text-[color:var(--text-primary)]"
-                      dangerouslySetInnerHTML={{
-                        __html: sanitizeRichText(h.title),
-                      }}
-                    />
-                  )}
-                  {h.content && <HtmlBlock html={h.content} />}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+      <section id="summary" className="glass-card scroll-mt-28">
+        <div className="glass-card-inner section-card space-y-4">
+          {cv.basics?.summary && <HtmlBlock html={cv.basics.summary} />}
+          {normalizeHighlights(cv.basics?.highlights).length > 0 && (
+            <div className="mt-3 mx-auto">
+              <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
+                {normalizeHighlights(cv.basics?.highlights).map((h, idx) => (
+                  <li key={idx} className="space-y-1">
+                    {h.title && (
+                      <div
+                        className="font-semibold text-base sm:text-lg text-[color:var(--text-primary)]"
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeRichText(h.title),
+                        }}
+                      />
+                    )}
+                    {h.content && <HtmlBlock html={h.content} />}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </section>
 
       {work.length > 0 && (
-        <section
-          id="experience"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.experienceSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
-          </div>
-          <div className="space-y-8 text-sm text-[color:var(--text-primary)]">
-            {work.map((company) => (
-              <article key={company.company} className="space-y-3">
-                <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                  <div>
-                    <p className="font-semibold text-[color:var(--text-primary)]">
-                      {company.company}
-                    </p>
-                    {company.location && (
-                      <p className="text-xs text-[color:var(--text-primary)] sm:text-sm">
-                        {company.location}
+        <section id="experience" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.experienceSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <div className="space-y-8 text-sm text-[color:var(--text-primary)]">
+              {work.map((company) => (
+                <article key={company.company} className="space-y-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                    <div>
+                      <p className="font-semibold text-[color:var(--text-primary)]">
+                        {company.company}
                       </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {company.positions?.map((role, idx) => (
-                    <div
-                      key={`${company.company}-${role.position}-${idx}`}
-                      className="space-y-1"
-                    >
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                        <p className="font-medium text-[color:var(--text-primary)]">
-                          {role.position}
+                      {company.location && (
+                        <p className="text-xs text-[color:var(--text-primary)] sm:text-sm">
+                          {company.location}
                         </p>
-                        {(role.startDate || role.endDate) && (
-                          <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
-                            {role.startDate}
-                            {role.startDate || role.endDate ? " – " : ""}
-                            {role.endDate || "Present"}
-                          </p>
-                        )}
-                      </div>
-
-                      {role.summary && <HtmlBlock html={role.summary} />}
-
-                      {normalizeHighlights(role.highlights).length > 0 && (
-                        <ul className="mt-2 list-disc marker:text-[color:var(--secondary)] space-y-1 pl-5">
-                          {normalizeHighlights(role.highlights).map((h, i) => (
-                            <li key={i}>
-                              <HtmlBlock html={h.content} />
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {role.skills && role.skills.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {role.skills.map((skill) => (
-                            <span
-                              key={skill}
-                              className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
                       )}
                     </div>
-                  ))}
-                </div>
-              </article>
-            ))}
+                  </div>
+
+                  <div className="space-y-4">
+                    {company.positions?.map((role, idx) => (
+                      <div
+                        key={`${company.company}-${role.position}-${idx}`}
+                        className="space-y-1"
+                      >
+                        <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                          <p className="font-medium text-[color:var(--text-primary)]">
+                            {role.position}
+                          </p>
+                          {(role.startDate || role.endDate) && (
+                            <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
+                              {role.startDate}
+                              {role.startDate || role.endDate ? " – " : ""}
+                              {role.endDate || "Present"}
+                            </p>
+                          )}
+                        </div>
+
+                        {role.summary && <HtmlBlock html={role.summary} />}
+
+                        {normalizeHighlights(role.highlights).length > 0 && (
+                          <ul className="mt-2 list-disc marker:text-[color:var(--secondary)] space-y-1 pl-5">
+                            {normalizeHighlights(role.highlights).map(
+                              (h, i) => (
+                                <li key={i}>
+                                  <HtmlBlock html={h.content} />
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                        )}
+
+                        {role.skills && role.skills.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {role.skills.map((skill) => (
+                              <span
+                                key={skill}
+                                className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
       {cv.education && cv.education.length > 0 && (
-        <section
-          id="education"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.educationSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
-          </div>
-          <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
-            {cv.education.map((ed) => (
-              <div key={`${ed.institution}-${ed.area}`} className="space-y-1">
-                <p className="font-semibold text-[color:var(--text-primary)]">
-                  {ed.institution}
-                </p>
-                <p className="text-[color:var(--text-primary)]">
-                  {[ed.studyType, ed.area].filter(Boolean).join(" in ")}
-                </p>
-                {(ed.startDate || ed.endDate) && (
-                  <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
-                    {ed.startDate}
-                    {ed.startDate || ed.endDate ? " – " : ""}
-                    {ed.endDate}
+        <section id="education" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.educationSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
+              {cv.education.map((ed) => (
+                <div key={`${ed.institution}-${ed.area}`} className="space-y-1">
+                  <p className="font-semibold text-[color:var(--text-primary)]">
+                    {ed.institution}
                   </p>
-                )}
-              </div>
-            ))}
+                  <p className="text-[color:var(--text-primary)]">
+                    {[ed.studyType, ed.area].filter(Boolean).join(" in ")}
+                  </p>
+                  {(ed.startDate || ed.endDate) && (
+                    <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
+                      {ed.startDate}
+                      {ed.startDate || ed.endDate ? " – " : ""}
+                      {ed.endDate}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
       {cv.languages && cv.languages.length > 0 && (
-        <section
-          id="languages"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.languagesSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
+        <section id="languages" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.languagesSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <ul className="space-y-1 text-sm text-[color:var(--text-primary)] marker:text-[color:var(--secondary)]">
+              {cv.languages.map((lang) => (
+                <li key={lang.language}>
+                  <span className="font-semibold text-[color:var(--text-primary)]">
+                    {lang.language}
+                  </span>
+                  <span className="text-[color:var(--text-muted)]">
+                    {lang.fluency ? ` — ${lang.fluency}` : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="space-y-1 text-sm text-[color:var(--text-primary)] marker:text-[color:var(--secondary)]">
-            {cv.languages.map((lang) => (
-              <li key={lang.language}>
-                <span className="font-semibold text-[color:var(--text-primary)]">
-                  {lang.language}
-                </span>
-                <span className="text-[color:var(--text-muted)]">
-                  {lang.fluency ? ` — ${lang.fluency}` : ""}
-                </span>
-              </li>
-            ))}
-          </ul>
         </section>
       )}
 
       {cv.skills && cv.skills.length > 0 && (
-        <section
-          id="skills"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.skillsSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
-          </div>
-          <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
-            {cv.skills.map((group) => (
-              <div key={group.name} className="space-y-1">
-                <p className="font-semibold text-[color:var(--text-primary)]">
-                  {group.name}
-                  {group.level ? ` · ${group.level}` : ""}
-                </p>
-                {group.keywords && (
-                  <div className="flex flex-wrap gap-2">
-                    {group.keywords.map((kw) => (
-                      <span
-                        key={kw}
-                        className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
-                      >
-                        {kw}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+        <section id="skills" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.skillsSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
+              {cv.skills.map((group) => (
+                <div key={group.name} className="space-y-1">
+                  <p className="font-semibold text-[color:var(--text-primary)]">
+                    {group.name}
+                    {group.level ? ` · ${group.level}` : ""}
+                  </p>
+                  {group.keywords && (
+                    <div className="flex flex-wrap gap-2">
+                      {group.keywords.map((kw) => (
+                        <span
+                          key={kw}
+                          className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
+                        >
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
       {cv.publications && cv.publications.length > 0 && (
-        <section
-          id="publications"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.publicationsSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
-          </div>
-          <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
-            {cv.publications.map((pub) => (
-              <li key={pub.name} className="space-y-1">
-                <div>
-                  {pub.url ? (
-                    <a
-                      href={pub.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-semibold text-[color:var(--link)] hover:underline"
-                    >
-                      {pub.name}
-                    </a>
-                  ) : (
-                    <span className="font-semibold text-[color:var(--text-primary)]">
-                      {pub.name}
-                    </span>
-                  )}
-                </div>
-                {(pub.publisher || pub.releaseDate) && (
-                  <div className="text-[color:var(--text-muted)]">
-                    {pub.publisher && <span>{pub.publisher}</span>}
-                    {pub.publisher && pub.releaseDate && <span> · </span>}
-                    {pub.releaseDate && <span>{pub.releaseDate}</span>}
+        <section id="publications" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.publicationsSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
+              {cv.publications.map((pub) => (
+                <li key={pub.name} className="space-y-1">
+                  <div>
+                    {pub.url ? (
+                      <a
+                        href={pub.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-semibold text-[color:var(--link)] hover:underline"
+                      >
+                        {pub.name}
+                      </a>
+                    ) : (
+                      <span className="font-semibold text-[color:var(--text-primary)]">
+                        {pub.name}
+                      </span>
+                    )}
                   </div>
-                )}
-              </li>
-            ))}
-          </ul>
+                  {(pub.publisher || pub.releaseDate) && (
+                    <div className="text-[color:var(--text-muted)]">
+                      {pub.publisher && <span>{pub.publisher}</span>}
+                      {pub.publisher && pub.releaseDate && <span> · </span>}
+                      {pub.releaseDate && <span>{pub.releaseDate}</span>}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       )}
 
       {cv.interests && cv.interests.length > 0 && (
-        <section
-          id="interests"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.interestsSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
-          </div>
-          <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
-            {cv.interests.map((interest) => (
-              <div key={interest.name} className="space-y-1">
-                <p className="font-semibold text-[color:var(--text-primary)]">
-                  {interest.name}
-                </p>
-                {interest.keywords && (
-                  <p className="text-[color:var(--text-muted)]">
-                    {interest.keywords.join(" · ")}
+        <section id="interests" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.interestsSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
+              {cv.interests.map((interest) => (
+                <div key={interest.name} className="space-y-1">
+                  <p className="font-semibold text-[color:var(--text-primary)]">
+                    {interest.name}
                   </p>
-                )}
-              </div>
-            ))}
+                  {interest.keywords && (
+                    <p className="text-[color:var(--text-muted)]">
+                      {interest.keywords.join(" · ")}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
       {cv.references && cv.references.length > 0 && (
-        <section
-          id="references"
-          className="glass-card section-card group space-y-4 scroll-mt-28"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-              {t("cv.referencesSection")}
-            </h2>
-            <a
-              href="#cv-top"
-              className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-              aria-label="Back to top"
-            >
-              ↑
-            </a>
+        <section id="references" className="glass-card group scroll-mt-28">
+          <div className="glass-card-inner section-card space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
+                {t("cv.referencesSection")}
+              </h2>
+              <a
+                href="#cv-top"
+                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
+                aria-label="Back to top"
+              >
+                ↑
+              </a>
+            </div>
+            <ReferencesCarousel references={cv.references} />
           </div>
-          <ReferencesCarousel references={cv.references} />
         </section>
       )}
 

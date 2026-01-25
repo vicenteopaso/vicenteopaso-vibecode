@@ -183,9 +183,19 @@ body {
      Base Glass Card (NO blur yet — SSR & Safari safe)
      ====================================================== */
   .glass-card {
-    @apply relative z-0 overflow-hidden rounded-2xl p-4 bg-white/80 dark:bg-neutral-900/80 border border-black/5 dark:border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.08)];
+    /* Use a single, token-driven radius so outer/inner corners match */
+    @apply relative z-0 overflow-hidden bg-white/80 dark:bg-neutral-900/80 border border-black/5 dark:border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.08)];
+    border-radius: var(--radius-2xl);
     contain: paint;
     transition: none;
+  }
+
+  .glass-card-inner {
+    position: relative;
+    z-index: 1;
+    border-radius: inherit;
+    overflow: hidden; /* ensure children respect the inherited radius */
+    background-color: var(--bg-surface);
   }
 
   /* ======================================================
@@ -202,8 +212,8 @@ body {
     }
 
     .dark .glass-card {
-      background-color: rgba(24, 24, 27, 0.6);
-      border-color: rgba(255, 255, 255, 0.12);
+      background-color: rgba(20, 24, 36, 0.6);
+      border-color: rgba(255, 255, 255, 0.07);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
     }
   }
@@ -227,8 +237,8 @@ body {
   .dark .glass-card::before {
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.015),
-      rgba(255, 255, 255, 0)
+      rgba(0, 8, 20, 0.5),
+      rgba(0, 8, 20, 0.05)
     );
   }
 
@@ -320,7 +330,8 @@ body {
   }
 
   .page-card {
-    @apply rounded-3xl p-6 sm:p-8;
+    /* Do not override radius here; inherit from .glass-card via .glass-card-inner */
+    @apply p-6 sm:p-8;
   }
 
   .section-card {
