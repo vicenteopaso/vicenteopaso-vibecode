@@ -304,7 +304,7 @@ Every PR should be reviewed against this checklist before merging. Some items ar
 
 ### CV Data
 
-- [ ] CV JSON in `content/en/cv.md` is valid
+- [ ] CV JSON in `content/en/cv.json` (and `content/es/cv.json`) is valid
 - [ ] All required fields present
 - [ ] HTML in CV sanitized and safe
 - [ ] Dates formatted consistently
@@ -617,10 +617,10 @@ This checklist helps reviewers consistently evaluate AI-authored and human-autho
 - [ ] **Locale-aware routes**: Routes follow `app/[lang]/` structure. `lang` parameter is validated against supported locales (`en`, `es`).
 - [ ] **UI strings in JSON**: UI strings are stored in `i18n/[locale]/ui.json`, not hardcoded in components.
 - [ ] **Content files by locale**: Content files are organized by locale (`content/en/`, `content/es/`). English is the source locale; Spanish is auto-translated.
-- [ ] **CV JSON parsing**: The CV page parses a JSON object from `content/[locale]/cv.md`:
+- [ ] **CV JSON parsing**: The CV page parses a JSON object from `content/[locale]/cv.json`:
   - Parsing logic in `app/[lang]/cv/page.tsx` is unchanged or improvements are tested.
   - Error handling is preserved: if JSON is invalid, render a fallback error message (not a crash).
-  - Example fallback: "CV data could not be loaded. Please check that the JSON body in `content/cv.md` is valid."
+  - Example fallback: "CV data could not be loaded. Please check that the CV JSON file in `content/[locale]/cv.json` is present and valid."
 - [ ] **Markdown rendering**: Markdown content is rendered with `ReactMarkdown` using shared components from `lib/markdown-components.tsx`.
   - Rendering is consistent across pages (homepage, CV, policy pages).
 - [ ] **No hardcoded text**: Avoid hardcoded English strings in components. Use `ui.json` or content files.

@@ -314,10 +314,12 @@ Content files are organized by locale in `content/en/` (English source) and `con
 
 ### CV page (`/en/cv`, `/es/cv`)
 
-- Source files: `content/en/cv.md`, `content/es/cv.md`
-- Frontmatter fields:
-  - `name`, `title`, `slug: cv`
-- Body: A **single JSON object**, parsed at build time into a `CvJson` structure. Key fields include:
+- Source files (per locale):
+  - Frontmatter: `content/[locale]/cv.md` (e.g., `content/en/cv.md`, `content/es/cv.md`)
+  - Structured data: `content/[locale]/cv.json` (e.g., `content/en/cv.json`, `content/es/cv.json`)
+- Frontmatter fields in `cv.md`:
+  - `name`, `title`, `slug: cv`, optional `tagline`
+- `cv.json` contains a **single JSON object**, parsed at build time into a `CvJson` structure. Key fields include:
   - `basics` – Name, label, summary, highlights (with optional titles and HTML content).
   - `work` – Companies, locations, positions, date ranges, highlights, and skills.
   - `education`, `skills`, `languages`, `interests`, `publications`, `references`.
@@ -325,10 +327,10 @@ Content files are organized by locale in `content/en/` (English source) and `con
 - Some fields contain HTML strings (e.g. `references[*].reference`), which are injected with `dangerouslySetInnerHTML` in both `CVPage` and `ReferencesCarousel`.
   - These HTML strings are sanitized via a whitelist-based sanitizer in `lib/sanitize-html.ts` before rendering to guard against XSS.
 
-If the JSON is invalid, the CV page will:
+If the JSON is invalid or missing, the CV page will:
 
 - Render a fallback message.
-- Show an error prompting you to fix the CV JSON in the appropriate locale file (`content/en/cv.md` or `content/es/cv.md`).
+- Show an error prompting you to fix the CV JSON in the appropriate locale JSON file (`content/en/cv.json` or `content/es/cv.json`).
 
 ---
 

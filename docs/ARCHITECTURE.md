@@ -638,7 +638,7 @@ app/
 │   ├── layout.tsx          # Locale layout wrapper
 │   ├── page.tsx            # About page (reads content/[locale]/about.md)
 │   ├── cv/
-│   │   └── page.tsx        # CV page (reads content/[locale]/cv.md)
+│   │   └── page.tsx        # CV page (reads frontmatter from content/[locale]/cv.md and JSON from content/[locale]/cv.json)
 │   ├── accessibility/
 │   │   └── page.tsx        # Accessibility statement
 │   ├── cookie-policy/
@@ -669,7 +669,8 @@ app/
 content/
 ├── en/                     # English content (source)
 │   ├── about.md
-│   ├── cv.md
+│   ├── cv.md                # Frontmatter (name, title, slug, tagline)
+│   ├── cv.json              # Structured CV JSON data
 │   ├── accessibility.md
 │   ├── cookie-policy.md
 │   ├── privacy-policy.md
