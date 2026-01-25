@@ -134,7 +134,7 @@ jobs:
       - name: Auto-fix package.json version from CHANGELOG.md
         run: |
           node - <<'EOF'
-          import { readFileSync, writeFileSync } from 'node:fs';
+          const { readFileSync, writeFileSync } = require('node:fs');
 
           const changelog = readFileSync('CHANGELOG.md', 'utf8');
           const match = changelog.match(/^## \[(\d+\.\d+\.\d+)]/m);
