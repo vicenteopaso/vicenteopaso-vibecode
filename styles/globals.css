@@ -330,7 +330,8 @@ body {
   }
 
   .page-card {
-    /* Do not override radius here; inherit from .glass-card via .glass-card-inner */
+    /* Do not override radius here; page cards inherit radius from .glass-card via .glass-card-inner.
+       Note: .section-card is a separate pattern that intentionally defines its own radius. */
     @apply p-6 sm:p-8;
   }
 
