@@ -411,8 +411,9 @@ describe("CV Page Social Icons", () => {
         name: /GitHub profile/i,
       });
       expect(
-        githubLinks.some((link) =>
-          link.getAttribute("href")?.includes("github.com/vicenteopaso"),
+        githubLinks.some(
+          (link) =>
+            link.getAttribute("href") === "https://github.com/vicenteopaso/",
         ),
       ).toBe(true);
 
@@ -420,8 +421,10 @@ describe("CV Page Social Icons", () => {
         name: /LinkedIn profile/i,
       });
       expect(
-        linkedInLinks.some((link) =>
-          link.getAttribute("href")?.includes("linkedin.com"),
+        linkedInLinks.some(
+          (link) =>
+            link.getAttribute("href") ===
+            "https://linkedin.com/in/vicenteopaso/",
         ),
       ).toBe(true);
 
@@ -429,7 +432,9 @@ describe("CV Page Social Icons", () => {
         name: /X \(Twitter\) profile/i,
       });
       expect(
-        xLinks.some((link) => link.getAttribute("href")?.includes("x.com")),
+        xLinks.some(
+          (link) => link.getAttribute("href") === "https://x.com/vicenteopaso/",
+        ),
       ).toBe(true);
     });
   });
