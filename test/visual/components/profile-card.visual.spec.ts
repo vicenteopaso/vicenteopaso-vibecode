@@ -16,7 +16,7 @@ test.describe("Profile Card Visual Regression", () => {
       await waitForHomepage(page);
 
       // Target the hero header which contains the ProfileCard on the homepage
-      const profileSection = page.locator("header .page-card");
+      const profileSection = page.locator("header.page-card");
       await expect(profileSection).toBeVisible();
 
       // Mask the portrait image since it's randomly selected
@@ -36,7 +36,7 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/");
       await waitForHomepage(page);
 
-      const profileSection = page.locator("header .page-card");
+      const profileSection = page.locator("header.page-card");
       await expect(profileSection).toBeVisible();
 
       const portraitMask = getPortraitMask(page);
@@ -55,7 +55,7 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/");
       await waitForHomepage(page);
 
-      const profileSection = page.locator("header .page-card");
+      const profileSection = page.locator("header.page-card");
       await expect(profileSection).toBeVisible();
 
       const portraitMask = getPortraitMask(page);
@@ -77,7 +77,7 @@ test.describe("Profile Card Visual Regression", () => {
       await waitForCVPage(page);
 
       // CV page has a header section-card with ProfileCard (no avatar)
-      const profileSection = page.locator("header .section-card");
+      const profileSection = page.locator("header.section-card");
       await expect(profileSection).toBeVisible();
 
       await expect(profileSection).toHaveScreenshot(
@@ -93,7 +93,7 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/cv");
       await waitForCVPage(page);
 
-      const profileSection = page.locator("header .section-card");
+      const profileSection = page.locator("header.section-card");
       await expect(profileSection).toBeVisible();
 
       await expect(profileSection).toHaveScreenshot(
@@ -111,7 +111,7 @@ test.describe("Profile Card Visual Regression", () => {
       await page.goto("/cv");
       await waitForCVPage(page);
 
-      const profileSection = page.locator("header .section-card");
+      const profileSection = page.locator("header.section-card");
       await expect(profileSection).toBeVisible();
 
       await expect(profileSection).toHaveScreenshot(
