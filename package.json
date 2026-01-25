@@ -129,6 +129,9 @@
       "rimraf@<4.0.0": ">=6.0.0",
       "node-domexception@<2.0.0": ">=2.0.0"
     },
+    "allowedDeprecatedVersions": {
+      "node-domexception": "*"
+    },
     "packageExtensions": {
       "next-contentlayer@*": {
         "peerDependencies": {
