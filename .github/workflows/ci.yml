@@ -126,20 +126,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
-      - name: Checkout base repo for trusted version sync script
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.base.sha }}
-          path: base
-
-      - name: Use trusted check-version-sync.mjs from base branch
-        run: |
-          cp base/scripts/check-version-sync.mjs scripts/check-version-sync.mjs
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -147,7 +133,30 @@ jobs:
 
       - name: Auto-fix package.json version from CHANGELOG.md
         run: |
-          node scripts/check-version-sync.mjs --fix-from-changelog
+          node - <<'EOF'
+          import { readFileSync, writeFileSync } from 'node:fs';
+
+          const changelog = readFileSync('CHANGELOG.md', 'utf8');
+          const match = changelog.match(/^## \[(\d+\.\d+\.\d+)]/m);
+          if (!match) {
+            console.error('Could not find top-level version in CHANGELOG.md (expected line starting with "## [x.y.z]").');
+            process.exit(1);
+          }
+
+          const changelogVersion = match[1];
+          const pkgRaw = readFileSync('package.json', 'utf8');
+          const pkg = JSON.parse(pkgRaw);
+          const pkgVersion = pkg.version;
+
+          if (pkgVersion === changelogVersion) {
+            console.log(`No changes needed: package.json version already matches CHANGELOG.md (${pkgVersion})`);
+            process.exit(0);
+          }
+
+          pkg.version = changelogVersion;
+          writeFileSync('package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf8');
+          console.log(`Updated package.json version from ${pkgVersion} to ${changelogVersion} based on CHANGELOG.md`);
+          EOF
 
           if [[ -n "$(git status --porcelain package.json)" ]]; then
             git config user.name "github-actions[bot]"
