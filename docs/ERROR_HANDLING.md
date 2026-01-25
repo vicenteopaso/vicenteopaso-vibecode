@@ -354,18 +354,20 @@ export async function POST(request: NextRequest) {
 
 ### SSR/SSG Error Handling
 
-**Locations**: `app/page.tsx`, `app/cv/page.tsx`
+**Locations**: `app/[lang]/page.tsx`, `app/[lang]/cv/page.tsx`
 
-Both pages read markdown files from the filesystem at build/runtime:
+These pages read markdown + JSON content from the filesystem at build/runtime. For the CV page, the pattern is:
 
 ```typescript
-const filePath = path.join(process.cwd(), "content", "cv.md");
-const fileContents = fs.readFileSync(filePath, "utf8");
-const { data, content } = matter(fileContents);
+const metaPath = path.join(process.cwd(), "content", locale, "cv.md");
+const metaContents = fs.readFileSync(metaPath, "utf8");
+const { data } = matter(metaContents);
 
 let cv: CvJson | null = null;
 try {
-  cv = JSON.parse(content) as CvJson;
+  const jsonPath = path.join(process.cwd(), "content", locale, "cv.json");
+  const jsonContents = fs.readFileSync(jsonPath, "utf8");
+  cv = JSON.parse(jsonContents) as CvJson;
 } catch {
   cv = null;
 }
@@ -375,8 +377,8 @@ if (!cv) {
     <div className="section-card space-y-4">
       <h1>CV</h1>
       <p className="text-red-400">
-        CV data could not be loaded. Please check that the JSON body in
-        <code>content/cv.md</code> is valid.
+        CV data could not be loaded. Please check that the CV JSON file in
+        <code>{`content/${locale}/cv.json`}</code> is present and valid.
       </p>
     </div>
   );

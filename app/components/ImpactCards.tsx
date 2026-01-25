@@ -191,24 +191,29 @@ export function ImpactCards({
         className="pointer-events-none absolute inset-0 -z-50 overflow-hidden opacity-0"
         aria-hidden="true"
       >
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3 items-stretch">
           {cards.map((content, i) => (
             <div
               key={`measure-${i}`}
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
-              className="glass-card impact-card flex flex-col items-center justify-center rounded-2xl px-6 py-4 text-center"
+              className="glass-card impact-card h-full"
             >
-              <ReactMarkdown components={impactCardComponents}>
-                {content}
-              </ReactMarkdown>
+              <div className="glass-card-inner flex h-full flex-col items-center justify-center px-6 py-4 text-center">
+                <ReactMarkdown components={impactCardComponents}>
+                  {content}
+                </ReactMarkdown>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3" data-testid="impact-cards">
+      <div
+        className="grid gap-4 md:grid-cols-3 items-stretch"
+        data-testid="impact-cards"
+      >
         {visibleCards.map(({ slot, content }) => {
           const isExiting = exitingSlot === slot;
           const stateClass = isExiting ? "impact-card--out" : "impact-card--in";
@@ -216,12 +221,16 @@ export function ImpactCards({
           return (
             <div
               key={slot}
-              className={`glass-card impact-card ${stateClass} flex flex-col items-center justify-center rounded-2xl px-6 py-4 text-center`}
-              style={maxHeight ? { minHeight: maxHeight } : undefined}
+              className={`glass-card impact-card ${stateClass} h-full`}
             >
-              <ReactMarkdown components={impactCardComponents}>
-                {content}
-              </ReactMarkdown>
+              <div
+                className="glass-card-inner flex h-full flex-col items-center justify-center px-6 py-4 text-center"
+                style={maxHeight ? { minHeight: maxHeight } : undefined}
+              >
+                <ReactMarkdown components={impactCardComponents}>
+                  {content}
+                </ReactMarkdown>
+              </div>
             </div>
           );
         })}

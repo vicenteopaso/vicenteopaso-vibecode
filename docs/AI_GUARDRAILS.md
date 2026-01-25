@@ -1320,7 +1320,7 @@ Beyond ESLint rules, these practices are specific to this codebase:
 
 ### Content Parsing
 
-**Preserve CV JSON parsing behavior**: The `content/[locale]/cv.md` file contains a JSON object that must be parsed correctly:
+**Preserve CV JSON parsing behavior**: The `content/[locale]/cv.json` file contains a JSON object that must be parsed correctly:
 
 ```typescript
 try {

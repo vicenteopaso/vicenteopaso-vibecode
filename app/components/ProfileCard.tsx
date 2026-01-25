@@ -166,7 +166,7 @@ export function ProfileCard({
     "mt-2 flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:justify-between";
 
   const linksRowClasses =
-    "flex items-center justify-center gap-2 text-sm font-medium text-[color:var(--text-primary)] sm:justify-start";
+    "flex w-full items-center justify-center gap-2 text-sm font-medium text-[color:var(--text-primary)] sm:justify-start";
 
   const socialRowClasses =
     "mt-3 flex items-center justify-center gap-2 sm:mt-0 sm:justify-end";

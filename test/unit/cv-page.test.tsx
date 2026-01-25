@@ -4,36 +4,78 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import CVPage from "../../app/[lang]/cv/page";
 
+const realReadFileSync = fs.readFileSync;
+
+function mockCvFs({
+  locale = "en",
+  meta,
+  cvJson,
+}: {
+  locale?: string;
+  meta?: { name?: string; title?: string; tagline?: string };
+  cvJson: unknown;
+}) {
+  const metaConfig = {
+    name: "Vicente",
+    title: "CV",
+    tagline: "Engineering leader",
+    ...meta,
+  };
+
+  const metaLines = [
+    "---",
+    `name: ${metaConfig.name}`,
+    `title: ${metaConfig.title}`,
+    metaConfig.tagline ? `tagline: ${metaConfig.tagline}` : undefined,
+    "slug: cv",
+    "---",
+    "",
+  ].filter(Boolean) as string[];
+
+  const metaRaw = metaLines.join("\n");
+  const cvContent =
+    typeof cvJson === "string" ? cvJson : JSON.stringify(cvJson);
+
+  vi.spyOn(fs, "readFileSync").mockImplementation((filePath, options) => {
+    const file = String(filePath);
+
+    if (file.endsWith(`${locale}/cv.md`)) {
+      return metaRaw;
+    }
+
+    if (file.endsWith(`${locale}/cv.json`)) {
+      return cvContent;
+    }
+
+    return realReadFileSync(filePath, options as never);
+  });
+}
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
 describe("CVPage", () => {
-  it.skip("renders fallback message when CV JSON is invalid", () => {
-    const raw = [
-      "---",
-      "name: Vicente",
-      "title: CV",
-      "tagline: Engineering leader",
-      "slug: cv",
-      "---",
-      "this is not valid json",
-    ].join("\n");
+  it("renders fallback message when CV JSON is invalid", async () => {
+    mockCvFs({
+      locale: "en",
+      cvJson: "this is not valid json",
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     expect(screen.getByText("CV")).toBeInTheDocument();
     expect(
       screen.getByText(
-        /CV data could not be loaded. Please check that the JSON body/i,
+        /CV data could not be loaded. Please check that the CV JSON file/i,
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText(/content\/en\/cv\.md/)).toBeInTheDocument();
+    expect(screen.getByText(/content\/en\/cv\.json/)).toBeInTheDocument();
   });
 
-  it.skip("renders CV sections when JSON is valid", () => {
+  it("renders CV sections when JSON is valid", async () => {
     const cvJson = {
       basics: {
         name: "Vicente Opaso",
@@ -108,19 +150,14 @@ describe("CVPage", () => {
       ],
     };
 
-    const raw = [
-      "---",
-      "name: Vicente",
-      "title: CV",
-      "tagline: Engineering leader",
-      "slug: cv",
-      "---",
-      JSON.stringify(cvJson),
-    ].join("\n");
+    mockCvFs({
+      locale: "en",
+      cvJson,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     // Header
     expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
@@ -162,7 +199,7 @@ describe("CVPage", () => {
     expect(screen.getByText("Summary HTML")).toBeInTheDocument();
   });
 
-  it.skip("handles minimal CV JSON and optional branches", () => {
+  it("handles minimal CV JSON and optional branches", async () => {
     const cvJson = {
       basics: {
         name: "SingleName",
@@ -197,39 +234,26 @@ describe("CVPage", () => {
       references: [],
     };
 
-    const raw = [
-      "---",
-      "name: Vicente",
-      "title: CV",
-      "slug: cv",
-      "---",
-      JSON.stringify(cvJson),
-    ].join("\n");
+    mockCvFs({
+      locale: "en",
+      cvJson,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
-    // Header uses basics.name and getInitials handles single-word name
     expect(screen.getByText("SingleName")).toBeInTheDocument();
-
-    // Experience section should be omitted when work is empty
     expect(screen.queryByRole("heading", { name: "Experience" })).toBeNull();
-
-    // Education section still renders
     expect(
       screen.getByRole("heading", { name: "Education" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Minimal University")).toBeInTheDocument();
-
-    // Languages without fluency render without separator text
     expect(screen.getByText("Spanish")).toBeInTheDocument();
-
-    // Publications without URL render as plain text, not a link
     expect(screen.getByText("Offline Article").closest("a")).toBeNull();
   });
 
-  it.skip("handles CV with all optional fields missing", () => {
+  it("handles CV with all optional fields missing", async () => {
     const cvJson = {
       basics: {},
       work: [],
@@ -241,24 +265,20 @@ describe("CVPage", () => {
       references: [],
     };
 
-    const raw = [
-      "---",
-      "name: Test",
-      "title: CV",
-      "slug: cv",
-      "---",
-      JSON.stringify(cvJson),
-    ].join("\n");
+    mockCvFs({
+      locale: "en",
+      meta: { name: "Test" },
+      cvJson,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
-    // Should still render without crashing - check for name heading
     expect(screen.getByRole("heading", { name: "Test" })).toBeInTheDocument();
   });
 
-  it.skip("renders work experience with multiple positions", () => {
+  it("renders work experience with multiple positions", async () => {
     const cvJson = {
       basics: {
         name: "Test User",
@@ -289,18 +309,15 @@ describe("CVPage", () => {
       ],
     };
 
-    const raw = [
-      "---",
-      "name: Test",
-      "title: CV",
-      "slug: cv",
-      "---",
-      JSON.stringify(cvJson),
-    ].join("\n");
+    mockCvFs({
+      locale: "en",
+      meta: { name: "Test" },
+      cvJson,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     expect(screen.getByText("Tech Corp")).toBeInTheDocument();
     expect(screen.getByText("Senior Engineer")).toBeInTheDocument();
@@ -308,7 +325,7 @@ describe("CVPage", () => {
     expect(screen.getByText("San Francisco")).toBeInTheDocument();
   });
 
-  it.skip("renders highlights with title when provided", () => {
+  it("renders highlights with title when provided", async () => {
     const cvJson = {
       basics: {
         name: "Test User",
@@ -322,18 +339,15 @@ describe("CVPage", () => {
       },
     };
 
-    const raw = [
-      "---",
-      "name: Test",
-      "title: CV",
-      "slug: cv",
-      "---",
-      JSON.stringify(cvJson),
-    ].join("\n");
+    mockCvFs({
+      locale: "en",
+      meta: { name: "Test" },
+      cvJson,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     expect(screen.getByText("Simple highlight")).toBeInTheDocument();
     expect(screen.getByText("Complex Highlight")).toBeInTheDocument();
@@ -355,111 +369,155 @@ describe("CV Page Social Icons", () => {
     vi.clearAllMocks();
   });
 
-  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
-  it.skip("should render social icons in ProfileCard when CV page loads", async () => {
-    const raw = ["---", JSON.stringify(mockCVData)].join("\n");
+  it("should render social icons in ProfileCard when CV page loads", async () => {
+    mockCvFs({
+      locale: "en",
+      cvJson: mockCVData,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     await waitFor(() => {
-      // Social icons should be rendered within ProfileCard in CV header
+      const githubLinks = screen.getAllByRole("link", {
+        name: /GitHub profile/i,
+      });
+      const linkedInLinks = screen.getAllByRole("link", {
+        name: /LinkedIn profile/i,
+      });
+      const xLinks = screen.getAllByRole("link", {
+        name: /X \(Twitter\) profile/i,
+      });
+
+      expect(githubLinks.length).toBeGreaterThanOrEqual(1);
+      expect(linkedInLinks.length).toBeGreaterThanOrEqual(1);
+      expect(xLinks.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it("should have correct hrefs for social icon links", async () => {
+    mockCvFs({
+      locale: "en",
+      cvJson: mockCVData,
+    });
+
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
+
+    render(ui);
+
+    await waitFor(() => {
+      const githubLinks = screen.getAllByRole("link", {
+        name: /GitHub profile/i,
+      });
       expect(
-        screen.queryByRole("link", { name: /GitHub/i }),
-      ).toBeInTheDocument();
+        githubLinks.some(
+          (link) =>
+            link.getAttribute("href") === "https://github.com/vicenteopaso/",
+        ),
+      ).toBe(true);
+
+      const linkedInLinks = screen.getAllByRole("link", {
+        name: /LinkedIn profile/i,
+      });
       expect(
-        screen.queryByRole("link", { name: /LinkedIn/i }),
-      ).toBeInTheDocument();
-      expect(screen.queryByRole("link", { name: /X/i })).toBeInTheDocument();
+        linkedInLinks.some(
+          (link) =>
+            link.getAttribute("href") ===
+            "https://linkedin.com/in/vicenteopaso/",
+        ),
+      ).toBe(true);
+
+      const xLinks = screen.getAllByRole("link", {
+        name: /X \(Twitter\) profile/i,
+      });
+      expect(
+        xLinks.some(
+          (link) => link.getAttribute("href") === "https://x.com/vicenteopaso/",
+        ),
+      ).toBe(true);
     });
   });
 
-  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
-  it.skip("should have correct hrefs for social icon links", async () => {
-    const raw = ["---", JSON.stringify(mockCVData)].join("\n");
+  it("should have proper accessibility attributes on social icons", async () => {
+    mockCvFs({
+      locale: "en",
+      cvJson: mockCVData,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     await waitFor(() => {
-      const githubLink = screen.queryByRole("link", { name: /GitHub/i });
-      expect(githubLink?.getAttribute("href")).toContain(
-        "github.com/vicenteopaso",
-      );
+      const githubLinks = screen.getAllByRole("link", {
+        name: /GitHub profile/i,
+      });
+      githubLinks.forEach((link) => {
+        expect(link).toHaveAttribute("aria-label", "GitHub profile");
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noreferrer");
+      });
 
-      const linkedInLink = screen.queryByRole("link", { name: /LinkedIn/i });
-      expect(linkedInLink?.getAttribute("href")).toContain("linkedin.com");
+      const linkedInLinks = screen.getAllByRole("link", {
+        name: /LinkedIn profile/i,
+      });
+      linkedInLinks.forEach((link) => {
+        expect(link).toHaveAttribute("aria-label", "LinkedIn profile");
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noreferrer");
+      });
 
-      const xLink = screen.queryByRole("link", { name: /X/i });
-      expect(xLink?.getAttribute("href")).toContain("x.com");
+      const xLinks = screen.getAllByRole("link", {
+        name: /X \(Twitter\) profile/i,
+      });
+      xLinks.forEach((link) => {
+        expect(link).toHaveAttribute("aria-label", "X (Twitter) profile");
+        expect(link).toHaveAttribute("target", "_blank");
+        expect(link).toHaveAttribute("rel", "noreferrer");
+      });
     });
   });
 
-  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
-  it.skip("should have proper accessibility attributes on social icons", async () => {
-    const raw = ["---", JSON.stringify(mockCVData)].join("\n");
-
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
-
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
-
-    await waitFor(() => {
-      const githubLink = screen.queryByRole("link", { name: /GitHub/i });
-      expect(githubLink).toHaveAttribute("aria-label");
-      expect(githubLink).toHaveAttribute("target", "_blank");
-      expect(githubLink).toHaveAttribute("rel", "noreferrer");
-
-      const linkedInLink = screen.queryByRole("link", { name: /LinkedIn/i });
-      expect(linkedInLink).toHaveAttribute("aria-label");
-      expect(linkedInLink).toHaveAttribute("target", "_blank");
-      expect(linkedInLink).toHaveAttribute("rel", "noreferrer");
-
-      const xLink = screen.queryByRole("link", { name: /X/i });
-      expect(xLink).toHaveAttribute("aria-label");
-      expect(xLink).toHaveAttribute("target", "_blank");
-      expect(xLink).toHaveAttribute("rel", "noreferrer");
+  it("should render social icons with correct styling classes", async () => {
+    mockCvFs({
+      locale: "en",
+      cvJson: mockCVData,
     });
-  });
 
-  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
-  it.skip("should render social icons with correct styling classes", async () => {
-    const raw = ["---", JSON.stringify(mockCVData)].join("\n");
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
-
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     await waitFor(() => {
-      const socialLinks = screen.queryAllByRole("link", {
-        name: /(GitHub|LinkedIn|X)/i,
+      const socialLinks = screen.getAllByRole("link", {
+        name: /(GitHub profile|LinkedIn profile|X \(Twitter\) profile)/i,
       });
 
       socialLinks.forEach((link) => {
-        // Check for styling classes that should be present
+        expect(link).toHaveClass("btn-outline");
         expect(link).toHaveClass("h-8");
         expect(link).toHaveClass("w-8");
-        expect(link).toHaveClass("rounded-full");
-        expect(link).toHaveClass("border");
+        expect(link).toHaveClass("p-0");
       });
     });
   });
 
-  // TODO: Re-enable once CV page rendering with social icons is fully supported in test environment
-  it.skip("should render download CV button with social icons in CV header", async () => {
-    const raw = ["---", JSON.stringify(mockCVData)].join("\n");
+  it("should render download CV button with social icons in CV header", async () => {
+    mockCvFs({
+      locale: "en",
+      cvJson: mockCVData,
+    });
 
-    vi.spyOn(fs, "readFileSync").mockReturnValue(raw);
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
 
-    render(<CVPage params={Promise.resolve({ lang: "en" })} />);
+    render(ui);
 
     await waitFor(() => {
-      const downloadButton = screen.queryByRole("link", {
+      const downloadButtons = screen.getAllByRole("link", {
         name: /Download CV/i,
       });
-      // Download button should be in the same row as social icons on desktop
-      expect(downloadButton).toBeInTheDocument();
+      expect(downloadButtons.length).toBeGreaterThanOrEqual(1);
     });
   });
 });

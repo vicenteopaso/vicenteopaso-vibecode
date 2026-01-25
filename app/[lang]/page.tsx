@@ -87,13 +87,15 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <header className="glass-card page-card flex flex-col gap-6 sm:flex-row sm:items-center">
-        <ProfileCard
-          name={name}
-          tagline={tagline}
-          initials={initials}
-          showSocialIcons
-        />
+      <header className="glass-card">
+        <div className="glass-card-inner page-card flex flex-col gap-6 sm:flex-row sm:items-center">
+          <ProfileCard
+            name={name}
+            tagline={tagline}
+            initials={initials}
+            showSocialIcons
+          />
+        </div>
       </header>
 
       {introBody && (
@@ -181,10 +183,12 @@ export default async function HomePage({ params }: PageProps) {
           }
 
           renderedSections.push(
-            <section key={index} className="glass-card section-card space-y-4">
-              <ReactMarkdown components={aboutPageComponents}>
-                {section}
-              </ReactMarkdown>
+            <section key={index} className="glass-card">
+              <div className="glass-card-inner section-card space-y-4">
+                <ReactMarkdown components={aboutPageComponents}>
+                  {section}
+                </ReactMarkdown>
+              </div>
             </section>,
           );
         }

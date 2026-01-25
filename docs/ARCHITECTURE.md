@@ -360,7 +360,7 @@ graph LR
 - Unit tests are written with Vitest and run in a jsdom environment.
 - Playwright handles end-to-end tests under `test/e2e`, targeting `http://localhost:3000`.
 - Visual regression tests under `test/visual` use Playwright with masking utilities for deterministic screenshots.
-- Coverage is collected via Vitest with thresholds set around 80% for lines, statements, branches, and functions.
+- Coverage is collected via Vitest with thresholds enforced at **90% lines**, **90% statements**, **85% branches**, and **90% functions**, as configured in `vitest.config.ts` and described in `sdd.yaml`.
 - CI runs linting, typechecking, unit tests, coverage, E2E tests, visual tests, accessibility checks, and CodeQL analysis on PRs and pushes to `main`.
 
 **AI Guardrails:**
@@ -638,7 +638,7 @@ app/
 │   ├── layout.tsx          # Locale layout wrapper
 │   ├── page.tsx            # About page (reads content/[locale]/about.md)
 │   ├── cv/
-│   │   └── page.tsx        # CV page (reads content/[locale]/cv.md)
+│   │   └── page.tsx        # CV page (reads frontmatter from content/[locale]/cv.md and JSON from content/[locale]/cv.json)
 │   ├── accessibility/
 │   │   └── page.tsx        # Accessibility statement
 │   ├── cookie-policy/
@@ -669,7 +669,8 @@ app/
 content/
 ├── en/                     # English content (source)
 │   ├── about.md
-│   ├── cv.md
+│   ├── cv.md                # Frontmatter (name, title, slug, tagline)
+│   ├── cv.json              # Structured CV JSON data
 │   ├── accessibility.md
 │   ├── cookie-policy.md
 │   ├── privacy-policy.md

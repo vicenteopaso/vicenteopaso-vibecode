@@ -57,7 +57,7 @@ standards:
         seo: "Single source of truth for site config, metadata, and JSON-LD in lib/seo.ts."
       content:
         about: "Frontmatter + markdown body in content/about.md."
-        cv: "Frontmatter + JSON body in content/cv.md."
+        cv: "Frontmatter in content/cv.md + structured JSON in content/cv.json."
         i18n: "Locale detection and translations in lib/i18n/; opengraph images support en/es locales."
     prohibited:
       - shared mutable state across routes
