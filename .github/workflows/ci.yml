@@ -117,15 +117,25 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
 
     steps:
-      - name: Checkout
+      - name: Checkout PR head
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+
+      - name: Checkout base repo for trusted version sync script
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - name: Use trusted check-version-sync.mjs from base branch
+        run: |
+          cp base/scripts/check-version-sync.mjs scripts/check-version-sync.mjs
 
       - name: Enable Corepack (pnpm)
         run: corepack enable
@@ -138,6 +148,7 @@ jobs:
       - name: Auto-fix package.json version from CHANGELOG.md
         run: |
           node scripts/check-version-sync.mjs --fix-from-changelog
+
           if [[ -n "$(git status --porcelain package.json)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

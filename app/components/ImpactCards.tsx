@@ -198,7 +198,7 @@ export function ImpactCards({
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
-              className="glass-card impact-card rounded-2xl h-full"
+              className="glass-card impact-card h-full"
             >
               <div className="glass-card-inner flex h-full flex-col items-center justify-center px-6 py-4 text-center">
                 <ReactMarkdown components={impactCardComponents}>
@@ -221,7 +221,7 @@ export function ImpactCards({
           return (
             <div
               key={slot}
-              className={`glass-card impact-card ${stateClass} rounded-2xl h-full`}
+              className={`glass-card impact-card ${stateClass} h-full`}
             >
               <div
                 className="glass-card-inner flex h-full flex-col items-center justify-center px-6 py-4 text-center"
