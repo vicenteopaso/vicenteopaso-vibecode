@@ -2,8 +2,8 @@
 
 import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +20,7 @@ function getTagVersion() {
   } else {
     try {
       tag = execSync("git describe --tags --abbrev=0", { encoding: "utf8" }).trim();
-    } catch (error) {
+    } catch {
       console.error(
         "Failed to determine latest tag. Ensure tags are fetched (git fetch --tags).",
       );
@@ -35,7 +35,7 @@ function getChangelogVersion() {
   let changelog;
   try {
     changelog = readFileSync(join(__dirname, "..", "CHANGELOG.md"), "utf8");
-  } catch (error) {
+  } catch {
     console.error("CHANGELOG.md not found at repo root.");
     process.exit(1);
   }
