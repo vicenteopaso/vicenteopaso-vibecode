@@ -2176,6 +2176,9 @@ packages:
   '@types/node@25.2.2':
     resolution: {integrity: sha512-BkmoP5/FhRYek5izySdkOneRyXYN35I860MFAGupTdebyE66uZaR+bXLHq8k4DirE5DwQi3NuhvRU1jqTVwUrQ==}
 
+  '@types/node@25.2.2':
+    resolution: {integrity: sha512-BkmoP5/FhRYek5izySdkOneRyXYN35I860MFAGupTdebyE66uZaR+bXLHq8k4DirE5DwQi3NuhvRU1jqTVwUrQ==}
+
   '@types/parse5@6.0.3':
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
 
@@ -8352,6 +8355,10 @@ snapshots:
   '@types/mysql@2.15.27':
     dependencies:
       '@types/node': 25.2.2
+
+  '@types/node@25.2.2':
+    dependencies:
+      undici-types: 7.16.0
 
   '@types/node@25.2.2':
     dependencies:
