@@ -127,7 +127,8 @@
       "diff@<8.0.3": ">=8.0.3",
       "glob@<8.0.0": ">=11.0.0",
       "rimraf@<4.0.0": ">=6.0.0",
-      "node-domexception@<2.0.0": ">=2.0.0"
+      "node-domexception@<2.0.0": ">=2.0.0",
+      "@isaacs/brace-expansion@<=5.0.0": ">=5.0.1"
     },
     "allowedDeprecatedVersions": {
       "node-domexception": "*"
