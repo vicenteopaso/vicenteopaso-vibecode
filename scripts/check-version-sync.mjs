@@ -19,7 +19,9 @@ function getTagVersion() {
     tag = ref.slice("refs/tags/".length);
   } else {
     try {
-      tag = execSync("git describe --tags --abbrev=0", { encoding: "utf8" }).trim();
+      tag = execSync("git describe --tags --abbrev=0", {
+        encoding: "utf8",
+      }).trim();
     } catch {
       console.error(
         "Failed to determine latest tag. Ensure tags are fetched (git fetch --tags).",

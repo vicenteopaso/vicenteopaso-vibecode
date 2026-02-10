@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Extend PATH for GUI clients (e.g. GitHub Desktop) that use a limited shell.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 # Run lint-staged using the repo-pinned pnpm version when possible.
 # Prefer Corepack (which enforces the pnpm version from package.json),
 # but fall back to plain pnpm in environments where the `corepack` CLI
