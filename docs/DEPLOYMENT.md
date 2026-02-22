@@ -67,7 +67,7 @@ The following paths contain documentation, tests, or metadata that doesn't affec
   - `docs/` — Technical documentation and guides
   - `README.md` — Repository readme
   - `CONTRIBUTING.md` — Contribution guidelines
-  - `WARP.md` — High-level architecture overview
+  - `docs/AI_AGENT_GUIDE.md` — AI agent quick reference
   - `LICENSE` — License file
   - `SECURITY.md` — Security policy
   - `SUPPORT.md` — Support information

@@ -13,6 +13,7 @@ import { Header } from "./components/Header";
 import { LocaleProvider } from "./components/LocaleProvider";
 import { SeoJsonLd } from "./components/SeoJsonLd";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { WebMcpInit } from "./components/WebMcpInit";
 
 const iconsCacheVersion = process.env.NEXT_PUBLIC_ICONS_CACHE_DATE ?? "1";
 
@@ -63,6 +64,11 @@ export default function RootLayout({
               src="https://challenges.cloudflare.com/turnstile/v0/api.js"
               strategy="afterInteractive"
             />
+            <Script
+              id="webmcp-polyfill"
+              src="https://unpkg.com/@mcp-b/global@latest/dist/index.iife.js"
+              strategy="afterInteractive"
+            />
             <SeoJsonLd />
             <Header />
             <ErrorBoundary>
@@ -74,6 +80,7 @@ export default function RootLayout({
               </main>
             </ErrorBoundary>
             <Footer />
+            <WebMcpInit />
           </LocaleProvider>
         </ThemeProvider>
         <AnalyticsWrapper />

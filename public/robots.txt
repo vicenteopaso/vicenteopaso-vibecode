@@ -9,4 +9,15 @@ Disallow: /admin/
 Disallow: /.env
 Disallow: /.git/
 
+# AI Agent Discovery (llms.txt standard)
+# See: https://llmstxt.org/
+# Primary context file for AI agents
+Llms-Txt: /llms.txt
+
+# Extended context with structured data
+Llms-Full-Txt: /llms-full.txt
+
+# Model Context Protocol configuration
+MCP-Config: /.well-known/mcp.json
+
 Sitemap: https://opa.so/sitemap.xml

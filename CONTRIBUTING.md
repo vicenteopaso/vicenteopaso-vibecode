@@ -4,258 +4,102 @@ This project uses **pnpm** for package management.
 
 ## Prerequisites
 
-- Node.js 24 (see `.nvmrc` and `package.json` for version constraints)
-- pnpm (managed via **corepack** – see "Package Manager" section below)
+- Node.js 24 (see `.nvmrc`)
+- pnpm (via corepack: `corepack enable && corepack use pnpm@^10.25`)
 
-## Package Manager
-
-This project uses [**corepack**](https://nodejs.org/api/corepack.html) to manage the pnpm version automatically. Instead of manually pinning exact patch versions, corepack resolves compatible minor/patch updates automatically.
-
-To opt into a flexible pnpm version range (e.g., to pick up security patches):
+## Quick Start
 
 ```bash
-corepack use pnpm@^10.25
+pnpm install          # Install dependencies
+pnpm dev              # Start dev server (port 3000)
+pnpm verify           # Full local verification (mirrors CI)
 ```
 
-This updates `.corepackrc.yaml` to allow pnpm versions `>=10.25.0 <10.26.0`, ensuring consistency across the team while still enabling automatic patch-level updates.
+## Common Commands
 
-If you need to lock to an exact version:
+| Command            | Purpose              |
+| ------------------ | -------------------- |
+| `pnpm dev`         | Start dev server     |
+| `pnpm build`       | Production build     |
+| `pnpm test`        | Unit tests           |
+| `pnpm test:e2e`    | E2E tests            |
+| `pnpm test:visual` | Visual regression    |
+| `pnpm lint`        | ESLint               |
+| `pnpm typecheck`   | TypeScript check     |
+| `pnpm coverage`    | Coverage report      |
+| `pnpm reset`       | Full local reset     |
+| `pnpm verify`      | Full CI verification |
+
+## Documentation-First Workflow
+
+For changes affecting architecture or workflows:
+
+1. Update `sdd.yaml` and relevant docs in `docs/`
+2. Create an ADR for architectural decisions (`docs/adr/`)
+3. Open PR with issue reference
+4. Implement code aligned to updated SDD
+5. Ensure CI passes
+
+## Before Opening a PR
+
+1. **Format & lint**: `pnpm lint:fix && pnpm typecheck`
+2. **Test**: `pnpm test && pnpm test:e2e && pnpm coverage`
+3. **Security**: `pnpm audit:secrets && pnpm audit:security`
+4. **Review**: Check against [Review Checklist](./docs/REVIEW_CHECKLIST.md)
+
+## Testing
+
+See [Testing Guide](./docs/TESTING.md) for comprehensive documentation.
+
+**Requirements:**
+
+- 90% coverage threshold
+- Unit tests for new code
+- E2E tests for user flows
+- Visual tests for UI changes
+
+**Commands:**
 
 ```bash
-corepack use pnpm@10.25.1
+pnpm test                # Unit tests
+pnpm test:e2e            # E2E (requires dev server)
+pnpm test:visual         # Visual regression
+pnpm test:visual:update  # Update baselines
 ```
 
-For more details on corepack, see the [Node.js corepack documentation](https://nodejs.org/api/corepack.html).
+## Key Documentation
 
-## Installing dependencies
+| Document                                              | Purpose                  |
+| ----------------------------------------------------- | ------------------------ |
+| [TESTING.md](./docs/TESTING.md)                       | Testing strategy         |
+| [REVIEW_CHECKLIST.md](./docs/REVIEW_CHECKLIST.md)     | PR review checklist      |
+| [ERROR_HANDLING.md](./docs/ERROR_HANDLING.md)         | Error patterns           |
+| [FORBIDDEN_PATTERNS.md](./docs/FORBIDDEN_PATTERNS.md) | Anti-patterns            |
+| [AI_AGENT_GUIDE.md](./docs/AI_AGENT_GUIDE.md)         | AI agent quick reference |
 
-```bash
-pnpm install
-```
+## AI Guardrails
 
-## Common commands
+PRs must satisfy automated quality checks:
 
-- Start dev server:
-  ```bash
-  pnpm dev
-  ```
-- Run tests:
-  ```bash
-  pnpm test
-  ```
-- Run end-to-end tests (requires dev server running on `http://localhost:3000`):
-  ```bash
-  pnpm test:e2e
-  ```
-- Lint:
-  ```bash
-  pnpm lint
-  ```
-- Type check:
-  ```bash
-  pnpm typecheck
-  ```
-- Generate unit test coverage:
-  ```bash
-  pnpm coverage
-  ```
-- Generate sitemap (requires build first):
-  ```bash
-  pnpm build
-  pnpm sitemap
-  ```
-- Test Vercel build skip logic:
-  ```bash
-  pnpm test:vercel-skip
-  ```
-  This validates that the build skip script correctly identifies when Vercel should skip a build.
+1. **Test coverage**: Changes to `app/`/`lib/` require test changes
+2. **PR template**: Complete all checklist items
+3. **ADRs**: Architecture changes require ADR link
+4. **CI gates**: lint, typecheck, test, e2e, visual
 
-## Composite scripts
+## Issues
 
-These scripts simplify common developer workflows:
+Use issue templates for:
 
-- **Full local reset** (wipe → reinstall → rebuild):
+- Bug reports
+- Feature requests
+- Documentation improvements
 
-  ```bash
-  pnpm reset
-  ```
+Security vulnerabilities → GitHub Security Advisories (not public issues).
 
-  Use when the environment is in an inconsistent state, after switching branches with lockfile changes, or after upgrading dependencies.
+## CI & Auto-merge
 
-- **Full local verification** (install → lint → typecheck → validate:links → test → test:e2e → build):
+- CI and CodeQL run on pushes and PRs to `main`
+- Dependabot PRs auto-merge when checks pass
+- Use `copilot-automerge` label for auto-merge
 
-  ```bash
-  pnpm verify
-  ```
-
-  Use before pushing changes to ensure local correctness matches CI expectations. This mirrors the CI pipeline. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
-
-## Documentation-first workflow (SDD)
-
-For changes that affect architecture, cross-cutting concerns, or developer workflows:
-
-1. Propose the change by updating `sdd.yaml` (source of truth) and relevant docs in `docs/`.
-2. **For architectural decisions**, create an ADR (Architecture Decision Record) documenting the context, decision, alternatives, and consequences. See `docs/adr/README.md` for guidance.
-3. Open a PR referencing the issue and summarizing the intent and scope. Link to any ADRs in the PR description.
-4. Implement code changes aligned to the updated SDD and standards.
-5. Update issue/PR templates if the change affects contribution workflows.
-6. Ensure CI is green (`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, visual tests when UI changes).
-
-Notes:
-
-- Solution-agnostic: the SDD encodes principles and boundaries; tech choices can evolve as long as principles hold.
-- Definition of Done includes updated docs and SDD alignment.
-- **Architectural decisions** require an ADR to capture context and rationale for future reference.
-
-## Before opening a PR
-
-- Make sure the code is formatted, linted, and type-safe:
-  - `pnpm lint` (or `pnpm lint:fix` to auto-fix import ordering and other auto-fixable issues)
-  - `pnpm typecheck`
-- Run tests locally:
-  - `pnpm test` (unit & integration tests)
-  - `pnpm test:e2e` (end-to-end tests when relevant)
-  - `pnpm test:visual` (visual regression tests when UI changes)
-  - `pnpm coverage` to verify coverage stays above 90%
-- Check for security issues:
-  - `pnpm audit:secrets` to scan for potential hardcoded secrets
-  - `pnpm audit:security` to check for high+ vulnerabilities in dependencies
-- Update documentation (README/docs) when changing behavior, workflows, or environment requirements.
-- Review your changes against the [Code Review Checklist](./docs/REVIEW_CHECKLIST.md) to ensure quality standards are met.
-- **AI Guardrails**: Ensure your PR satisfies the automated quality checks (see below).
-
-### Testing guidelines
-
-This project maintains **>90% test coverage** across multiple testing layers. See [Testing Guide](./docs/TESTING.md) for comprehensive documentation.
-
-#### Test Types
-
-- **Unit tests** (`pnpm test`): Test individual functions, utilities, and component logic
-- **E2E tests** (`pnpm test:e2e`): Test complete user flows and critical paths
-- **Visual regression** (`pnpm test:visual`): Catch unintended UI changes
-- **Type checking** (`pnpm typecheck`): Ensure TypeScript type safety
-
-#### When to Add Tests
-
-- **New features**: Always include unit and E2E tests for new functionality
-- **Bug fixes**: Add regression test that would have caught the bug
-- **UI changes**: Run visual tests and update baselines if intentional
-- **Refactoring**: Tests should still pass; if not, tests need updating
-
-#### Running Tests
-
-```bash
-# Quick test run
-pnpm test                    # Unit tests only
-
-# Full test suite
-pnpm test:e2e                # E2E tests (requires dev server)
-pnpm test:visual             # Visual regression tests
-pnpm coverage                # Generate coverage report
-
-# Update visual baselines (after intentional UI changes)
-pnpm test:visual:update
-```
-
-#### Test Coverage Requirements
-
-- Maintain **>90% statement coverage**
-- All new components must have tests
-- All bug fixes must include regression tests
-- E2E tests required for critical user flows (contact form, CV download, navigation)
-
-#### AI Guardrails (Automated in CI)
-
-This project enforces **AI Guardrails** to ensure consistent quality:
-
-1. **Test Coverage Check**: Changes to `app/` or `lib/` **must** include test changes in `test/unit/`, `test/e2e/`, or `test/visual/`
-   - Automated via `scripts/check-pr-tests.mjs`
-   - Runs in CI on every PR
-   - Ensures no code changes ship without tests
-
-2. **PR Template Compliance**: All PRs must complete the checklist including:
-   - ✅ Accessibility verification
-   - ✅ SEO impact assessment
-   - ✅ Security review
-   - ✅ Error handling verification
-
-3. **Architecture Decision Records (ADRs)**: PRs labeled `architecture-change` must link to an ADR in `docs/adr/`
-   - Use the [ADR template](./docs/adr/adr-template.md)
-   - See [ADR documentation](./docs/adr/README.md) for guidelines
-   - Example: [ADR-0001: Implement AI Guardrails](./docs/adr/0001-implement-ai-guardrails.md)
-
-4. **Quality Gates**: All PRs must pass:
-   - Lint, typecheck, unit tests, E2E tests, visual regression tests
-   - Enforced in `.github/workflows/ci.yml`
-
-See [Testing Guide](./docs/TESTING.md) for detailed best practices and examples.
-
-### Code review checklist
-
-Before requesting review and after making changes based on feedback, review your PR against the [Code Review Checklist](./docs/REVIEW_CHECKLIST.md). This checklist helps ensure consistent quality across:
-
-- **Error handling**: Graceful failures, structured logging, user-friendly messages
-- **Security**: Turnstile verification, rate limiting, input validation, no hardcoded secrets
-- **Accessibility**: Semantic HTML, keyboard navigation, ARIA, color contrast, alt text
-- **SEO**: Metadata exports, canonical URLs, structured data, descriptive link text
-- **Performance**: Server-first rendering, Core Web Vitals, image optimization
-- **i18n/Content**: Locale-aware routes, CV JSON parsing preserved, no hardcoded strings
-- **Testing**: Unit tests, E2E tests, visual regression tests with shared utilities
-- **Code quality**: TypeScript strict mode, import type usage, linting, formatting
-
-The checklist is especially useful for AI-authored changes and complex PRs.
-
-### Component documentation guidelines
-
-When creating or modifying UI components:
-
-- **Document new components** in `docs/components/` following the established format (see [Component Catalog](./docs/components/README.md)).
-- **Update existing documentation** when component APIs change (props, behavior, accessibility features).
-- **Include**:
-  - Purpose and use cases
-  - Complete props/API reference with TypeScript types
-  - Usage examples with code snippets
-  - Accessibility features (keyboard navigation, ARIA, screen reader support)
-  - Design tokens used (colors, spacing, typography)
-  - Testing notes and current coverage
-- **Link from `DESIGN_SYSTEM.md`** if the component represents a new design pattern.
-- See existing component docs (`ProfileCard.md`, `Modal.md`, etc.) as examples.
-
-### Linting guidelines
-
-- **Import ordering**: Imports are automatically sorted by `eslint-plugin-simple-import-sort`. Run `pnpm lint:fix` to auto-sort imports.
-- **Security**: The security plugin will warn about potential security issues. Most checks are errors, but some are warnings to avoid noise. Review and address security warnings appropriately.
-- **Type imports**: Use `import type` for type-only imports to satisfy `@typescript-eslint/consistent-type-imports`.
-- **Forbidden patterns**: Review [Forbidden APIs and Patterns](./docs/FORBIDDEN_PATTERNS.md) for security-critical and quality-related patterns that must be avoided. This includes bypassing Turnstile/rate limiting, hard-coding secrets, unsafe sanitization, and more.
-
-### Error handling guidelines
-
-- **Client-side errors**: Use `ErrorBoundary` component for React errors and `logError()` from `lib/error-logging` for explicit error logging.
-- **Server-side errors**: Use `console.error()` in API routes and server components; Vercel logs capture these in production.
-- **Structured logging**: Use `logError()` and `logWarning()` from `lib/error-logging` to include context (component, action, metadata).
-- **User-friendly fallbacks**: Never expose stack traces or internal details to users; always show graceful error messages.
-- See `docs/ERROR_HANDLING.md` for comprehensive error handling patterns and debugging workflows.
-
-## Issues and Bug Reports
-
-Issues are enabled for bug reports, feature requests, and documentation improvements. Please use the appropriate issue template:
-
-- **Bug Report**: Report functional issues, errors, or unexpected behavior
-- **Feature Request**: Suggest new features or enhancements
-- **Documentation**: Report documentation issues or suggest improvements
-
-For security vulnerabilities, use GitHub Security Advisories instead of opening a public issue.
-
-## CI, CodeQL, and auto-merge
-
-- CI and CodeQL run automatically on pushes and pull requests to `main`.
-- Dependabot opens weekly PRs for dependency and GitHub Actions updates; these are labeled `dependencies` (and `github-actions` for workflow updates).
-- Some PRs can be auto-merged when all required checks pass and branch protection allows it:
-  - Dependabot PRs with the `dependencies` label.
-  - PRs authored by `vicenteopaso` with the `copilot-automerge` label.
-
-## Labels
-
-Repository labels are managed declaratively via `.github/labels.yml`. The `sync-labels` workflow syncs labels automatically when the configuration file changes. To add or modify labels, update the configuration file and merge to `main`.
-
-Please prefer `pnpm` over `npm` or `yarn` when working in this repository.
+Always use `pnpm` (not npm/yarn) in this repository.

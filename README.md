@@ -212,7 +212,7 @@ The main routes are:
 - `/en/technical-governance` – English technical governance documentation
 - `/es/technical-governance` – Spanish technical governance documentation
 - `/api/contact` – Contact form API route
-- `/api/content/[slug]` – Content API for policy/tech markdown (deprecated, pages now server-side rendered)
+- `/api/content/[lang]/[slug]` – Localized content API for markdown (pages are server-side rendered; API remains for tooling/AI)
 
 ### Environment Variables & Security
 
@@ -740,7 +740,7 @@ For complete deployment details, build skip logic, manual redeployment instructi
 
 For deeper context, see:
 
-- **[WARP.md](./WARP.md)** — Higher-level explanations and architecture overview
+- **[docs/AI_AGENT_GUIDE.md](./docs/AI_AGENT_GUIDE.md)** — AI agent quick reference (commands, patterns, constraints)
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Design decisions, tech stack justifications, and constraints
 - **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, build skip logic, and environment configuration
 - **[docs/VERCEL_BUILD_SKIP_SETUP.md](./docs/VERCEL_BUILD_SKIP_SETUP.md)** — Step-by-step Vercel build skip configuration guide
@@ -753,6 +753,9 @@ For deeper context, see:
 - **[docs/SECURITY_POLICY.md](./docs/SECURITY_POLICY.md)** — Threat model, security headers, and defense-in-depth
 - **[docs/SECURITY_BOT_MANAGEMENT.md](./docs/SECURITY_BOT_MANAGEMENT.md)** — Bot traffic handling, attack vector blocking, and log noise reduction
 - **[docs/ERROR_HANDLING.md](./docs/ERROR_HANDLING.md)** — Error handling patterns and observability stack
+- **[docs/CONTACT_FLOW.md](./docs/CONTACT_FLOW.md)** — Contact form architecture and security
+- **[docs/API_PATTERNS.md](./docs/API_PATTERNS.md)** — API route patterns and validation
+- **[docs/CONFIGURATION.md](./docs/CONFIGURATION.md)** — Environment variables and configuration
 - **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)** — Comprehensive Sentry configuration and setup guide
 - **[docs/DESIGN_SYSTEM.md](./docs/DESIGN_SYSTEM.md)** — Design tokens, component catalog, and theming
 - **[docs/components/README.md](./docs/components/README.md)** — Component documentation catalog

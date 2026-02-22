@@ -235,7 +235,7 @@ const [emailError, setEmailError] = useState<string | null>(null);
 const [error, setError] = useState<string | null>(null);
 
 try {
-  const response = await fetch("/api/content/tech-stack");
+  const response = await fetch("/api/content/en/tech-stack");
   if (!response.ok) {
     throw new Error("Failed to load tech stack.");
   }

@@ -149,7 +149,7 @@ export default async function CVPage({ params }: PageProps) {
   const tagline = (data.tagline as string) || "";
 
   // Structured CV data now comes from a separate JSON file (cv.json)
-  let cv: CvJson | null = null;
+  let cv: CvJson | null;
   try {
     const jsonPath = path.join(process.cwd(), "content", locale, "cv.json");
     const jsonContents = fs.readFileSync(jsonPath, "utf8");

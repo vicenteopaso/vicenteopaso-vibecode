@@ -825,7 +825,7 @@ Do I have a new metadata route (opengraph image, RSS feed, etc.)?
 ## Related Documentation
 
 - **[ADR Directory](./adr/README.md)** — Architecture Decision Records with context and rationale
-- **[WARP.md](../WARP.md)** — High-level project overview and structure
+- **[AI_AGENT_GUIDE.md](./AI_AGENT_GUIDE.md)** — AI agent quick reference (commands, patterns, constraints)
 - **[README.md](../README.md)** — Setup instructions and quick start
 - **[ACCESSIBILITY.md](./ACCESSIBILITY.md)** — Accessibility strategy
 - **[SEO_GUIDE.md](./SEO_GUIDE.md)** — SEO implementation
