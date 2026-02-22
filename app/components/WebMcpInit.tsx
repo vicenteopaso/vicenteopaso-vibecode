@@ -64,12 +64,18 @@ function registerTools(modelContext: ModelContext) {
   const fetchJson = async (path: string) => {
     try {
       const response = await fetch(path);
-      const rawText = await response.text();
 
-      let data: unknown;
       try {
-        data = JSON.parse(rawText);
+        const data = await response.json();
+        return { ok: response.ok, status: response.status, data };
       } catch (parseError) {
+        let rawText = "";
+        try {
+          rawText = await response.text();
+        } catch {
+          rawText = "";
+        }
+
         return {
           ok: false,
           status: response.status,
@@ -83,8 +89,6 @@ function registerTools(modelContext: ModelContext) {
           },
         };
       }
-
-      return { ok: response.ok, status: response.status, data };
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Unknown network error.";
