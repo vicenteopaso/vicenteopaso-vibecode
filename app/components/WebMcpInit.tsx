@@ -23,14 +23,7 @@ type ModelContext = {
 type ModelContextNavigator = Navigator & { modelContext?: unknown };
 
 const MCP_REGISTRATION_FLAG = "__opaWebMcpRegistered";
-const CONTENT_SLUGS = [
-  "about",
-  "accessibility",
-  "cookie-policy",
-  "privacy-policy",
-  "tech-stack",
-  "technical-governance",
-] as const;
+import { CONTENT_SLUGS } from "@/lib/content-slugs";
 
 function getModelContext(): ModelContext | null {
   if (typeof navigator === "undefined") {

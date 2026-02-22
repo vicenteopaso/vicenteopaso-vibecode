@@ -5,7 +5,7 @@ import path from "path";
 
 import { isValidLocale } from "@/lib/i18n";
 
-import { ALLOWED_CONTENT_SLUGS } from "../shared";
+import { ALLOWED_CONTENT_SLUGS } from "@/lib/content-slugs";
 
 export const dynamic = "force-static";
 
