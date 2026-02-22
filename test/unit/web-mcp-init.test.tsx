@@ -119,6 +119,73 @@ describe("WebMcpInit", () => {
     expect(registerTool).not.toHaveBeenCalled();
   });
 
+  it("stops retrying after max attempts when modelContext never becomes available", () => {
+    const timerSpy = vi.spyOn(globalThis, "setTimeout");
+
+    Object.defineProperty(globalThis, "navigator", {
+      value: { modelContext: null },
+      configurable: true,
+    });
+
+    render(<WebMcpInit />);
+
+    act(() => {
+      vi.advanceTimersByTime(250 * 20);
+    });
+
+    expect(timerSpy).toHaveBeenCalledTimes(9);
+  });
+
+  it("keeps retrying when navigator/modelContext are invalid guard values", () => {
+    let modelContext: unknown = "invalid";
+    const registerTool = vi.fn();
+
+    Object.defineProperty(globalThis, "navigator", {
+      value: {
+        get modelContext() {
+          return modelContext;
+        },
+      },
+      configurable: true,
+    });
+
+    render(<WebMcpInit />);
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    expect(registerTool).not.toHaveBeenCalled();
+
+    modelContext = { registerTool };
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    expect(registerTool).toHaveBeenCalled();
+  });
+
+  it("retries when navigator is temporarily undefined", () => {
+    let navigatorValue: unknown = undefined;
+    const registerTool = vi.fn();
+
+    Object.defineProperty(globalThis, "navigator", {
+      get() {
+        return navigatorValue;
+      },
+      configurable: true,
+    });
+
+    render(<WebMcpInit />);
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    expect(registerTool).not.toHaveBeenCalled();
+
+    navigatorValue = { modelContext: { registerTool } };
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    expect(registerTool).toHaveBeenCalled();
+  });
+
   it("tool handlers return expected responses for success and error paths", async () => {
     const registered: RegisteredTool[] = [];
     const registerTool = vi.fn((tool) => {
@@ -201,5 +268,99 @@ describe("WebMcpInit", () => {
     };
     expect(list.content[0].text).toContain("about");
     expect(list.content[0].text).toContain("privacy-policy");
+  });
+
+  it("tool handlers cover parse and network fallback branches", async () => {
+    const registered: RegisteredTool[] = [];
+    const registerTool = vi.fn((tool) => {
+      registered.push(tool);
+    });
+    Object.defineProperty(globalThis, "navigator", {
+      value: { modelContext: { registerTool } },
+      configurable: true,
+    });
+
+    const fetchMock = globalThis.fetch as unknown as ReturnType<typeof vi.fn>;
+    fetchMock
+      .mockRejectedValueOnce("overview-failed")
+      .mockRejectedValueOnce(new Error("context-failed"))
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => {
+          throw new Error("bad-json");
+        },
+        text: async () => "raw-json-text",
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => {
+          throw "parse-string-error";
+        },
+        text: async () => {
+          throw new Error("cannot-read-body");
+        },
+      })
+      .mockRejectedValueOnce(new Error("network-down"))
+      .mockRejectedValueOnce("network-string-error");
+
+    render(<WebMcpInit />);
+
+    const tools = Object.fromEntries(
+      registered.map((tool) => [tool.name, tool]),
+    );
+
+    const overview = (await tools.get_site_overview.execute(null)) as {
+      isError?: boolean;
+      content: { text: string }[];
+    };
+    expect(overview.isError).toBe(true);
+    expect(overview.content[0].text).toContain("Unknown network error.");
+
+    const context = (await tools.get_site_context.execute(null)) as {
+      isError?: boolean;
+      content: { text: string }[];
+    };
+    expect(context.isError).toBe(true);
+    expect(context.content[0].text).toContain("context-failed");
+
+    const invalidJsonWithRawText = (await tools.get_content.execute({
+      lang: "en",
+      slug: "about",
+    })) as { isError?: boolean; content: { text: string }[] };
+    expect(invalidJsonWithRawText.isError).toBe(true);
+    expect(invalidJsonWithRawText.content[0].text).toContain(
+      "Invalid JSON response.",
+    );
+    expect(invalidJsonWithRawText.content[0].text).toContain("raw-json-text");
+    expect(invalidJsonWithRawText.content[0].text).toContain("bad-json");
+
+    const invalidJsonWithoutRawText = (await tools.get_content.execute({
+      lang: "es",
+      slug: "about",
+    })) as { isError?: boolean; content: { text: string }[] };
+    expect(invalidJsonWithoutRawText.isError).toBe(true);
+    expect(invalidJsonWithoutRawText.content[0].text).toContain(
+      "Unknown parse error.",
+    );
+    expect(invalidJsonWithoutRawText.content[0].text).toContain('"rawText": ""');
+
+    const networkErrorObject = (await tools.get_content.execute({
+      lang: "en",
+      slug: "privacy-policy",
+    })) as { isError?: boolean; content: { text: string }[] };
+    expect(networkErrorObject.isError).toBe(true);
+    expect(networkErrorObject.content[0].text).toContain("Network error.");
+    expect(networkErrorObject.content[0].text).toContain("network-down");
+
+    const networkErrorString = (await tools.get_content.execute({
+      lang: "es",
+      slug: "privacy-policy",
+    })) as { isError?: boolean; content: { text: string }[] };
+    expect(networkErrorString.isError).toBe(true);
+    expect(networkErrorString.content[0].text).toContain(
+      "Unknown network error.",
+    );
   });
 });

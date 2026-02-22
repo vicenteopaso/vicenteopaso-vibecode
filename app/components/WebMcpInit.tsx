@@ -45,16 +45,72 @@ function getModelContext(): ModelContext | null {
 }
 
 function registerTools(modelContext: ModelContext) {
+  const fetchText = async (path: string) => {
+    try {
+      const response = await fetch(path);
+      const text = await response.text();
+      return { ok: response.ok, status: response.status, text };
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unknown network error.";
+      return {
+        ok: false,
+        status: null,
+        text: `Error fetching ${path}: ${message}`,
+      };
+    }
+  };
+
+  const fetchJson = async (path: string) => {
+    try {
+      const response = await fetch(path);
+      let data: unknown;
+
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        let rawText = "";
+        try {
+          rawText = await response.text();
+        } catch {
+          rawText = "";
+        }
+
+        return {
+          ok: false,
+          status: response.status,
+          data: {
+            error: "Invalid JSON response.",
+            rawText,
+            parseError:
+              parseError instanceof Error
+                ? parseError.message
+                : "Unknown parse error.",
+          },
+        };
+      }
+
+      return { ok: response.ok, status: response.status, data };
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unknown network error.";
+      return {
+        ok: false,
+        status: null,
+        data: { error: "Network error.", message },
+      };
+    }
+  };
+
   modelContext.registerTool({
     name: "get_site_overview",
     description: "Return the short AI overview for this site (/llms.txt).",
     inputSchema: { type: "object", additionalProperties: false },
     execute: async () => {
-      const response = await fetch("/llms.txt");
-      const text = await response.text();
+      const result = await fetchText("/llms.txt");
       return {
-        content: [{ type: "text", text }],
-        isError: !response.ok,
+        content: [{ type: "text", text: result.text }],
+        isError: !result.ok,
       };
     },
   });
@@ -64,11 +120,10 @@ function registerTools(modelContext: ModelContext) {
     description: "Return the full AI context for this site (/llms-full.txt).",
     inputSchema: { type: "object", additionalProperties: false },
     execute: async () => {
-      const response = await fetch("/llms-full.txt");
-      const text = await response.text();
+      const result = await fetchText("/llms-full.txt");
       return {
-        content: [{ type: "text", text }],
-        isError: !response.ok,
+        content: [{ type: "text", text: result.text }],
+        isError: !result.ok,
       };
     },
   });
@@ -107,16 +162,19 @@ function registerTools(modelContext: ModelContext) {
         };
       }
 
-      const response = await fetch(`/api/content/${lang}/${slug}`);
-      const json = await response.json();
+      const result = await fetchJson(`/api/content/${lang}/${slug}`);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({ ok: response.ok, data: json }, null, 2),
+            text: JSON.stringify(
+              { ok: result.ok, status: result.status, data: result.data },
+              null,
+              2,
+            ),
           },
         ],
-        isError: !response.ok,
+        isError: !result.ok,
       };
     },
   });
