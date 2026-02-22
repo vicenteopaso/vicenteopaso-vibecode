@@ -40,11 +40,19 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContents);
+  try {
+    const fileContents = fs.readFileSync(filePath, "utf8");
+    const { data, content } = matter(fileContents);
 
-  return NextResponse.json({
-    title: (data.title as string) ?? (data.name as string) ?? slug,
-    body: content,
-  });
+    return NextResponse.json({
+      title: (data.title as string) ?? (data.name as string) ?? slug,
+      body: content,
+    });
+  } catch (error) {
+    console.error("Failed to load content", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
 }

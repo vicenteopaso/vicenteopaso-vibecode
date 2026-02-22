@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { CONTENT_SLUGS } from "@/lib/content-slugs";
+
 type ToolInputSchema = {
   type: "object";
   properties?: Record<string, { type: string; description?: string }>;
@@ -23,7 +25,6 @@ type ModelContext = {
 type ModelContextNavigator = Navigator & { modelContext?: unknown };
 
 const MCP_REGISTRATION_FLAG = "__opaWebMcpRegistered";
-import { CONTENT_SLUGS } from "@/lib/content-slugs";
 
 function getModelContext(): ModelContext | null {
   if (typeof navigator === "undefined") {
