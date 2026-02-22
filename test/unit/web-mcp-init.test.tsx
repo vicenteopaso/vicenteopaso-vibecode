@@ -344,7 +344,9 @@ describe("WebMcpInit", () => {
     expect(invalidJsonWithoutRawText.content[0].text).toContain(
       "Unknown parse error.",
     );
-    expect(invalidJsonWithoutRawText.content[0].text).toContain('"rawText": ""');
+    expect(invalidJsonWithoutRawText.content[0].text).toContain(
+      '"rawText": ""',
+    );
 
     const networkErrorObject = (await tools.get_content.execute({
       lang: "en",

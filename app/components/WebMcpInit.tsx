@@ -64,18 +64,12 @@ function registerTools(modelContext: ModelContext) {
   const fetchJson = async (path: string) => {
     try {
       const response = await fetch(path);
+      const rawText = await response.text();
+
       let data: unknown;
-
       try {
-        data = await response.json();
+        data = JSON.parse(rawText);
       } catch (parseError) {
-        let rawText = "";
-        try {
-          rawText = await response.text();
-        } catch {
-          rawText = "";
-        }
-
         return {
           ok: false,
           status: response.status,
