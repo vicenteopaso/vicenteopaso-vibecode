@@ -42,6 +42,7 @@ async function openContactDialog(page: Page) {
       `Dialog failed to open. Button state: ${JSON.stringify(buttonState)}, ` +
         `Dialog elements found: ${dialogExists}, ` +
         `Original error: ${error}`,
+      { cause: error },
     );
   }
 

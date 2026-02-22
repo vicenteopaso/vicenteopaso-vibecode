@@ -1,0 +1,81 @@
+# Vicente Opaso — Full AI Context
+
+<!-- 
+  MAINTENANCE NOTE: This file provides comprehensive AI agent context.
+  Keep in sync with README.md, cv.json, and site content.
+  Last updated: 2026-02-22
+-->
+
+> Web Engineering Manager & Frontend Architect | Composable Platforms, Design Systems & DevEx
+
+## Profile
+
+**Name:** Vicente Opaso  
+**Title:** Web Engineering Manager & Frontend Architect  
+**Location:** Europe  
+**Languages:** Spanish (Native), English (C2)
+
+25+ years designing and scaling high-performance digital platforms across enterprise, e-commerce, and mission-critical environments. Specializes in composable architecture, Design Systems, and Developer Experience.
+
+## Experience Summary
+
+| Company | Role | Period | Focus |
+|---------|------|--------|-------|
+| Nexthink | Web Engineering Manager | 2025 | Composable platform, Next.js, Vercel |
+| EUROCONTROL | Technical Application Owner | 2025 | Aviation systems, Design System |
+| Carlsberg Group | Frontend Solutions Architect | 2020-2024 | B2B platforms, Malty Design System |
+| Greygoo | Co-founder | 2012-2019 | Digital studio, Fortune 500 clients |
+| Nokia Networks | RF Engineer | 2001-2011 | Telecommunications |
+
+## Core Skills
+
+**Master:** TypeScript, React, Next.js, Design Systems, DevEx, CI/CD  
+**Advanced:** AWS, GraphQL, Tailwind CSS, Playwright, Vitest
+
+## Site Architecture
+
+```
+/en                    Home page + contact form
+/en/cv                 Full CV
+/en/tech-stack         Technical details
+/en/accessibility      WCAG 2.1 AA statement
+/en/technical-governance Technical governance
+/es/*                  Spanish locale
+```
+
+**Stack:** Next.js 16 (App Router) | TypeScript | Tailwind CSS v4 | Vercel
+
+## Publications
+
+1. Hardening Agentic Experience (AX) in an AI-First Codebase (2025)
+2. Building My Website Through Spec-Driven Development (2025)
+3. Empowering Design Systems: Communities of Practice (2024)
+
+## Contact
+
+- Website: https://opa.so
+- LinkedIn: linkedin.com/in/vicenteopaso
+- GitHub: github.com/vicenteopaso
+
+## AI Governance
+
+This site implements strict AI guardrails:
+- Governance: `CONSTITUTION.md` > `sdd.yaml` > ADRs > docs > code
+- Security: Turnstile, sanitization, rate limiting
+- Accessibility: WCAG 2.1 AA minimum
+- Testing: 90% coverage required
+
+## AI & MCP Interfaces
+
+- Short context: `/llms.txt`
+- Full context: `/llms-full.txt`
+- MCP config: `/.well-known/mcp.json`
+- Content API example: `/api/content/en/tech-stack` (pattern: `/api/content/{lang}/{slug}`, slugs: about, accessibility, cookie-policy, privacy-policy, tech-stack, technical-governance)
+
+## WebMCP Tools (Browser)
+
+When a WebMCP-capable client is present, the site exposes read-only tools:
+- `get_site_overview` — returns `/llms.txt`
+- `get_site_context` — returns `/llms-full.txt`
+- `get_content` — returns localized markdown via `/api/content/{lang}/{slug}`
+- `list_content_slugs` — lists available slugs

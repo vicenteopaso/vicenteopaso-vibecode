@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Governance**: All constitutional invariants are now explicitly enumerated for machine and human reference
-- **Documentation**: Updated all governance docs (`AI_GUARDRAILS.md`, `ENGINEERING_STANDARDS.md`, `ARCHITECTURE.md`, `WARP.md`, `README.md`) for AI-first rigor
+- **Documentation**: Updated all governance docs (`AI_GUARDRAILS.md`, `ENGINEERING_STANDARDS.md`, `ARCHITECTURE.md`, `AI_AGENT_GUIDE.md`, `README.md`) for AI-first rigor
 - **SDD**: Updated `sdd.yaml` for consistency with AI-first governance model
 - **Content**: Updated tech-stack and technical-governance content files for English and Spanish
 - **CI**: Enhanced coverage and visual regression workflows

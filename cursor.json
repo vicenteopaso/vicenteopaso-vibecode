@@ -4,15 +4,17 @@
     "constitutionPath": "./docs/CONSTITUTION.md",
     "sddPath": "./sdd.yaml",
     "docs": [
+      "./docs/AI_AGENT_GUIDE.md",
       "./docs/ARCHITECTURE.md",
-      "./docs/ERROR_HANDLING.md",
-      "./docs/AI_GUARDRAILS.md"
+      "./docs/AI_GUARDRAILS.md",
+      "./docs/FORBIDDEN_PATTERNS.md"
     ],
     "instructions": [
       "Always comply with docs/CONSTITUTION.md. If a request conflicts, explain the conflict and refuse.",
-      "Always read and respect the rules in sdd.yaml when generating or editing code.",
-      "Preserve the Next.js App Router structure and testing strategy defined there.",
-      "Prefer existing patterns and components over new abstractions unless needed."
+      "Read docs/AI_AGENT_GUIDE.md for quick reference on commands and patterns.",
+      "Follow rules in sdd.yaml when generating or editing code.",
+      "Preserve the Next.js App Router structure and testing strategy.",
+      "Prefer existing patterns and components over new abstractions."
     ]
   }
 }

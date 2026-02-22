@@ -1,0 +1,60 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/mcp.json",
+  "name": "opa.so",
+  "description": "Vicente Opaso's portfolio and CV - Web Engineering Manager & Frontend Architect",
+  "version": "1.0.0",
+  "provider": {
+    "name": "Vicente Opaso",
+    "url": "https://opa.so"
+  },
+  "capabilities": {
+    "read": true,
+    "write": false,
+    "execute": false
+  },
+  "content": {
+    "llms_txt": "/llms.txt",
+    "llms_full_txt": "/llms-full.txt"
+  },
+  "endpoints": {
+    "content": {
+      "path": "/api/content/{lang}/{slug}",
+      "method": "GET",
+      "description": "Retrieve localized markdown content by locale and slug",
+      "parameters": {
+        "lang": {
+          "type": "string",
+          "description": "Locale code (en or es)",
+          "required": true
+        },
+        "slug": {
+          "type": "string",
+          "description": "Content slug (about, accessibility, cookie-policy, privacy-policy, tech-stack, technical-governance)",
+          "required": true
+        }
+      }
+    }
+  },
+  "locales": ["en", "es"],
+  "primaryLocale": "en",
+  "contact": {
+    "method": "form",
+    "path": "/en",
+    "description": "Contact form on home page (protected by Cloudflare Turnstile)"
+  },
+  "social": {
+    "linkedin": "https://linkedin.com/in/vicenteopaso",
+    "github": "https://github.com/vicenteopaso",
+    "twitter": "https://twitter.com/vicenteopaso"
+  },
+  "technical": {
+    "framework": "Next.js 16",
+    "deployment": "Vercel",
+    "accessibility": "WCAG 2.1 AA",
+    "security": ["CSP", "Turnstile", "Rate Limiting", "Input Sanitization"]
+  },
+  "governance": {
+    "ai_guardrails": true,
+    "documentation": "https://github.com/vicenteopaso/vicenteopaso-vibecode/tree/main/docs"
+  }
+}

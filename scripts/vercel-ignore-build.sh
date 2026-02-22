@@ -59,7 +59,7 @@ SKIP_PATHS=(
   ".github/"
   "README.md"
   "CONTRIBUTING.md"
-  "WARP.md"
+  "docs/AI_AGENT_GUIDE.md"
   "LICENSE"
   "SECURITY.md"
   "SUPPORT.md"

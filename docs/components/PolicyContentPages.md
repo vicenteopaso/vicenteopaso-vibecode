@@ -8,7 +8,7 @@ Cookie Policy, Privacy Policy, and Tech Stack are now rendered as standalone pag
 
 - Footer links: see `app/components/Footer.tsx`
 - Policy pages: see `app/[lang]/cookie-policy/page.tsx`, etc.
-- Content API: see `app/api/content/[slug]/route.ts`
+- Content API: see `app/api/content/[[...parts]]/route.ts`
 
 ## Testing
 
