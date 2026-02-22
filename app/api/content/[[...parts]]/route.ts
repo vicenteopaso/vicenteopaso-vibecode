@@ -3,9 +3,8 @@ import matter from "gray-matter";
 import { NextResponse } from "next/server";
 import path from "path";
 
+import { isContentSlug } from "@/lib/content-slugs";
 import { isValidLocale } from "@/lib/i18n";
-
-import { ALLOWED_CONTENT_SLUGS } from "@/lib/content-slugs";
 
 export const dynamic = "force-static";
 
@@ -27,7 +26,7 @@ export async function GET(
   const lang = parts.length === 2 ? first : "en";
   const slug = parts.length === 2 ? second : first;
 
-  if (!slug || !ALLOWED_CONTENT_SLUGS.has(slug)) {
+  if (!slug || !isContentSlug(slug)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
