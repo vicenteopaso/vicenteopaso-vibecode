@@ -105,7 +105,7 @@ const nextConfig = {
 
       // CV PDF: strong edge cache, 1-day browser cache
       {
-        source: "/assets/vicente-opaso-cv-2025.pdf",
+        source: "/assets/vicente-opaso-cv-2026.pdf",
         headers: [
           {
             key: "Cache-Control",
