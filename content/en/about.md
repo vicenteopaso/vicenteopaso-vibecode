@@ -9,7 +9,7 @@ initials: VO
 
 ## Introduction
 
-I lead engineering teams and architect frontend platforms that combine composable architectures, modern frameworks, design systems and Developer Experience (DevEx) workflows. My work focuses on scalable frontend architectures, accessible user experiences, CI/CD automation and cross-functional engineering leadership.
+I lead engineering teams and architect frontend platforms that combine composable architectures, modern frameworks, design systems, Developer Experience (DevEx) workflows, and engineering governance. My work focuses on scalable frontend architectures, accessible user experiences, CI/CD automation, and cross-functional engineering leadership.
 
 ---
 
@@ -17,14 +17,14 @@ I lead engineering teams and architect frontend platforms that combine composabl
 
 _Improved_
 **Core Web Vitals**
-**30%**  
+**25%**  
 Across six global markets
 
 ---
 
 _Cut_
 **Release friction**
-**60%**  
+**40%**  
 Through CI/CD guardrails & DevEx automation
 
 ---
@@ -60,7 +60,7 @@ Via edge delivery and governance frameworks
 ---
 
 _Led_
-**€1M yearly turnover**  
+**€1B+ yearly turnover**  
 B2B E-Commerce Platforms'
 Frontend Development Team
 
@@ -68,9 +68,9 @@ Frontend Development Team
 
 ## Professional Summary
 
-At Nexthink I led the global corporate marketing platform built on Next.js, GraphQL, Tailwind CSS and Hygraph on Vercel—driving performance, accessibility and DevEx automation across a distributed engineering team operating in six locales.
+At Nexthink I led the global corporate marketing platform built on Next.js, GraphQL, Tailwind CSS and Hygraph on Vercel—driving performance, accessibility and DevEx automation across a 5-person cross-functional team (including a UI/UX Designer) operating in six locales, raising Core Web Vitals by 25%.
 
-At EUROCONTROL I defined the Design System strategy for aviation-critical operations, strengthened CI/CD pipelines and implemented governance frameworks across regulated, mission-critical workflows.
+At EUROCONTROL I defined the Design System strategy for aviation-critical operations, coordinated a 10-person cross-functional delivery team, and implemented governance frameworks that reduced deployment friction by 40% across regulated, mission-critical workflows.
 
 At Carlsberg I built the _Malty_ global React/TypeScript component library, founded the Frontend Community of Practice and scaled cross-market engineering workflows supporting the Western Europe digital ecosystem.
 
