@@ -9,7 +9,7 @@ initials: VO
 
 ## Introduction
 
-Lidero equipos de ingeniería y articulo plataformas frontend que combinan arquitecturas composables, frameworks modernos, design systems y flujos de Developer Experience (DevEx). Mi trabajo se centra en arquitecturas frontend escalables, experiencias accesibles, automatización CI/CD y liderazgo técnico transversal.
+Lidero equipos de ingeniería y articulo plataformas frontend que combinan arquitecturas composables, frameworks modernos, design systems, flujos de Developer Experience (DevEx) y gobernanza de ingeniería. Mi trabajo se centra en arquitecturas frontend escalables, experiencias accesibles, automatización CI/CD y liderazgo técnico transversal.
 
 ---
 
@@ -17,14 +17,14 @@ Lidero equipos de ingeniería y articulo plataformas frontend que combinan arqui
 
 _Mejoré_  
 **Core Web Vitals**  
-**30%**  
+**25%**  
 En seis mercados globales
 
 ---
 
-_Reducción_  
+_Reduje_  
 **Fricción en releases**  
-**60%**  
+**40%**  
 Mediante guardrails de CI/CD y automatización DevEx
 
 ---
@@ -60,16 +60,16 @@ A través de edge delivery y marcos de gobernanza
 ---
 
 _Lideré_  
-**€1M de facturación anual**  
-Equipo de Frontend Development para plataformas B2B E-Commerce
+**€1B+ de facturación anual**  
+Equipo de Frontend Development para plataformas B2B E‑Commerce
 
 ---
 
 ## Resumen Profesional
 
-En Nexthink lideré la plataforma global de marketing corporativo basada en Next.js, GraphQL, Tailwind CSS y Hygraph sobre Vercel—impulsando rendimiento, accesibilidad y automatización DevEx dentro de un equipo distribuido operando en seis mercados.
+En Nexthink lideré la plataforma global de marketing corporativo basada en Next.js, GraphQL, Tailwind CSS y Hygraph sobre Vercel—impulsando rendimiento, accesibilidad y automatización DevEx dentro de un equipo multifuncional de 5 personas (incluyendo una persona de UI/UX Design) operando en seis mercados y elevando Core Web Vitals en 25%.
 
-En EUROCONTROL definí la estrategia del Design System para operaciones críticas de aviación, reforcé los pipelines de CI/CD e implementé marcos de gobernanza en flujos regulados y de misión crítica.
+En EUROCONTROL definí la estrategia del Design System para operaciones críticas de aviación, coordiné un equipo de entrega multifuncional de 10 personas e implementé marcos de gobernanza que redujeron la fricción de despliegue en 40% en flujos regulados y de misión crítica.
 
 En Carlsberg construí la librería global de componentes React/TypeScript _Malty_, fundé la Frontend Community of Practice y escalé los flujos de ingeniería entre mercados que soportan el ecosistema digital de Europa Occidental.
 
