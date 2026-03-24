@@ -27,6 +27,19 @@ export async function setThemeDark(page: Page): Promise<void> {
   await page.emulateMedia({ colorScheme: "dark" });
 }
 
+export async function setFixedProfilePhotoIndex(
+  page: Page,
+  index: number,
+): Promise<void> {
+  await page.addInitScript((fixedIndex) => {
+    (
+      window as Window & {
+        __PROFILE_PHOTO_INDEX__?: number;
+      }
+    ).__PROFILE_PHOTO_INDEX__ = fixedIndex;
+  }, index);
+}
+
 // Wait until document height is stable for N consecutive checks
 export async function waitForStableHeight(
   page: Page,

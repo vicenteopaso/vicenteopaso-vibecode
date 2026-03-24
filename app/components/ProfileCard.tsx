@@ -139,10 +139,14 @@ export function ProfileCard({
     if (!mounted) return;
     const list = displayTheme === "dark" ? DARK_PORTRAITS : LIGHT_PORTRAITS;
     if (list.length > 0) {
-      // In Playwright runs, keep image deterministic (index 0)
-      const index = process.env.PLAYWRIGHT
-        ? 0
-        : Math.floor(Math.random() * list.length);
+      const profilePhotoIndex = (
+        window as Window & { __PROFILE_PHOTO_INDEX__?: number }
+      ).__PROFILE_PHOTO_INDEX__;
+      const index =
+        typeof profilePhotoIndex === "number" &&
+        Number.isInteger(profilePhotoIndex)
+          ? Math.abs(profilePhotoIndex) % list.length
+          : Math.floor(Math.random() * list.length);
       setPhotoIndex(index);
     }
   }, [mounted, displayTheme]);
