@@ -16,12 +16,16 @@ test.describe("References Carousel Visual Regression", () => {
     await waitForCVPage(page);
 
     const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
+    const referencesContent = page.locator(
+      '[data-testid="references-carousel-content"]',
+    );
     await expect(referencesSection).toBeVisible();
+    await expect(referencesContent).toBeVisible();
 
     await freezeReferencesCarousel(page);
     await waitForStableHeight(page);
 
-    await expect(referencesSection).toHaveScreenshot(
+    await expect(referencesContent).toHaveScreenshot(
       "references-carousel-light.png",
       {
         animations: "disabled",
@@ -35,12 +39,16 @@ test.describe("References Carousel Visual Regression", () => {
     await waitForCVPage(page);
 
     const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
+    const referencesContent = page.locator(
+      '[data-testid="references-carousel-content"]',
+    );
     await expect(referencesSection).toBeVisible();
+    await expect(referencesContent).toBeVisible();
 
     await freezeReferencesCarousel(page);
     await waitForStableHeight(page);
 
-    await expect(referencesSection).toHaveScreenshot(
+    await expect(referencesContent).toHaveScreenshot(
       "references-carousel-dark.png",
       {
         animations: "disabled",
@@ -54,12 +62,16 @@ test.describe("References Carousel Visual Regression", () => {
     await waitForCVPage(page);
 
     const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
+    const referencesContent = page.locator(
+      '[data-testid="references-carousel-content"]',
+    );
     await expect(referencesSection).toBeVisible();
+    await expect(referencesContent).toBeVisible();
 
     await freezeReferencesCarousel(page);
     await waitForStableHeight(page);
 
-    await expect(referencesSection).toHaveScreenshot(
+    await expect(referencesContent).toHaveScreenshot(
       "references-carousel-mobile.png",
       {
         animations: "disabled",

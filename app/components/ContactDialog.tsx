@@ -115,11 +115,11 @@ export function ContactDialog({
     // In automated browser runs, skip rendering Turnstile and set a fake token.
     const isAutomatedBrowser =
       typeof window !== "undefined" &&
-      (((window.navigator as Navigator & { webdriver?: boolean }).webdriver ===
+      ((window.navigator as Navigator & { webdriver?: boolean }).webdriver ===
         true ||
         (window as Window & { __PLAYWRIGHT__?: boolean }).__PLAYWRIGHT__ ===
           true ||
-        /HeadlessChrome/.test(window.navigator.userAgent)));
+        /HeadlessChrome/.test(window.navigator.userAgent));
 
     if (isAutomatedBrowser) {
       setTurnstileToken("test-token");

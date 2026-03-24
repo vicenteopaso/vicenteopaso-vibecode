@@ -1,15 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Build a Sentry mock that captures init calls and exposes required client APIs.
-function createSentryClientMock() {
-  return {
-    init: vi.fn(),
-    replayIntegration: vi.fn(() => ({ name: "ReplayIntegrationMock" })),
-    captureRouterTransitionStart: vi.fn(() => ({ type: "router-transition" })),
-  };
-}
+const sentryClientMock = vi.hoisted(() => ({
+  init: vi.fn(),
+  replayIntegration: vi.fn(() => ({ name: "ReplayIntegrationMock" })),
+  captureRouterTransitionStart: vi.fn(() => ({ type: "router-transition" })),
+}));
 
-type SentryClientMock = ReturnType<typeof createSentryClientMock>;
+vi.mock("@sentry/nextjs", () => sentryClientMock);
+
+type SentryClientMock = typeof sentryClientMock;
 interface InitOptions {
   dsn: string;
   environment: string;
@@ -22,7 +21,6 @@ interface InitOptions {
 // Helper to import the client instrumentation fresh per test with new env.
 async function importClientInstrumentation() {
   vi.resetModules();
-  vi.mock("@sentry/nextjs", () => createSentryClientMock());
   return import("../../instrumentation-client");
 }
 
@@ -33,6 +31,9 @@ describe("instrumentation-client Sentry init", () => {
   beforeEach(() => {
     warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     debugSpy = vi.spyOn(console, "debug").mockImplementation(() => {});
+    sentryClientMock.init.mockClear();
+    sentryClientMock.replayIntegration.mockClear();
+    sentryClientMock.captureRouterTransitionStart.mockClear();
     delete process.env.VITEST;
     delete process.env.NEXT_PUBLIC_SENTRY_DSN;
   });

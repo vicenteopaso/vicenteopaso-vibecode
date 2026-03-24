@@ -121,6 +121,7 @@ export function ReferencesCarousel({
       {/* Reference content (no inner card) */}
       <div
         className="space-y-3"
+        data-testid="references-carousel-content"
         style={maxHeight ? { minHeight: maxHeight } : undefined}
       >
         <HtmlBlock html={current.reference} />
