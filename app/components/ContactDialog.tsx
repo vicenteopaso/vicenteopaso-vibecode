@@ -29,6 +29,7 @@ declare global {
 
 interface ContactDialogProps {
   triggerLabel?: string;
+  triggerClassName?: string;
   trigger?: ReactNode;
   children?: ReactNode;
 }
@@ -47,6 +48,7 @@ type FormState = "idle" | "submitting" | "success" | "countdown";
 
 export function ContactDialog({
   triggerLabel = "Contact me",
+  triggerClassName,
   trigger,
   children,
 }: ContactDialogProps) {
@@ -323,7 +325,10 @@ export function ContactDialog({
   const triggerNode = trigger ?? (
     <button
       type="button"
-      className="btn-outline px-3.5 py-1.5 text-xs font-medium bg-[color:var(--bg-surface)]/90 shadow-black/5 hover:border-[color:var(--accent)]/50 hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+      className={
+        triggerClassName ??
+        "btn-outline px-3.5 py-1.5 text-xs font-medium bg-[color:var(--bg-surface)]/90 shadow-black/5 hover:border-[color:var(--accent)]/50 hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+      }
     >
       {triggerLabel}
     </button>

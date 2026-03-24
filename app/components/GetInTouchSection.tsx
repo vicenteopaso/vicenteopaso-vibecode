@@ -14,14 +14,8 @@ export function GetInTouchSection({ locale }: { locale: Locale }) {
             {t("getInTouch.title")}
           </h2>
           <ContactDialog
-            trigger={
-              <button
-                type="button"
-                className="btn-primary h-8 px-4 text-sm font-semibold"
-              >
-                {t("getInTouch.contactButton")}
-              </button>
-            }
+            triggerLabel={t("getInTouch.contactButton")}
+            triggerClassName="btn-primary h-8 px-4 text-sm font-semibold"
           />
         </div>
         <p className="pt-2 text-sm text-[color:var(--text-primary)]">
