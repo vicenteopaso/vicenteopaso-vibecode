@@ -1,26 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Mock factory so that importing the Sentry config files does not perform any
-// real network or SDK initialization work during tests. Vitest's Sentry
-// integration expects a `getCurrentHub` export to exist on the mock.
-function createSentryMock() {
-  return {
-    init: vi.fn(),
-    getCurrentHub: vi.fn(() => ({
-      getClient: () => null,
-    })),
-    captureRequestError: vi.fn(),
-  };
-}
+const sentryMock = vi.hoisted(() => ({
+  init: vi.fn(),
+  getCurrentHub: vi.fn(() => ({
+    getClient: () => null,
+  })),
+  captureRequestError: vi.fn(),
+}));
 
-vi.mock("@sentry/nextjs", () => createSentryMock());
+vi.mock("@sentry/nextjs", () => sentryMock);
 
 // Helper to import the module fresh so it sees updated env vars between tests.
 async function importInstrumentation() {
   // Ensure a fresh module instance for each test
   vi.resetModules();
-  // Re-apply the Sentry mock after resetting modules
-  vi.mock("@sentry/nextjs", () => createSentryMock());
   return import("../../instrumentation");
 }
 
@@ -29,6 +22,9 @@ describe("instrumentation register()", () => {
 
   beforeEach(() => {
     process.env = { ...originalEnv };
+    sentryMock.init.mockClear();
+    sentryMock.getCurrentHub.mockClear();
+    sentryMock.captureRequestError.mockClear();
   });
 
   afterEach(() => {

@@ -3,6 +3,8 @@ import type { Locator, Page } from "@playwright/test";
 // Shared selectors for visual tests
 export const PORTRAIT_SELECTOR = 'img[alt*="Portrait"]';
 export const REFERENCES_SECTION_SELECTOR = "#references";
+const NEXT_DEVTOOLS_HOST_SELECTORS =
+  "nextjs-portal, script[data-nextjs-dev-overlay]";
 
 // Theme helpers for next-themes: ensure deterministic light/dark
 export async function setThemeLight(page: Page): Promise<void> {
@@ -23,6 +25,19 @@ export async function setThemeDark(page: Page): Promise<void> {
     (window as Window & { __PLAYWRIGHT__?: boolean }).__PLAYWRIGHT__ = true;
   });
   await page.emulateMedia({ colorScheme: "dark" });
+}
+
+export async function setFixedProfilePhotoIndex(
+  page: Page,
+  index: number,
+): Promise<void> {
+  await page.addInitScript((fixedIndex) => {
+    (
+      window as Window & {
+        __PROFILE_PHOTO_INDEX__?: number;
+      }
+    ).__PROFILE_PHOTO_INDEX__ = fixedIndex;
+  }, index);
 }
 
 // Wait until document height is stable for N consecutive checks
@@ -153,6 +168,42 @@ export async function cvPageMasks(page: Page): Promise<Locator[]> {
   return [page.locator(REFERENCES_SECTION_SELECTOR)];
 }
 
+// Hide the Next.js devtools/issues indicator and overlay host during screenshots.
+// This keeps visual baselines stable even if dev-only tooling appears.
+export async function hideNextDevtools(page: Page): Promise<void> {
+  await page.evaluate((selectors) => {
+    const globalWindow = window as Window & {
+      __VISUAL_TEST_NEXTJS_UI_HIDDEN__?: boolean;
+    };
+
+    if (globalWindow.__VISUAL_TEST_NEXTJS_UI_HIDDEN__) {
+      document.querySelectorAll(selectors).forEach((element) => {
+        (element as HTMLElement).style.display = "none";
+      });
+      return;
+    }
+
+    const hideElements = () => {
+      document.querySelectorAll(selectors).forEach((element) => {
+        (element as HTMLElement).style.display = "none";
+      });
+    };
+
+    hideElements();
+
+    const observer = new MutationObserver(() => {
+      hideElements();
+    });
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+
+    globalWindow.__VISUAL_TEST_NEXTJS_UI_HIDDEN__ = true;
+  }, NEXT_DEVTOOLS_HOST_SELECTORS);
+}
+
 // Wait for CV page to be fully loaded and ready for screenshot
 export async function waitForCVPage(page: Page): Promise<void> {
   // Wait for basic page load
@@ -163,6 +214,9 @@ export async function waitForCVPage(page: Page): Promise<void> {
 
   // Wait for footer to ensure page is mostly rendered
   await page.waitForSelector("footer", { state: "visible", timeout: 10000 });
+
+  // Hide any Next.js dev overlay/devtools UI that could otherwise pollute snapshots
+  await hideNextDevtools(page);
 
   // Short delay to let things settle
   await page.waitForTimeout(200);
@@ -175,6 +229,9 @@ export async function waitForHomepage(page: Page): Promise<void> {
 
   // Wait for footer to ensure page is mostly rendered
   await page.waitForSelector("footer", { state: "visible", timeout: 10000 });
+
+  // Hide any Next.js dev overlay/devtools UI that could otherwise pollute snapshots
+  await hideNextDevtools(page);
 
   // Freeze carousel if it exists
   await page

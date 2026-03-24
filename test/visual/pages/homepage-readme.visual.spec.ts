@@ -1,11 +1,17 @@
 import { expect, test } from "@playwright/test";
 
-import { setThemeDark, setThemeLight, waitForHomepage } from "../utils";
+import {
+  setFixedProfilePhotoIndex,
+  setThemeDark,
+  setThemeLight,
+  waitForHomepage,
+} from "../utils";
 
 test.describe("Homepage Screenshots for README", () => {
   test("homepage light mode - desktop (masked portrait for README)", async ({
     page,
   }, testInfo) => {
+    await setFixedProfilePhotoIndex(page, 0);
     await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
@@ -29,6 +35,7 @@ test.describe("Homepage Screenshots for README", () => {
   test("homepage dark mode - desktop (masked portrait for README)", async ({
     page,
   }, testInfo) => {
+    await setFixedProfilePhotoIndex(page, 0);
     await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
