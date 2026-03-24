@@ -140,7 +140,7 @@ export function ProfileCard({
     const list = displayTheme === "dark" ? DARK_PORTRAITS : LIGHT_PORTRAITS;
     if (list.length > 0) {
       const profilePhotoIndex = (
-        window as Window & { __PROFILE_PHOTO_INDEX__?: number }
+        globalThis as unknown as Window & { __PROFILE_PHOTO_INDEX__?: number }
       ).__PROFILE_PHOTO_INDEX__;
       const index =
         typeof profilePhotoIndex === "number" &&
