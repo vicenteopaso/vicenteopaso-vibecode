@@ -20,7 +20,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           token: ${{ secrets.PAT_WORKFLOW_TRIGGER || secrets.GITHUB_TOKEN }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
       - run: pnpm install
       - run: npx playwright install --with-deps
       - run: pnpm test:visual:update
