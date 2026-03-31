@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 async function createGetHandler() {
   vi.resetModules();
   const mod = await import("../../app/api/sources/route");
-  return mod.GET as (req: Request) => Promise<Response>;
+  return mod.GET;
 }
 
 describe("app/api/sources GET", () => {
@@ -18,7 +18,7 @@ describe("app/api/sources GET", () => {
 
     expect(res.status).toBe(200);
     const json = (await res.json()) as {
-      version: string | number;
+      version: number;
       mode: string;
       sources: Array<{
         id: string;
@@ -28,7 +28,7 @@ describe("app/api/sources GET", () => {
       }>;
     };
 
-    expect(json.version).toBe("1");
+    expect(json.version).toBe(1);
     expect(json.mode).toBe("production");
     expect(json.sources.length).toBeGreaterThan(0);
     expect(json.sources).toEqual(

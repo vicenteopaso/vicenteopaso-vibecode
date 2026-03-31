@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 async function createGetHandler() {
   vi.resetModules();
   const mod = await import("../../app/api/rules/route");
-  return mod.GET as (req: Request) => Promise<Response>;
+  return mod.GET;
 }
 
 describe("app/api/rules GET", () => {

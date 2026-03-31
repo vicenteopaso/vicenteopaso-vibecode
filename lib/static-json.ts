@@ -79,7 +79,7 @@ const sourceSchema = z
 
 const sourcesSchema = z
   .object({
-    version: z.union([z.string(), z.number()]),
+    version: z.number().int().nonnegative(),
     mode: z.string(),
     sources: z.array(sourceSchema),
   })
