@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 async function createGetHandler() {
+  vi.resetModules();
   const mod = await import("../../app/api/profile/route");
   return mod.GET as (req: Request) => Promise<Response>;
 }
