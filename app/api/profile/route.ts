@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 function getPreferredProfileLocale(request: Request): "en" | "es" {
   const langHeader = request.headers.get("accept-language") || "";
