@@ -86,6 +86,17 @@ describe("error-logging", () => {
 
       expect(logEntry.message).toBe("Unknown error");
     });
+
+    it("suppresses console error output in browser test environments", () => {
+      Object.defineProperty(window.navigator, "webdriver", {
+        value: true,
+        configurable: true,
+      });
+
+      logError(new Error("Playwright browser error"));
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe("logWarning", () => {

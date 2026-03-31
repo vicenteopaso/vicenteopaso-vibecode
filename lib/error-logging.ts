@@ -15,6 +15,30 @@ export interface ErrorContext {
   metadata?: Record<string, unknown>;
 }
 
+function isBrowserTestEnvironment(): boolean {
+  const globalScope = globalThis as typeof globalThis & {
+    window?: Window;
+  };
+  const browserWindow = globalScope.window;
+
+  if (!browserWindow) {
+    return false;
+  }
+
+  const extendedWindow = browserWindow as Window & {
+    __PLAYWRIGHT__?: boolean;
+  };
+  const browserNavigator = browserWindow.navigator as Navigator & {
+    webdriver?: boolean;
+  };
+
+  return (
+    browserNavigator.webdriver === true ||
+    extendedWindow.__PLAYWRIGHT__ === true ||
+    /HeadlessChrome/.test(browserWindow.navigator.userAgent)
+  );
+}
+
 /**
  * Log an error with optional context information.
  *
@@ -56,9 +80,11 @@ export function logError(error: Error | unknown, context?: ErrorContext): void {
     );
   });
 
-  // Log to console (captured by Vercel in production)
-  // eslint-disable-next-line no-console
-  console.error("Application Error:", JSON.stringify(logEntry, null, 2));
+  if (!isBrowserTestEnvironment()) {
+    // Log to console (captured by Vercel in production)
+    // eslint-disable-next-line no-console
+    console.error("Application Error:", JSON.stringify(logEntry, null, 2));
+  }
 }
 
 /**

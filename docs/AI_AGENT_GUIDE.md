@@ -109,6 +109,7 @@ This site provides AI-friendly context files:
 - `/llms.txt` — Brief site context
 - `/llms-full.txt` — Comprehensive context with structured data
 - `/.well-known/mcp.json` — Model Context Protocol configuration
+- `/api/profile/{lang}` — Canonical localized JSON profile assembled from CV data and profile preferences
 
 ---
 

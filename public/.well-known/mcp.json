@@ -33,6 +33,18 @@
           "required": true
         }
       }
+    },
+    "profile": {
+      "path": "/api/profile/{lang}",
+      "method": "GET",
+      "description": "Retrieve the canonical localized JSON profile for Vicente Opaso",
+      "parameters": {
+        "lang": {
+          "type": "string",
+          "description": "Locale code (en or es)",
+          "required": true
+        }
+      }
     }
   },
   "locales": ["en", "es"],

@@ -71,6 +71,7 @@ describe("WebMcpInit", () => {
         "get_site_overview",
         "get_site_context",
         "get_content",
+        "get_profile",
         "list_content_slugs",
       ]),
     );
@@ -213,6 +214,11 @@ describe("WebMcpInit", () => {
       .mockResolvedValueOnce({
         ok: false,
         json: async () => ({ error: true }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ name: "Vicente Opaso" }),
       });
 
     render(<WebMcpInit />);
@@ -263,6 +269,19 @@ describe("WebMcpInit", () => {
     expect(errorContent.isError).toBe(true);
     expect(errorContent.content[0].text).toContain('"ok": false');
 
+    const missingProfileInput = (await tools.get_profile.execute({})) as {
+      isError?: boolean;
+      content: { text: string }[];
+    };
+    expect(missingProfileInput.isError).toBe(true);
+    expect(missingProfileInput.content[0].text).toContain("lang is required");
+
+    const okProfile = (await tools.get_profile.execute({
+      lang: "en",
+    })) as { isError?: boolean; content: { text: string }[] };
+    expect(okProfile.isError).toBe(false);
+    expect(okProfile.content[0].text).toContain('"name": "Vicente Opaso"');
+
     const list = tools.list_content_slugs.execute(null) as {
       content: { text: string }[];
     };
@@ -303,6 +322,11 @@ describe("WebMcpInit", () => {
         },
       })
       .mockRejectedValueOnce(new Error("network-down"))
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        json: async () => ({ error: "profile-down" }),
+      })
       .mockRejectedValueOnce("network-string-error");
 
     render(<WebMcpInit />);
@@ -355,6 +379,12 @@ describe("WebMcpInit", () => {
     expect(networkErrorObject.isError).toBe(true);
     expect(networkErrorObject.content[0].text).toContain("Network error.");
     expect(networkErrorObject.content[0].text).toContain("network-down");
+
+    const profileError = (await tools.get_profile.execute({
+      lang: "es",
+    })) as { isError?: boolean; content: { text: string }[] };
+    expect(profileError.isError).toBe(true);
+    expect(profileError.content[0].text).toContain("profile-down");
 
     const networkErrorString = (await tools.get_content.execute({
       lang: "es",
