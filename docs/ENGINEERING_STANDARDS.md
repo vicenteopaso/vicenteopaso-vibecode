@@ -162,7 +162,7 @@ This document captures the engineering intent for this repository. It is a **nor
 
 - **Lines**: ≥90%
 - **Statements**: ≥90%
-- **Branches**: ≥85%
+- **Branches**: ≥90%
 - **Functions**: ≥90%
 
 **Purpose**: Prevents AI-generated code and manual changes from having high pass rates but low actual test coverage. Coverage gates ensure every change is tested, not just syntactically correct.
@@ -171,7 +171,7 @@ This document captures the engineering intent for this repository. It is a **nor
 
 ### 5.3 Coverage by Test Type
 
-- **Unit/Integration tests**: Enforced thresholds (lines: 90%, statements: 90%, branches: 85%, functions: 90%)
+- **Unit/Integration tests**: Enforced thresholds (lines: 90%, statements: 90%, branches: 90%, functions: 90%)
 - **E2E tests**: All critical user journeys covered
 - **Visual regression**: All pages and key component variants
 - **Type safety**: 100% via TypeScript strict mode

@@ -119,7 +119,7 @@ devex:
     coverage-thresholds:
       lines: 90
       statements: 90
-      branches: 85 # Lower threshold: branches are harder to cover due to edge cases
+      branches: 90
       functions: 90
       enforcement: fail-on-violation
       config-file: vitest.config.ts
@@ -157,7 +157,7 @@ ai-governance:
       Business logic and utilities belong in lib/* (no React dependencies, pure functions where possible).
       API routes contain schema validation and external service calls, not business rules.
     testing-expectations: |
-      Coverage thresholds are enforced in CI (lines: 90%, statements: 90%, branches: 85%, functions: 90%).
+      Coverage thresholds are enforced in CI (lines: 90%, statements: 90%, branches: 90%, functions: 90%).
       New features must include unit tests (Vitest) and maintain coverage thresholds.
       UI changes require visual regression tests (Playwright) for light/dark mode and mobile/desktop viewports.
       Routes must have E2E tests (Playwright) verifying happy path and error cases.

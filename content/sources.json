@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "mode": "production",
+  "sources": [
+    {
+      "id": "remotive",
+      "type": "rss",
+      "url": "https://remotive.com/remote-jobs/feed",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "himalayas",
+      "type": "rss",
+      "url": "https://himalayas.app/jobs/rss",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "weworkremotely-all",
+      "type": "rss",
+      "url": "https://weworkremotely.com/remote-jobs.rss",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "weworkremotely-programming",
+      "type": "rss",
+      "url": "https://weworkremotely.com/categories/remote-programming-jobs.rss",
+      "enabled": true,
+      "tags": ["remote", "programming"]
+    },
+    {
+      "id": "weworkremotely-fullstack",
+      "type": "rss",
+      "url": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs.rss",
+      "enabled": true,
+      "tags": ["remote", "fullstack"]
+    },
+    {
+      "id": "weworkremotely-frontend",
+      "type": "rss",
+      "url": "https://weworkremotely.com/categories/remote-front-end-programming-jobs.rss",
+      "enabled": true,
+      "tags": ["remote", "frontend"]
+    },
+    {
+      "id": "remote-co",
+      "type": "html",
+      "url": "https://remote.co",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "remoteok",
+      "type": "rss",
+      "url": "https://remoteok.com/rss",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "remoteok-dev",
+      "type": "rss",
+      "url": "https://remoteok.com/remote-dev-jobs.rss",
+      "enabled": true,
+      "tags": ["remote", "programming"]
+    },
+    {
+      "id": "remoteok-frontend",
+      "type": "rss",
+      "url": "https://remoteok.com/remote-frontend-jobs.rss",
+      "enabled": true,
+      "tags": ["remote", "frontend"]
+    },
+    {
+      "id": "remoteok-management",
+      "type": "rss",
+      "url": "https://remoteok.com/remote-management-jobs.rss",
+      "enabled": true,
+      "tags": ["remote", "management"]
+    },
+    {
+      "id": "jobspresso",
+      "type": "rss",
+      "url": "https://jobspresso.co/rss",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "workingnomads",
+      "type": "rss",
+      "url": "https://workingnomads.com/jobs/rss",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "authenticjobs",
+      "type": "rss",
+      "url": "https://authenticjobs.com/rss",
+      "enabled": true,
+      "tags": ["remote"]
+    },
+    {
+      "id": "larajobs",
+      "type": "rss",
+      "url": "https://larajobs.com/feed",
+      "enabled": true,
+      "tags": ["remote", "laravel"]
+    },
+    {
+      "id": "wellfound",
+      "type": "rss",
+      "url": "https://wellfound.com/jobs.rss",
+      "enabled": true,
+      "tags": ["startup"]
+    },
+    {
+      "id": "cord",
+      "type": "html",
+      "url": "https://cord.co/jobs",
+      "enabled": true,
+      "tags": ["startup"]
+    },
+    {
+      "id": "justjoinit",
+      "type": "rss",
+      "url": "https://justjoin.it/feed.xml",
+      "enabled": true,
+      "tags": ["europe"]
+    },
+    {
+      "id": "nofluffjobs",
+      "type": "rss",
+      "url": "https://nofluffjobs.com/rss",
+      "enabled": true,
+      "tags": ["europe"]
+    },
+    {
+      "id": "berlinstartupjobs",
+      "type": "rss",
+      "url": "https://berlinstartupjobs.com/feed",
+      "enabled": true,
+      "tags": ["europe", "startup"]
+    },
+    {
+      "id": "swissdevjobs",
+      "type": "rss",
+      "url": "https://swissdevjobs.ch/rss",
+      "enabled": true,
+      "tags": ["europe"]
+    },
+    {
+      "id": "eurotechjobs",
+      "type": "rss",
+      "url": "https://eurotechjobs.com/jobs/rss",
+      "enabled": true,
+      "tags": ["europe"]
+    },
+    {
+      "id": "eures",
+      "type": "html",
+      "url": "https://eures.europa.eu/eures-searchengine/page/main?lang=en#/jobs",
+      "enabled": true,
+      "tags": ["europe", "eu-official"]
+    },
+    {
+      "id": "ycombinator-jobs",
+      "type": "html",
+      "url": "https://www.ycombinator.com/jobs",
+      "enabled": true,
+      "tags": ["startup", "yc"]
+    },
+    {
+      "id": "techstars",
+      "type": "html",
+      "url": "https://www.techstars.com/jobs",
+      "enabled": true,
+      "tags": ["startup"]
+    },
+    {
+      "id": "gitlab-careers",
+      "type": "html",
+      "url": "https://about.gitlab.com/jobs/",
+      "enabled": true,
+      "tags": ["company", "remote"]
+    },
+    {
+      "id": "automattic-careers",
+      "type": "html",
+      "url": "https://automattic.com/work-with-us/",
+      "enabled": true,
+      "tags": ["company", "remote"]
+    },
+    {
+      "id": "shopify-careers",
+      "type": "html",
+      "url": "https://careers.shopify.com/",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "vercel-careers",
+      "type": "html",
+      "url": "https://vercel.com/careers",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "linear-careers",
+      "type": "html",
+      "url": "https://linear.app/careers",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "sentry-careers",
+      "type": "html",
+      "url": "https://sentry.io/careers/",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "elastic-careers",
+      "type": "html",
+      "url": "https://www.elastic.co/careers",
+      "enabled": true,
+      "tags": ["company", "remote"]
+    },
+    {
+      "id": "contentful-careers",
+      "type": "html",
+      "url": "https://www.contentful.com/careers/",
+      "enabled": true,
+      "tags": ["company", "europe"]
+    },
+    {
+      "id": "miro-careers",
+      "type": "html",
+      "url": "https://miro.com/careers/",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "stripe-careers",
+      "type": "html",
+      "url": "https://stripe.com/jobs",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "cloudflare-careers",
+      "type": "html",
+      "url": "https://www.cloudflare.com/careers/",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "datadog-careers",
+      "type": "html",
+      "url": "https://www.datadoghq.com/careers/",
+      "enabled": true,
+      "tags": ["company"]
+    },
+    {
+      "id": "openai-careers",
+      "type": "html",
+      "url": "https://openai.com/careers",
+      "enabled": true,
+      "tags": ["company", "ai"]
+    },
+    {
+      "id": "anthropic-careers",
+      "type": "html",
+      "url": "https://www.anthropic.com/careers",
+      "enabled": true,
+      "tags": ["company", "ai"]
+    },
+    {
+      "id": "perplexity-careers",
+      "type": "html",
+      "url": "https://www.perplexity.ai/careers",
+      "enabled": true,
+      "tags": ["company", "ai"]
+    },
+    {
+      "id": "huggingface-careers",
+      "type": "html",
+      "url": "https://huggingface.co/jobs",
+      "enabled": true,
+      "tags": ["company", "ai"]
+    },
+    {
+      "id": "cohere-careers",
+      "type": "html",
+      "url": "https://cohere.com/careers",
+      "enabled": true,
+      "tags": ["company", "ai"]
+    },
+    {
+      "id": "replicate-careers",
+      "type": "html",
+      "url": "https://replicate.com/careers",
+      "enabled": true,
+      "tags": ["company", "ai"]
+    },
+    {
+      "id": "amgen-careers",
+      "type": "html",
+      "url": "https://careers.amgen.com/en/search-jobs",
+      "enabled": true,
+      "tags": ["company", "pharma"]
+    },
+    {
+      "id": "adzuna-api",
+      "type": "api",
+      "url": "https://developer.adzuna.com/",
+      "enabled": true,
+      "tags": ["aggregator", "europe", "api"]
+    },
+    {
+      "id": "jooble-api",
+      "type": "api",
+      "url": "https://jooble.org/api/about",
+      "enabled": true,
+      "tags": ["aggregator", "europe", "api"]
+    },
+    {
+      "id": "careerjet-api",
+      "type": "api",
+      "url": "https://www.careerjet.com/partners/api/",
+      "enabled": true,
+      "tags": ["aggregator", "europe", "api"]
+    },
+    {
+      "id": "arbeitnow-api",
+      "type": "api",
+      "url": "https://www.arbeitnow.com/api/job-board-api",
+      "enabled": true,
+      "tags": ["remote", "europe", "api"]
+    },
+    {
+      "id": "reed-uk-rss",
+      "type": "rss",
+      "url": "https://www.reed.co.uk/jobs/software-engineer-jobs?format=rss",
+      "enabled": true,
+      "tags": ["uk", "europe", "rss"]
+    },
+    {
+      "id": "totaljobs-uk-rss",
+      "type": "rss",
+      "url": "https://www.totaljobs.com/jobs/software-engineer/rss",
+      "enabled": true,
+      "tags": ["uk", "europe", "rss"]
+    },
+    {
+      "id": "stepstone-de",
+      "type": "html",
+      "url": "https://www.stepstone.de/jobs/software-engineer",
+      "enabled": true,
+      "tags": ["germany", "europe"]
+    },
+    {
+      "id": "lesjeudis-fr",
+      "type": "html",
+      "url": "https://www.lesjeudis.com/",
+      "enabled": true,
+      "tags": ["france", "europe", "tech"]
+    },
+    {
+      "id": "welcome-to-the-jungle",
+      "type": "html",
+      "url": "https://www.welcometothejungle.com/en/jobs",
+      "enabled": true,
+      "tags": ["europe", "startup"]
+    },
+    {
+      "id": "greenhouse-boards",
+      "type": "pattern",
+      "url": "https://boards.greenhouse.io/",
+      "enabled": true,
+      "tags": ["ats", "company", "high-signal"]
+    },
+    {
+      "id": "lever-jobs",
+      "type": "pattern",
+      "url": "https://jobs.lever.co/",
+      "enabled": true,
+      "tags": ["ats", "company", "high-signal"]
+    },
+    {
+      "id": "ashby-jobs-pattern",
+      "type": "pattern",
+      "url": "https://jobs.ashbyhq.com/",
+      "enabled": true,
+      "tags": ["ats", "startup", "high-signal"]
+    },
+    {
+      "id": "personio-jobs",
+      "type": "pattern",
+      "url": "https://jobs.personio.de/",
+      "enabled": true,
+      "tags": ["ats", "europe"]
+    },
+    {
+      "id": "smartrecruiters",
+      "type": "pattern",
+      "url": "https://jobs.smartrecruiters.com/",
+      "enabled": true,
+      "tags": ["ats", "company"]
+    },
+    {
+      "id": "workday-jobs",
+      "type": "pattern",
+      "url": "https://wd3.myworkdayjobs.com/",
+      "enabled": true,
+      "tags": ["ats", "enterprise"]
+    },
+    {
+      "id": "relocate-me",
+      "type": "rss",
+      "url": "https://relocate.me/feed",
+      "enabled": true,
+      "tags": ["europe", "relocation", "high-paying"]
+    },
+    {
+      "id": "irishjobs",
+      "type": "html",
+      "url": "https://www.irishjobs.ie/Jobs/IT",
+      "enabled": true,
+      "tags": ["ireland", "europe"]
+    },
+    {
+      "id": "stack-overflow-questions-jobs-tag",
+      "type": "rss",
+      "url": "https://stackoverflow.com/jobs/feed",
+      "enabled": true,
+      "tags": ["programming", "tech"]
+    },
+    {
+      "id": "germantechjobs",
+      "type": "html",
+      "url": "https://germantechjobs.de/",
+      "enabled": true,
+      "tags": ["germany", "europe", "tech"]
+    },
+    {
+      "id": "englishjobs-berlin",
+      "type": "html",
+      "url": "https://englishjobs.de/in/berlin",
+      "enabled": true,
+      "tags": ["germany", "berlin", "english-speaking"]
+    },
+    {
+      "id": "devjobs-de",
+      "type": "html",
+      "url": "https://en.devjobs.de/",
+      "enabled": true,
+      "tags": ["germany", "tech", "developer"]
+    },
+    {
+      "id": "tech-careers-berlin",
+      "type": "html",
+      "url": "https://www.tech-careers.de/it-jobs-in-berlin/",
+      "enabled": true,
+      "tags": ["germany", "berlin", "tech"]
+    },
+    {
+      "id": "jobsinberlin-eu",
+      "type": "html",
+      "url": "http://www.jobsinberlin.eu/jobs/IT%20Technology",
+      "enabled": true,
+      "tags": ["germany", "berlin", "tech"]
+    },
+    {
+      "id": "topremotejobs-germany",
+      "type": "html",
+      "url": "https://www.topremotejobs.eu/jobs/countries/germany",
+      "enabled": true,
+      "tags": ["germany", "remote", "tech"]
+    }
+  ]
+}

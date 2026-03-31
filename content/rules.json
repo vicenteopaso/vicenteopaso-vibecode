@@ -1,0 +1,97 @@
+{
+  "version": 1,
+
+  "matching": {
+    "min_match_score": 0.8,
+    "require_recommended_flag": true,
+    "prioritize_titles": [
+      "Engineering Manager",
+      "Frontend Engineering Manager",
+      "Web Engineering Manager",
+      "Tech Lead",
+      "Tech Leader",
+      "Technical Leader",
+      "Lead Engineer",
+      "Team Lead"
+    ],
+    "secondary_titles": [
+      "Principal Frontend Engineer",
+      "Staff Frontend Engineer",
+      "Senior Frontend Engineer",
+      "Principal Engineer",
+      "Staff Engineer",
+      "Design System Engineer",
+      "Developer Experience Engineer"
+    ],
+    "title_priority_boosts": {
+      "frontend engineering manager": 0.1,
+      "web engineering manager": 0.1,
+      "engineering manager": 0.08,
+      "tech lead": 0.07,
+      "tech leader": 0.07,
+      "technical lead": 0.07,
+      "technical leader": 0.07,
+      "principal engineer": 0.05,
+      "staff engineer": 0.05,
+      "lead engineer": 0.05,
+      "team lead": 0.03,
+      "senior frontend engineer": 0.02
+    }
+  },
+
+  "hard_filters": {
+    "exclude_open_opportunities": true,
+    "exclude_titles_containing": [
+      "designer",
+      "product designer",
+      "ux designer",
+      "ui designer",
+      "graphic designer",
+      "intern",
+      "junior"
+    ],
+    "exclude_keywords_in_description": [
+      "open application",
+      "general interest",
+      "talent pool"
+    ],
+    "allowed_work_models": ["remote", "hybrid"],
+    "exclude_work_models": []
+  },
+
+  "queue": {
+    "max_new_linear_issues_per_day": 30,
+    "carry_over_overflow": true,
+    "max_job_age_days": 45,
+    "recheck_queued_jobs_each_run": true,
+    "drop_jobs_if_closed": true
+  },
+
+  "deduplication": {
+    "dedupe_by": ["canonical_url", "company", "title"],
+    "ignore_query_params": true,
+    "cross_source_duplicate_window_days": 30
+  },
+
+  "scoring": {
+    "batch_size_for_llm_matching": 20,
+    "max_description_chars_per_job": 3000,
+    "prefer_remote": true,
+    "prefer_europe_friendly": true,
+    "penalize_unclear_location": false
+  },
+
+  "linear": {
+    "create_issue_only_if_above_threshold": true,
+    "default_team_key": "JOB",
+    "default_labels": ["job-search"],
+    "include_match_reasons": true,
+    "include_dealbreakers": true
+  },
+
+  "operations": {
+    "runs_per_day": 2,
+    "timezone": "Europe/Madrid",
+    "log_level": "info"
+  }
+}

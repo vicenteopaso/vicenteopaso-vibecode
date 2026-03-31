@@ -27,7 +27,7 @@ This project embraces AI-first development with strong guardrails to ensure code
 ### 3. Quality Gates Are Non-Negotiable
 
 - All AI-generated code must pass CI checks (lint, typecheck, tests)
-- Coverage thresholds (90% lines, 85% branches, 90% functions) must be maintained
+- Coverage thresholds (90% lines, 90% branches, 90% functions) must be maintained
 - Accessibility standards (WCAG 2.1 AA) cannot be regressed
 - Security checks (CodeQL, dependency scanning) must pass
 
@@ -129,7 +129,7 @@ All PRs (including AI-generated changes) must pass:
    - Broken links fail CI
 
 4. **Unit Tests** (`pnpm test`)
-   - Coverage thresholds: 90% lines, 85% branches, 90% functions
+   - Coverage thresholds: 90% lines, 90% branches, 90% functions
    - Tests must be meaningful, not just coverage padding
 
 5. **E2E Tests** (`pnpm test:e2e`)
