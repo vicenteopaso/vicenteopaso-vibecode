@@ -5,7 +5,7 @@ import { getRulesConfig } from "@/lib/static-json";
 
 export const dynamic = "force-static";
 
-export async function GET() {
+export async function GET(_request: Request) {
   try {
     return NextResponse.json(getRulesConfig(), {
       headers: {
