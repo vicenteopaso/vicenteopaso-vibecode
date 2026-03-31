@@ -6,30 +6,35 @@
     "require_recommended_flag": true,
     "prioritize_titles": [
       "Engineering Manager",
-      "Web Engineering Manager",
       "Frontend Engineering Manager",
+      "Web Engineering Manager",
       "Tech Lead",
-      "Team Lead",
-      "Lead Engineer"
+      "Tech Leader",
+      "Technical Leader",
+      "Lead Engineer",
+      "Team Lead"
     ],
     "secondary_titles": [
-      "Senior Frontend Engineer",
-      "Staff Frontend Engineer",
       "Principal Frontend Engineer",
-      "Staff Engineer",
+      "Staff Frontend Engineer",
+      "Senior Frontend Engineer",
       "Principal Engineer",
+      "Staff Engineer",
       "Design System Engineer",
       "Developer Experience Engineer"
     ],
     "title_priority_boosts": {
-      "engineering manager": 0.08,
       "frontend engineering manager": 0.1,
       "web engineering manager": 0.1,
+      "engineering manager": 0.08,
       "tech lead": 0.07,
-      "team lead": 0.06,
+      "tech leader": 0.07,
+      "technical lead": 0.07,
+      "technical leader": 0.07,
+      "principal engineer": 0.05,
+      "staff engineer": 0.05,
       "lead engineer": 0.05,
-      "staff engineer": 0.03,
-      "principal engineer": 0.03,
+      "team lead": 0.03,
       "senior frontend engineer": 0.02
     }
   },
@@ -51,7 +56,7 @@
       "talent pool"
     ],
     "allowed_work_models": ["remote", "hybrid"],
-    "exclude_work_models": ["onsite"]
+    "exclude_work_models": []
   },
 
   "queue": {
