@@ -8,5 +8,7 @@ Disallow: /xmlrpc.php
 Disallow: /admin/
 Disallow: /.env
 Disallow: /.git/
+Disallow: /api/rules
+Disallow: /api/sources/
 
 Sitemap: https://opa.so/sitemap.xml

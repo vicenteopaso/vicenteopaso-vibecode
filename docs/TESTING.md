@@ -587,7 +587,7 @@ The following minimum coverage thresholds are configured in `vitest.config.ts` a
 | ---------- | ------- |
 | Lines      | 90%     |
 | Statements | 90%     |
-| Branches   | 85%     |
+| Branches   | 90%     |
 | Functions  | 90%     |
 
 **CI Integration**: Both the main CI workflow and the dedicated coverage workflow run `pnpm coverage`, which fails if any threshold is not met.
@@ -836,7 +836,7 @@ The main CI workflow runs on every PR and push to main, executing:
 Dedicated coverage workflow that:
 
 1. Runs unit tests with coverage (`pnpm coverage`)
-2. **Enforces coverage thresholds** (lines: 90%, statements: 90%, branches: 85%, functions: 90%)
+2. **Enforces coverage thresholds** (lines: 90%, statements: 90%, branches: 90%, functions: 90%)
 3. Uploads coverage reports as artifacts for review
 
 ### Coverage Gates

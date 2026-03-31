@@ -165,7 +165,7 @@ Every PR should be reviewed against this checklist before merging. Some items ar
 - [ ] `pnpm test` passes
 - [ ] New functionality has unit tests
 - [ ] Changed functionality has updated tests
-- [ ] Coverage thresholds maintained (90% lines, 85% branches, 90% functions)
+- [ ] Coverage thresholds maintained (90% lines, 90% branches, 90% functions)
 - [ ] Tests are meaningful, not just coverage padding
 - [ ] Tests focus on behavior, not implementation details
 - [ ] Mocks used appropriately (external APIs, timers)

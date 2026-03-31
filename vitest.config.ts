@@ -10,6 +10,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    testTimeout: 10000,
     setupFiles: ["./test/setup-vitest.ts"],
     exclude: [
       ...configDefaults.exclude,
@@ -65,10 +66,9 @@ export default defineConfig({
         "sentry.*.config.*",
       ],
       thresholds: {
-        // Adjust these to your desired minimum coverage percentages
         lines: 90,
         statements: 90,
-        branches: 85,
+        branches: 90,
         functions: 90,
       },
     },

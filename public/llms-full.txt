@@ -71,6 +71,7 @@ This site implements strict AI guardrails:
 - Full context: `/llms-full.txt`
 - MCP config: `/.well-known/mcp.json`
 - Content API example: `/api/content/en/tech-stack` (pattern: `/api/content/{lang}/{slug}`, slugs: about, accessibility, cookie-policy, privacy-policy, tech-stack, technical-governance)
+- Profile API: `/api/profile/{lang}`
 
 ## WebMCP Tools (Browser)
 
