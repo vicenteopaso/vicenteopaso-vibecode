@@ -24,3 +24,4 @@ Personal site with CV, technical governance, and contact details.
 - [Full context](/llms-full.txt)
 - [MCP config](/.well-known/mcp.json)
 - [Content API example](/api/content/en/tech-stack) — pattern: `/api/content/{lang}/{slug}` (slugs: about, accessibility, cookie-policy, privacy-policy, tech-stack, technical-governance)
+- [Canonical profile API](/api/profile/en) — pattern: `/api/profile/{lang}`

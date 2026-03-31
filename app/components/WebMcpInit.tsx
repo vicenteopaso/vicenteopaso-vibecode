@@ -178,6 +178,51 @@ function registerTools(modelContext: ModelContext) {
   });
 
   modelContext.registerTool({
+    name: "get_profile",
+    description:
+      "Fetch the canonical localized JSON profile from /api/profile/{lang}.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        lang: { type: "string", description: "Locale code (en or es)." },
+      },
+      required: ["lang"],
+      additionalProperties: false,
+    },
+    execute: async (input) => {
+      if (!input || typeof input !== "object") {
+        return {
+          content: [{ type: "text", text: "Error: invalid input." }],
+          isError: true,
+        };
+      }
+
+      const { lang } = input as { lang?: string };
+      if (!lang) {
+        return {
+          content: [{ type: "text", text: "Error: lang is required." }],
+          isError: true,
+        };
+      }
+
+      const result = await fetchJson(`/api/profile/${lang}`);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(
+              { ok: result.ok, status: result.status, data: result.data },
+              null,
+              2,
+            ),
+          },
+        ],
+        isError: !result.ok,
+      };
+    },
+  });
+
+  modelContext.registerTool({
     name: "list_content_slugs",
     description: "List available markdown content slugs for this site.",
     inputSchema: { type: "object", additionalProperties: false },

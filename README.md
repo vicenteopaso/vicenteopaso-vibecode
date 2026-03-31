@@ -472,7 +472,7 @@ pnpm reset
 pnpm verify
 ```
 
-- **`reset`** — Cleans all build artifacts and caches, reinstalls dependencies, and rebuilds the project. Use after upgrading dependencies, switching branches with lockfile changes, or when the environment is in an inconsistent state.
+- **`reset`** — Cleans build artifacts, caches, and common macOS/iCloud junk files (for example duplicate generated files like `next-env.d 2.ts`), reinstalls dependencies, and rebuilds the project. Use after upgrading dependencies, switching branches with lockfile changes, or when the environment is in an inconsistent state.
 - **`verify`** — Runs the full verification pipeline: install → lint → typecheck → validate:links → test → test:e2e → build. Use before pushing changes to ensure local correctness matches CI expectations. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
 
 ### Content & build

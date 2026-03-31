@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "current_title": "Web Engineering Manager",
+    "seniority": "lead-manager",
+    "actively_looking": true
+  },
+  "role_preferences": {
+    "target_titles": [
+      "Engineering Manager",
+      "Web Engineering Manager",
+      "Frontend Engineering Manager",
+      "Staff Frontend Engineer",
+      "Tech Lead",
+      "Principal Frontend Engineer",
+      "Platform Engineer (Frontend-focused)",
+      "Design System Manager",
+      "Design System Engineer",
+      "Design System Lead",
+      "Developer Experience Engineer"
+    ],
+    "excluded_titles": [
+      "Product Designer",
+      "UX Designer",
+      "UI Designer",
+      "Interaction Designer",
+      "Graphic Designer",
+      "Junior",
+      "Intern"
+    ],
+    "min_seniority": "senior",
+    "management_interest": "manager_or_individual_contributor",
+    "open_to_individual_contributor": true
+  },
+  "domains": {
+    "preferred_industries": [
+      "SaaS",
+      "Herramientas para desarrolladores",
+      "Infraestructura cloud",
+      "Plataformas de IA y ML",
+      "Plataformas B2B",
+      "Fintech (selectivamente)"
+    ],
+    "excluded_industries": [
+      "Juego de azar",
+      "Exchanges solo-cripto",
+      "Vigilancia / spyware",
+      "Contenido para adultos"
+    ]
+  },
+  "skills": {
+    "core_technical_additions": ["Node.js"],
+    "architecture_additions": [
+      "Component libraries",
+      "Monorepos",
+      "DX tooling",
+      "CI/CD",
+      "Testing strategy",
+      "Performance optimization",
+      "Accessibility"
+    ],
+    "platform_and_devex_additions": [
+      "Internal platforms",
+      "Tooling ownership",
+      "Documentation standards"
+    ],
+    "cloud_and_infra": [
+      "Vercel",
+      "Cloudflare",
+      "Docker",
+      "GitHub Actions",
+      "Pipelines CI/CD"
+    ],
+    "language_levels": {
+      "English": "nativo funcional",
+      "Spanish": "nativo"
+    }
+  },
+  "experience_highlights": [
+    "15+ años en ingeniería de software con foco en arquitectura frontend y design systems.",
+    "Lideró la estrategia de plataforma y design systems en Carlsberg Group, construyendo y escalando el design system Malty.",
+    "Creó y amplió una Frontend Community of Practice entre equipos distribuidos.",
+    "Experiencia convirtiendo entornos poco estructurados en equipos de ingeniería disciplinados y de alto rendimiento.",
+    "Hands-on con React, TypeScript, Next.js, monorepos, CI/CD y tooling de DX."
+  ],
+  "location_preferences": {
+    "primary_locations": [
+      "Remoto (zonas horarias amigables con Europa)",
+      "Europa",
+      "España",
+      "Portugal",
+      "Alemania",
+      "Países Bajos",
+      "Países nórdicos",
+      "Bélgica",
+      "Luxemburgo",
+      "Francia",
+      "Italia",
+      "Suiza",
+      "Austria",
+      "Dinamarca",
+      "Suecia",
+      "Noruega",
+      "Finlandia",
+      "Irlanda",
+      "Reino Unido",
+      "Europa occidental y del norte",
+      "Empresas globales remote-first con fuerte cultura async",
+      "Remoto con horario flexible para solapamiento CET/CEST",
+      "Totalmente remoto con solapamiento CET/CEST"
+    ],
+    "acceptable_regions": [
+      "Unión Europea",
+      "Reino Unido",
+      "EMEA",
+      "Empresas globales remote-first con fuerte cultura async"
+    ],
+    "restrictions": [
+      "Medio Oriente",
+      "África (excepto roles remotos abiertos a EMEA)",
+      "Zonas de guerra",
+      "Ucrania",
+      "Rusia",
+      "Bielorrusia",
+      "Polonia",
+      "Estados bálticos"
+    ],
+    "work_authorization": ["España (ciudadano)", "Unión Europea", "Chile"]
+  },
+  "work_model_preferences": {
+    "preferred": [
+      "Remoto",
+      "Remote-first",
+      "Híbrido con política flexible de remoto"
+    ],
+    "excluded": [
+      "Solo on-site (no local)",
+      "Presencial obligatorio 4-5 días en ciudades no locales"
+    ]
+  },
+  "compensation_and_level": {
+    "level_target": ["Senior", "Staff", "Lead", "Principal", "Manager"],
+    "notes": "Preferencia por roles con alcance e impacto alineados a Staff/Lead/Manager más que a IC mid-level."
+  },
+  "company_preferences": {
+    "size_preference": [
+      "Scale-up",
+      "Mid-size",
+      "Large tech",
+      "Empresas bien estructuradas con fuerte cultura de ingeniería"
+    ],
+    "must_haves": [
+      "Prácticas modernas de ingeniería",
+      "Cultura remota saludable",
+      "Inversión en DX y design systems",
+      "Estrategia de producto clara"
+    ],
+    "red_flags": [
+      "Sin ownership claro de arquitectura frontend o DX",
+      "Roles puramente de mantenimiento con poco impacto estratégico",
+      "Procesos waterfall tardíos vendidos como agile"
+    ]
+  },
+  "hard_constraints": {
+    "exclude_open_opportunities": true,
+    "exclude_designer_roles": true,
+    "excluded_keywords_in_title": [
+      "Designer",
+      "Design Lead (non-engineering)",
+      "Graphic",
+      "Visual Designer",
+      "Intern",
+      "Junior"
+    ],
+    "required_language": ["English"]
+  },
+  "links": {
+    "cv_url": "https://opa.so/es/cv",
+    "website": "https://opa.so/",
+    "linkedin": "https://www.linkedin.com/in/vicenteopaso",
+    "github": "https://github.com/vicenteopaso"
+  }
+}

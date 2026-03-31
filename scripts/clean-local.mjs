@@ -3,6 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
+const MACOS_SIDE_CAR_PREFIX = "._";
+const MACOS_TRASH_BASENAMES = new Set([".DS_Store"]);
 
 /**
  * Comprehensive list of build artifacts, caches, and generated files to clean.
@@ -52,7 +54,76 @@ const targets = [
 let removed = 0;
 let skipped = 0;
 
+function removePath(targetPath, label) {
+  try {
+    fs.rmSync(targetPath, { recursive: true, force: true });
+    console.log(`  ✓ Removed ${label}`);
+    removed++;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`  ✗ Failed to remove ${label}: ${message}`);
+  }
+}
+
+function isMacOsOrICloudJunk(fileName) {
+  return (
+    MACOS_TRASH_BASENAMES.has(fileName) ||
+    fileName.startsWith(MACOS_SIDE_CAR_PREFIX) ||
+    fileName.endsWith(".icloud")
+  );
+}
+
+function getCanonicalDuplicateFileName(fileName) {
+  const duplicateMatch = /^(.+) \d+((\.[^.]+(?:\.[^.]+)*)?)$/.exec(fileName);
+  if (!duplicateMatch) {
+    return null;
+  }
+
+  return `${duplicateMatch[1]}${duplicateMatch[2]}`;
+}
+
+function removeMacOsAndICloudJunk(currentDir) {
+  const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (entry.name === "node_modules") {
+      continue;
+    }
+
+    const entryPath = path.join(currentDir, entry.name);
+
+    if (entry.isDirectory()) {
+      removeMacOsAndICloudJunk(entryPath);
+      continue;
+    }
+
+    if (isMacOsOrICloudJunk(entry.name)) {
+      const relativePath = path.relative(root, entryPath) || entry.name;
+      removePath(entryPath, `${relativePath} (macOS/iCloud artifact)`);
+      continue;
+    }
+
+    const canonicalName = getCanonicalDuplicateFileName(entry.name);
+    if (!canonicalName) {
+      continue;
+    }
+
+    const canonicalPath = path.join(currentDir, canonicalName);
+    if (!fs.existsSync(canonicalPath)) {
+      continue;
+    }
+
+    const relativePath = path.relative(root, entryPath) || entry.name;
+    removePath(entryPath, `${relativePath} (duplicate numbered file)`);
+  }
+}
+
 console.log("🧹 Cleaning local environment...\n");
+
+console.log("🗑️  Removing macOS/iCloud junk files...\n");
+removeMacOsAndICloudJunk(root);
+
+console.log("\n🧹 Removing local build artifacts and caches...\n");
 
 for (const target of targets) {
   // Handle glob patterns for files like *.tsbuildinfo
@@ -77,13 +148,7 @@ for (const target of targets) {
       if (matches.length > 0) {
         for (const match of matches) {
           const filePath = path.join(dir, match);
-          try {
-            fs.rmSync(filePath, { recursive: true, force: true });
-            console.log(`  ✓ Removed ${match}`);
-            removed++;
-          } catch (err) {
-            console.error(`  ✗ Failed to remove ${match}: ${err.message}`);
-          }
+          removePath(filePath, match);
         }
       }
     } catch {
@@ -95,11 +160,10 @@ for (const target of targets) {
       try {
         const stats = fs.statSync(targetPath);
         const type = stats.isDirectory() ? "directory" : "file";
-        fs.rmSync(targetPath, { recursive: true, force: true });
-        console.log(`  ✓ Removed ${target} (${type})`);
-        removed++;
+        removePath(targetPath, `${target} (${type})`);
       } catch (err) {
-        console.error(`  ✗ Failed to remove ${target}: ${err.message}`);
+        const message = err instanceof Error ? err.message : String(err);
+        console.error(`  ✗ Failed to remove ${target}: ${message}`);
       }
     } else {
       skipped++;

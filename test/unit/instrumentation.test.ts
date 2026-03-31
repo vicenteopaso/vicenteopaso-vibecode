@@ -30,8 +30,24 @@ describe("instrumentation register()", () => {
   afterEach(() => {
     process.env = originalEnv;
   });
-  it("imports server Sentry config when NEXT_RUNTIME is nodejs", async () => {
-    process.env.NEXT_RUNTIME = "nodejs";
+  it("imports server Sentry config when NEXT_RUNTIME is nodejs in production", async () => {
+    process.env = {
+      ...process.env,
+      NEXT_RUNTIME: "nodejs",
+      NODE_ENV: "production",
+    };
+
+    const { register } = await importInstrumentation();
+
+    await expect(register()).resolves.not.toThrow();
+  });
+
+  it("does not import server Sentry config when NEXT_RUNTIME is nodejs outside production", async () => {
+    process.env = {
+      ...process.env,
+      NEXT_RUNTIME: "nodejs",
+      NODE_ENV: "development",
+    };
 
     const { register } = await importInstrumentation();
 
@@ -52,5 +68,11 @@ describe("instrumentation register()", () => {
     const { register } = await importInstrumentation();
 
     await expect(register()).resolves.not.toThrow();
+  });
+
+  it("re-exports captureRequestError as onRequestError", async () => {
+    const mod = await importInstrumentation();
+
+    expect(mod.onRequestError).toBe(sentryMock.captureRequestError);
   });
 });
