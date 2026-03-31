@@ -20,7 +20,12 @@ export async function GET(_request: Request) {
 
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 },
+      {
+        status: 500,
+        headers: {
+          "X-Robots-Tag": "noindex, nofollow, noarchive",
+        },
+      },
     );
   }
 }
