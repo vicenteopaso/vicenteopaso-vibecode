@@ -22,5 +22,4 @@ module.exports = {
   generateRobotsTxt: false,
   sitemapSize: 5000,
   changefreq: "monthly",
-  exclude: ["/api/rules", "/api/sources"],
 };
