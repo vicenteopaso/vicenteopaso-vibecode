@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Check PR title and body for governance compliance
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const pr = context.payload.pull_request;
@@ -92,7 +92,7 @@ jobs:
             }
 
       - name: Check for ADR link if architecture-change label present
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const pr = context.payload.pull_request;
