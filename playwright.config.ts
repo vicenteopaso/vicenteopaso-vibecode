@@ -5,9 +5,12 @@ import { defineConfig } from "@playwright/test";
 //
 // The base URL and dev server command are configurable so tests can
 // either reuse an existing dev server or start one automatically.
-const PORT = Number(process.env.PORT ?? 3000);
+// Use a dedicated Playwright port by default to avoid colliding with unrelated local apps.
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? process.env.PORT ?? 3000);
 // Use localhost so the origin matches what Next.js expects in development.
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORT}`;
+const WEB_SERVER_COMMAND =
+  process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ?? `pnpm dev --port ${PORT}`;
 
 export default defineConfig({
   testMatch: /.*\.(spec|test)\.(ts|tsx)$/,
@@ -44,10 +47,10 @@ export default defineConfig({
   webServer: process.env.PLAYWRIGHT_SKIP_WEB_SERVER
     ? undefined
     : {
-        command: process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ?? "pnpm dev",
+        command: WEB_SERVER_COMMAND,
         url: BASE_URL,
         // Allow extra time for Next.js dev server cold start before visual tests
         timeout: 300_000,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: true,
       },
 });

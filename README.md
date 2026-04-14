@@ -723,16 +723,18 @@ With these rules in place, the `automerge.yml` workflow will only merge PRs that
 
 ## Deployment
 
-The app is deployed on **Vercel** with intelligent build skipping to optimize CI/CD resources:
+The app is built in **GitHub Actions** and deployed to **Vercel** as a prebuilt deployment:
 
-- Build command: `pnpm build`
-- Output: Standard Next.js output (`.next`)
-- **Build optimization**: Vercel automatically skips builds when only documentation or non-build-impacting files change (e.g., `docs/`, `README.md`, tests). Code, dependencies, or config changes always trigger a build.
+- Preview deployments run from pull requests against `main`
+- Production deployments run from pushes to `main`
+- Build command: `vercel build` (`--prod` for production)
+- Deploy command: `vercel deploy --prebuilt` (`--prod` for production)
+- Vercel Git deployments are disabled in `vercel.json` so GitHub Actions is the single deployment path.
 - Environment variables:
   - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` for the contact form
   - Sentry variables for error tracking (see **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)**)
 
-For complete deployment details, build skip logic, manual redeployment instructions, and troubleshooting, see **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)**.
+For complete deployment details, required GitHub secrets, manual redeployment instructions, and troubleshooting, see **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)**.
 
 ---
 
@@ -742,8 +744,7 @@ For deeper context, see:
 
 - **[docs/AI_AGENT_GUIDE.md](./docs/AI_AGENT_GUIDE.md)** — AI agent quick reference (commands, patterns, constraints)
 - **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Design decisions, tech stack justifications, and constraints
-- **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, build skip logic, and environment configuration
-- **[docs/VERCEL_BUILD_SKIP_SETUP.md](./docs/VERCEL_BUILD_SKIP_SETUP.md)** — Step-by-step Vercel build skip configuration guide
+- **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** — Deployment guide, GitHub Actions workflow, and environment configuration
 - **[docs/ENGINEERING_STANDARDS.md](./docs/ENGINEERING_STANDARDS.md)** — Cross-cutting architecture, quality, a11y, security, and governance intent
 - **[docs/AI_GUARDRAILS.md](./docs/AI_GUARDRAILS.md)** — AI coding rules: required practices, forbidden patterns, and review checklist
 - **[docs/TESTING.md](./docs/TESTING.md)** — Comprehensive testing guide (unit, E2E, visual regression)

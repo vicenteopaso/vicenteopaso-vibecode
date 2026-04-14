@@ -338,7 +338,7 @@ Every PR should be reviewed against this checklist before merging. Some items ar
 
 ### Deployment
 
-- [ ] Vercel build skip logic considered (docs/tests don't trigger full builds)
+- [ ] GitHub Actions Vercel deploy workflow considered when deployment behavior changes
 - [ ] Environment variables documented if new ones added
 - [ ] No deployment blockers
 
