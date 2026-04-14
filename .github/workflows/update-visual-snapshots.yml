@@ -20,7 +20,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           token: ${{ secrets.PAT_WORKFLOW_TRIGGER || secrets.GITHUB_TOKEN }}
-      - uses: pnpm/action-setup@v5
+      - uses: pnpm/action-setup@v6
       - run: pnpm install
       - run: npx playwright install --with-deps
       - run: pnpm test:visual:update
@@ -43,7 +43,7 @@ jobs:
 
       - name: Trigger CI workflow for this branch
         if: ${{ inputs.trigger_ci }}
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.PAT_WORKFLOW_TRIGGER || secrets.GITHUB_TOKEN }}
           script: |
