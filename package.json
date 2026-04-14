@@ -34,8 +34,6 @@
     "audit:security:fix": "pnpm audit --fix --audit-level=high",
     "audit:secrets": "node scripts/scan-secrets.mjs",
     "sitemap": "next-sitemap --config next-sitemap.config.js",
-    "vercel:should-skip": "bash scripts/vercel-ignore-build.sh",
-    "test:vercel-skip": "bash scripts/test-vercel-ignore-build.sh",
     "translate": "node scripts/translate.mjs"
   },
   "dependencies": {
@@ -93,7 +91,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-security": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "import-in-the-middle": "^3.0.1",
