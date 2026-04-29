@@ -3,14 +3,9 @@ import matter from "gray-matter";
 import type { Metadata } from "next";
 import path from "path";
 
-import { invariant } from "@/lib/assertions";
-import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
-import { sanitizeRichText } from "@/lib/sanitize-html";
+import { getLocaleFromParams } from "@/lib/i18n";
+import { CV_TOC, SITE_IMPACT, SITE_TLDR } from "@/lib/site-data";
 import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
-
-import { GetInTouchSection } from "../../components/GetInTouchSection";
-import { ProfileCard } from "../../components/ProfileCard";
-import { ReferencesCarousel } from "../../components/ReferencesCarousel";
 
 export const dynamic = "force-static";
 
@@ -26,7 +21,6 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
   const description = getCvDescription(locale);
-
   return {
     title: "CV",
     description,
@@ -36,13 +30,7 @@ export async function generateMetadata({
       title: `${siteConfig.name} · CV`,
       description,
       siteName: siteConfig.name,
-      images: [
-        {
-          url: `/${locale}/cv/opengraph-image?v=${ogCacheVersion}`,
-          width: 1200,
-          height: 630,
-        },
-      ],
+      images: [{ url: `/${locale}/cv/opengraph-image?v=${ogCacheVersion}`, width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",
@@ -55,21 +43,17 @@ export async function generateMetadata({
   };
 }
 
-type Highlight = {
-  title?: string;
-  content: string;
-};
-
-type RawHighlight = string | Highlight;
+// ─── Types ─────────────────────────────────────────────────────────────────────
+type Highlight = string | { title?: string; content: string };
 
 type CvJson = {
-  basics: {
-    name: string;
+  basics?: {
+    name?: string;
     label?: string;
     summary?: string;
-    highlights?: RawHighlight[];
+    highlights?: Highlight[];
   };
-  work: Array<{
+  work?: Array<{
     company: string;
     location?: string;
     positions: Array<{
@@ -77,7 +61,7 @@ type CvJson = {
       summary?: string;
       startDate?: string;
       endDate?: string;
-      highlights?: RawHighlight[];
+      highlights?: Highlight[];
       skills?: string[];
     }>;
   }>;
@@ -88,23 +72,9 @@ type CvJson = {
     startDate?: string;
     endDate?: string;
   }>;
-  skills?: Array<{
-    name: string;
-    level?: string;
-    keywords?: string[];
-  }>;
-  languages?: Array<{
-    language: string;
-    fluency?: string;
-  }>;
-  interests?: Array<{
-    name: string;
-    keywords?: string[];
-  }>;
-  references?: Array<{
-    name: string;
-    reference: string;
-  }>;
+  skills?: Array<{ name: string; level?: string; keywords?: string[] }>;
+  languages?: Array<{ language: string; fluency?: string }>;
+  references?: Array<{ name: string; reference: string }>;
   publications?: Array<{
     name: string;
     publisher?: string;
@@ -113,24 +83,528 @@ type CvJson = {
   }>;
 };
 
-function HtmlBlock({ html }: { html?: string }) {
-  const safeHtml = sanitizeRichText(html);
-  if (!safeHtml) return null;
+// ─── Style helpers ─────────────────────────────────────────────────────────────
+const mono: React.CSSProperties = { fontFamily: "var(--f-mono)" };
+const big: React.CSSProperties = {
+  fontFamily: "var(--f-sans)",
+  fontWeight: 800,
+  letterSpacing: "-0.045em",
+};
+const rule2: React.CSSProperties = { borderBottom: "2px solid var(--v3-fg)" };
+const MAX_W = 900;
+
+function SecHead({ n, label }: { n: string; label: string }) {
   return (
-    <div
-      className="space-y-2 text-sm leading-relaxed text-[color:var(--text-primary)] sm:text-[0.95rem]"
-      dangerouslySetInnerHTML={{ __html: safeHtml }}
-    />
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.14em" }}>
+        §{n}
+      </span>
+      <span style={{ ...big, fontSize: 18, letterSpacing: "-0.015em" }}>{label}</span>
+      <span style={{ flex: 1, height: 2, background: "var(--v3-fg)" }} />
+    </div>
   );
 }
 
-function normalizeHighlights(highlights?: RawHighlight[]): Highlight[] {
-  if (!highlights) return [];
-  return highlights.map((item) =>
-    typeof item === "string" ? { content: item } : item,
+/** Strip HTML tags — used to clean reference names */
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, "");
+}
+
+/** Parse "Name | Role" reference name strings */
+function parseRefName(raw: string): { name: string; role: string } {
+  const clean = stripHtml(raw);
+  const parts = clean.split("|").map((p) => p.trim());
+  return { name: parts[0] ?? clean, role: parts[1] ?? "" };
+}
+
+// ─── CV Masthead ───────────────────────────────────────────────────────────────
+function CvMasthead({ name, label }: { name: string; label: string }) {
+  const meta = [
+    ["LOCATION", "Málaga, ES · EU"],
+    ["AVAILABILITY", "● Open to roles"],
+    ["LANGUAGES", "EN · ES"],
+    ["EXPERIENCE", "15+ yrs web · 10 yrs telecom"],
+    ["UPDATED", "2026.04"],
+  ] as const;
+
+  return (
+    <section style={{ padding: "56px 32px 32px", ...rule2 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 180px", gap: 32, alignItems: "start" }}>
+        {/* Headline */}
+        <div>
+          <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 18 }}>
+            ◈ CURRICULUM VITAE · v2026.04
+          </div>
+          <h1 style={{ ...big, fontSize: 72, lineHeight: 0.9, margin: 0 }}>
+            {name.split(" ")[0]}<br />
+            <span style={{ color: "var(--v3-accent)" }}>{name.split(" ").slice(1).join(" ")}</span>.
+          </h1>
+          <div style={{ fontSize: 16, fontWeight: 500, marginTop: 18, letterSpacing: "-0.005em" }}>
+            {label}
+          </div>
+          <div style={{ fontSize: 14, color: "var(--v3-muted)", marginTop: 10, maxWidth: 440, lineHeight: 1.65 }}>
+            15+ years delivering composable platforms, design systems, and developer experience.
+            Currently leading web engineering at Nexthink.
+          </div>
+          <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
+            <CvBtn href="/en/cv" primary>↓ DOWNLOAD PDF</CvBtn>
+            <CvBtn href="#contact">✉ VICENTE@OPA.SO</CvBtn>
+          </div>
+        </div>
+
+        {/* Portrait placeholder */}
+        <div
+          style={{
+            background: "var(--v3-fg)",
+            color: "var(--v3-bg)",
+            aspectRatio: "4 / 5",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div style={{ ...mono, position: "absolute", top: 10, left: 10, right: 10, fontSize: 9, letterSpacing: "0.16em", opacity: 0.55, display: "flex", justifyContent: "space-between" }}>
+            <span>VO · 2026</span><span>▢ 4:5</span>
+          </div>
+          <div style={{ position: "absolute", inset: 24, border: "1px dashed rgba(246,241,231,0.28)", display: "grid", placeItems: "center" }}>
+            <div style={{ textAlign: "center" as const }}>
+              <div style={{ ...big, fontSize: 72, color: "var(--v3-accent)", lineHeight: 1 }}>VO</div>
+              <div style={{ ...mono, fontSize: 9, opacity: 0.5, letterSpacing: "0.18em", marginTop: 6 }}>PORTRAIT · PLACEHOLDER</div>
+            </div>
+          </div>
+          <div style={{ ...mono, position: "absolute", bottom: 10, left: 10, right: 10, fontSize: 9, letterSpacing: "0.16em", opacity: 0.55, display: "flex", justifyContent: "space-between" }}>
+            <span>MÁLAGA</span><span>36.7°N</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Meta row */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0, marginTop: 32, paddingTop: 18, borderTop: "1px solid var(--v3-rule)" }}>
+        {meta.map(([k, v], i) => (
+          <div key={k} style={{ paddingLeft: i > 0 ? 14 : 0, borderLeft: i > 0 ? "1px solid var(--v3-rule)" : "none" }}>
+            <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 6 }}>{k}</div>
+            <div style={{ fontSize: 13, fontWeight: 500, color: k === "AVAILABILITY" ? "var(--v3-accent)" : "inherit" }}>{v}</div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
+function CvBtn({ children, primary, href }: { children: React.ReactNode; primary?: boolean; href: string }) {
+  return (
+    <a
+      href={href}
+      style={{
+        display: "inline-block",
+        background: primary ? "var(--v3-accent)" : "transparent",
+        color: primary ? "#fff" : "var(--v3-fg)",
+        border: primary ? "none" : "1px solid var(--v3-fg)",
+        padding: "10px 16px",
+        fontSize: 11,
+        fontWeight: 600,
+        fontFamily: "var(--f-mono)",
+        letterSpacing: "0.08em",
+        textDecoration: "none",
+        cursor: "pointer",
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+// ─── TOC ───────────────────────────────────────────────────────────────────────
+function CvToc() {
+  return (
+    <section style={{ padding: "32px 32px", ...rule2 }}>
+      <div style={{ ...mono, fontSize: 11, letterSpacing: "0.18em", color: "var(--v3-muted)", marginBottom: 12 }}>
+        CONTENTS ————
+      </div>
+      <div style={{ border: "1px solid var(--v3-rule)" }}>
+        {CV_TOC.map((entry, i) => (
+          <a
+            key={entry.n}
+            href={`#cv-${entry.t.toLowerCase().replace(/\s+/g, "-")}`}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "60px 1fr auto",
+              alignItems: "center",
+              padding: "14px 16px",
+              borderBottom: i < CV_TOC.length - 1 ? "1px solid var(--v3-rule)" : "none",
+              color: "var(--v3-fg)",
+              textDecoration: "none",
+            }}
+          >
+            <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.1em" }}>§{entry.n}</span>
+            <span>
+              <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em" }}>{entry.t}</span>
+              <span style={{ fontSize: 13, color: "var(--v3-muted)", marginLeft: 12 }}>— {entry.s}</span>
+            </span>
+            <span style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}>↓</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── Impact marquee ─────────────────────────────────────────────────────────
+function ImpactStrip() {
+  return (
+    <section style={{ ...rule2 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        {SITE_IMPACT.map((x, i) => (
+          <div key={i} style={{ padding: "32px 24px", borderRight: i < 3 ? "1px solid var(--v3-rule)" : "none" }}>
+            <div style={{ ...big, fontSize: 56, color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)", lineHeight: 1 }}>{x.k}</div>
+            <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", marginTop: 10, lineHeight: 1.5, letterSpacing: "0.02em" }}>{x.v}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §01 Summary ───────────────────────────────────────────────────────────────
+function SummarySection({ summary }: { summary?: string }) {
+  return (
+    <section id="cv-summary" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="01" label="SUMMARY" />
+      <div style={{ marginTop: 28 }}>
+        {summary && (
+          <p style={{ fontSize: 15, lineHeight: 1.75, color: "var(--v3-fg)", margin: "0 0 24px", maxWidth: 720 }}>
+            {summary.replace(/<[^>]+>/g, "")}
+          </p>
+        )}
+        <div style={{ borderTop: "1px solid var(--v3-rule)", borderBottom: "1px solid var(--v3-rule)", padding: "14px 0 4px" }}>
+          <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.18em", marginBottom: 6 }}>
+            TL;DR ————
+          </div>
+          <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            {SITE_TLDR.map((t, i) => (
+              <li key={i} style={{ display: "grid", gridTemplateColumns: "32px 1fr", alignItems: "baseline", padding: "8px 0", gap: 10 }}>
+                <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.08em" }}>0{i + 1}</span>
+                <span style={{ fontSize: 14.5, letterSpacing: "-0.005em", lineHeight: 1.5 }}>{t}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── §02 Experience ─────────────────────────────────────────────────────────
+type WorkEntry = {
+  company: string;
+  location?: string;
+  positions: Array<{
+    position: string;
+    summary?: string;
+    startDate?: string;
+    endDate?: string;
+    highlights?: Highlight[];
+    skills?: string[];
+  }>;
+};
+
+function ExperienceSection({ work }: { work: WorkEntry[] }) {
+  return (
+    <section id="cv-experience" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="02" label="EXPERIENCE" />
+      <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
+        {/* Header row */}
+        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 130px", padding: "10px 14px", borderBottom: "1px solid var(--v3-rule)", ...mono, fontSize: 10, letterSpacing: "0.14em", color: "var(--v3-muted)" }}>
+          <span>YEARS</span><span>COMPANY · ROLE · DETAIL</span><span>LOCATION</span>
+        </div>
+
+        {work.map((company, ci) => (
+          <div key={ci} style={{ borderBottom: ci < work.length - 1 ? "2px solid var(--v3-fg)" : "none" }}>
+            {/* Company row */}
+            <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 130px", padding: "14px 14px 10px", alignItems: "baseline", gap: 12, borderBottom: "1px solid var(--v3-rule)" }}>
+              <span style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.06em" }}>
+                {company.positions[company.positions.length - 1]?.startDate?.slice(0, 4) ?? ""}
+                {" – "}
+                {company.positions[0]?.endDate ? company.positions[0].endDate.slice(0, 4) : "NOW"}
+              </span>
+              <span style={{ ...big, fontSize: 22, letterSpacing: "-0.02em" }}>{company.company}</span>
+              <span style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.06em" }}>
+                {(company.location ?? "").toUpperCase()}
+              </span>
+            </div>
+
+            {company.positions.map((role, ri) => {
+              const isCurrent = !role.endDate;
+              const highlights = (role.highlights ?? []).map((h) =>
+                typeof h === "string" ? h : h.content
+              );
+              return (
+                <div
+                  key={ri}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "100px 1fr 130px",
+                    padding: "14px 14px",
+                    gap: 12,
+                    borderBottom: ri < company.positions.length - 1 ? "1px dashed var(--v3-rule)" : "none",
+                  }}
+                >
+                  <div style={{ ...mono, fontSize: 10, color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)", letterSpacing: "0.04em", lineHeight: 1.55 }}>
+                    {role.startDate ?? ""}{"\n→\n"}{role.endDate ?? "Present"}
+                    {isCurrent && <div style={{ marginTop: 4 }}>● CURRENT</div>}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", marginBottom: 4 }}>{role.position}</div>
+                    {role.summary && (
+                      <div style={{ fontSize: 13.5, color: "var(--v3-muted)", lineHeight: 1.6, marginBottom: highlights.length ? 10 : 0 }}>
+                        {role.summary.replace(/<[^>]+>/g, "")}
+                      </div>
+                    )}
+                    {highlights.length > 0 && (
+                      <ul style={{ margin: "6px 0 0", padding: 0, listStyle: "none", display: "grid", gap: 4 }}>
+                        {highlights.map((h, hi) => (
+                          <li key={hi} style={{ display: "grid", gridTemplateColumns: "16px 1fr", gap: 6, fontSize: 13, lineHeight: 1.55 }}>
+                            <span style={{ ...mono, color: "var(--v3-accent)" }}>→</span>
+                            <span>{h.replace(/<[^>]+>/g, "")}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {role.skills && role.skills.length > 0 && (
+                      <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 5, marginTop: 10 }}>
+                        {role.skills.map((s) => (
+                          <span key={s} className="v3-chip">{s}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div />
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §03 Skills ─────────────────────────────────────────────────────────────
+function SkillsSection({ skills }: { skills: Array<{ name: string; level?: string; keywords?: string[] }> }) {
+  return (
+    <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="03" label="SKILLS" />
+      <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)", display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
+        {skills.map((g, i) => (
+          <div
+            key={g.name}
+            style={{
+              padding: "16px 18px",
+              borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
+              borderBottom: i < skills.length - (skills.length % 2 === 0 ? 2 : 1) ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+              <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em" }}>{g.name}</span>
+              {g.level && <span style={{ ...mono, fontSize: 9.5, color: "var(--v3-accent)", letterSpacing: "0.14em" }}>{g.level.toUpperCase()}</span>}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 5 }}>
+              {(g.keywords ?? []).map((kw) => <span key={kw} className="v3-chip">{kw}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §04 Education + Languages ─────────────────────────────────────────────
+function EducationSection({
+  education,
+  languages,
+}: {
+  education: Array<{ institution: string; area?: string; studyType?: string; startDate?: string; endDate?: string }>;
+  languages: Array<{ language: string; fluency?: string }>;
+}) {
+  return (
+    <section id="cv-education" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="04" label="EDUCATION · LANGUAGES" />
+      <div style={{ marginTop: 24, display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid var(--v3-rule)" }}>
+        <div style={{ padding: "18px 18px", borderRight: "1px solid var(--v3-rule)" }}>
+          <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.18em", marginBottom: 10 }}>EDUCATION</div>
+          {education.map((ed, i) => (
+            <div key={i} style={{ marginBottom: i < education.length - 1 ? 16 : 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em" }}>{ed.institution}</div>
+              {(ed.studyType || ed.area) && (
+                <div style={{ fontSize: 13, color: "var(--v3-muted)", marginTop: 4 }}>
+                  {[ed.studyType, ed.area].filter(Boolean).join(" in ")}
+                </div>
+              )}
+              {(ed.startDate || ed.endDate) && (
+                <div style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", marginTop: 8, letterSpacing: "0.06em" }}>
+                  {ed.startDate} → {ed.endDate}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div style={{ padding: "18px 18px" }}>
+          <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.18em", marginBottom: 10 }}>LANGUAGES</div>
+          <div style={{ display: "grid", gap: 8 }}>
+            {languages.map(({ language, fluency }) => (
+              <div key={language} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: 14 }}>
+                <span style={{ fontWeight: 600 }}>{language}</span>
+                {fluency && <span style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.08em" }}>{fluency.toUpperCase()}</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── §05 Publications ──────────────────────────────────────────────────────
+function PublicationsSection({ publications }: { publications: Array<{ name: string; publisher?: string; releaseDate?: string; url?: string }> }) {
+  return (
+    <section id="cv-publications" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="05" label="PUBLICATIONS" />
+      <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
+        {publications.map((pub, i) => (
+          <a
+            key={i}
+            href={pub.url ?? "#"}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "100px 1fr 80px",
+              padding: "14px 14px",
+              gap: 16,
+              alignItems: "baseline",
+              textDecoration: "none",
+              color: "var(--v3-fg)",
+              borderBottom: i < publications.length - 1 ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <span style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.06em" }}>{pub.releaseDate ?? ""}</span>
+            <span>
+              <span style={{ fontSize: 14, fontWeight: 500, letterSpacing: "-0.005em" }}>{pub.name}</span>
+              {pub.publisher && (
+                <span style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", marginLeft: 10, letterSpacing: "0.12em" }}>
+                  · {pub.publisher.toUpperCase()}
+                </span>
+              )}
+            </span>
+            <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", textAlign: "right" as const, letterSpacing: "0.1em" }}>READ ↗</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §06 References ────────────────────────────────────────────────────────
+function ReferencesSection({ references }: { references: Array<{ name: string; reference: string }> }) {
+  return (
+    <section id="cv-references" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="06" label="REFERENCES" />
+      <div style={{ marginTop: 24, display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid var(--v3-rule)" }}>
+        {references.map((ref, i) => {
+          const { name, role } = parseRefName(ref.name);
+          const quote = ref.reference.replace(/<[^>]+>/g, "").slice(0, 220) + "…";
+          return (
+            <div
+              key={i}
+              style={{
+                padding: "18px 18px",
+                borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
+                borderBottom: i < 2 ? "1px solid var(--v3-rule)" : "none",
+              }}
+            >
+              <div style={{ ...mono, fontSize: 10, color: "var(--v3-accent)", letterSpacing: "0.14em", marginBottom: 10 }}>
+                ❝ REF · 0{i + 1}
+              </div>
+              <div style={{ fontSize: 13, color: "var(--v3-fg)", marginBottom: 14, lineHeight: 1.6 }}>{quote}</div>
+              <div style={{ paddingTop: 10, borderTop: "1px solid var(--v3-rule)" }}>
+                <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.005em" }}>{name}</div>
+                <div style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.04em", marginTop: 2 }}>{role}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+
+// ─── End CTA ─────────────────────────────────────────────────────────────────
+function EndCta() {
+  return (
+    <section
+      id="contact"
+      style={{
+        background: "var(--v3-fg)",
+        color: "var(--v3-bg)",
+        padding: "40px 32px",
+        borderBottom: "2px solid var(--v3-fg)",
+      }}
+    >
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "end", gap: 24 }}>
+        <div>
+          <div style={{ ...mono, fontSize: 11, opacity: 0.55, letterSpacing: "0.18em", marginBottom: 12 }}>
+            END OF DOCUMENT ————
+          </div>
+          <div style={{ ...big, fontSize: 56, lineHeight: 0.95 }}>
+            Let&apos;s <span style={{ color: "var(--v3-accent)" }}>talk</span>.
+          </div>
+          <div style={{ fontSize: 13, opacity: 0.7, marginTop: 12, maxWidth: 520 }}>
+            Best for engineering leadership, frontend architecture, or design system roles in Europe / remote.
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
+          <a
+            href="mailto:vicente@opa.so"
+            style={{
+              background: "var(--v3-accent)",
+              color: "#fff",
+              padding: "12px 20px",
+              fontSize: 12,
+              fontWeight: 600,
+              fontFamily: "var(--f-mono)",
+              letterSpacing: "0.08em",
+              textDecoration: "none",
+              textAlign: "center" as const,
+            }}
+          >
+            ✉ VICENTE@OPA.SO
+          </a>
+          <a
+            href="https://linkedin.com/in/vicenteopaso"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              background: "transparent",
+              color: "var(--v3-bg)",
+              border: "1px solid var(--v3-bg)",
+              padding: "12px 20px",
+              fontSize: 12,
+              fontWeight: 600,
+              fontFamily: "var(--f-mono)",
+              letterSpacing: "0.08em",
+              textDecoration: "none",
+              textAlign: "center" as const,
+            }}
+          >
+            ↗ /in/vicenteopaso
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
@@ -138,498 +612,40 @@ interface PageProps {
 export default async function CVPage({ params }: PageProps) {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
-  const t = getTranslations(locale);
 
-  // Frontmatter (title, name, tagline) still comes from the markdown file
+  // Frontmatter from cv.md (title, name)
   const metaPath = path.join(process.cwd(), "content", locale, "cv.md");
-  const metaContents = fs.readFileSync(metaPath, "utf8");
-  const { data } = matter(metaContents);
+  const { data } = matter(fs.readFileSync(metaPath, "utf8"));
 
-  const title = (data.title as string) || "CV";
-  const tagline = (data.tagline as string) || "";
-
-  // Structured CV data now comes from a separate JSON file (cv.json)
-  let cv: CvJson | null;
+  // Structured data from cv.json
+  let cv: CvJson = {};
   try {
     const jsonPath = path.join(process.cwd(), "content", locale, "cv.json");
-    const jsonContents = fs.readFileSync(jsonPath, "utf8");
-    cv = JSON.parse(jsonContents) as CvJson;
+    cv = JSON.parse(fs.readFileSync(jsonPath, "utf8")) as CvJson;
   } catch {
-    cv = null;
+    // Degrade gracefully
   }
 
-  if (!cv) {
-    return (
-      <div className="glass-card">
-        <div className="glass-card-inner section-card space-y-4">
-          <h1 className="text-3xl font-bold text-[color:var(--text-primary)] sm:text-4xl">
-            {title}
-          </h1>
-          {tagline && (
-            <p className="text-base text-[color:var(--text-muted)] sm:text-lg">
-              {tagline}
-            </p>
-          )}
-          <p className="text-xs text-red-400 sm:text-sm">
-            CV data could not be loaded. Please check that the CV JSON file in
-            <code className="ml-1">{`content/${locale}/cv.json`}</code> is
-            present and valid.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const work = cv.work ?? [];
-
-  const basics = cv.basics ?? { name: "", label: "" };
-  invariant(
-    basics.name || data.name || title,
-    "CV must have a name in basics, frontmatter, or title",
-  );
-  const profileName = basics.name || (data.name as string) || title;
-  const profileTagline = basics.label || tagline;
-
-  function getInitials(fullName: string): string {
-    if (!fullName) return "";
-    const parts = fullName.trim().split(/\s+/);
-    if (parts.length === 1) return (parts[0][0] ?? "").toUpperCase();
-    const first = parts[0][0] ?? "";
-    const last = parts[parts.length - 1][0] ?? "";
-    return `${first}${last}`.toUpperCase();
-  }
-
-  const profileInitials = getInitials(profileName);
-
-  const sectionLinks = [
-    work.length > 0
-      ? { href: "#experience", label: t("cv.experienceSection") }
-      : null,
-    cv.skills && cv.skills.length > 0
-      ? { href: "#skills", label: t("cv.skillsSection") }
-      : null,
-    cv.education && cv.education.length > 0
-      ? { href: "#education", label: t("cv.educationSection") }
-      : null,
-    cv.languages && cv.languages.length > 0
-      ? { href: "#languages", label: t("cv.languagesSection") }
-      : null,
-    cv.publications && cv.publications.length > 0
-      ? { href: "#publications", label: t("cv.publicationsSection") }
-      : null,
-    cv.interests && cv.interests.length > 0
-      ? { href: "#interests", label: t("cv.interestsSection") }
-      : null,
-    cv.references && cv.references.length > 0
-      ? { href: "#references", label: t("cv.referencesSection") }
-      : null,
-  ].filter((link): link is { href: string; label: string } => link !== null);
+  const name = (cv.basics?.name ?? (data.name as string) ?? "Vicente Opaso");
+  const label = (cv.basics?.label ?? (data.tagline as string) ?? "Web Engineering Manager · Frontend Architect");
 
   return (
-    <div id="cv-top" className="space-y-6 scroll-mt-28">
-      <header className="glass-card">
-        <div className="glass-card-inner section-card">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <ProfileCard
-              name={profileName}
-              tagline={profileTagline}
-              initials={profileInitials}
-              align="left"
-              showLinks={false}
-              showAvatar={false}
-              showSocialIcons
-              showDownloadIcon
-              sectionLinks={sectionLinks}
-            />
-          </div>
-        </div>
-      </header>
-
-      <section id="summary" className="glass-card scroll-mt-28">
-        <div className="glass-card-inner section-card space-y-4">
-          {cv.basics?.summary && <HtmlBlock html={cv.basics.summary} />}
-          {normalizeHighlights(cv.basics?.highlights).length > 0 && (
-            <div className="mt-3 mx-auto">
-              <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
-                {normalizeHighlights(cv.basics?.highlights).map((h, idx) => (
-                  <li key={idx} className="space-y-1">
-                    {h.title && (
-                      <div
-                        className="font-semibold text-base sm:text-lg text-[color:var(--text-primary)]"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeRichText(h.title),
-                        }}
-                      />
-                    )}
-                    {h.content && <HtmlBlock html={h.content} />}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {work.length > 0 && (
-        <section id="experience" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.experienceSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <div className="space-y-8 text-sm text-[color:var(--text-primary)]">
-              {work.map((company) => (
-                <article key={company.company} className="space-y-3">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                    <div>
-                      <p className="font-semibold text-[color:var(--text-primary)]">
-                        {company.company}
-                      </p>
-                      {company.location && (
-                        <p className="text-xs text-[color:var(--text-primary)] sm:text-sm">
-                          {company.location}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    {company.positions?.map((role, idx) => (
-                      <div
-                        key={`${company.company}-${role.position}-${idx}`}
-                        className="space-y-1"
-                      >
-                        <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                          <p className="font-medium text-[color:var(--text-primary)]">
-                            {role.position}
-                          </p>
-                          {(role.startDate || role.endDate) && (
-                            <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
-                              {role.startDate}
-                              {role.startDate || role.endDate ? " – " : ""}
-                              {role.endDate || "Present"}
-                            </p>
-                          )}
-                        </div>
-
-                        {role.summary && <HtmlBlock html={role.summary} />}
-
-                        {normalizeHighlights(role.highlights).length > 0 && (
-                          <ul className="mt-2 list-disc marker:text-[color:var(--secondary)] space-y-1 pl-5">
-                            {normalizeHighlights(role.highlights).map(
-                              (h, i) => (
-                                <li key={i}>
-                                  <HtmlBlock html={h.content} />
-                                </li>
-                              ),
-                            )}
-                          </ul>
-                        )}
-
-                        {role.skills && role.skills.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {role.skills.map((skill) => (
-                              <span
-                                key={skill}
-                                className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+    <div className="v3-page" style={{ maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+      <CvMasthead name={name} label={label} />
+      <CvToc />
+      <ImpactStrip />
+      <SummarySection summary={cv.basics?.summary} />
+      {(cv.work?.length ?? 0) > 0 && <ExperienceSection work={cv.work!} />}
+      {(cv.skills?.length ?? 0) > 0 && <SkillsSection skills={cv.skills!} />}
+      {((cv.education?.length ?? 0) > 0 || (cv.languages?.length ?? 0) > 0) && (
+        <EducationSection
+          education={cv.education ?? []}
+          languages={cv.languages ?? []}
+        />
       )}
-
-      {cv.education && cv.education.length > 0 && (
-        <section id="education" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.educationSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
-              {cv.education.map((ed) => (
-                <div key={`${ed.institution}-${ed.area}`} className="space-y-1">
-                  <p className="font-semibold text-[color:var(--text-primary)]">
-                    {ed.institution}
-                  </p>
-                  <p className="text-[color:var(--text-primary)]">
-                    {[ed.studyType, ed.area].filter(Boolean).join(" in ")}
-                  </p>
-                  {(ed.startDate || ed.endDate) && (
-                    <p className="text-xs uppercase tracking-wide text-[color:var(--text-primary)]">
-                      {ed.startDate}
-                      {ed.startDate || ed.endDate ? " – " : ""}
-                      {ed.endDate}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {cv.languages && cv.languages.length > 0 && (
-        <section id="languages" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.languagesSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <ul className="space-y-1 text-sm text-[color:var(--text-primary)] marker:text-[color:var(--secondary)]">
-              {cv.languages.map((lang) => (
-                <li key={lang.language}>
-                  <span className="font-semibold text-[color:var(--text-primary)]">
-                    {lang.language}
-                  </span>
-                  <span className="text-[color:var(--text-muted)]">
-                    {lang.fluency ? ` — ${lang.fluency}` : ""}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
-
-      {cv.skills && cv.skills.length > 0 && (
-        <section id="skills" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.skillsSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
-              {cv.skills.map((group) => (
-                <div key={group.name} className="space-y-1">
-                  <p className="font-semibold text-[color:var(--text-primary)]">
-                    {group.name}
-                    {group.level ? ` · ${group.level}` : ""}
-                  </p>
-                  {group.keywords && (
-                    <div className="flex flex-wrap gap-2">
-                      {group.keywords.map((kw) => (
-                        <span
-                          key={kw}
-                          className="rounded-full border border-[color:var(--secondary)] px-3 py-1 text-xs text-[color:var(--text-primary)]"
-                        >
-                          {kw}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {cv.publications && cv.publications.length > 0 && (
-        <section id="publications" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.publicationsSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <ul className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]">
-              {cv.publications.map((pub) => (
-                <li key={pub.name} className="space-y-1">
-                  <div>
-                    {pub.url ? (
-                      <a
-                        href={pub.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="font-semibold text-[color:var(--link)] hover:underline"
-                      >
-                        {pub.name}
-                      </a>
-                    ) : (
-                      <span className="font-semibold text-[color:var(--text-primary)]">
-                        {pub.name}
-                      </span>
-                    )}
-                  </div>
-                  {(pub.publisher || pub.releaseDate) && (
-                    <div className="text-[color:var(--text-muted)]">
-                      {pub.publisher && <span>{pub.publisher}</span>}
-                      {pub.publisher && pub.releaseDate && <span> · </span>}
-                      {pub.releaseDate && <span>{pub.releaseDate}</span>}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
-
-      {cv.interests && cv.interests.length > 0 && (
-        <section id="interests" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.interestsSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <div className="space-y-3 text-sm text-[color:var(--text-primary)]">
-              {cv.interests.map((interest) => (
-                <div key={interest.name} className="space-y-1">
-                  <p className="font-semibold text-[color:var(--text-primary)]">
-                    {interest.name}
-                  </p>
-                  {interest.keywords && (
-                    <p className="text-[color:var(--text-muted)]">
-                      {interest.keywords.join(" · ")}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {cv.references && cv.references.length > 0 && (
-        <section id="references" className="glass-card group scroll-mt-28">
-          <div className="glass-card-inner section-card space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-xl font-semibold text-[color:var(--text-primary)]">
-                {t("cv.referencesSection")}
-              </h2>
-              <a
-                href="#cv-top"
-                className="btn-outline h-7 w-7 text-xs opacity-0 transition-opacity hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] group-hover:opacity-100 focus-visible:opacity-100 no-underline hover:no-underline"
-                aria-label="Back to top"
-              >
-                ↑
-              </a>
-            </div>
-            <ReferencesCarousel references={cv.references} />
-          </div>
-        </section>
-      )}
-
-      <GetInTouchSection locale={locale} />
-
-      <div className="flex items-center justify-center gap-2">
-        <a
-          href="https://github.com/vicenteopaso/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="GitHub profile"
-          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            className="h-4 w-4"
-            aria-hidden="true"
-          >
-            <path
-              fill="currentColor"
-              d="M12 2C6.48 2 2 6.58 2 12.26c0 4.51 2.87 8.33 6.84 9.68.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.57 2.36 1.12 2.94.85.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.18 9.18 0 0 1 12 6.34c.85 0 1.71.12 2.51.34 1.9-1.32 2.74-1.05 2.74-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.92-2.34 4.78-4.57 5.03.36.32.68.96.68 1.94 0 1.4-.01 2.53-.01 2.87 0 .27.18.6.69.49A10.03 10.03 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"
-            />
-          </svg>
-        </a>
-
-        <a
-          href="https://linkedin.com/in/vicenteopaso/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="LinkedIn profile"
-          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            className="h-4 w-4"
-            aria-hidden="true"
-          >
-            <path
-              fill="currentColor"
-              d="M4.98 3.5C4.98 4.88 3.9 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.24 8.98h4.52V24H.24zM8.47 8.98h4.33v2.05h.06c.6-1.14 2.06-2.34 4.24-2.34 4.54 0 5.38 2.99 5.38 6.88V24h-4.52v-7.18c0-1.71-.03-3.91-2.38-3.91-2.38 0-2.75 1.86-2.75 3.78V24H8.47z"
-            />
-          </svg>
-        </a>
-
-        <a
-          href="https://x.com/vicenteopaso/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="X (Twitter) profile"
-          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            className="h-4 w-4"
-            aria-hidden="true"
-          >
-            <path
-              fill="currentColor"
-              d="M18.25 2h3.01l-6.58 7.52L22 22h-6.19l-4.01-6.03L6.9 22H3.89l7.03-8.03L2 2h6.31l3.62 5.41L18.25 2Zm-1.06 17.99h1.67L7.89 3.92H6.09l11.1 16.07Z"
-            />
-          </svg>
-        </a>
-      </div>
+      {(cv.publications?.length ?? 0) > 0 && <PublicationsSection publications={cv.publications!} />}
+      {(cv.references?.length ?? 0) > 0 && <ReferencesSection references={cv.references!} />}
+      <EndCta />
     </div>
   );
 }

@@ -547,3 +547,82 @@ body {
     width: 100% !important;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   V3 Brutalist Design System — tokens, base classes
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Font stacks — vars populated by next/font in layout.tsx */
+  --f-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --f-serif: var(--font-instrument-serif, "Times New Roman"), serif;
+  --f-mono: var(--font-jetbrains-mono, ui-monospace, "SFMono-Regular", Menlo), monospace;
+
+  /* v3 color tokens — light */
+  --v3-bg: #faf8f5;
+  --v3-bg-soft: #f3efe8;
+  --v3-fg: #0e0d0b;
+  --v3-muted: #6b6760;
+  --v3-rule: #e3ded4;
+  --v3-elevated: #efeadf;
+  --v3-accent: #b91c1c;
+  --v3-sec: #1d4ed8;
+}
+
+.dark {
+  /* v3 color tokens — dark */
+  --v3-bg: #0d0c0a;
+  --v3-bg-soft: #15130f;
+  --v3-fg: #f6f1e7;
+  --v3-muted: #8a847a;
+  --v3-rule: #26231e;
+  --v3-elevated: #1a1814;
+  --v3-accent: #b91c1c;
+  --v3-sec: #1d4ed8;
+}
+
+/* Brutalist base: full-width, dark bg, custom type scale */
+.v3-page {
+  background: var(--v3-bg);
+  color: var(--v3-fg);
+  font-family: var(--f-sans);
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+/* Typography utilities */
+.v3-big {
+  font-family: var(--f-sans);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.v3-mono {
+  font-family: var(--f-mono);
+}
+
+.v3-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  font-size: 10.5px;
+  border: 1px solid var(--v3-fg);
+  font-family: var(--f-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Section heading — § number + label + full-bleed rule */
+.v3-sec-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Cursor blink animation for terminal hero */
+@keyframes v3blink {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0 }
+}

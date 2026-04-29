@@ -1,19 +1,35 @@
 import "../styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
+import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import React from "react";
 
 import { baseMetadata } from "../lib/seo";
 import { AnalyticsWrapper } from "./components/AnalyticsWrapper";
+import { BrutalistFooter } from "./components/BrutalistFooter";
+import { BrutalistNav } from "./components/BrutalistNav";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { Footer } from "./components/Footer";
 import { GlobalErrorHandler } from "./components/GlobalErrorHandler";
-import { Header } from "./components/Header";
 import { LocaleProvider } from "./components/LocaleProvider";
 import { SeoJsonLd } from "./components/SeoJsonLd";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { WebMcpInit } from "./components/WebMcpInit";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 const iconsCacheVersion = process.env.NEXT_PUBLIC_ICONS_CACHE_DATE ?? "1";
 
@@ -40,8 +56,8 @@ export const metadata: Metadata = baseMetadata({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+    { media: "(prefers-color-scheme: light)", color: "#faf8f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0c0a" },
   ],
 };
 
@@ -51,8 +67,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="flex min-h-screen flex-col antialiased">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="flex min-h-screen flex-col antialiased" style={{ background: "var(--v3-bg)", color: "var(--v3-fg)" }}>
         <ThemeProvider>
           <LocaleProvider>
             <GlobalErrorHandler />
@@ -70,16 +90,13 @@ export default function RootLayout({
               strategy="afterInteractive"
             />
             <SeoJsonLd />
-            <Header />
+            <BrutalistNav />
             <ErrorBoundary>
-              <main
-                id="main-content"
-                className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-8"
-              >
+              <main id="main-content" className="flex-1 w-full flex flex-col">
                 {children}
               </main>
             </ErrorBoundary>
-            <Footer />
+            <BrutalistFooter />
             <WebMcpInit />
           </LocaleProvider>
         </ThemeProvider>
