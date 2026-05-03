@@ -43,17 +43,45 @@ function CvRefCard({ index, total, name, role, fullText, dimmed, onEnter, onLeav
 
   const handleEnter = () => { setExpanded(true); onEnter(); };
   const handleLeave = () => { setExpanded(false); onLeave(); };
+  const handleFocus = () => { setExpanded(true); onEnter(); };
+  const handleBlur = () => { setExpanded(false); onLeave(); };
+  const handleToggle = () => {
+    setExpanded((currentExpanded) => {
+      const nextExpanded = !currentExpanded;
+
+      if (nextExpanded) {
+        onEnter();
+      } else {
+        onLeave();
+      }
+
+      return nextExpanded;
+    });
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleToggle();
+    }
+  };
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-expanded={expanded}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onClick={handleToggle}
+      onKeyDown={handleKeyDown}
       style={{
         position: "relative",
         padding: "20px",
         borderRight: isEvenCol ? "1px solid var(--v3-rule)" : "none",
         borderBottom: !isLastRow ? "1px solid var(--v3-rule)" : "none",
-        cursor: "default",
+        cursor: "pointer",
         zIndex: expanded ? 10 : "auto",
         opacity: dimmed ? 0.35 : 1,
         transition: "opacity 0.2s ease",
