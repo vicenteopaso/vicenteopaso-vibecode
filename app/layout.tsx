@@ -83,7 +83,7 @@ export default async function RootLayout({
         style={{ background: "var(--v3-bg)", color: "var(--v3-fg)" }}
       >
         <ThemeProvider>
-          <LocaleProvider>
+          <LocaleProvider initialLocale={locale as "en" | "es"}>
             <GlobalErrorHandler />
             <a href="#main-content" className="skip-link">
               Skip to main content
