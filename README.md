@@ -121,14 +121,18 @@ High‑level layout:
     - `tech-stack/page.tsx` – Technical stack documentation page.
     - `technical-governance/page.tsx` – Technical governance documentation page.
   - `components/`
-    - `Header.tsx`, `Footer.tsx` – Layout chrome.
-    - `NavigationMenu.tsx` – Radix navigation menu with theme toggle, logo, and contact trigger.
+    - `BrutalistNav.tsx` – Primary v3 navigation: wordmark, nav links, locale toggle, theme toggle.
+    - `BrutalistFooter.tsx` – Primary v3 footer with locale-prefixed policy links.
+    - `V3ContactForm.tsx` – Inline contact form (homepage `#contact` section) with Turnstile integration.
+    - `CvRefCard.tsx` / `CvRefsGrid` – CV references 2-column grid with hover-expand overlay (replaced `ReferencesCarousel`).
+    - `LocaleProvider.tsx` – Locale context; persists preference cookie and syncs `<html lang>`.
+    - `Header.tsx`, `Footer.tsx` – Legacy layout chrome (superseded by Brutalist variants in v3).
+    - `NavigationMenu.tsx` – Legacy Radix navigation menu (superseded by `BrutalistNav` in v3).
     - `ProfileCard.tsx` – Hero/profile card, with stable portraits by theme and initials fallback.
     - `Modal.tsx` – Shared Radix dialog wrapper with consistent styling and optional Vercel Analytics tracking on open.
-    - `ContactDialog.tsx` – Contact form dialog implemented on top of `Modal`, including Turnstile integration.
-
-    - `ImpactCards.tsx` – Rotating impact cards for the Home page, rendering markdown snippets with subtle animations.
-    - `ReferencesCarousel.tsx` – Auto‑rotating carousel for CV references.
+    - `ContactDialog.tsx` – Modal contact form dialog implemented on top of `Modal`, including Turnstile integration.
+    - `ImpactCards.tsx` – Rotating impact cards for the Home page.
+    - `ReferencesCarousel.tsx` – Legacy auto‑rotating carousel (superseded by `CvRefsGrid` in v3).
     - `ThemeProvider.tsx` – Wraps `next-themes` configuration.
     - `icons.tsx` – Shared icon primitives (GitHub, LinkedIn, X, download, and small glyph icons).
 

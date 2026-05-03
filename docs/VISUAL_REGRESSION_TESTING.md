@@ -54,7 +54,7 @@ Create targeted visual regression tests for critical UI surfaces:
 - Profile card (multiple variants)
 - Contact dialog
 - Impact cards
-- References carousel
+- References grid (CvRefsGrid)
 - Footer
 
 ### 2. Test Organization
@@ -260,7 +260,7 @@ This site has dynamic content that requires masking:
 
 - **ProfileCard**: `Math.random()` selects from 3 portrait images on mount
 - **ImpactCards**: Auto-rotates cards every 7s with random selection
-- **ReferencesCarousel**: Auto-rotates testimonials every 5s
+- **CvRefsGrid**: Static references grid (replaced auto-rotating carousel in v3)
 
 **Solution**: Use Playwright's `mask` option with shared helper functions:
 
@@ -272,7 +272,7 @@ await expect(page).toHaveScreenshot("homepage.png", {
 
 // CV page: Mask references carousel
 await expect(page).toHaveScreenshot("cv.png", {
-  mask: await cvPageMasks(page), // Returns [#references]
+  mask: await cvPageMasks(page), // Returns [#cv-references]
 });
 ```
 
@@ -518,7 +518,7 @@ await expect(page).toHaveScreenshot("footer.png", {
 - ✅ Profile card variants (Homepage with avatar, CV without avatar)
 - ✅ Contact dialog (light/dark/mobile)
 - ✅ Impact cards (light/dark/mobile + single card)
-- ✅ References carousel (light/dark/mobile + dots navigation)
+- ✅ References grid — CvRefsGrid (light/dark/mobile + single card)
 - ✅ Footer (light/dark/mobile + CV page)
 
 ### Phase 3: Interactions (Future)
