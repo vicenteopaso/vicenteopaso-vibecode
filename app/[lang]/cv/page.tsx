@@ -109,9 +109,9 @@ function SecHead({ n, label }: { n: string; label: string }) {
   );
 }
 
-/** Strip HTML tags — used to clean reference names */
+/** Strip HTML-like markup delimiters — used to clean reference names */
 function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, "");
+  return html.replace(/[<>]/g, "");
 }
 
 /** Parse "Name | Role" reference name strings */
