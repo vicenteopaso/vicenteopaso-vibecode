@@ -78,11 +78,9 @@ test.describe("Error Handling", () => {
       });
     });
 
-    await page.goto("/en", { waitUntil: "load" });
-    await expect(page.locator("#contact")).toBeAttached({ timeout: 15000 });
-
-    // Contact form is now inline at the #contact section
-    await page.locator("#contact").scrollIntoViewIfNeeded();
+    await page.goto("/en", { waitUntil: "networkidle" });
+    await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
+    await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
     await expect(page.getByLabel("EMAIL *")).toBeVisible({ timeout: 15000 });
   });
 
