@@ -5,8 +5,8 @@ import Link from "next/link";
 import path from "path";
 
 import { V3ContactForm } from "@/app/components/V3ContactForm";
-import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { logWarning } from "@/lib/error-logging";
+import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { ogCacheVersion, siteConfig } from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
 
