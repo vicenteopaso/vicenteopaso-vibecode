@@ -335,7 +335,7 @@ function ExperienceTable({ work, locale, t }: { work: WorkEntry[]; locale: strin
                   {company.location ?? ""}
                 </span>
                 <a
-                  href={`/${locale}/cv#experience`}
+                  href={`/${locale}/cv#cv-experience`}
                   style={{ ...mono, fontSize: 11, color: "var(--v3-fg)", textDecoration: "none", textAlign: "right" as const, letterSpacing: "0.1em" }}
                 >
                   {t("exp.read")}
