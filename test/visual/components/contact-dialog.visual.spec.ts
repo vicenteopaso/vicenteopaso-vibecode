@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 import {
   setThemeDark,
@@ -6,6 +6,18 @@ import {
   waitForHomepage,
   waitForStableHeight,
 } from "../utils";
+
+async function hideGlobalChrome(page: Page) {
+  await page.evaluate(() => {
+    document
+      .querySelectorAll("body > header, a.skip-link")
+      .forEach((element) => {
+        const htmlElement = element as HTMLElement;
+        htmlElement.style.visibility = "hidden";
+        htmlElement.style.pointerEvents = "none";
+      });
+  });
+}
 
 test.describe("Contact Section Visual Regression", () => {
   test("renders contact section in light mode", async ({ page }) => {
@@ -15,6 +27,7 @@ test.describe("Contact Section Visual Regression", () => {
 
     await page.locator("#contact").scrollIntoViewIfNeeded();
     await waitForStableHeight(page);
+    await hideGlobalChrome(page);
 
     const contactSection = page.locator("#contact");
     await expect(contactSection).toBeVisible();
@@ -31,6 +44,7 @@ test.describe("Contact Section Visual Regression", () => {
 
     await page.locator("#contact").scrollIntoViewIfNeeded();
     await waitForStableHeight(page);
+    await hideGlobalChrome(page);
 
     const contactSection = page.locator("#contact");
     await expect(contactSection).toBeVisible();
@@ -48,6 +62,7 @@ test.describe("Contact Section Visual Regression", () => {
 
     await page.locator("#contact").scrollIntoViewIfNeeded();
     await waitForStableHeight(page);
+    await hideGlobalChrome(page);
 
     const contactSection = page.locator("#contact");
     await expect(contactSection).toBeVisible();
