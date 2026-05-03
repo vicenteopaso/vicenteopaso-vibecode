@@ -11,6 +11,10 @@ import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-static";
 
+function stripHtmlLikeDelimiters(input: string): string {
+  return input.replace(/[<>]/g, "");
+}
+
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "es" }];
 }
@@ -355,7 +359,7 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
                     <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", marginBottom: 4 }}>{role.position}</div>
                     {role.summary && (
                       <div style={{ fontSize: 13.5, color: "var(--v3-muted)", lineHeight: 1.6, marginBottom: highlights.length ? 10 : 0 }}>
-                        {role.summary.replace(/<[^>]+>/g, "")}
+                        {stripHtmlLikeDelimiters(role.summary)}
                       </div>
                     )}
                     {highlights.length > 0 && (
@@ -363,7 +367,7 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
                         {highlights.map((h, hi) => (
                           <li key={hi} style={{ display: "grid", gridTemplateColumns: "16px 1fr", gap: 6, fontSize: 13, lineHeight: 1.55 }}>
                             <span style={{ ...mono, color: "var(--v3-accent)" }}>→</span>
-                            <span>{h.replace(/<[^>]+>/g, "")}</span>
+                            <span>{stripHtmlLikeDelimiters(h)}</span>
                           </li>
                         ))}
                       </ul>
