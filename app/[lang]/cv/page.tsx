@@ -270,7 +270,7 @@ function SummarySection({ summary, t, tldr }: { summary?: string; t: T; tldr: re
         <div>
           {summary && (
             <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--v3-fg)", margin: 0 }}>
-              {summary.replace(/<[^>]+>/g, "")}
+              {stripHtmlLikeDelimiters(summary)}
             </p>
           )}
         </div>
