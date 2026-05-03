@@ -144,8 +144,6 @@ export function V3ContactForm() {
             trimMsg,
           ]
             .filter(Boolean)
-          honeypot,
-          website: honeypot,
             .join("\n\n"),
           honeypot,
           turnstileToken,
