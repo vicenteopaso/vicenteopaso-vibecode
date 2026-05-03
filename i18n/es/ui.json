@@ -96,6 +96,7 @@
   "form.emailRequired": "El correo es obligatorio.",
   "form.emailInvalid": "Por favor introduce un correo válido.",
   "form.messageRequired": "El mensaje es obligatorio.",
+  "form.messageTooLong": "El mensaje es demasiado largo (máx. 2000 caracteres).",
   "form.errorsAbove": "Por favor corrige los errores anteriores.",
   "form.verificationRequired": "Por favor completa la verificación.",
   "form.footer": "TURNSTILE · FORMSPREE",

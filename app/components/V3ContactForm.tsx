@@ -118,8 +118,11 @@ export function V3ContactForm() {
       setEmailError(t("form.emailInvalid"));
       valid = false;
     }
-    if (!trimMsg) {
+    if (!trimMsg || trimMsg.length < 5) {
       setMsgError(t("form.messageRequired"));
+      valid = false;
+    } else if (trimMsg.length > 2000) {
+      setMsgError(t("form.messageTooLong"));
       valid = false;
     }
     if (!valid) {

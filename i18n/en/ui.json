@@ -96,6 +96,7 @@
   "form.emailRequired": "Email is required.",
   "form.emailInvalid": "Please enter a valid email.",
   "form.messageRequired": "Message is required.",
+  "form.messageTooLong": "Message is too long (max 2000 characters).",
   "form.errorsAbove": "Please fix the errors above.",
   "form.verificationRequired": "Please complete the verification.",
   "form.footer": "TURNSTILE · FORMSPREE",
