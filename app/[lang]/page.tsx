@@ -834,7 +834,7 @@ export default async function HomePage({ params }: PageProps) {
     skills = cv.skills ?? [];
   } catch (err) {
     logWarning(`Landing page CV JSON load failed for locale "${locale}"`, {
-      component: "HomePage",
+      component: "app/[lang]/page",
       metadata: { error: err instanceof Error ? err.message : String(err) },
     });
   }
