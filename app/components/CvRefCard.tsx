@@ -153,7 +153,10 @@ function CvRefCard({
       }}
     >
       {/* Truncated content — always rendered to hold grid row height */}
-      <div style={{ visibility: expanded ? "hidden" : "visible" }}>
+      <div
+        aria-hidden={expanded ? true : undefined}
+        style={{ visibility: expanded ? "hidden" : "visible" }}
+      >
         <CardContent index={index} name={name} role={role} text={truncated} />
       </div>
 
@@ -177,7 +180,7 @@ function CvRefCard({
           transition: "opacity 0.2s ease, transform 0.22s ease",
           pointerEvents: "none",
         }}
-        aria-hidden={!expanded}
+        aria-hidden={expanded ? undefined : true}
       >
         <CardContent index={index} name={name} role={role} text={fullText} />
       </div>
