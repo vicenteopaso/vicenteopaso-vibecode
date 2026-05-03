@@ -22,12 +22,47 @@ const SUSPICIOUS_PATTERNS = [
   "/cgi-bin",
 ] as const;
 
+type Locale = (typeof locales)[number];
+const defaultLocale: Locale = "en";
+
+/**
+ * Determine the best locale for the request:
+ * 1. User's stored cookie preference (set when manually switching language)
+ * 2. Browser's Accept-Language header
+ * 3. Default locale (en)
+ */
+function detectLocale(req: NextRequest): Locale {
+  // 1. Stored preference cookie
+  const cookieLocale = req.cookies.get("preferred-locale")?.value;
+  if (cookieLocale && (locales as readonly string[]).includes(cookieLocale)) {
+    return cookieLocale as Locale;
+  }
+
+  // 2. Accept-Language header
+  const langHeader = req.headers.get("accept-language") ?? "";
+  const preferredLangs = langHeader
+    .split(",")
+    .map((item) => {
+      const [lang, q] = item.trim().split(";q=");
+      return { lang: (lang ?? "").trim().toLowerCase().slice(0, 2), q: parseFloat(q ?? "1") };
+    })
+    .sort((a, b) => b.q - a.q)
+    .map(({ lang }) => lang);
+
+  for (const lang of preferredLangs) {
+    const match = (locales as readonly string[]).find((l) => l === lang);
+    if (match) return match as Locale;
+  }
+
+  // 3. Default
+  return defaultLocale;
+}
+
 /**
  * Proxy to handle locale-based routing and redirects.
  *
- * - Redirects non-locale-prefixed paths to the appropriate locale based on Accept-Language header.
- * - Spanish-locale browsers are redirected to `/es/*` paths.
- * - All other browsers are redirected to `/en/*` paths.
+ * - Redirects non-locale-prefixed paths to the appropriate locale.
+ * - Priority: stored cookie preference → Accept-Language header → default (en)
  * - Preserves user's manual locale choice for paths that already include a locale prefix.
  */
 export function proxy(req: NextRequest) {
@@ -44,53 +79,34 @@ export function proxy(req: NextRequest) {
   ) {
     const url = req.nextUrl.clone();
     url.pathname = "/sitemap.xml";
-    return NextResponse.redirect(url, {
-      status: 301,
-    });
+    return NextResponse.redirect(url, { status: 301 });
   }
 
   if (SUSPICIOUS_PATTERNS.some((pattern) => pathname.startsWith(pattern))) {
     return new NextResponse(null, { status: 404 });
   }
 
-  // Check if the pathname already includes a locale
+  // If locale is already in the path, continue without modification
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
 
-  // If locale is already in the path, continue without modification
   if (pathnameHasLocale) {
     return NextResponse.next();
   }
 
-  // Handle all paths without locale prefix for automatic language detection
-  const langHeader = req.headers.get("accept-language") || "";
-  const preferredLang = langHeader.split(",")[0]?.slice(0, 2) || "";
-
-  // Redirect Spanish-locale browsers to /es, others to /en
-  const targetLocale = preferredLang === "es" ? "es" : "en";
+  // Detect locale and redirect
+  const targetLocale = detectLocale(req);
   const url = req.nextUrl.clone();
-  // Handle root path specially to avoid double slash
-  url.pathname =
-    pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
+  url.pathname = pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
   return NextResponse.redirect(url, { status: 307 });
 }
 
 /**
  * Configure which paths the proxy should run on.
- * We want to run on all paths except static files and API routes.
  */
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public assets (files in /public)
-     * - API routes
-     * - Next.js metadata routes (opengraph-image, etc.)
-     */
     "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|sitemap-0.xml|news_sitemap.xml|opengraph-image|.*\\..*|robots.txt|sitemap.xml|site.webmanifest).*)",
   ],
 };

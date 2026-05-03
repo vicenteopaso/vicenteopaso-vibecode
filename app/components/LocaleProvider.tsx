@@ -18,12 +18,14 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
   const [mounted, setMounted] = useState(false);
 
-  // Sync locale with URL params and localStorage
+  // Sync locale with URL params and storage
   useEffect(() => {
     const urlLocale = (params?.lang as Locale) || defaultLocale;
     if (locales.includes(urlLocale)) {
       setLocaleState(urlLocale);
       localStorage.setItem("preferred-locale", urlLocale);
+      // Set cookie so proxy.ts can respect user's manual selection
+      document.cookie = `preferred-locale=${urlLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
     }
     setMounted(true);
   }, [params?.lang]);
@@ -31,6 +33,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
     localStorage.setItem("preferred-locale", newLocale);
+    document.cookie = `preferred-locale=${newLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
   };
 
   // Don't render until mounted to avoid hydration mismatch

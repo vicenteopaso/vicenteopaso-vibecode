@@ -69,6 +69,7 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {},
   typedRoutes: true,
   turbopack: {
     // Explicitly tell Turbopack that the project root (where next/package.json lives)

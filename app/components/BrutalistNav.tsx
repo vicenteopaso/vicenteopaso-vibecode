@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { useTranslations } from "@/lib/i18n";
+
 import { useLocale } from "./LocaleProvider";
 
 export function BrutalistNav() {
@@ -12,6 +14,7 @@ export function BrutalistNav() {
   const { locale } = useLocale();
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations();
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -30,23 +33,18 @@ export function BrutalistNav() {
 
   const isActive = (href: string) => {
     if (!pathname) return false;
-    // exact match for home page; prefix match for sub-pages
     if (href === `/${locale}`) return pathname === href;
     return pathname.startsWith(href);
   };
 
   const navLinks = [
-    { label: "ABOUT", href: `/${locale}` },
-    { label: "CV",    href: `/${locale}/cv` },
-    { label: "CONTACT", href: "#contact" },
+    { label: t("nav.about"), href: `/${locale}` },
+    { label: t("nav.cv"),    href: `/${locale}/cv` },
+    { label: t("nav.contact"), href: `/${locale}#contact` },
   ];
 
   const s = {
     root: {
-      display: "flex" as const,
-      alignItems: "center" as const,
-      justifyContent: "space-between" as const,
-      padding: "14px 32px",
       borderBottom: "2px solid var(--v3-fg)",
       fontFamily: "var(--f-mono)",
       fontSize: 11,
@@ -57,25 +55,35 @@ export function BrutalistNav() {
       top: 0,
       zIndex: 50,
     },
+    inner: {
+      display: "flex" as const,
+      alignItems: "center" as const,
+      justifyContent: "space-between" as const,
+      maxWidth: 1180,
+      margin: "0 auto",
+      padding: "14px 32px",
+      width: "100%",
+    },
   };
 
   return (
     <header style={s.root}>
+      <div style={s.inner} className="v3-nav-inner">
       {/* Brand */}
-      <div style={{ display: "flex", gap: 20, color: "var(--v3-muted)" }}>
+      <div style={{ display: "flex", gap: 20, color: "var(--v3-muted)", alignItems: "center" }}>
         <a
           href={`/${locale}`}
           style={{ color: "var(--v3-fg)", fontWeight: 600, textDecoration: "none" }}
         >
-          OPA.SO
+          {t("nav.brand")}
         </a>
-        <span>/V2026</span>
-        <span>—</span>
-        <span style={{ color: "var(--v3-accent)" }}>● MÁLAGA, ES</span>
+        <span className="v3-nav-meta">{t("nav.version")}</span>
+        <span className="v3-nav-meta">—</span>
+        <span className="v3-nav-meta" style={{ color: "var(--v3-accent)" }}>{t("nav.location")}</span>
       </div>
 
       {/* Primary nav */}
-      <nav style={{ display: "flex", gap: 24, color: "var(--v3-muted)" }}>
+      <nav className="v3-nav-links" style={{ display: "flex", gap: 24, color: "var(--v3-muted)" }}>
         {navLinks.map((l) => (
           <a
             key={l.label}
@@ -108,9 +116,9 @@ export function BrutalistNav() {
             color: "var(--v3-muted)",
             padding: 0,
           }}
-          aria-label="Switch language"
+          aria-label={t("nav.switchLanguage")}
         >
-          {locale === "en" ? "ES" : "EN"}
+          {locale === "en" ? t("language.es") : t("language.en")}
         </button>
         <span>·</span>
         <button
@@ -126,10 +134,11 @@ export function BrutalistNav() {
             padding: 0,
             lineHeight: 1,
           }}
-          aria-label="Toggle theme"
+          aria-label={t("nav.themeToggle")}
         >
           {displayTheme === "dark" ? "☼" : "☾"}
         </button>
+      </div>
       </div>
     </header>
   );

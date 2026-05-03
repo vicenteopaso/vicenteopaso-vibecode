@@ -3,16 +3,10 @@ import matter from "gray-matter";
 import type { Metadata } from "next";
 import path from "path";
 
-import { getLocaleFromParams } from "@/lib/i18n";
-import {
-  SITE_BRANDS,
-  SITE_FOCUS,
-  SITE_IMPACT,
-  SITE_LANDING_TOC,
-  SITE_TLDR,
-  SITE_TLDR_LABELS,
-} from "@/lib/site-data";
+import { V3ContactForm } from "@/app/components/V3ContactForm";
+import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { ogCacheVersion, siteConfig } from "@/lib/seo";
+import { getSiteData, SITE_BRANDS } from "@/lib/site-data";
 
 export const dynamic = "force-static";
 
@@ -59,6 +53,8 @@ const rule2: React.CSSProperties = { borderBottom: "2px solid var(--v3-fg)" };
 const rule1: React.CSSProperties = { borderBottom: "1px solid var(--v3-rule)" };
 const MAX_W = 1180;
 
+type T = ReturnType<typeof getTranslations>;
+
 // ─── Section heading: §NN ── LABEL ─────── ───────────────────────────────────
 function SecHead({ n, label }: { n: string; label: string }) {
   return (
@@ -73,45 +69,49 @@ function SecHead({ n, label }: { n: string; label: string }) {
 }
 
 // ─── A4 Hero: 2-col headline + TOC ───────────────────────────────────────────
-function HeroA4() {
+function HeroA4({ locale, t, tocEntries }: {
+  locale: string;
+  t: T;
+  tocEntries: Array<{ n: string; t: string; s: string }>;
+}) {
   return (
-    <section style={{ padding: "64px 32px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start" }}>
+    <section className="v3-section v3-hero-section" style={{ padding: "64px 32px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+      <div className="v3-hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start" }}>
         {/* Left: headline + sub + CTAs */}
         <div>
-          <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 20 }}>
-            ◈ VICENTE OPASO
+          <div className="v3-hero-label" style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 20 }}>
+            {t("hero.label")}
           </div>
-          <h1 style={{ ...big, fontSize: 80, lineHeight: 0.92, margin: 0 }}>
-            Frontend<br />architecture.<br />
-            <span style={{ color: "var(--v3-accent)" }}>Engineering</span><br />leadership.
+          <h1 className="v3-hero-h1" style={{ ...big, fontSize: 80, lineHeight: 0.92, margin: 0 }}>
+            {t("hero.headline1")}<br />{t("hero.headline2")}<br />
+            <span style={{ color: "var(--v3-accent)" }}>{t("hero.headline3")}</span><br />{t("hero.headline4")}
           </h1>
-          <p style={{ fontSize: 15, color: "var(--v3-muted)", marginTop: 24, maxWidth: 440, lineHeight: 1.65 }}>
-            15+ years shipping composable web platforms, design systems, and the teams behind them.
-            Málaga, ES · Remote-EU.
+          <p className="v3-hero-sub" style={{ fontSize: 15, color: "var(--v3-muted)", marginTop: 24, maxWidth: 440, lineHeight: 1.65 }}>
+            {t("hero.sub")}
           </p>
-          <div style={{ display: "flex", gap: 10, marginTop: 28 }}>
-            <HeroBtn href="/en/cv" primary>READ CV ↗</HeroBtn>
-            <HeroBtn href="#contact">VICENTE@OPA.SO</HeroBtn>
+          <div className="v3-hero-ctas" style={{ display: "flex", gap: 10, marginTop: 28 }}>
+            <HeroBtn href={`/${locale}/cv`} primary>{t("hero.readCv")}</HeroBtn>
+            <HeroBtn href="#contact">{t("hero.email")}</HeroBtn>
           </div>
         </div>
 
         {/* Right: TOC */}
         <div>
           <div style={{ ...mono, fontSize: 11, letterSpacing: "0.18em", color: "var(--v3-muted)", marginBottom: 12 }}>
-            CONTENTS ————
+            {t("hero.contents")}
           </div>
           <div style={{ border: "1px solid var(--v3-rule)" }}>
-            {SITE_LANDING_TOC.map((entry, i) => (
+            {tocEntries.map((entry, i) => (
               <a
                 key={entry.n}
-                href={`#${entry.t.toLowerCase().replace(/\s+/g, "-")}`}
+                href={`#${entry.t.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim().replace(/\s+/g, "-")}`}
+                className="v3-cv-toc-row"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "60px 1fr auto",
                   alignItems: "center",
                   padding: "14px 16px",
-                  borderBottom: i < SITE_LANDING_TOC.length - 1 ? "1px solid var(--v3-rule)" : "none",
+                  borderBottom: i < tocEntries.length - 1 ? "1px solid var(--v3-rule)" : "none",
                   color: "var(--v3-fg)",
                   textDecoration: "none",
                 }}
@@ -120,8 +120,8 @@ function HeroA4() {
                   §{entry.n}
                 </span>
                 <span>
-                  <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em" }}>{entry.t}</span>
-                  <span style={{ fontSize: 13, color: "var(--v3-muted)", marginLeft: 12 }}>— {entry.s}</span>
+                  <span className="v3-cv-toc-label" style={{ fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em" }}>{entry.t}</span>
+                  <span className="v3-cv-toc-sub" style={{ fontSize: 13, color: "var(--v3-muted)", marginLeft: 12 }}>— {entry.s}</span>
                 </span>
                 <span style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}>↓</span>
               </a>
@@ -165,11 +165,11 @@ function HeroBtn({
 }
 
 // ─── Impact 4-stat strip ──────────────────────────────────────────────────────
-function ImpactStrip() {
+function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
   return (
     <section style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
-        {SITE_IMPACT.map((x, i) => (
+      <div className="v3-impact-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        {impact.map((x, i) => (
           <div
             key={i}
             style={{
@@ -177,7 +177,7 @@ function ImpactStrip() {
               borderRight: i < 3 ? "1px solid var(--v3-rule)" : "none",
             }}
           >
-            <div style={{ ...big, fontSize: 56, color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)", lineHeight: 1 }}>
+            <div className="v3-impact-stat" style={{ ...big, fontSize: 56, color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)", lineHeight: 1 }}>
               {x.k}
             </div>
             <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", marginTop: 10, lineHeight: 1.5, letterSpacing: "0.02em" }}>
@@ -191,32 +191,36 @@ function ImpactStrip() {
 }
 
 // ─── §01 TL;DR ───────────────────────────────────────────────────────────────
-function TlDrSection() {
+function TlDrSection({ t, tldr, tldrLabels }: {
+  t: T;
+  tldr: readonly string[];
+  tldrLabels: readonly string[];
+}) {
   return (
     <section id="tl-dr" style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", ...rule1 }}>
+      <div className="v3-tldr-grid" style={{ display: "grid", gridTemplateColumns: "260px 1fr", ...rule1 }}>
         {/* Inverted sidebar */}
-        <div style={{ background: "var(--v3-fg)", color: "var(--v3-bg)", padding: "32px 24px" }}>
+        <div className="v3-tldr-sidebar" style={{ background: "var(--v3-fg)", color: "var(--v3-bg)", padding: "32px 24px" }}>
           <div style={{ ...mono, fontSize: 11, opacity: 0.6, letterSpacing: "0.18em" }}>§01</div>
           <div style={{ ...big, fontSize: 48, lineHeight: 0.95, marginTop: 8 }}>
             TL;<span style={{ color: "var(--v3-accent)" }}>DR</span>
           </div>
           <div style={{ ...mono, fontSize: 11, opacity: 0.55, letterSpacing: "0.06em", marginTop: 14, lineHeight: 1.7 }}>
-            the short version,<br />for people who<br />skim everything.
+            {t("tldr.subtitle1")}<br />{t("tldr.subtitle2")}<br />{t("tldr.subtitle3")}
           </div>
         </div>
 
         {/* Numbered list */}
         <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {SITE_TLDR.map((t, i) => (
+          {tldr.map((item, i) => (
             <li
               key={i}
-              style={{
+              className="v3-tldr-item" style={{
                 display: "grid",
                 gridTemplateColumns: "56px 1fr 80px",
                 alignItems: "baseline",
                 padding: "18px 24px",
-                borderBottom: i < SITE_TLDR.length - 1 ? "1px solid var(--v3-rule)" : "none",
+                borderBottom: i < tldr.length - 1 ? "1px solid var(--v3-rule)" : "none",
                 gap: 16,
               }}
             >
@@ -224,10 +228,10 @@ function TlDrSection() {
                 0{i + 1} —
               </span>
               <span style={{ fontSize: 19, letterSpacing: "-0.01em", lineHeight: 1.4, fontWeight: 500 }}>
-                {t}
+                {item}
               </span>
-              <span style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em", textAlign: "right" as const }}>
-                {SITE_TLDR_LABELS[i]}
+              <span className="v3-tldr-label" style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em", textAlign: "right" as const }}>
+                {tldrLabels[i]}
               </span>
             </li>
           ))}
@@ -238,13 +242,16 @@ function TlDrSection() {
 }
 
 // ─── §02 What I Do ───────────────────────────────────────────────────────────
-function FocusStrip() {
+function FocusStrip({ t, focus }: {
+  t: T;
+  focus: Array<{ h: string; b: string }>;
+}) {
   return (
-    <section id="what-i-do" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <SecHead n="02" label="WHAT I DO" />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0, marginTop: 24, border: "1px solid var(--v3-rule)" }}>
-        {SITE_FOCUS.map((f, i) => (
-          <div key={i} style={{ padding: "20px 18px", borderRight: i < 4 ? "1px solid var(--v3-rule)" : "none" }}>
+    <section id="what-i-do" className="v3-section" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+      <SecHead n="02" label={t("section.whatIDo")} />
+      <div className="v3-focus-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0, marginTop: 24, border: "1px solid var(--v3-rule)" }}>
+        {focus.map((f, i) => (
+          <div key={i} className="v3-focus-item" style={{ padding: "20px 18px", borderRight: i < 4 ? "1px solid var(--v3-rule)" : "none" }}>
             <div style={{ ...mono, fontSize: 10, color: "var(--v3-accent)", letterSpacing: "0.14em", marginBottom: 8 }}>
               0{i + 1}
             </div>
@@ -270,12 +277,18 @@ type WorkEntry = {
   }>;
 };
 
-function ExperienceTable({ work }: { work: WorkEntry[] }) {
+function fmtDate(d?: string, nowLabel?: string): string {
+  if (!d || d === "Present") return nowLabel ?? "NOW";
+  return d.replace(/-(\d{2})$/, ".$1");
+}
+
+function ExperienceTable({ work, locale, t }: { work: WorkEntry[]; locale: string; t: T }) {
   return (
-    <section id="experience" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <SecHead n="03" label="WHERE I'VE WORKED" />
+    <section id="experience" className="v3-section" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+      <SecHead n="03" label={t("section.whereWorked")} />
       <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
         <div
+          className="v3-exp-header"
           style={{
             display: "grid",
             gridTemplateColumns: "90px 1fr 200px 80px",
@@ -287,17 +300,20 @@ function ExperienceTable({ work }: { work: WorkEntry[] }) {
             color: "var(--v3-muted)",
           }}
         >
-          <span>DATES</span><span>ROLE · COMPANY</span><span>LOCATION</span>
-          <span style={{ textAlign: "right" as const }}>→</span>
+          <span>{t("exp.colDates")}</span>
+          <span>{t("exp.colRole")}</span>
+          <span className="v3-exp-loc">{t("exp.colLocation")}</span>
+          <span className="v3-exp-read" style={{ textAlign: "right" as const }}>→</span>
         </div>
         {work.map((company, ci) =>
           company.positions.map((role, ri) => {
             const isCurrent = !role.endDate || role.endDate === "Present";
-            const dateStr = `${role.startDate ?? ""}–${isCurrent ? "NOW" : (role.endDate ?? "")}`;
+            const nowLabel = t("exp.now");
+            const dateStr = `${fmtDate(role.startDate, nowLabel)} – ${isCurrent ? nowLabel : fmtDate(role.endDate, nowLabel)}`;
             return (
               <div
                 key={`${ci}-${ri}`}
-                style={{
+                className="v3-exp-row" style={{
                   display: "grid",
                   gridTemplateColumns: "90px 1fr 200px 80px",
                   padding: "14px 16px",
@@ -315,14 +331,14 @@ function ExperienceTable({ work }: { work: WorkEntry[] }) {
                   <span style={{ fontWeight: 600 }}>{role.position}</span>
                   <span style={{ color: "var(--v3-muted)" }}> · {company.company}</span>
                 </span>
-                <span style={{ ...mono, fontSize: 11, color: "var(--v3-muted)" }}>
+                <span className="v3-exp-loc" style={{ ...mono, fontSize: 11, color: "var(--v3-muted)" }}>
                   {company.location ?? ""}
                 </span>
                 <a
-                  href="/en/cv#experience"
+                  href={`/${locale}/cv#experience`}
                   style={{ ...mono, fontSize: 11, color: "var(--v3-fg)", textDecoration: "none", textAlign: "right" as const, letterSpacing: "0.1em" }}
                 >
-                  READ ↗
+                  {t("exp.read")}
                 </a>
               </div>
             );
@@ -334,7 +350,7 @@ function ExperienceTable({ work }: { work: WorkEntry[] }) {
 }
 
 // ─── Brands inverted strip ────────────────────────────────────────────────────
-function BrandsStrip() {
+function BrandsStrip({ t }: { t: T }) {
   return (
     <section
       style={{
@@ -348,7 +364,7 @@ function BrandsStrip() {
       }}
     >
       <div style={{ ...mono, fontSize: 10, letterSpacing: "0.18em", opacity: 0.6, marginBottom: 16 }}>
-        BRANDS I'VE SHIPPED FOR —
+        {t("brands.header")}
       </div>
       <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "8px 28px", alignItems: "baseline" }}>
         {SITE_BRANDS.map((b) => (
@@ -364,11 +380,12 @@ function BrandsStrip() {
 // ─── §04 Tech & Tools ────────────────────────────────────────────────────────
 type SkillGroup = { name: string; level?: string; keywords?: string[] };
 
-function StackGrid({ skills }: { skills: SkillGroup[] }) {
+function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
   return (
-    <section id="tech-tools" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <SecHead n="04" label="TECH & TOOLS" />
+    <section id="tech-tools" className="v3-section" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+      <SecHead n="04" label={t("section.techTools")} />
       <div
+        className="v3-stack-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
@@ -408,109 +425,28 @@ function StackGrid({ skills }: { skills: SkillGroup[] }) {
 }
 
 // ─── §05 Contact ──────────────────────────────────────────────────────────────
-function ContactBlock() {
+function ContactBlock({ t }: { t: T }) {
   return (
-    <section id="contact" style={{ padding: "56px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
+    <section id="contact" className="v3-section" style={{ padding: "56px 32px", maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+      <div className="v3-contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
         {/* Left: info */}
         <div>
-          <SecHead n="05" label="GET IN TOUCH" />
+          <SecHead n="05" label={t("section.getInTouch")} />
           <h2 style={{ ...big, fontSize: 64, lineHeight: 0.95, margin: "16px 0" }}>
-            Let&apos;s<br /> <span style={{ color: "var(--v3-accent)" }}>talk</span>.
+            {t("contact.headline")}<br /> <span style={{ color: "var(--v3-accent)" }}>{t("contact.headlineAccent")}</span>.
           </h2>
           <p style={{ fontSize: 14, color: "var(--v3-muted)", maxWidth: 380, lineHeight: 1.7, margin: 0 }}>
-            Best for engineering leadership, frontend architecture, or design system roles in Europe / remote.
+            {t("contact.description")}
           </p>
-          <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", marginTop: 24, lineHeight: 1.9 }}>
-            <div>→ vicente@opa.so</div>
-            <div>→ linkedin.com/in/vicenteopaso</div>
-            <div>→ github.com/vicenteopaso</div>
+          <div style={{ ...mono, fontSize: 11, marginTop: 24, lineHeight: 1.9, display: "flex", flexDirection: "column" as const, gap: 0 }}>
+            <a href="mailto:vicente@opa.so" style={{ color: "var(--v3-muted)", textDecoration: "none" }}>{t("contact.email")}</a>
+            <a href="https://linkedin.com/in/vicenteopaso" target="_blank" rel="noreferrer" style={{ color: "var(--v3-muted)", textDecoration: "none" }}>{t("contact.linkedin")}</a>
+            <a href="https://github.com/vicenteopaso" target="_blank" rel="noreferrer" style={{ color: "var(--v3-muted)", textDecoration: "none" }}>{t("contact.github")}</a>
           </div>
         </div>
 
         {/* Right: form */}
-        <form
-          action="https://formspree.io/f/placeholder"
-          method="POST"
-          style={{ display: "grid", gap: 0, border: "1px solid var(--v3-rule)" }}
-        >
-          {(["NAME", "EMAIL", "SUBJECT"] as const).map((label) => (
-            <label
-              key={label}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "110px 1fr",
-                borderBottom: "1px solid var(--v3-rule)",
-                alignItems: "center",
-              }}
-            >
-              <span style={{ ...mono, paddingLeft: 16, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em" }}>
-                {label}
-              </span>
-              <input
-                name={label.toLowerCase()}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  borderLeft: "1px solid var(--v3-rule)",
-                  padding: 14,
-                  fontSize: 14,
-                  fontFamily: "inherit",
-                  color: "var(--v3-fg)",
-                  outline: "none",
-                }}
-              />
-            </label>
-          ))}
-          <label
-            style={{
-              display: "grid",
-              gridTemplateColumns: "110px 1fr",
-              borderBottom: "1px solid var(--v3-rule)",
-              alignItems: "start",
-            }}
-          >
-            <span style={{ ...mono, padding: "14px 0 14px 16px", fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em" }}>
-              MESSAGE
-            </span>
-            <textarea
-              name="message"
-              rows={5}
-              style={{
-                background: "transparent",
-                border: "none",
-                borderLeft: "1px solid var(--v3-rule)",
-                padding: 14,
-                fontSize: 14,
-                fontFamily: "inherit",
-                color: "var(--v3-fg)",
-                resize: "none",
-                outline: "none",
-              }}
-            />
-          </label>
-          <div style={{ padding: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.1em" }}>
-              TURNSTILE · FORMSPREE
-            </span>
-            <button
-              type="submit"
-              style={{
-                background: "var(--v3-accent)",
-                color: "#fff",
-                border: "none",
-                padding: "10px 18px",
-                fontSize: 12,
-                fontWeight: 600,
-                fontFamily: "var(--f-mono)",
-                letterSpacing: "0.08em",
-                cursor: "pointer",
-              }}
-            >
-              SEND →
-            </button>
-          </div>
-        </form>
+        <V3ContactForm />
       </div>
     </section>
   );
@@ -525,12 +461,14 @@ interface PageProps {
 export default async function HomePage({ params }: PageProps) {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
+  const t = getTranslations(locale);
+  const siteData = getSiteData(locale);
 
   // Load about.md for name/tagline
   const aboutPath = path.join(process.cwd(), "content", locale, "about.md");
   const aboutContents = fs.readFileSync(aboutPath, "utf8");
   const { data: aboutData } = matter(aboutContents);
-  void aboutData; // currently unused — data comes from site-data.ts + cv.json
+  void aboutData;
 
   // Load cv.json for work + skills
   let work: WorkEntry[] = [];
@@ -549,14 +487,14 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <div className="v3-page">
-      <HeroA4 />
-      <ImpactStrip />
-      <TlDrSection />
-      <FocusStrip />
-      <ExperienceTable work={work} />
-      <BrandsStrip />
-      <StackGrid skills={skills} />
-      <ContactBlock />
+      <HeroA4 locale={locale} t={t} tocEntries={siteData.landingToc} />
+      <ImpactStrip impact={siteData.impact} />
+      <TlDrSection t={t} tldr={siteData.tldr} tldrLabels={siteData.tldrLabels} />
+      <FocusStrip t={t} focus={siteData.focus} />
+      <ExperienceTable work={work} locale={locale} t={t} />
+      <div style={{ display: "none" }}><BrandsStrip t={t} /></div>
+      <StackGrid skills={skills} t={t} />
+      <ContactBlock t={t} />
     </div>
   );
 }
