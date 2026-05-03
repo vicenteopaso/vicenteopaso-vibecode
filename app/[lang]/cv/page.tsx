@@ -222,7 +222,7 @@ function CvMasthead({
             {t("cv.subtitle1")} {t("cv.subtitle2")}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
-            <CvBtn href={CV_PDF_PATH} primary download>
+            <CvBtn href={CV_PDF_PATH} primary download="vicente-opaso-cv-2026.pdf">
               {t("cv.downloadPdf")}
             </CvBtn>
             <CvBtn href="#contact">{t("cv.emailCta")}</CvBtn>
@@ -308,7 +308,7 @@ function CvBtn({
   children: React.ReactNode;
   primary?: boolean;
   href: string;
-  download?: boolean;
+  download?: string;
 }) {
   return (
     <a
