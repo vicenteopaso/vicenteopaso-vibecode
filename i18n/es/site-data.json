@@ -39,22 +39,23 @@
     { "k": "15y+", "v": "Entregando en la web — y 10 años en telco antes" }
   ],
   "landingToc": [
-    { "n": "01", "t": "TL;DR", "s": "La versión de 5 puntos" },
-    { "n": "02", "t": "QUÉ HAGO", "s": "Cinco áreas de enfoque" },
-    { "n": "03", "t": "EXPERIENCIA", "s": "25 años · 8 roles" },
-    { "n": "04", "t": "TECH & HERRAMIENTAS", "s": "El stack actual" },
-    { "n": "05", "t": "CONTACTO", "s": "Hablemos" }
+    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "La versión de 5 puntos" },
+    { "n": "02", "id": "what-i-do", "t": "QUÉ HAGO", "s": "Cinco áreas de enfoque" },
+    { "n": "03", "id": "experience", "t": "EXPERIENCIA", "s": "25 años · 8 roles" },
+    { "n": "04", "id": "tech-tools", "t": "TECH & HERRAMIENTAS", "s": "El stack actual" },
+    { "n": "05", "id": "contact", "t": "CONTACTO", "s": "Hablemos" }
   ],
   "cvToc": [
-    { "n": "01", "t": "RESUMEN", "s": "TL;DR + puntos clave" },
-    { "n": "02", "t": "EXPERIENCIA", "s": "8 roles · 15 años en la web" },
+    { "n": "01", "id": "cv-summary", "t": "RESUMEN", "s": "TL;DR + puntos clave" },
+    { "n": "02", "id": "cv-experience", "t": "EXPERIENCIA", "s": "8 roles · 15 años en la web" },
     {
       "n": "03",
+      "id": "cv-skills",
       "t": "HABILIDADES",
       "s": "Lenguajes · frameworks · herramientas"
     },
-    { "n": "04", "t": "FORMACIÓN", "s": "Educación e idiomas" },
-    { "n": "05", "t": "PUBLICACIONES", "s": "Escritura seleccionada" },
-    { "n": "06", "t": "REFERENCIAS", "s": "Lo que dicen de mí" }
+    { "n": "04", "id": "cv-education", "t": "FORMACIÓN", "s": "Educación e idiomas" },
+    { "n": "05", "id": "cv-publications", "t": "PUBLICACIONES", "s": "Escritura seleccionada" },
+    { "n": "06", "id": "cv-references", "t": "REFERENCIAS", "s": "Lo que dicen de mí" }
   ]
 }

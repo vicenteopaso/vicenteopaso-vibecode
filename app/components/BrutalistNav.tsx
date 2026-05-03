@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -37,8 +38,10 @@ export function BrutalistNav() {
 
   const isActive = (href: string) => {
     if (!pathname) return false;
-    if (href === `/${locale}`) return pathname === href;
-    return pathname.startsWith(href);
+    // Strip fragment for comparison — pathname never includes hash
+    const path = href.split("#")[0];
+    if (!path || path === `/${locale}`) return pathname === `/${locale}`;
+    return pathname.startsWith(path);
   };
 
   const navLinks = [
@@ -82,7 +85,7 @@ export function BrutalistNav() {
             alignItems: "center",
           }}
         >
-          <a
+          <Link
             href={`/${locale}`}
             style={{
               color: "var(--v3-fg)",
@@ -91,7 +94,7 @@ export function BrutalistNav() {
             }}
           >
             {t("nav.brand")}
-          </a>
+          </Link>
           <span className="v3-nav-meta">{t("nav.version")}</span>
           <span className="v3-nav-meta">—</span>
           <span className="v3-nav-meta" style={{ color: "var(--v3-accent)" }}>
@@ -105,7 +108,7 @@ export function BrutalistNav() {
           style={{ display: "flex", gap: 24, color: "var(--v3-muted)" }}
         >
           {navLinks.map((l) => (
-            <a
+            <Link
               key={l.label}
               href={l.href}
               style={{
@@ -119,7 +122,7 @@ export function BrutalistNav() {
               }}
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

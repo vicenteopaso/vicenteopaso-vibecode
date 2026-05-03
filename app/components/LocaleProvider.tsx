@@ -26,6 +26,8 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("preferred-locale", urlLocale);
       // Set cookie so proxy.ts can respect user's manual selection
       document.cookie = `preferred-locale=${urlLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
+      // Keep the <html lang> attribute in sync for accessibility/SEO
+      document.documentElement.lang = urlLocale;
     }
     setMounted(true);
   }, [params?.lang]);

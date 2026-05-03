@@ -152,7 +152,7 @@ export function V3ContactForm() {
         const data = (await res.json().catch(() => null)) as {
           error?: string;
         } | null;
-        throw new Error(data?.error ?? "Submission failed. Please try again.");
+        throw new Error(data?.error ?? t("contact.submitError"));
       }
 
       setFormState("success");
@@ -160,9 +160,7 @@ export function V3ContactForm() {
       window.turnstile?.reset();
       setTurnstileToken(null);
       setErrorMsg(
-        err instanceof Error
-          ? err.message
-          : "Unexpected error. Please try again.",
+        err instanceof Error ? err.message : t("contact.submitError"),
       );
       setFormState("error");
     }

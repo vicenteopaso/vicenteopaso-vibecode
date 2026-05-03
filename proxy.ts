@@ -43,11 +43,11 @@ function detectLocale(req: NextRequest): Locale {
   const preferredLangs = langHeader
     .split(",")
     .map((item) => {
-      const [lang, q] = item.trim().split(";q=");
-      return {
-        lang: (lang ?? "").trim().toLowerCase().slice(0, 2),
-        q: parseFloat(q ?? "1"),
-      };
+      const parts = item.trim().split(";");
+      const lang = (parts[0] ?? "").trim().toLowerCase().slice(0, 2);
+      const qPart = parts.find((p) => /^\s*q\s*=/i.test(p));
+      const q = qPart ? parseFloat(qPart.replace(/^\s*q\s*=\s*/i, "")) : 1;
+      return { lang, q: Number.isFinite(q) ? q : 0 };
     })
     .sort((a, b) => b.q - a.q)
     .map(({ lang }) => lang);

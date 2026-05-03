@@ -1,22 +1,26 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 
 import { useTranslations } from "@/lib/i18n";
 
+import { useLocale } from "./LocaleProvider";
+
 export function BrutalistFooter() {
   const t = useTranslations();
+  const { locale } = useLocale();
   const year = new Date().getFullYear();
 
   const footerLinks = [
-    { labelKey: "footer.privacyPolicy" as const, href: "/privacy-policy" },
-    { labelKey: "footer.cookiePolicy" as const, href: "/cookie-policy" },
-    { labelKey: "footer.accessibility" as const, href: "/accessibility" },
+    { labelKey: "footer.privacyPolicy" as const, path: "privacy-policy" },
+    { labelKey: "footer.cookiePolicy" as const, path: "cookie-policy" },
+    { labelKey: "footer.accessibility" as const, path: "accessibility" },
     {
       labelKey: "footer.technicalGovernance" as const,
-      href: "/technical-governance",
+      path: "technical-governance",
     },
-    { labelKey: "footer.techStack" as const, href: "/tech-stack" },
+    { labelKey: "footer.techStack" as const, path: "tech-stack" },
   ];
 
   return (
@@ -65,9 +69,9 @@ export function BrutalistFooter() {
           className="v3-footer-links"
         >
           {footerLinks.map((l, i) => (
-            <React.Fragment key={l.href}>
-              <a
-                href={l.href}
+            <React.Fragment key={l.path}>
+              <Link
+                href={`/${locale}/${l.path}`}
                 style={{
                   fontSize: 10.5,
                   color: "var(--v3-accent)",
@@ -78,7 +82,7 @@ export function BrutalistFooter() {
                 }}
               >
                 {t(l.labelKey)}
-              </a>
+              </Link>
               {i < footerLinks.length - 1 && (
                 <span
                   style={{

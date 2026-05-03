@@ -116,33 +116,32 @@ function CvRefCard({
       return nextExpanded;
     });
   };
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      handleToggle();
-    }
-  };
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
       aria-expanded={expanded}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       onFocus={handleFocus}
       onBlur={handleBlur}
       onClick={handleToggle}
-      onKeyDown={handleKeyDown}
       style={{
         position: "relative",
         padding: "20px",
+        borderTop: "none",
+        borderLeft: "none",
         borderRight: isEvenCol ? "1px solid var(--v3-rule)" : "none",
         borderBottom: !isLastRow ? "1px solid var(--v3-rule)" : "none",
         cursor: "pointer",
         zIndex: expanded ? 10 : "auto",
         opacity: dimmed ? 0.35 : 1,
         transition: "opacity 0.2s ease",
+        background: "transparent",
+        textAlign: "left",
+        width: "100%",
+        fontFamily: "inherit",
+        color: "inherit",
       }}
     >
       {/* Truncated content — always rendered to hold grid row height */}
@@ -173,7 +172,7 @@ function CvRefCard({
       >
         <CardContent index={index} name={name} role={role} text={fullText} />
       </div>
-    </div>
+    </button>
   );
 }
 

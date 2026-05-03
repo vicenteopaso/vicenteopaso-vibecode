@@ -181,11 +181,7 @@ function HeroA4({
             {tocEntries.map((entry, i) => (
               <a
                 key={entry.n}
-                href={`#${entry.t
-                  .toLowerCase()
-                  .replace(/[^a-z0-9\s]/g, "")
-                  .trim()
-                  .replace(/\s+/g, "-")}`}
+                href={`#${entry.id}`}
                 className="v3-cv-toc-row"
                 style={{
                   display: "grid",

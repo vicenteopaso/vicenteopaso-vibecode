@@ -56,3 +56,9 @@ blob-report
 
 # Local pnpm store
 .pnpm-store/
+
+# Claude MCP local config (machine-specific)
+.claude/
+
+# Playwright MCP debug output (local only)
+.playwright-mcp/

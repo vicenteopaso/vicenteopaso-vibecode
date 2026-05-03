@@ -5,7 +5,9 @@ import Image from "next/image";
 import path from "path";
 
 import { CvRefsGrid } from "@/app/components/CvRefCard";
+import { CV_PDF_PATH } from "@/app/config/cv";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
+import { logWarning } from "@/lib/error-logging";
 import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
 
@@ -220,7 +222,7 @@ function CvMasthead({
             {t("cv.subtitle1")} {t("cv.subtitle2")}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
-            <CvBtn href={`/${locale}/cv`} primary>
+            <CvBtn href={CV_PDF_PATH} primary download>
               {t("cv.downloadPdf")}
             </CvBtn>
             <CvBtn href="#contact">{t("cv.emailCta")}</CvBtn>
@@ -301,14 +303,17 @@ function CvBtn({
   children,
   primary,
   href,
+  download,
 }: {
   children: React.ReactNode;
   primary?: boolean;
   href: string;
+  download?: boolean;
 }) {
   return (
     <a
       href={href}
+      download={download}
       style={{
         display: "inline-block",
         background: primary ? "var(--v3-accent)" : "transparent",
@@ -334,7 +339,7 @@ function CvToc({
   tocEntries,
 }: {
   t: T;
-  tocEntries: Array<{ n: string; t: string; s: string }>;
+  tocEntries: Array<{ n: string; id: string; t: string; s: string }>;
 }) {
   return (
     <section style={{ padding: "32px 32px", ...rule2 }}>
@@ -353,11 +358,7 @@ function CvToc({
         {tocEntries.map((entry, i) => (
           <a
             key={entry.n}
-            href={`#cv-${entry.t
-              .toLowerCase()
-              .replace(/[^a-z0-9\s]/g, "")
-              .trim()
-              .replace(/\s+/g, "-")}`}
+            href={`#${entry.id}`}
             className="v3-cv-toc-row"
             style={{
               display: "grid",
@@ -1205,8 +1206,11 @@ export default async function CVPage({ params }: PageProps) {
   try {
     const jsonPath = path.join(process.cwd(), "content", locale, "cv.json");
     cv = JSON.parse(fs.readFileSync(jsonPath, "utf8")) as CvJson;
-  } catch {
-    // Degrade gracefully
+  } catch (err) {
+    logWarning(`CV JSON load failed for locale "${locale}"`, {
+      component: "CVPage",
+      metadata: { error: err instanceof Error ? err.message : String(err) },
+    });
   }
 
   const name = cv.basics?.name ?? (data.name as string) ?? "Vicente Opaso";

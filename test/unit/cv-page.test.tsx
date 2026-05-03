@@ -377,7 +377,7 @@ describe("CV Page Masthead Actions", () => {
 
     expect(screen.getByRole("link", { name: /DOWNLOAD PDF/i })).toHaveAttribute(
       "href",
-      "/en/cv",
+      expect.stringContaining("/assets/vicente-opaso-cv-2026.pdf"),
     );
     expect(
       screen.getAllByRole("link", { name: /VICENTE@OPA\.SO/i })[0],

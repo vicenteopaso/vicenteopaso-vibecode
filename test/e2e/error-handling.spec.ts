@@ -6,6 +6,9 @@ test.describe("Error Handling", () => {
   }) => {
     await page.goto("/en", { waitUntil: "load" });
 
+    // Verify the page is operational before the test
+    await expect(page.locator("body")).toBeVisible();
+
     await page.evaluate(() => {
       const originalConsoleError = console.error;
       console.error = (...args) => {
@@ -24,6 +27,9 @@ test.describe("Error Handling", () => {
     });
 
     await page.waitForTimeout(500);
+
+    // The ErrorBoundary should have caught the error; the page body must still exist
+    await expect(page.locator("body")).toBeVisible();
   });
 
   test("handles unhandled promise rejections gracefully", async ({ page }) => {
@@ -41,6 +47,9 @@ test.describe("Error Handling", () => {
     });
 
     await page.waitForTimeout(500);
+
+    // The page must still be navigable after an unhandled rejection
+    await expect(page.locator("body")).toBeVisible();
   });
 
   test("page remains functional after error boundary catches error", async ({

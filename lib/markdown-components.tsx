@@ -62,7 +62,7 @@ export const markdownComponents: Components = {
       >
         →
       </span>
-      <span>{children}</span>
+      <div>{children}</div>
     </li>
   ),
   ol: ({ children, ...props }) => (
