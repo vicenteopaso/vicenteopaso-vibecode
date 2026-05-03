@@ -14,7 +14,7 @@ test.describe("Navigation Menu Visual Regression", () => {
     await waitForHomepage(page);
 
     // Get the main navigation element (the header shell container)
-    const nav = page.locator('nav[aria-label="Main"]');
+    const nav = page.locator('nav[aria-label="Main navigation"]');
     await expect(nav).toBeVisible();
 
     // Take a screenshot of just the navigation
@@ -28,7 +28,7 @@ test.describe("Navigation Menu Visual Regression", () => {
     await page.goto("/");
     await waitForHomepage(page);
 
-    const nav = page.locator('nav[aria-label="Main"]');
+    const nav = page.locator('nav[aria-label="Main navigation"]');
     await expect(nav).toBeVisible();
 
     await expect(nav).toHaveScreenshot("navigation-dark.png", {
@@ -46,7 +46,7 @@ test.describe("Navigation Menu Visual Regression", () => {
     await page.waitForSelector("h1", { state: "visible" });
     await waitForStableHeight(page);
 
-    const nav = page.locator('nav[aria-label="Main"]');
+    const nav = page.locator('nav[aria-label="Main navigation"]');
     await expect(nav).toBeVisible();
 
     await expect(nav).toHaveScreenshot("navigation-cv-active-light.png", {
@@ -64,7 +64,7 @@ test.describe("Navigation Menu Visual Regression", () => {
     await page.waitForSelector("h1", { state: "visible" });
     await waitForStableHeight(page);
 
-    const nav = page.locator('nav[aria-label="Main"]');
+    const nav = page.locator('nav[aria-label="Main navigation"]');
     await expect(nav).toBeVisible();
 
     await expect(nav).toHaveScreenshot("navigation-cv-active-dark.png", {
@@ -77,7 +77,7 @@ test.describe("Navigation Menu Visual Regression", () => {
     await page.goto("/");
     await waitForHomepage(page);
 
-    const nav = page.locator('nav[aria-label="Main"]');
+    const nav = page.locator('nav[aria-label="Main navigation"]');
     await expect(nav).toBeVisible();
 
     await expect(nav).toHaveScreenshot("navigation-mobile.png", {

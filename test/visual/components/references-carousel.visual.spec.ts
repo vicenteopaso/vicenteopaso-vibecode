@@ -1,105 +1,70 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  freezeReferencesCarousel,
-  REFERENCES_SECTION_SELECTOR,
   setThemeDark,
   setThemeLight,
   waitForCVPage,
   waitForStableHeight,
 } from "../utils";
 
-test.describe("References Carousel Visual Regression", () => {
-  test("renders references carousel in light mode", async ({ page }) => {
+const REFS_GRID_SELECTOR = ".v3-cv-refs-grid";
+
+test.describe("References Grid Visual Regression", () => {
+  test("renders references grid in light mode", async ({ page }) => {
     await setThemeLight(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
-    const referencesContent = page.locator(
-      '[data-testid="references-carousel-content"]',
-    );
-    await expect(referencesSection).toBeVisible();
-    await expect(referencesContent).toBeVisible();
-
-    await freezeReferencesCarousel(page);
+    const refsGrid = page.locator(REFS_GRID_SELECTOR);
+    await expect(refsGrid).toBeVisible();
     await waitForStableHeight(page);
 
-    await expect(referencesContent).toHaveScreenshot(
-      "references-carousel-light.png",
-      {
-        animations: "disabled",
-      },
-    );
+    await expect(refsGrid).toHaveScreenshot("references-carousel-light.png", {
+      animations: "disabled",
+    });
   });
 
-  test("renders references carousel in dark mode", async ({ page }) => {
+  test("renders references grid in dark mode", async ({ page }) => {
     await setThemeDark(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
-    const referencesContent = page.locator(
-      '[data-testid="references-carousel-content"]',
-    );
-    await expect(referencesSection).toBeVisible();
-    await expect(referencesContent).toBeVisible();
-
-    await freezeReferencesCarousel(page);
+    const refsGrid = page.locator(REFS_GRID_SELECTOR);
+    await expect(refsGrid).toBeVisible();
     await waitForStableHeight(page);
 
-    await expect(referencesContent).toHaveScreenshot(
-      "references-carousel-dark.png",
-      {
-        animations: "disabled",
-      },
-    );
+    await expect(refsGrid).toHaveScreenshot("references-carousel-dark.png", {
+      animations: "disabled",
+    });
   });
 
-  test("renders references carousel on mobile viewport", async ({ page }) => {
+  test("renders references grid on mobile viewport", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto("/cv");
-    await waitForCVPage(page);
-
-    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
-    const referencesContent = page.locator(
-      '[data-testid="references-carousel-content"]',
-    );
-    await expect(referencesSection).toBeVisible();
-    await expect(referencesContent).toBeVisible();
-
-    await freezeReferencesCarousel(page);
-    await waitForStableHeight(page);
-
-    await expect(referencesContent).toHaveScreenshot(
-      "references-carousel-mobile.png",
-      {
-        animations: "disabled",
-      },
-    );
-  });
-});
-
-test.describe("References Carousel Navigation Visual Regression", () => {
-  test("renders carousel indicator dots correctly", async ({ page }) => {
     await setThemeLight(page);
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const referencesSection = page.locator(REFERENCES_SECTION_SELECTOR);
-    await expect(referencesSection).toBeVisible();
+    const refsGrid = page.locator(REFS_GRID_SELECTOR);
+    await expect(refsGrid).toBeVisible();
+    await waitForStableHeight(page);
 
-    // Find the dots navigation container using data-testid for reliable selection
-    const dotsContainer = referencesSection.locator(
-      '[data-testid="references-carousel-dots"]',
-    );
+    await expect(refsGrid).toHaveScreenshot("references-carousel-mobile.png", {
+      animations: "disabled",
+    });
+  });
+});
 
-    await expect(dotsContainer).toBeVisible();
-    await expect(dotsContainer).toHaveScreenshot(
-      "references-carousel-dots.png",
-      {
-        animations: "disabled",
-      },
-    );
+test.describe("References Grid Card Visual Regression", () => {
+  test("renders single reference card correctly", async ({ page }) => {
+    await setThemeLight(page);
+    await page.goto("/cv");
+    await waitForCVPage(page);
+
+    const firstCard = page.locator(`${REFS_GRID_SELECTOR} button`).first();
+    await expect(firstCard).toBeVisible();
+
+    await expect(firstCard).toHaveScreenshot("references-carousel-dots.png", {
+      animations: "disabled",
+    });
   });
 });

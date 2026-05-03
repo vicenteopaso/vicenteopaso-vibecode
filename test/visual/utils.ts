@@ -2,7 +2,7 @@ import type { Locator, Page } from "@playwright/test";
 
 // Shared selectors for visual tests
 export const PORTRAIT_SELECTOR = 'img[alt*="Portrait"]';
-export const REFERENCES_SECTION_SELECTOR = "#references";
+export const REFERENCES_SECTION_SELECTOR = "#cv-references";
 const NEXT_DEVTOOLS_HOST_SELECTORS =
   "nextjs-portal, script[data-nextjs-dev-overlay]";
 

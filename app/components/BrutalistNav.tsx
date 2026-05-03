@@ -103,6 +103,7 @@ export function BrutalistNav() {
 
         {/* Primary nav */}
         <nav
+          aria-label="Main navigation"
           className="v3-nav-links"
           style={{ display: "flex", gap: 24, color: "var(--v3-muted)" }}
         >
