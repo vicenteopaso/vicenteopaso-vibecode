@@ -48,11 +48,22 @@ export const markdownComponents: Components = {
   ),
   ul: ({ children, ...props }) => (
     <ul
-      className="list-disc marker:text-[color:var(--secondary)] mb-4 space-y-2 pl-5 text-sm text-[color:var(--text-primary)]"
+      className="mb-4 space-y-1.5 pl-0 list-none text-sm text-[color:var(--text-primary)]"
       {...props}
     >
       {children}
     </ul>
+  ),
+  li: ({ children, ...props }) => (
+    <li className="flex gap-2 items-baseline" {...props}>
+      <span
+        aria-hidden="true"
+        className="font-mono text-[color:var(--v3-accent)] shrink-0"
+      >
+        →
+      </span>
+      <div>{children}</div>
+    </li>
   ),
   ol: ({ children, ...props }) => (
     <ol
@@ -67,7 +78,7 @@ export const markdownComponents: Components = {
   ),
   a: ({ children, ...props }) => (
     <a
-      className="font-medium text-[color:var(--link)] underline underline-offset-4 hover:text-[color:var(--link-hover)]"
+      className="font-medium text-[color:var(--v3-accent)] underline underline-offset-4 hover:opacity-80"
       {...props}
     >
       {children}
@@ -113,9 +124,17 @@ export const aboutPageComponents: Components = {
   ),
   ul: (props) => (
     <ul
-      className="list-disc marker:text-[color:var(--secondary)] space-y-3 pl-5 text-sm text-[color:var(--text-primary)]"
+      className="space-y-1.5 pl-0 list-none text-sm text-[color:var(--text-primary)]"
       {...props}
     />
+  ),
+  li: ({ children, ...props }) => (
+    <li className="flex gap-2 items-baseline" {...props}>
+      <span className="font-mono text-[color:var(--v3-accent)] shrink-0" aria-hidden="true">
+        →
+      </span>
+      <div>{children}</div>
+    </li>
   ),
   ol: (props) => (
     <ol
@@ -137,9 +156,17 @@ export const introComponents: Components = {
   ),
   ul: (props) => (
     <ul
-      className="list-disc marker:text-[color:var(--secondary)] space-y-2 pl-5 text-base sm:text-lg leading-relaxed text-[color:var(--text-primary)]"
+      className="space-y-2 pl-0 list-none text-base sm:text-lg leading-relaxed text-[color:var(--text-primary)]"
       {...props}
     />
+  ),
+  li: ({ children, ...props }) => (
+    <li className="flex gap-2 items-baseline" {...props}>
+      <span className="font-mono text-[color:var(--v3-accent)] shrink-0" aria-hidden="true">
+        →
+      </span>
+      <div>{children}</div>
+    </li>
   ),
   ol: (props) => (
     <ol

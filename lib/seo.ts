@@ -75,7 +75,7 @@ export function getPersonJsonLd() {
     jobTitle:
       "Web Engineering Manager & Frontend Architect specializing in Composable Platforms, Design Systems and Developer Experience (DevEx).",
     description:
-      "Technology leader with 25+ years designing, scaling, and maintaining high-performance digital platforms across enterprise, e-commerce, and mission-critical environments.",
+      "Technology leader with 15+ years designing, scaling, and maintaining high-performance digital platforms across enterprise, e-commerce, and mission-critical environments.",
     knowsAbout: [
       "Frontend Architecture",
       "Design Systems",
@@ -140,7 +140,7 @@ export function getCvJsonLd() {
       url: siteConfig.url,
       jobTitle: "Web Engineering Manager & Frontend Architect",
       description:
-        "25+ years designing, scaling, and maintaining high-performance digital platforms across enterprise, e-commerce, and mission-critical environments.",
+        "15+ years designing, scaling, and maintaining high-performance digital platforms across enterprise, e-commerce, and mission-critical environments.",
       hasCredential: [
         {
           "@type": "EducationalOccupationalCredential",

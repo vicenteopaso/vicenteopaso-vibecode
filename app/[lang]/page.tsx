@@ -1,20 +1,14 @@
 import fs from "fs";
-import matter from "gray-matter";
 import type { Metadata } from "next";
+import type { Route } from "next";
+import Link from "next/link";
 import path from "path";
-import ReactMarkdown from "react-markdown";
 
-import { getLocaleFromParams } from "@/lib/i18n";
-import {
-  aboutPageComponents,
-  introComponents,
-} from "@/lib/markdown-components";
+import { V3ContactForm } from "@/app/components/V3ContactForm";
+import { logWarning } from "@/lib/error-logging";
+import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { ogCacheVersion, siteConfig } from "@/lib/seo";
-
-import { GetInTouchSection } from "../components/GetInTouchSection";
-import { GitHubIcon, LinkedInIcon, XIcon } from "../components/icons";
-import { ImpactCards } from "../components/ImpactCards";
-import { ProfileCard } from "../components/ProfileCard";
+import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-static";
 
@@ -29,7 +23,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
-
   return {
     openGraph: {
       type: "website",
@@ -56,6 +49,768 @@ export async function generateMetadata({
   };
 }
 
+// ─── Shared style helpers ─────────────────────────────────────────────────────
+
+const mono: React.CSSProperties = { fontFamily: "var(--f-mono)" };
+const big: React.CSSProperties = {
+  fontFamily: "var(--f-sans)",
+  fontWeight: 800,
+  letterSpacing: "-0.045em",
+};
+const rule2: React.CSSProperties = { borderBottom: "2px solid var(--v3-fg)" };
+const rule1: React.CSSProperties = { borderBottom: "1px solid var(--v3-rule)" };
+const MAX_W = 1180;
+
+type T = ReturnType<typeof getTranslations>;
+
+// ─── Section heading: §NN ── LABEL ─────── ───────────────────────────────────
+function SecHead({ n, label }: { n: string; label: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span
+        style={{
+          ...mono,
+          fontSize: 11,
+          color: "var(--v3-accent)",
+          letterSpacing: "0.14em",
+        }}
+      >
+        §{n}
+      </span>
+      <span style={{ ...big, fontSize: 18, letterSpacing: "-0.015em" }}>
+        {label}
+      </span>
+      <span style={{ flex: 1, height: 2, background: "var(--v3-fg)" }} />
+    </div>
+  );
+}
+
+// ─── A4 Hero: 2-col headline + TOC ───────────────────────────────────────────
+function HeroA4({
+  locale,
+  t,
+  tocEntries,
+}: {
+  locale: string;
+  t: T;
+  tocEntries: Array<{ n: string; id: string; t: string; s: string }>;
+}) {
+  return (
+    <section
+      className="v3-section v3-hero-section"
+      style={{
+        padding: "64px 32px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <div
+        className="v3-hero-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 64,
+          alignItems: "start",
+        }}
+      >
+        {/* Left: headline + sub + CTAs */}
+        <div>
+          <div
+            className="v3-hero-label"
+            style={{
+              ...mono,
+              fontSize: 11,
+              color: "var(--v3-muted)",
+              letterSpacing: "0.14em",
+              marginBottom: 20,
+            }}
+          >
+            {t("hero.label")}
+          </div>
+          <h1
+            className="v3-hero-h1"
+            style={{ ...big, fontSize: 80, lineHeight: 0.92, margin: 0 }}
+          >
+            {t("hero.headline1")}
+            <br />
+            {t("hero.headline2")}
+            <br />
+            <span style={{ color: "var(--v3-accent)" }}>
+              {t("hero.headline3")}
+            </span>
+            <br />
+            {t("hero.headline4")}
+          </h1>
+          <p
+            className="v3-hero-sub"
+            style={{
+              fontSize: 15,
+              color: "var(--v3-muted)",
+              marginTop: 24,
+              maxWidth: 440,
+              lineHeight: 1.65,
+            }}
+          >
+            {t("hero.sub")}
+          </p>
+          <div
+            className="v3-hero-ctas"
+            style={{ display: "flex", gap: 10, marginTop: 28 }}
+          >
+            <HeroBtn href={`/${locale}/cv`} primary>
+              {t("hero.readCv")}
+            </HeroBtn>
+            <HeroBtn href="#contact">{t("hero.email")}</HeroBtn>
+          </div>
+        </div>
+
+        {/* Right: TOC */}
+        <div>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              color: "var(--v3-muted)",
+              marginBottom: 12,
+            }}
+          >
+            {t("hero.contents")}
+          </div>
+          <div style={{ border: "1px solid var(--v3-rule)" }}>
+            {tocEntries.map((entry, i) => (
+              <a
+                key={entry.n}
+                href={`#${entry.id}`}
+                className="v3-cv-toc-row"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "60px 1fr auto",
+                  alignItems: "center",
+                  padding: "14px 16px",
+                  borderBottom:
+                    i < tocEntries.length - 1
+                      ? "1px solid var(--v3-rule)"
+                      : "none",
+                  color: "var(--v3-fg)",
+                  textDecoration: "none",
+                }}
+              >
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: "var(--v3-accent)",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  §{entry.n}
+                </span>
+                <span>
+                  <span
+                    className="v3-cv-toc-label"
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 700,
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {entry.t}
+                  </span>
+                  <span
+                    className="v3-cv-toc-sub"
+                    style={{
+                      fontSize: 13,
+                      color: "var(--v3-muted)",
+                      marginLeft: 12,
+                    }}
+                  >
+                    — {entry.s}
+                  </span>
+                </span>
+                <span
+                  style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}
+                >
+                  ↓
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroBtn({
+  children,
+  primary,
+  href,
+}: {
+  children: React.ReactNode;
+  primary?: boolean;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href as Route}
+      style={{
+        display: "inline-block",
+        background: primary ? "var(--v3-accent)" : "transparent",
+        color: primary ? "#fff" : "var(--v3-fg)",
+        border: primary ? "none" : "1px solid var(--v3-fg)",
+        padding: "12px 20px",
+        fontSize: 12,
+        fontWeight: 600,
+        fontFamily: "var(--f-mono)",
+        letterSpacing: "0.08em",
+        textDecoration: "none",
+        cursor: "pointer",
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+// ─── Impact 4-stat strip ──────────────────────────────────────────────────────
+function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
+  return (
+    <section
+      style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
+    >
+      <div
+        className="v3-impact-grid"
+        style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}
+      >
+        {impact.map((x, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "32px 24px",
+              borderRight: i < 3 ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <div
+              className="v3-impact-stat"
+              style={{
+                ...big,
+                fontSize: 56,
+                color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)",
+                lineHeight: 1,
+              }}
+            >
+              {x.k}
+            </div>
+            <div
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-muted)",
+                marginTop: 10,
+                lineHeight: 1.5,
+                letterSpacing: "0.02em",
+              }}
+            >
+              {x.v}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §01 TL;DR ───────────────────────────────────────────────────────────────
+function TlDrSection({
+  t,
+  tldr,
+  tldrLabels,
+}: {
+  t: T;
+  tldr: readonly string[];
+  tldrLabels: readonly string[];
+}) {
+  return (
+    <section
+      id="tl-dr"
+      style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
+    >
+      <div
+        className="v3-tldr-grid"
+        style={{ display: "grid", gridTemplateColumns: "260px 1fr", ...rule1 }}
+      >
+        {/* Inverted sidebar */}
+        <div
+          className="v3-tldr-sidebar"
+          style={{
+            background: "var(--v3-fg)",
+            color: "var(--v3-bg)",
+            padding: "32px 24px",
+          }}
+        >
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              opacity: 0.6,
+              letterSpacing: "0.18em",
+            }}
+          >
+            §01
+          </div>
+          <div style={{ ...big, fontSize: 48, lineHeight: 0.95, marginTop: 8 }}>
+            TL;<span style={{ color: "var(--v3-accent)" }}>DR</span>
+          </div>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              opacity: 0.55,
+              letterSpacing: "0.06em",
+              marginTop: 14,
+              lineHeight: 1.7,
+            }}
+          >
+            {t("tldr.subtitle1")}
+            <br />
+            {t("tldr.subtitle2")}
+            <br />
+            {t("tldr.subtitle3")}
+          </div>
+        </div>
+
+        {/* Numbered list */}
+        <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          {tldr.map((item, i) => (
+            <li
+              key={i}
+              className="v3-tldr-item"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "56px 1fr 80px",
+                alignItems: "baseline",
+                padding: "18px 24px",
+                borderBottom:
+                  i < tldr.length - 1 ? "1px solid var(--v3-rule)" : "none",
+                gap: 16,
+              }}
+            >
+              <span
+                style={{
+                  ...mono,
+                  fontSize: 11,
+                  color: "var(--v3-accent)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                0{i + 1} —
+              </span>
+              <span
+                style={{
+                  fontSize: 19,
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1.4,
+                  fontWeight: 500,
+                }}
+              >
+                {item}
+              </span>
+              <span
+                className="v3-tldr-label"
+                style={{
+                  ...mono,
+                  fontSize: 10,
+                  color: "var(--v3-muted)",
+                  letterSpacing: "0.14em",
+                  textAlign: "right" as const,
+                }}
+              >
+                {tldrLabels[i]}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+// ─── §02 What I Do ───────────────────────────────────────────────────────────
+function FocusStrip({
+  t,
+  focus,
+}: {
+  t: T;
+  focus: Array<{ h: string; b: string }>;
+}) {
+  return (
+    <section
+      id="what-i-do"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <SecHead n="02" label={t("section.whatIDo")} />
+      <div
+        className="v3-focus-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gap: 0,
+          marginTop: 24,
+          border: "1px solid var(--v3-rule)",
+        }}
+      >
+        {focus.map((f, i) => (
+          <div
+            key={i}
+            className="v3-focus-item"
+            style={{
+              padding: "20px 18px",
+              borderRight: i < 4 ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <div
+              style={{
+                ...mono,
+                fontSize: 10,
+                color: "var(--v3-accent)",
+                letterSpacing: "0.14em",
+                marginBottom: 8,
+              }}
+            >
+              0{i + 1}
+            </div>
+            <div
+              style={{
+                fontSize: 15,
+                fontWeight: 700,
+                letterSpacing: "-0.015em",
+                marginBottom: 8,
+                lineHeight: 1.2,
+              }}
+            >
+              {f.h}
+            </div>
+            <div
+              style={{
+                fontSize: 12.5,
+                color: "var(--v3-muted)",
+                lineHeight: 1.55,
+              }}
+            >
+              {f.b}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §03 Experience table ─────────────────────────────────────────────────────
+type WorkEntry = {
+  company: string;
+  location?: string;
+  positions: Array<{
+    position: string;
+    startDate?: string;
+    endDate?: string;
+  }>;
+};
+
+function fmtDate(d?: string, nowLabel?: string): string {
+  if (!d || d === "Present") return nowLabel ?? "NOW";
+  return d.replace(/-(\d{2})$/, ".$1");
+}
+
+function ExperienceTable({
+  work,
+  locale,
+  t,
+}: {
+  work: WorkEntry[];
+  locale: string;
+  t: T;
+}) {
+  return (
+    <section
+      id="experience"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <SecHead n="03" label={t("section.whereWorked")} />
+      <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
+        <div
+          className="v3-exp-header"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "90px 1fr 200px 80px",
+            padding: "10px 16px",
+            borderBottom: "1px solid var(--v3-rule)",
+            ...mono,
+            fontSize: 10,
+            letterSpacing: "0.14em",
+            color: "var(--v3-muted)",
+          }}
+        >
+          <span>{t("exp.colDates")}</span>
+          <span>{t("exp.colRole")}</span>
+          <span className="v3-exp-loc">{t("exp.colLocation")}</span>
+          <span className="v3-exp-read" style={{ textAlign: "right" as const }}>
+            →
+          </span>
+        </div>
+        {work.map((company, ci) =>
+          company.positions.map((role, ri) => {
+            const isCurrent = !role.endDate || role.endDate === "Present";
+            const nowLabel = t("exp.now");
+            const dateStr = `${fmtDate(role.startDate, nowLabel)} – ${isCurrent ? nowLabel : fmtDate(role.endDate, nowLabel)}`;
+            return (
+              <div
+                key={`${ci}-${ri}`}
+                className="v3-exp-row"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "90px 1fr 200px 80px",
+                  padding: "14px 16px",
+                  borderBottom:
+                    ci < work.length - 1 || ri < company.positions.length - 1
+                      ? "1px solid var(--v3-rule)"
+                      : "none",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)",
+                  }}
+                >
+                  {dateStr}
+                </span>
+                <span style={{ fontSize: 14 }}>
+                  <span style={{ fontWeight: 600 }}>{role.position}</span>
+                  <span style={{ color: "var(--v3-muted)" }}>
+                    {" "}
+                    · {company.company}
+                  </span>
+                </span>
+                <span
+                  className="v3-exp-loc"
+                  style={{ ...mono, fontSize: 11, color: "var(--v3-muted)" }}
+                >
+                  {company.location ?? ""}
+                </span>
+                <Link
+                  href={`/${locale}/cv#cv-experience` as Route}
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: "var(--v3-fg)",
+                    textDecoration: "none",
+                    textAlign: "right" as const,
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  {t("exp.read")}
+                </Link>
+              </div>
+            );
+          }),
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─── §04 Tech & Tools ────────────────────────────────────────────────────────
+type SkillGroup = { name: string; level?: string; keywords?: string[] };
+
+function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
+  return (
+    <section
+      id="tech-tools"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <SecHead n="04" label={t("section.techTools")} />
+      <div
+        className="v3-stack-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 0,
+          marginTop: 24,
+          border: "1px solid var(--v3-rule)",
+        }}
+      >
+        {skills.map((g, i) => (
+          <div
+            key={g.name}
+            style={{
+              padding: "20px 18px",
+              borderRight: i % 3 !== 2 ? "1px solid var(--v3-rule)" : "none",
+              borderBottom:
+                i < skills.length - (skills.length % 3 || 3)
+                  ? "1px solid var(--v3-rule)"
+                  : "none",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                marginBottom: 10,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {g.name}
+              </span>
+              {g.level && (
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 9,
+                    color: "var(--v3-accent)",
+                    letterSpacing: "0.14em",
+                  }}
+                >
+                  {g.level.toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-muted)",
+                lineHeight: 1.75,
+              }}
+            >
+              {(g.keywords ?? []).join(" · ")}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §05 Contact ──────────────────────────────────────────────────────────────
+function ContactBlock({ t }: { t: T }) {
+  return (
+    <section
+      id="contact"
+      className="v3-section"
+      style={{
+        padding: "56px 32px",
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <div
+        className="v3-contact-grid"
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}
+      >
+        {/* Left: info */}
+        <div>
+          <SecHead n="05" label={t("section.getInTouch")} />
+          <h2
+            style={{ ...big, fontSize: 64, lineHeight: 0.95, margin: "16px 0" }}
+          >
+            {t("contact.headline")}
+            <br />{" "}
+            <span style={{ color: "var(--v3-accent)" }}>
+              {t("contact.headlineAccent")}
+            </span>
+            .
+          </h2>
+          <p
+            style={{
+              fontSize: 14,
+              color: "var(--v3-muted)",
+              maxWidth: 380,
+              lineHeight: 1.7,
+              margin: 0,
+            }}
+          >
+            {t("contact.description")}
+          </p>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              marginTop: 24,
+              lineHeight: 1.9,
+              display: "flex",
+              flexDirection: "column" as const,
+              gap: 0,
+            }}
+          >
+            <a
+              href="mailto:vicente@opa.so"
+              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
+            >
+              {t("contact.email")}
+            </a>
+            <a
+              href="https://linkedin.com/in/vicenteopaso"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
+            >
+              {t("contact.linkedin")}
+            </a>
+            <a
+              href="https://github.com/vicenteopaso"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
+            >
+              {t("contact.github")}
+            </a>
+          </div>
+        </div>
+
+        {/* Right: form */}
+        <V3ContactForm />
+      </div>
+    </section>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
@@ -63,172 +818,40 @@ interface PageProps {
 export default async function HomePage({ params }: PageProps) {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
+  const t = getTranslations(locale);
+  const siteData = getSiteData(locale);
 
-  const filePath = path.join(process.cwd(), "content", locale, "about.md");
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContents);
-  const name = (data.name as string) || "";
-  const tagline = (data.tagline as string) || "";
-  const initials = (data.initials as string) || "";
-
-  // Split markdown content into sections using horizontal rules ("---")
-  const sections = content
-    .split(/^---$/m)
-    .map((section) => section.trim())
-    .filter(Boolean);
-
-  const [introSection, ...otherSections] = sections;
-
-  // Strip the "### Introduction" heading from the intro section so the
-  // copy is titleless and can be rendered as plain body text.
-  const introBody = introSection
-    ? introSection.replace(/^#{1,6}\s+[^\n]+\n*/i, "").trim()
-    : "";
+  // Load cv.json for work + skills
+  let work: WorkEntry[] = [];
+  let skills: SkillGroup[] = [];
+  try {
+    const cvPath = path.join(process.cwd(), "content", locale, "cv.json");
+    const cv = JSON.parse(fs.readFileSync(cvPath, "utf8")) as {
+      work?: WorkEntry[];
+      skills?: SkillGroup[];
+    };
+    work = cv.work ?? [];
+    skills = cv.skills ?? [];
+  } catch (err) {
+    logWarning(`Landing page CV JSON load failed for locale "${locale}"`, {
+      component: "app/[lang]/page",
+      metadata: { error: err instanceof Error ? err.message : String(err) },
+    });
+  }
 
   return (
-    <div className="space-y-6">
-      <header className="glass-card">
-        <div className="glass-card-inner page-card flex flex-col gap-6 sm:flex-row sm:items-center">
-          <ProfileCard
-            name={name}
-            tagline={tagline}
-            initials={initials}
-            showSocialIcons
-          />
-        </div>
-      </header>
-
-      {introBody && (
-        <section className="space-y-4 py-3">
-          <ReactMarkdown components={introComponents}>
-            {introBody}
-          </ReactMarkdown>
-        </section>
-      )}
-
-      {/* Placeholder for dynamically displayed static content that will come after the intro */}
-
-      {(() => {
-        const renderedSections: React.ReactNode[] = [];
-
-        for (let index = 0; index < otherSections.length; index += 1) {
-          const section = otherSections[index];
-          const trimmedLower = section.trim().toLowerCase();
-
-          const isImpactCardsSection =
-            trimmedLower.startsWith("### impact cards");
-
-          if (isImpactCardsSection) {
-            const lines = section.split("\n");
-            const headingLineIndex = lines.findIndex((line) =>
-              line.trim().toLowerCase().startsWith("### impact cards"),
-            );
-
-            const headingLine =
-              headingLineIndex >= 0
-                ? lines[headingLineIndex]
-                : "### Impact Cards";
-
-            const firstCardBody = lines
-              .slice(headingLineIndex + 1)
-              .join("\n")
-              .trim();
-
-            let cardBlocks: string[] = [];
-
-            if (firstCardBody) {
-              cardBlocks.push(firstCardBody);
-            }
-
-            // Collect subsequent non-heading sections as additional cards.
-            let nextIndex = index + 1;
-            while (nextIndex < otherSections.length) {
-              const candidate = otherSections[nextIndex];
-              const candidateTrimmed = candidate.trimStart();
-
-              if (/^#{1,6}\s/.test(candidateTrimmed)) {
-                break;
-              }
-
-              if (candidateTrimmed) {
-                cardBlocks.push(candidateTrimmed);
-              }
-
-              nextIndex += 1;
-            }
-
-            // Fallback: support legacy "***" separators within a single block.
-            if (cardBlocks.length === 1 && cardBlocks[0].includes("***")) {
-              cardBlocks = cardBlocks[0]
-                .split(/^\*\*\*$/m)
-                .map((block) => block.trim())
-                .filter(Boolean);
-            }
-
-            const headingText = headingLine.replace(/^###\s*/i, "");
-
-            renderedSections.push(
-              <section
-                key={`impact-${index}`}
-                aria-label={headingText}
-                className="space-y-4"
-              >
-                <ImpactCards cards={cardBlocks} />
-              </section>,
-            );
-
-            // Skip the card sections we just consumed.
-            index = nextIndex - 1;
-            continue;
-          }
-
-          renderedSections.push(
-            <section key={index} className="glass-card">
-              <div className="glass-card-inner section-card space-y-4">
-                <ReactMarkdown components={aboutPageComponents}>
-                  {section}
-                </ReactMarkdown>
-              </div>
-            </section>,
-          );
-        }
-
-        return renderedSections;
-      })()}
-
-      <GetInTouchSection locale={locale} />
-
-      <div className="flex items-center justify-center gap-2">
-        <a
-          href="https://github.com/vicenteopaso/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="GitHub profile"
-          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
-        >
-          <GitHubIcon className="h-4 w-4" />
-        </a>
-
-        <a
-          href="https://linkedin.com/in/vicenteopaso/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="LinkedIn profile"
-          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
-        >
-          <LinkedInIcon className="h-4 w-4" />
-        </a>
-
-        <a
-          href="https://x.com/vicenteopaso/"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="X (Twitter) profile"
-          className="btn-outline h-8 w-8 p-0 hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
-        >
-          <XIcon className="h-4 w-4" />
-        </a>
-      </div>
+    <div className="v3-page">
+      <HeroA4 locale={locale} t={t} tocEntries={siteData.landingToc} />
+      <ImpactStrip impact={siteData.impact} />
+      <TlDrSection
+        t={t}
+        tldr={siteData.tldr}
+        tldrLabels={siteData.tldrLabels}
+      />
+      <FocusStrip t={t} focus={siteData.focus} />
+      <ExperienceTable work={work} locale={locale} t={t} />
+      <StackGrid skills={skills} t={t} />
+      <ContactBlock t={t} />
     </div>
   );
 }

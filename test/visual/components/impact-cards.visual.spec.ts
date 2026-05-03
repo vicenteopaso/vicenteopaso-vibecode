@@ -1,84 +1,70 @@
 import { expect, test } from "@playwright/test";
 
 import {
-  freezeCarouselInteractions,
   setThemeDark,
   setThemeLight,
   waitForHomepage,
-  waitForStableTransform,
+  waitForStableHeight,
 } from "../utils";
 
-test.describe("Impact Cards Visual Regression", () => {
-  test("renders impact cards in light mode", async ({ page }) => {
+test.describe("Impact Strip Visual Regression", () => {
+  test("renders impact strip in light mode", async ({ page }) => {
     await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-    await waitForStableTransform(page, '[data-testid="impact-cards"]');
+    const impactStrip = page.locator(".v3-impact-grid");
+    await expect(impactStrip).toBeVisible();
+    await waitForStableHeight(page);
 
-    const impactCards = page.locator('[data-testid="impact-cards"]');
-    await expect(impactCards).toBeVisible();
-
-    await expect(impactCards).toHaveScreenshot("impact-cards-light.png", {
+    await expect(impactStrip).toHaveScreenshot("impact-cards-light.png", {
       animations: "disabled",
     });
   });
 
-  test("renders impact cards in dark mode", async ({ page }) => {
+  test("renders impact strip in dark mode", async ({ page }) => {
     await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-    await waitForStableTransform(page, '[data-testid="impact-cards"]');
+    const impactStrip = page.locator(".v3-impact-grid");
+    await expect(impactStrip).toBeVisible();
+    await waitForStableHeight(page);
 
-    const impactCards = page.locator('[data-testid="impact-cards"]');
-    await expect(impactCards).toBeVisible();
-
-    await expect(impactCards).toHaveScreenshot("impact-cards-dark.png", {
+    await expect(impactStrip).toHaveScreenshot("impact-cards-dark.png", {
       animations: "disabled",
     });
   });
 
-  test("renders impact cards on mobile viewport", async ({ page }) => {
+  test("renders impact strip on mobile viewport", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-    await waitForStableTransform(page, '[data-testid="impact-cards"]');
+    const impactStrip = page.locator(".v3-impact-grid");
+    await expect(impactStrip).toBeVisible();
+    await waitForStableHeight(page);
 
-    const impactCards = page.locator('[data-testid="impact-cards"]');
-    await expect(impactCards).toBeVisible();
-
-    await expect(impactCards).toHaveScreenshot("impact-cards-mobile.png", {
+    await expect(impactStrip).toHaveScreenshot("impact-cards-mobile.png", {
       animations: "disabled",
     });
   });
 });
 
-test.describe("Impact Cards Individual Card Visual Regression", () => {
-  test("renders single impact card style correctly", async ({ page }) => {
+test.describe("Impact Strip Individual Card Visual Regression", () => {
+  test("renders single impact stat correctly", async ({ page }) => {
     await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    await freezeCarouselInteractions(page, '[data-testid="impact-cards"]');
-    await waitForStableTransform(page, '[data-testid="impact-cards"]');
+    const impactStrip = page.locator(".v3-impact-grid");
+    await expect(impactStrip).toBeVisible();
 
-    // Select the first visible impact card within the container
-    const impactCardsContainer = page.locator('[data-testid="impact-cards"]');
-    const impactCard = impactCardsContainer.locator(".impact-card").first();
-    await expect(impactCard).toBeVisible();
+    const firstCard = impactStrip.locator(".v3-impact-stat").first();
+    await expect(firstCard).toBeVisible();
 
-    // Scroll the card into view and ensure it's in the viewport
-    await impactCard.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
-
-    // Take a screenshot with proper clip to ensure we capture the element, not viewport
-    await expect(impactCard).toHaveScreenshot("impact-card-single-light.png", {
+    await expect(firstCard).toHaveScreenshot("impact-card-single-light.png", {
       animations: "disabled",
     });
   });

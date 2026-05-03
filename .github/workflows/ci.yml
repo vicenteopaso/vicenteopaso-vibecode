@@ -204,6 +204,9 @@ jobs:
       - name: Unit tests with coverage
         run: pnpm coverage
 
+      - name: Build
+        run: pnpm build
+
       - name: Install Playwright
         run: npx playwright install --with-deps
 
@@ -223,5 +226,3 @@ jobs:
             test-results/
           retention-days: 7
 
-      - name: Build
-        run: pnpm build

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import fs from "fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -56,7 +56,7 @@ afterEach(() => {
 });
 
 describe("CVPage", () => {
-  it("renders fallback message when CV JSON is invalid", async () => {
+  it("renders the CV shell when CV JSON is invalid", async () => {
     mockCvFs({
       locale: "en",
       cvJson: "this is not valid json",
@@ -66,13 +66,13 @@ describe("CVPage", () => {
 
     render(ui);
 
-    expect(screen.getByText("CV")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /CV data could not be loaded. Please check that the CV JSON file/i,
-      ),
+      screen.getByText(/CURRICULUM VITAE · v2026\.04/i),
     ).toBeInTheDocument();
-    expect(screen.getByText(/content\/en\/cv\.json/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /DOWNLOAD PDF/i }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/Acme Corp/i)).toBeNull();
   });
 
   it("renders CV sections when JSON is valid", async () => {
@@ -160,33 +160,27 @@ describe("CVPage", () => {
     render(ui);
 
     // Header
-    expect(screen.getByText("Vicente Opaso")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Vicente\s*Opaso/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Engineering leader")).toBeInTheDocument();
 
     // Sections
+    expect(screen.getAllByText("SUMMARY").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("EXPERIENCE").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("SKILLS").length).toBeGreaterThanOrEqual(1);
     expect(
-      screen.getByRole("heading", { name: "Experience" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Education" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Skills" })).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Languages" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Interests" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Publications" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "References" }),
-    ).toBeInTheDocument();
+      screen.getAllByText("EDUCATION · LANGUAGES").length,
+    ).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("PUBLICATIONS").length).toBeGreaterThanOrEqual(
+      1,
+    );
+    expect(screen.getAllByText("REFERENCES").length).toBeGreaterThanOrEqual(1);
 
     // Experience content
     expect(screen.getByText("Acme Corp")).toBeInTheDocument();
     expect(screen.getByText("Staff Engineer")).toBeInTheDocument();
+    expect(screen.getByText("REMOTE")).toBeInTheDocument();
 
     // References carousel rendered (at least one visible copy)
     expect(
@@ -196,7 +190,7 @@ describe("CVPage", () => {
     // Sanitizer should remove script tags from the rendered output.
     expect(document.querySelector("script")).toBeNull();
     // And should keep the visible summary text.
-    expect(screen.getByText("Summary HTML")).toBeInTheDocument();
+    expect(screen.getByText(/Summary HTML/i)).toBeInTheDocument();
   });
 
   it("handles minimal CV JSON and optional branches", async () => {
@@ -243,14 +237,16 @@ describe("CVPage", () => {
 
     render(ui);
 
-    expect(screen.getByText("SingleName")).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Experience" })).toBeNull();
     expect(
-      screen.getByRole("heading", { name: "Education" }),
+      screen.getByRole("heading", { name: /SingleName/i }),
     ).toBeInTheDocument();
+    expect(screen.queryByText("Tech Corp")).toBeNull();
+    expect(
+      screen.getAllByText("EDUCATION · LANGUAGES").length,
+    ).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Minimal University")).toBeInTheDocument();
     expect(screen.getByText("Spanish")).toBeInTheDocument();
-    expect(screen.getByText("Offline Article").closest("a")).toBeNull();
+    expect(screen.getByText("Offline Article").closest("a")).not.toBeNull();
   });
 
   it("handles CV with all optional fields missing", async () => {
@@ -275,7 +271,8 @@ describe("CVPage", () => {
 
     render(ui);
 
-    expect(screen.getByRole("heading", { name: "Test" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Test/i })).toBeInTheDocument();
+    expect(screen.getAllByText("SUMMARY").length).toBeGreaterThanOrEqual(1);
   });
 
   it("renders work experience with multiple positions", async () => {
@@ -322,20 +319,13 @@ describe("CVPage", () => {
     expect(screen.getByText("Tech Corp")).toBeInTheDocument();
     expect(screen.getByText("Senior Engineer")).toBeInTheDocument();
     expect(screen.getByText("Engineer")).toBeInTheDocument();
-    expect(screen.getByText("San Francisco")).toBeInTheDocument();
+    expect(screen.getByText("SAN FRANCISCO")).toBeInTheDocument();
   });
 
-  it("renders highlights with title when provided", async () => {
+  it("renders the shared TLDR content when work highlights are absent", async () => {
     const cvJson = {
       basics: {
         name: "Test User",
-        highlights: [
-          "Simple highlight",
-          {
-            title: "Complex Highlight",
-            content: "<p>With structured content</p>",
-          },
-        ],
       },
     };
 
@@ -349,19 +339,25 @@ describe("CVPage", () => {
 
     render(ui);
 
-    expect(screen.getByText("Simple highlight")).toBeInTheDocument();
-    expect(screen.getByText("Complex Highlight")).toBeInTheDocument();
-    expect(screen.getByText("With structured content")).toBeInTheDocument();
+    expect(screen.getByText(/TL;DR —/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /I lead engineering teams and architect frontend platforms\./i,
+      ),
+    ).toBeInTheDocument();
   });
 });
 
-describe("CV Page Social Icons", () => {
+describe("CV Page Masthead Actions", () => {
   const mockCVData = {
-    intro: "Test intro",
+    basics: {
+      name: "Vicente Opaso",
+    },
     education: [],
-    experience: [],
+    work: [],
     skills: [],
-    highlights: [],
+    languages: [],
+    publications: [],
     references: [],
   };
 
@@ -369,7 +365,7 @@ describe("CV Page Social Icons", () => {
     vi.clearAllMocks();
   });
 
-  it("should render social icons in ProfileCard when CV page loads", async () => {
+  it("renders the primary masthead actions", async () => {
     mockCvFs({
       locale: "en",
       cvJson: mockCVData,
@@ -379,24 +375,16 @@ describe("CV Page Social Icons", () => {
 
     render(ui);
 
-    await waitFor(() => {
-      const githubLinks = screen.getAllByRole("link", {
-        name: /GitHub profile/i,
-      });
-      const linkedInLinks = screen.getAllByRole("link", {
-        name: /LinkedIn profile/i,
-      });
-      const xLinks = screen.getAllByRole("link", {
-        name: /X \(Twitter\) profile/i,
-      });
-
-      expect(githubLinks.length).toBeGreaterThanOrEqual(1);
-      expect(linkedInLinks.length).toBeGreaterThanOrEqual(1);
-      expect(xLinks.length).toBeGreaterThanOrEqual(1);
-    });
+    expect(screen.getByRole("link", { name: /DOWNLOAD PDF/i })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/assets/vicente-opaso-cv-2026.pdf"),
+    );
+    expect(
+      screen.getAllByRole("link", { name: /VICENTE@OPA\.SO/i })[0],
+    ).toHaveAttribute("href", "#contact");
   });
 
-  it("should have correct hrefs for social icon links", async () => {
+  it("renders the end CTA links with the current labels", async () => {
     mockCvFs({
       locale: "en",
       cvJson: mockCVData,
@@ -406,40 +394,17 @@ describe("CV Page Social Icons", () => {
 
     render(ui);
 
-    await waitFor(() => {
-      const githubLinks = screen.getAllByRole("link", {
-        name: /GitHub profile/i,
-      });
-      expect(
-        githubLinks.some(
-          (link) =>
-            link.getAttribute("href") === "https://github.com/vicenteopaso/",
-        ),
-      ).toBe(true);
-
-      const linkedInLinks = screen.getAllByRole("link", {
-        name: /LinkedIn profile/i,
-      });
-      expect(
-        linkedInLinks.some(
-          (link) =>
-            link.getAttribute("href") ===
-            "https://linkedin.com/in/vicenteopaso/",
-        ),
-      ).toBe(true);
-
-      const xLinks = screen.getAllByRole("link", {
-        name: /X \(Twitter\) profile/i,
-      });
-      expect(
-        xLinks.some(
-          (link) => link.getAttribute("href") === "https://x.com/vicenteopaso/",
-        ),
-      ).toBe(true);
-    });
+    expect(screen.getByRole("link", { name: /GET IN TOUCH/i })).toHaveAttribute(
+      "href",
+      "/en#contact",
+    );
+    expect(screen.getByRole("link", { name: /LINKEDIN/i })).toHaveAttribute(
+      "href",
+      "https://linkedin.com/in/vicenteopaso",
+    );
   });
 
-  it("should have proper accessibility attributes on social icons", async () => {
+  it("renders the portrait image with descriptive alt text", async () => {
     mockCvFs({
       locale: "en",
       cvJson: mockCVData,
@@ -449,37 +414,10 @@ describe("CV Page Social Icons", () => {
 
     render(ui);
 
-    await waitFor(() => {
-      const githubLinks = screen.getAllByRole("link", {
-        name: /GitHub profile/i,
-      });
-      githubLinks.forEach((link) => {
-        expect(link).toHaveAttribute("aria-label", "GitHub profile");
-        expect(link).toHaveAttribute("target", "_blank");
-        expect(link).toHaveAttribute("rel", "noreferrer");
-      });
-
-      const linkedInLinks = screen.getAllByRole("link", {
-        name: /LinkedIn profile/i,
-      });
-      linkedInLinks.forEach((link) => {
-        expect(link).toHaveAttribute("aria-label", "LinkedIn profile");
-        expect(link).toHaveAttribute("target", "_blank");
-        expect(link).toHaveAttribute("rel", "noreferrer");
-      });
-
-      const xLinks = screen.getAllByRole("link", {
-        name: /X \(Twitter\) profile/i,
-      });
-      xLinks.forEach((link) => {
-        expect(link).toHaveAttribute("aria-label", "X (Twitter) profile");
-        expect(link).toHaveAttribute("target", "_blank");
-        expect(link).toHaveAttribute("rel", "noreferrer");
-      });
-    });
+    expect(screen.getByAltText("Vicente Opaso")).toBeInTheDocument();
   });
 
-  it("should render social icons with correct styling classes", async () => {
+  it("renders the LinkedIn CTA as an external link", async () => {
     mockCvFs({
       locale: "en",
       cvJson: mockCVData,
@@ -489,21 +427,12 @@ describe("CV Page Social Icons", () => {
 
     render(ui);
 
-    await waitFor(() => {
-      const socialLinks = screen.getAllByRole("link", {
-        name: /(GitHub profile|LinkedIn profile|X \(Twitter\) profile)/i,
-      });
-
-      socialLinks.forEach((link) => {
-        expect(link).toHaveClass("btn-outline");
-        expect(link).toHaveClass("h-8");
-        expect(link).toHaveClass("w-8");
-        expect(link).toHaveClass("p-0");
-      });
-    });
+    const linkedin = screen.getByRole("link", { name: /LINKEDIN/i });
+    expect(linkedin).toHaveAttribute("target", "_blank");
+    expect(linkedin).toHaveAttribute("rel", "noreferrer");
   });
 
-  it("should render download CV button with social icons in CV header", async () => {
+  it("renders the email CTA in the footer block", async () => {
     mockCvFs({
       locale: "en",
       cvJson: mockCVData,
@@ -513,11 +442,8 @@ describe("CV Page Social Icons", () => {
 
     render(ui);
 
-    await waitFor(() => {
-      const downloadButtons = screen.getAllByRole("link", {
-        name: /Download CV/i,
-      });
-      expect(downloadButtons.length).toBeGreaterThanOrEqual(1);
-    });
+    expect(
+      screen.getAllByRole("link", { name: /VICENTE@OPA\.SO/i })[1],
+    ).toHaveAttribute("href", "mailto:vicente@opa.so");
   });
 });

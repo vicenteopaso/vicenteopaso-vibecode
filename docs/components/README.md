@@ -4,16 +4,20 @@ This directory contains detailed documentation for all reusable components in th
 
 ## Component Catalog
 
-### Layout Components
+### Layout Components (v3 Brutalist)
 
-- **[Header](./Header.md)** - Site header with sticky positioning and backdrop blur
-- **[Footer](./Footer.md)** - Site footer with copyright, attribution links, and policy navigation
-- **[NavigationMenu](./NavigationMenu.md)** - Main navigation with logo, links, contact trigger, and theme toggle
+- **[BrutalistNav](./BrutalistNav.md)** - Primary site navigation: logo, nav links, locale toggle, theme toggle
+- **[BrutalistFooter](./BrutalistFooter.md)** - Primary site footer with locale-prefixed policy links
+- **[Header](./Header.md)** - Legacy site header (superseded by BrutalistNav in v3)
+- **[Footer](./Footer.md)** - Legacy site footer (superseded by BrutalistFooter in v3)
+- **[NavigationMenu](./NavigationMenu.md)** - Legacy Radix navigation menu (superseded by BrutalistNav in v3)
 
 ### UI Components
 
+- **[V3ContactForm](./V3ContactForm.md)** - Inline v3 contact form with Turnstile, name/subject/email/message
+- **[CvRefCard](./CvRefCard.md)** - CV references grid card with hover-expand overlay (replaces ReferencesCarousel)
 - **[Modal](./Modal.md)** - Base modal/dialog component with size variants and analytics
-- **[ContactDialog](./ContactDialog.md)** - Contact form with Turnstile spam protection and validation
+- **[ContactDialog](./ContactDialog.md)** - Modal contact form dialog with Turnstile spam protection
 - **[ProfileCard](./ProfileCard.md)** - User profile with avatar, name, tagline, and configurable actions
 - **[ErrorBoundary](./ErrorBoundary.md)** - React error boundary for graceful error handling
 
@@ -30,6 +34,7 @@ This directory contains detailed documentation for all reusable components in th
 
 ### Utility Components
 
+- **[LocaleProvider](./LocaleProvider.md)** - Locale context provider; persists preference to cookie and syncs `<html lang>`
 - **[GlobalErrorHandler](./GlobalErrorHandler.md)** - Global error and promise rejection handler
 - **[SeoJsonLd](./SeoJsonLd.md)** - Structured data (JSON-LD) for SEO
 - **[ThemeProvider](./ThemeProvider.md)** - Theme context provider (light/dark mode)

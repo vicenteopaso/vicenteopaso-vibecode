@@ -9,16 +9,8 @@ test("home page has title and navigation links", async ({ page }) => {
     page.getByRole("link", { name: "CV", exact: true }),
   ).toBeVisible();
 
-  // Wait for the Contact button to be visible
+  // Contact is now a nav link (not a button) that scrolls to the inline contact section
   await expect(
-    page.getByRole("button", { name: "Contact", exact: true }),
+    page.locator("header").getByRole("link", { name: "CONTACT", exact: true }),
   ).toBeVisible();
-
-  // Scroll to top, then re-query the button to ensure it is attached
-  await page.evaluate(() => window.scrollTo(0, 0));
-  const contactButton = page.getByRole("button", {
-    name: "Contact",
-    exact: true,
-  });
-  await contactButton.click();
 });

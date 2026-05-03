@@ -264,7 +264,7 @@ Always use shared utilities instead of inline waits:
 - **`freezeCarouselInteractions(page, selector)`**: Disables `pointer-events` on all buttons within selector to prevent user-driven carousel changes
 - **`waitForStableTransform(page, selector, consecutive?, intervalMs?)`**: Waits for CSS transform to stabilize
 - **`homepageMasks(page)`**: Returns `[portrait img, impact-cards]` locators for masking dynamic homepage elements
-- **`cvPageMasks(page)`**: Returns `[#references section]` locator for masking dynamic CV elements
+- **`cvPageMasks(page)`**: Returns `[#cv-references section]` locator for masking dynamic CV elements
 
 #### Handling Dynamic Content
 
@@ -272,7 +272,7 @@ This site has dynamic content that requires masking:
 
 - **ProfileCard**: `Math.random()` selects from 3 portrait images on mount
 - **ImpactCards**: Auto-rotates cards every 7s with random selection
-- **ReferencesCarousel**: Auto-rotates testimonials every 5s
+- **CvRefsGrid**: Static references grid (replaced auto-rotating carousel in v3)
 
 **Solution**: Use Playwright's `mask` option with shared utilities:
 

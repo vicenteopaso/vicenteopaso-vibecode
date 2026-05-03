@@ -344,4 +344,4 @@ See `.github/ISSUE_TEMPLATE/` for template definitions and usage guidelines.
 
 ## Last Updated
 
-This technical governance documentation was last reviewed and updated on December 13, 2024.
+This technical governance documentation was last reviewed and updated on May 3, 2026.

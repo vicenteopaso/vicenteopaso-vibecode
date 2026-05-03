@@ -51,7 +51,18 @@ Vercel uses this data for:
 Vercel acts as an independent controller.  
 Learn more: https://vercel.com/legal/privacy-policy
 
-### 4. No Tracking or Advertising Cookies
+### 4. Error Monitoring (Sentry)
+
+To diagnose bugs and improve reliability, Sentry may process:
+
+- Stack traces and error messages (no personally identifiable data unless included in a form submission)
+- Browser type, OS, and URL of the page where the error occurred
+- Session replay data (sampled, redacted of sensitive inputs)
+
+Sentry acts as a data processor under our instructions.  
+https://sentry.io/privacy/
+
+### 5. No Tracking or Advertising Cookies
 
 We do **not** use analytics tools that track identifiable behavior, nor do we use advertising cookies.
 
@@ -70,6 +81,9 @@ We rely on:
 
 ## Third-Party Data Processors
 
+- **Sentry** — processes error reports, stack traces, and optional session replay data for debugging and monitoring.  
+  Data is collected only when errors occur. Session replay is sampled at a low rate.  
+  https://sentry.io/privacy/
 - **Formspree** — processes contact form submissions securely.  
   https://formspree.io/security/
 - **Cloudflare** — processes security and anti-abuse data as an independent controller.  
@@ -109,4 +123,4 @@ https://www.aepd.es/
 For privacy matters, contact us at:  
 **contact@opa.so**
 
-_Last updated: November 26, 2025_
+_Last updated: May 3, 2026_

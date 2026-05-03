@@ -19,6 +19,7 @@ describe("proxy (middleware)", () => {
   function createMockRequest(
     pathname: string,
     acceptLanguage?: string,
+    preferredLocale?: string,
   ): NextRequest {
     const url = new URL(pathname, "http://localhost:3000");
 
@@ -39,10 +40,38 @@ describe("proxy (middleware)", () => {
     return {
       nextUrl: urlWithClone,
       headers,
+      cookies: {
+        get: (name: string) =>
+          name === "preferred-locale" && preferredLocale
+            ? { value: preferredLocale }
+            : undefined,
+      },
     } as NextRequest;
   }
 
   describe("Spanish locale detection and redirect", () => {
+    it("should prioritize preferred locale cookie over accept-language", () => {
+      const req = createMockRequest("/", "en-US,en;q=0.9", "es");
+      const response = proxy(req);
+
+      expect(response).toBeInstanceOf(NextResponse);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es",
+      );
+    });
+
+    it("should ignore unsupported preferred locale cookies", () => {
+      const req = createMockRequest("/", "es-ES,es;q=0.9", "fr");
+      const response = proxy(req);
+
+      expect(response).toBeInstanceOf(NextResponse);
+      expect((response as NextResponse).status).toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBe(
+        "http://localhost:3000/es",
+      );
+    });
+
     it("should redirect Spanish browsers from / to /es", () => {
       const req = createMockRequest("/", "es-ES,es;q=0.9");
       const response = proxy(req);

@@ -3,7 +3,7 @@ name: Vicente Opaso
 title: Vicente Opaso
 slug: about
 tagline: Web Engineering Manager. Frontend Architect. Design Systems & DevEx Leader.
-underhero: 25 + years of driving scalable, high-performance web platforms in enterprise, e-commerce & mission-critical domains.
+underhero: 15+ years of driving scalable, high-performance web platforms in enterprise, e-commerce & mission-critical domains.
 initials: VO
 ---
 

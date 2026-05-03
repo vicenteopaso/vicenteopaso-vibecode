@@ -20,6 +20,15 @@ opa.so utiliza **solo una categoría** de cookies:
 - Necesidad: Requerida para la seguridad y funcionalidad del sitio.
 - Base legal: **Interés Legítimo** (Artículo 6(1)(f) del RGPD).
 
+### 2. Cookie Funcional (Preferencia de Idioma)
+
+- **Nombre**: `preferred-locale`
+- **Propósito**: Recuerda tu preferencia de idioma (inglés o español) para que se sirva el idioma correcto en tu próxima visita sin necesidad de redirección.
+- **Establecida por**: El propio sitio (componente `LocaleProvider`) al visitar cualquier página.
+- **Caducidad**: 1 año (`max-age=31536000`).
+- **Datos personales procesados**: Ninguno — almacena únicamente `"en"` o `"es"`.
+- **Base legal**: **Interés Legítimo** (Artículo 6(1)(f) RGPD) — necesario para el enrutamiento de idioma consistente.
+
 ### Sin Cookies de Analítica, Marketing o Seguimiento
 
 No utilizamos Google Analytics, rastreadores de marketing ni cookies publicitarias de terceros.
@@ -34,4 +43,4 @@ Cookies de Cloudflare: https://www.cloudflare.com/cookies/
 Privacidad de Cloudflare: https://www.cloudflare.com/privacypolicy/  
 Seguridad de Formspree: https://formspree.io/security/
 
-_Última actualización: 26 de noviembre de 2025_
+_Última actualización: 3 de mayo de 2026_

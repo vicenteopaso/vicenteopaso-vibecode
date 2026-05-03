@@ -1,0 +1,101 @@
+{
+  "tldr": [
+    "Lidero equipos de ingeniería y arquitecto plataformas frontend.",
+    "Me importa la arquitectura componible, los sistemas de diseño y la experiencia de desarrollador.",
+    "Entrego productos accesibles, performantes y globalmente localizados.",
+    "Escalo Comunidades de Práctica y mentorizo equipos distribuidos.",
+    "Soy, muy probablemente, el único Arquitecto Frontend que conocerás que también fue ingeniero RF en Nokia."
+  ],
+  "tldrLabels": ["QUIÉN", "OFICIO", "ENTREGO", "ESCALO", "EXTRA"],
+  "focus": [
+    {
+      "h": "Arquitectura Frontend",
+      "b": "Ecosistemas React / Next.js componibles construidos para entrega global."
+    },
+    {
+      "h": "Sistemas de Diseño & UI",
+      "b": "Librerías de componentes, tokens, accesibilidad, consistencia multi-plataforma."
+    },
+    {
+      "h": "Experiencia de Desarrollador",
+      "b": "Automatización CI/CD, guardrails de calidad de código, onboarding, tooling."
+    },
+    {
+      "h": "Liderazgo en Ingeniería",
+      "b": "Equipos distribuidos, estrategia, alineando producto, diseño e ingeniería."
+    },
+    {
+      "h": "Rendimiento, A11y & SEO",
+      "b": "Core Web Vitals, edge delivery, WCAG 2.1, SEO técnico."
+    }
+  ],
+  "impact": [
+    { "k": "25%", "v": "Mejora en Core Web Vitals en 6 mercados" },
+    { "k": "40%", "v": "Reducción de fricción en releases vía CI/CD" },
+    {
+      "k": "€1B+",
+      "v": "Facturación anual en plataformas que he arquitectado"
+    },
+    { "k": "15y+", "v": "Entregando en la web — y 10 años en telco antes" }
+  ],
+  "landingToc": [
+    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "La versión de 5 puntos" },
+    {
+      "n": "02",
+      "id": "what-i-do",
+      "t": "QUÉ HAGO",
+      "s": "Cinco áreas de enfoque"
+    },
+    {
+      "n": "03",
+      "id": "experience",
+      "t": "EXPERIENCIA",
+      "s": "15+ años · 8 roles"
+    },
+    {
+      "n": "04",
+      "id": "tech-tools",
+      "t": "TECH & HERRAMIENTAS",
+      "s": "El stack actual"
+    },
+    { "n": "05", "id": "contact", "t": "CONTACTO", "s": "Hablemos" }
+  ],
+  "cvToc": [
+    {
+      "n": "01",
+      "id": "cv-summary",
+      "t": "RESUMEN",
+      "s": "TL;DR + puntos clave"
+    },
+    {
+      "n": "02",
+      "id": "cv-experience",
+      "t": "EXPERIENCIA",
+      "s": "8 roles · 15 años en la web"
+    },
+    {
+      "n": "03",
+      "id": "cv-skills",
+      "t": "HABILIDADES",
+      "s": "Lenguajes · frameworks · herramientas"
+    },
+    {
+      "n": "04",
+      "id": "cv-education",
+      "t": "FORMACIÓN",
+      "s": "Educación e idiomas"
+    },
+    {
+      "n": "05",
+      "id": "cv-publications",
+      "t": "PUBLICACIONES",
+      "s": "Escritura seleccionada"
+    },
+    {
+      "n": "06",
+      "id": "cv-references",
+      "t": "REFERENCIAS",
+      "s": "Lo que dicen de mí"
+    }
+  ]
+}

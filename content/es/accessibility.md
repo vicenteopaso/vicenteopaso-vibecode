@@ -145,7 +145,7 @@ Esta declaración hace referencia a los siguientes estándares:
 
 ## Última Actualización
 
-Esta declaración de accesibilidad fue revisada y actualizada el 27 de noviembre de 2025.
+Esta declaración de accesibilidad fue revisada y actualizada el 3 de mayo de 2026.
 
 ---
 

@@ -51,7 +51,18 @@ Vercel utiliza estos datos para:
 Vercel actúa como un controlador independiente.  
 Más información: https://vercel.com/legal/privacy-policy
 
-### 4. Sin Cookies de Seguimiento o Publicidad
+### 4. Monitorización de Errores (Sentry)
+
+Para diagnosticar errores y mejorar la fiabilidad, Sentry puede procesar:
+
+- Trazas de pila y mensajes de error (sin datos de identificación personal salvo que estén incluidos en un envío de formulario)
+- Tipo de navegador, sistema operativo y URL de la página donde ocurrió el error
+- Datos de reproducción de sesión (muestreados y con redacción de entradas sensibles)
+
+Sentry actúa como encargado del tratamiento bajo nuestras instrucciones.  
+https://sentry.io/privacy/
+
+### 5. Sin Cookies de Seguimiento o Publicidad
 
 No utilizamos herramientas de analítica que rastreen comportamiento identificable ni empleamos cookies de publicidad.
 
@@ -70,6 +81,9 @@ Nos basamos en:
 
 ## Procesadores Externos
 
+- **Sentry** — procesa informes de errores, trazas de pila y datos opcionales de reproducción de sesión para depuración y monitorización.  
+  Los datos solo se recopilan cuando se producen errores. La reproducción de sesión tiene una tasa de muestreo baja.  
+  https://sentry.io/privacy/
 - **Formspree** — procesa de forma segura los envíos del formulario de contacto.  
   https://formspree.io/security/
 - **Cloudflare** — procesa datos de seguridad y anti-abuso como controlador independiente.  
@@ -109,4 +123,4 @@ https://www.aepd.es/
 Para asuntos de privacidad, puedes contactarnos en:  
 **contact@opa.so**
 
-_Última actualización: 26 de noviembre de 2025_
+_Última actualización: 3 de mayo de 2026_

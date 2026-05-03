@@ -12,7 +12,7 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 
 - **Next.js 16** — App Router with React Server Components (RSC), static site generation (SSG), and typed routes
 - **React 19.2** — UI library with server components and progressive enhancement
-- **TypeScript 5.6** — Strict type checking end-to-end
+- **TypeScript 6.0** — Strict type checking end-to-end
 - **Node.js 24** — Runtime environment (LTS)
 
 ## Styling & UI Components
@@ -45,39 +45,38 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 
 ## Testing & Quality Assurance
 
-- **Vitest 2.1** — Unit testing framework with jsdom environment
+- **Vitest 4.1** — Unit testing framework with jsdom environment
 - **@vitest/coverage-v8** — Code coverage reporting
-- **Playwright 1.57** — End-to-end testing
+- **Playwright 1.59** — End-to-end testing
 - **@testing-library/react** — React component testing utilities
 - **@testing-library/jest-dom** — DOM matchers for testing
 - **@testing-library/dom** — DOM testing utilities
 
 ## Code Quality & Linting
 
-- **ESLint 9.39** — Code linting with:
+- **ESLint 10.3** — Code linting with:
   - `eslint-config-next` — Next.js recommended rules
   - `@typescript-eslint/eslint-plugin` — TypeScript-specific rules
   - `eslint-plugin-jsx-a11y` — Accessibility linting
   - `eslint-plugin-security` — Security-focused rules
   - `eslint-plugin-simple-import-sort` — Import sorting
   - `eslint-config-prettier` — Prettier integration
-- **Prettier 3.7** — Code formatting
+- **Prettier 3.8** — Code formatting
 - **Husky 9.1** — Git hooks
-- **lint-staged 15.2** — Pre-commit linting and formatting
+- **lint-staged 16.4** — Pre-commit linting and formatting
 
 ## Observability & Monitoring
 
 - **Vercel Analytics** — Page views and user interactions
 - **Vercel Speed Insights** — Core Web Vitals and performance metrics
-- **Sentry (@sentry/nextjs 10.29)** — Error tracking, session replay, and alerting
+- **Sentry (@sentry/nextjs 10.49)** — Error tracking, session replay, and alerting
 - **Vercel Logs** — Server-side error logs
 
 ## Build & Deployment
 
 - **Vercel** — Hosting, CDN, and edge network deployment
 - **next-sitemap 4.2** — Automatic sitemap and robots.txt generation
-- **@vercel/og 0.6** — Open Graph image generation
-- **pnpm 10.24** — Package manager
+- **pnpm 10.32** — Package manager
 
 ## Development Tools
 
@@ -91,7 +90,7 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 - **Static Site Generation (SSG)** — Pre-rendered pages at build time
 - **Server Components** — Reduced client-side JavaScript
 - **Image Optimization** — Next.js automatic image optimization
-- **Font Optimization** — Self-hosted variable fonts (Inter) with `font-display: swap`
+- **Font Optimization** — Google Fonts via `next/font/google`: Instrument Serif and JetBrains Mono, with `font-display: swap`
 - **JSON-LD Structured Data** — Schema.org markup for SEO
 - **Open Graph & Twitter Cards** — Social media previews
 
@@ -109,7 +108,7 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 - **GitHub Actions** — Continuous integration and deployment
 - **Dependabot** — Automated dependency updates
 - **Lighthouse CI** — Performance and accessibility audits
-- **Coverage Thresholds** — Enforced via Vitest (90% lines, 85% branches, 90% functions)
+- **Coverage Thresholds** — Enforced via Vitest (90% lines, statements, branches, functions)
 
 ## Design System
 

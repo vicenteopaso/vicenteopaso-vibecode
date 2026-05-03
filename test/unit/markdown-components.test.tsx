@@ -55,7 +55,7 @@ describe("markdownComponents", () => {
 
     const unordered = container.querySelector("ul");
     expect(unordered).not.toBeNull();
-    expect(unordered).toHaveClass("list-disc");
+    expect(unordered).toHaveClass("list-none");
 
     const ordered = container.querySelector("ol");
     expect(ordered).not.toBeNull();
@@ -103,7 +103,7 @@ describe("aboutPageComponents", () => {
 
     const unordered = container.querySelector("ul");
     expect(unordered).not.toBeNull();
-    expect(unordered).toHaveClass("space-y-3");
+    expect(unordered).toHaveClass("space-y-1.5");
 
     const ordered = container.querySelector("ol");
     expect(ordered).not.toBeNull();

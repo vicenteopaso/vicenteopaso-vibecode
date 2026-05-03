@@ -4,8 +4,8 @@
   "slug": "cv",
   "basics": {
     "name": "Vicente Opaso",
-    "label": "Web Engineering Manager y Frontend Architect. Composable Platforms, Design Systems y Developer Experience. Más de 25 años entregando productos digitales de alto impacto.",
-    "summary": "Soy Web Engineering Manager y Frontend Architect con más de 25 años diseñando, escalando y manteniendo plataformas digitales de alto rendimiento en entornos empresariales, de comercio electrónico y de misión crítica. Me especializo en arquitectura composable, Design Systems y Developer Experience (DevEx), alineando tecnología, diseño y estrategia para entregar productos accesibles, performantes y mantenibles. He liderado equipos multifuncionales, modernizado CI/CD y la gobernanza del código, y fortalecido la cultura técnica mediante mentoría y Communities of Practice. Mi enfoque combina arquitectura técnica con empatía de diseño y disciplina operativa para lograr resultados duraderos y alineados al negocio.",
+    "label": "Web Engineering Manager y Frontend Architect. Composable Platforms, Design Systems y Developer Experience. Más de 15 años entregando productos digitales de alto impacto.",
+    "summary": "Soy Web Engineering Manager y Frontend Architect con más de 15 años diseñando, escalando y manteniendo plataformas digitales de alto rendimiento en entornos empresariales, de comercio electrónico y de misión crítica. Me especializo en arquitectura composable, Design Systems y Developer Experience (DevEx), alineando tecnología, diseño y estrategia para entregar productos accesibles, performantes y mantenibles. He liderado equipos multifuncionales, modernizado CI/CD y la gobernanza del código, y fortalecido la cultura técnica mediante mentoría y Communities of Practice. Mi enfoque combina arquitectura técnica con empatía de diseño y disciplina operativa para lograr resultados duraderos y alineados al negocio.",
     "highlights": [
       {
         "title": "Web Engineering Manager en Nexthink",
@@ -43,7 +43,7 @@
       "location": "Híbrido",
       "positions": [
         {
-          "position": "Manager of Web Engineering",
+          "position": "Responsable de Ingeniería Web",
           "startDate": "2025-07",
           "endDate": "2025-11",
           "summary": "Lideré un equipo multifuncional de 5 personas —incluyendo una persona de UI/UX Design— detrás de nexthink.com, la plataforma web composable global que respalda marca, marketing y estrategia de producto. Me enfoqué en estructura de equipo, DevEx y colaboración diseño‑ingeniería para ofrecer experiencias escalables, fiables y localizadas.",
@@ -82,7 +82,7 @@
       "location": "Bruselas, Bélgica (Onsite)",
       "positions": [
         {
-          "position": "Technical Application Owner (User Domain)",
+          "position": "Propietario Técnico de Aplicación (Dominio Usuario)",
           "startDate": "2025-02",
           "endDate": "2025-07",
           "summary": "Lideré la gobernanza frontend, coordinación de equipo y modernización para sistemas críticos de aviación en el Network Manager Operations Centre (NMOC). Coordiné un equipo multifuncional de 10 personas (ingeniería, diseño, SM, PO y QA) dentro de una organización de desarrollo de más de 20 personas, conectando ingeniería, producto y stakeholders regulatorios en un entorno de seguridad aérea.",
@@ -117,7 +117,7 @@
       "location": "Lisboa, Portugal (Híbrido)",
       "positions": [
         {
-          "position": "Frontend Solutions Architect",
+          "position": "Arquitecto de Soluciones Frontend",
           "startDate": "2022-12",
           "endDate": "2024-12",
           "summary": "Lideré el diseño y entrega de arquitecturas frontend escalables para plataformas globales B2B y de marketing, alineando ingeniería con prioridades comerciales y madurez DevEx.",
@@ -144,7 +144,7 @@
           ]
         },
         {
-          "position": "Solutions Architect – Digital Marketing & Consumer Tech",
+          "position": "Arquitecto de Soluciones – Marketing Digital & Consumer Tech",
           "startDate": "2022-12",
           "endDate": "2024-07",
           "summary": "Diseñé y entregué soluciones globales de marketing (Cookie Consent, Age Gateway, Global Policies) con TypeScript/React y CMS headless (principalmente Umbraco), equilibrando cumplimiento, localización (i18n) y rendimiento.",
@@ -166,7 +166,7 @@
           ]
         },
         {
-          "position": "Lead Developer & Architect – Malty Design System",
+          "position": "Desarrollador Principal y Arquitecto – Malty Design System",
           "startDate": "2021-01",
           "endDate": "2022-12",
           "summary": "Lideré la arquitectura, desarrollo y adopción de Malty—un Design System React/TypeScript empresarial con modelo de inner-sourcing. Escalé contribución, gobernanza y documentación para habilitar la reutilización entre productos.",
@@ -187,7 +187,7 @@
           ]
         },
         {
-          "position": "Principal Frontend Developer",
+          "position": "Desarrollador Frontend Principal",
           "startDate": "2021-03",
           "endDate": "2022-12",
           "summary": "Responsable de la entrega de aplicaciones clave dentro del ecosistema de Carlsberg, co-gestionando CarlShop+ (B2B, €1B+ ingresos) y liderando el frontend para CADI (CRM interno), mientras mentoraba desarrolladores y mejoraba prácticas de entrega.",
@@ -207,7 +207,7 @@
           ]
         },
         {
-          "position": "Lead Frontend Developer",
+          "position": "Desarrollador Frontend Líder",
           "startDate": "2020-01",
           "endDate": "2021-03",
           "summary": "Me uní al equipo digital de Carlsberg para co-crear una plataforma interna de microfrontends Single-SPA con TypeScript/React en AWS, y establecer automatización CI/CD con GitHub Actions.",
@@ -232,7 +232,7 @@
       "location": "Naperville, IL, USA",
       "positions": [
         {
-          "position": "Co-founder & Principal",
+          "position": "Cofundador y Principal",
           "startDate": "2012-03",
           "endDate": "2019-06",
           "summary": "Co-fundé un estudio digital entregando plataformas web y móviles para clientes enterprise y sector público, incluyendo General Motors, GO GROUND (NCAA) y el Paulson Institute. Supervisé ingeniería, UX y operaciones de entrega, mentorando un equipo multifuncional.",
@@ -260,7 +260,7 @@
       "location": "Remoto | Chicago, IL",
       "positions": [
         {
-          "position": "Senior Frontend Developer",
+          "position": "Desarrollador Frontend Senior",
           "startDate": "2018-12",
           "endDate": "2019-06",
           "summary": "Lideré un equipo distribuido entregando una plataforma sanitaria personalizada en Angular. Supervisé UX, diseño de base de datos y UI. Gestioné relación con clientes, documentación y entrega Agile.",
@@ -285,7 +285,7 @@
       "location": "Remoto | Chicago, IL",
       "positions": [
         {
-          "position": "A/B Testing Developer",
+          "position": "Desarrollador de Testing A/B",
           "startDate": "2018-06",
           "endDate": "2018-11",
           "summary": "Construí y desplegué experimentos A/B y multivariante para clientes globales de e-commerce, mejorando engagement y conversión mediante iteración UX y diseño basado en analítica.",
@@ -309,7 +309,7 @@
       "location": "Chicago, IL",
       "positions": [
         {
-          "position": "Frontend Developer",
+          "position": "Desarrollador Frontend",
           "startDate": "2011-04",
           "endDate": "2012-04",
           "summary": "Entregué micrositios y herramientas internas de alta calidad para clientes como Hilton Hotels, Anheuser-Busch y Omron. Enfocado en interfaces responsivas, accesibles y optimizadas para SEO.",
@@ -333,7 +333,7 @@
       "location": "Estados Unidos (viajando)",
       "positions": [
         {
-          "position": "Contracting Engineer",
+          "position": "Ingeniero de Contratación",
           "startDate": "2001-10",
           "endDate": "2011-03",
           "summary": "Gestioné despliegues nacionales de telecomunicaciones para clientes como T-Mobile, AT&T y Alascom. Dirigí equipos de ingeniería, aseguré cumplimiento y mantuve relaciones con clientes.",
@@ -356,12 +356,12 @@
   "skills": [
     {
       "name": "JavaScript",
-      "level": "Master",
+      "level": "Experto",
       "keywords": ["TypeScript", "Node.js", "ECMAScript", "Micro Frontends"]
     },
     {
-      "name": "Frontend Development",
-      "level": "Master",
+      "name": "Desarrollo Frontend",
+      "level": "Experto",
       "keywords": [
         "React",
         "Next.js",
@@ -379,8 +379,8 @@
       ]
     },
     {
-      "name": "Design Systems",
-      "level": "Master",
+      "name": "Sistemas de Diseño",
+      "level": "Experto",
       "keywords": [
         "Figma",
         "Storybook",
@@ -390,8 +390,8 @@
       ]
     },
     {
-      "name": "Developer Experience",
-      "level": "Master",
+      "name": "Experiencia de Desarrollador",
+      "level": "Experto",
       "keywords": [
         "CI/CD Optimization",
         "GitHub Actions",
@@ -403,12 +403,12 @@
     },
     {
       "name": "AWS",
-      "level": "Advanced",
+      "level": "Avanzado",
       "keywords": ["S3", "CloudFront", "Lambda", "CloudWatch", "Amplify"]
     },
     {
       "name": "GitHub",
-      "level": "Advanced",
+      "level": "Avanzado",
       "keywords": [
         "GitHub Actions",
         "Pages",
@@ -419,7 +419,7 @@
     },
     {
       "name": "HTML",
-      "level": "Master",
+      "level": "Experto",
       "keywords": [
         "HTML5",
         "Web Components",
@@ -430,12 +430,12 @@
     },
     {
       "name": "CSS",
-      "level": "Master",
+      "level": "Experto",
       "keywords": ["Tailwind CSS", "Sass", "Less", "CSS-in-JS"]
     },
     {
-      "name": "Testing",
-      "level": "Basic",
+      "name": "Pruebas & Testing",
+      "level": "Básico",
       "keywords": ["Jest", "Cypress", "React Testing Library"]
     }
   ],

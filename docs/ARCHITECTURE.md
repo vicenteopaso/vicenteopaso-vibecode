@@ -25,7 +25,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 
 - **Runtime**: Node.js (LTS)
 - **Framework**: Next.js 16 (App Router, RSC)
-- **Content**: Markdown + JSON CV, with Contentlayer configured for future refactors
+- **Content**: Markdown + JSON CV; Contentlayer wraps the Next.js build (`withContentlayer`) and is used for typed content builds
 - **Styling**: Tailwind CSS v4 + Radix UI primitives
 - **Deployment**: Vercel
 - **Testing**: Unit (Vitest) + E2E (Playwright)
@@ -120,7 +120,7 @@ introduced only where interactivity is required.
 - `content/[locale]/about.md` contains frontmatter and markdown for the About page
 - `content/[locale]/cv.md` contains frontmatter and a JSON object in the markdown body for the CV
 - Pages under `app/[lang]/` read locale-specific content files at build time using `fs` + `gray-matter` / `JSON.parse`
-- Contentlayer is configured and may be used in the future, but currently the filesystem (markdown files) is the source of truth for content at build time
+- Contentlayer wraps the Next.js build via `withContentlayer` in `next.config.mjs`. Markdown files in `content/` remain the source of truth for content
 
 **Content Rendering Flow:**
 

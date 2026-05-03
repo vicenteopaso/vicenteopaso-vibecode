@@ -1,7 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import type { Locale } from "@/lib/i18n";
 import { defaultLocale, locales } from "@/lib/i18n";
@@ -13,30 +12,31 @@ interface LocaleContextType {
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
-export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const params = useParams();
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
-  const [mounted, setMounted] = useState(false);
+function persistLocale(locale: Locale) {
+  localStorage.setItem("preferred-locale", locale);
+  document.cookie = `preferred-locale=${locale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
+  document.documentElement.lang = locale;
+}
 
-  // Sync locale with URL params and localStorage
+export function LocaleProvider({
+  initialLocale = defaultLocale,
+  children,
+}: {
+  initialLocale?: Locale;
+  children: React.ReactNode;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
+
+  // On mount, persist the server-determined locale to storage/cookie/<html lang>
   useEffect(() => {
-    const urlLocale = (params?.lang as Locale) || defaultLocale;
-    if (locales.includes(urlLocale)) {
-      setLocaleState(urlLocale);
-      localStorage.setItem("preferred-locale", urlLocale);
-    }
-    setMounted(true);
-  }, [params?.lang]);
+    persistLocale(initialLocale);
+  }, []); // intentional: only persist on mount, not on every initialLocale change
 
-  const setLocale = (newLocale: Locale) => {
+  const setLocale = useCallback((newLocale: Locale) => {
+    if (!locales.includes(newLocale)) return;
     setLocaleState(newLocale);
-    localStorage.setItem("preferred-locale", newLocale);
-  };
-
-  // Don't render until mounted to avoid hydration mismatch
-  if (!mounted) {
-    return <>{children}</>;
-  }
+    persistLocale(newLocale);
+  }, []);
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
