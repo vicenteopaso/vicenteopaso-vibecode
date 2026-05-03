@@ -513,7 +513,7 @@ function PublicationsSection({ publications, t }: { publications: Array<{ name: 
 function ReferencesSection({ references, t }: { references: Array<{ name: string; reference: string }>; t: T }) {
   const refs = references.map((ref) => {
     const { name, role } = parseRefName(ref.name);
-    return { name, role, fullText: ref.reference.replace(/<[^>]+>/g, "") };
+    return { name, role, fullText: stripHtmlLikeDelimiters(ref.reference) };
   });
   return (
     <section id="cv-references" style={{ padding: "48px 32px", ...rule2 }}>
