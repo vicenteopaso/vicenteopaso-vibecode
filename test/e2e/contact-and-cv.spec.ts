@@ -5,7 +5,7 @@ import { expect, type Page, test } from "@playwright/test";
  * The contact form is now rendered inline on the homepage at the #contact section.
  */
 async function navigateToContactSection(page: Page) {
-  await page.goto("/en", { waitUntil: "networkidle" });
+  await page.goto("/en", { waitUntil: "load" });
   await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
   await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
   await expect(page.getByLabel("EMAIL *")).toBeVisible({ timeout: 15000 });
@@ -38,7 +38,7 @@ test.describe("Contact form - mobile viewport", () => {
   test.use({ viewport: { width: 375, height: 667 } });
 
   test("contact form is visible on mobile", async ({ page }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
     await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
     await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
 
@@ -52,7 +52,7 @@ test.describe("Contact form - mobile viewport", () => {
   test("contact form renders correctly on mobile viewport", async ({
     page,
   }) => {
-    await page.goto("/en", { waitUntil: "networkidle" });
+    await page.goto("/en", { waitUntil: "load" });
     await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
     await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
 
