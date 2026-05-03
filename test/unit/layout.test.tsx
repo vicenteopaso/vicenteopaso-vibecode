@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/script", () => ({
@@ -53,18 +53,25 @@ vi.mock("../../app/components/WebMcpInit", () => ({
   WebMcpInit: () => <div data-testid="webmcp-init" />,
 }));
 
+
+vi.mock("next/headers", () => ({
+  headers: () =>
+    Promise.resolve({
+      get: (key: string) => (key === "x-locale" ? "en" : null),
+    }),
+}));
+
 import RootLayout from "../../app/layout";
 
 describe("RootLayout", () => {
-  it("wraps children in main content area and includes shell components", () => {
+  it("wraps children in main content area and includes shell components", async () => {
     // Suppress hydration warning for <html> element in test environment
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    render(
-      <RootLayout>
-        <div data-testid="child">Hello world</div>
-      </RootLayout>,
-    );
+    // RootLayout is an async Server Component; call it directly to get resolved JSX,
+    // then render synchronously (JSDOM doesn't support async components natively).
+    const jsx = await RootLayout({ children: <div data-testid="child">Hello world</div> });
+    render(jsx);
 
     consoleSpy.mockRestore();
 
