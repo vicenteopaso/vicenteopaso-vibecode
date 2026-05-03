@@ -145,7 +145,7 @@ This statement references the following standards:
 
 ## Last Updated
 
-This accessibility statement was last reviewed and updated on November 27, 2025.
+This accessibility statement was last reviewed and updated on May 3, 2026.
 
 ---
 

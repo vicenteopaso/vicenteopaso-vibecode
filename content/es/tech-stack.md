@@ -12,7 +12,7 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 
 - **Next.js 16** — App Router con React Server Components (RSC), generación estática (SSG) y rutas tipadas
 - **React 19.2** — Librería UI con server components y mejora progresiva
-- **TypeScript 5.6** — Tipado estricto de extremo a extremo
+- **TypeScript 6.0** — Tipado estricto de extremo a extremo
 - **Node.js 24** — Entorno de ejecución (LTS)
 
 ## Estilos y Componentes UI
@@ -45,39 +45,38 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 
 ## Testing y Aseguramiento de Calidad
 
-- **Vitest 2.1** — Framework de tests unitarios con entorno jsdom
+- **Vitest 4.1** — Framework de tests unitarios con entorno jsdom
 - **@vitest/coverage-v8** — Reportes de cobertura
-- **Playwright 1.57** — End-to-end testing
+- **Playwright 1.59** — End-to-end testing
 - **@testing-library/react** — Utilidades para testear componentes React
 - **@testing-library/jest-dom** — Matchers DOM
 - **@testing-library/dom** — Utilidades para pruebas DOM
 
 ## Calidad de Código y Linting
 
-- **ESLint 9.39** — Linter con configuraciones:
+- **ESLint 10.3** — Linter con configuraciones:
   - `eslint-config-next` — Reglas recomendadas para Next.js
   - `@typescript-eslint/eslint-plugin` — Reglas específicas para TypeScript
   - `eslint-plugin-jsx-a11y` — Accesibilidad
   - `eslint-plugin-security` — Reglas de seguridad
   - `eslint-plugin-simple-import-sort` — Ordenación de imports
   - `eslint-config-prettier` — Integración con Prettier
-- **Prettier 3.7** — Formateo de código
+- **Prettier 3.8** — Formateo de código
 - **Husky 9.1** — Git hooks
-- **lint-staged 15.2** — Linting y formateo pre-commit
+- **lint-staged 16.4** — Linting y formateo pre-commit
 
 ## Observabilidad y Monitoreo
 
 - **Vercel Analytics** — Métricas de interacción y visitas
 - **Vercel Speed Insights** — Core Web Vitals y métricas de rendimiento
-- **Sentry (@sentry/nextjs 10.29)** — Tracking de errores, session replay y alertas
+- **Sentry (@sentry/nextjs 10.49)** — Tracking de errores, session replay y alertas
 - **Vercel Logs** — Logs de errores del servidor
 
 ## Build y Deployment
 
 - **Vercel** — Hosting, CDN y despliegue en edge network
 - **next-sitemap 4.2** — Generación automática de sitemap y robots.txt
-- **@vercel/og 0.6** — Generación de imágenes Open Graph
-- **pnpm 10.24** — Gestor de paquetes
+- **pnpm 10.32** — Gestor de paquetes
 
 ## Herramientas de Desarrollo
 
@@ -91,7 +90,7 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 - **Static Site Generation (SSG)** — Páginas prerenderizadas en build
 - **Server Components** — Menos JavaScript en el cliente
 - **Optimización de Imágenes** — Optimización automática de Next.js
-- **Optimización de Fuentes** — Fuentes variables autoalojadas (Inter) con `font-display: swap`
+- **Optimización de Fuentes** — Google Fonts via `next/font/google`: Instrument Serif y JetBrains Mono, con `font-display: swap`
 - **JSON-LD Structured Data** — Marcado Schema.org para SEO
 - **Open Graph y Twitter Cards** — Previews sociales
 
@@ -109,7 +108,7 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 - **GitHub Actions** — Integración y despliegue continuo
 - **Dependabot** — Actualizaciones automatizadas de dependencias
 - **Lighthouse CI** — Auditorías de rendimiento y accesibilidad
-- **Coverage Thresholds** — Límites de cobertura aplicados vía Vitest (90% líneas, 85% ramas, 90% funciones)
+- **Coverage Thresholds** — Límites de cobertura aplicados vía Vitest (90% líneas, sentencias, ramas y funciones)
 
 ## Design System
 

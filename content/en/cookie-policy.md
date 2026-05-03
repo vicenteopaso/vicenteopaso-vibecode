@@ -20,6 +20,15 @@ opa.so uses **only one category** of cookie:
 - Necessity: Required for site security and functionality.
 - Legal basis: **Legitimate Interest** (Article 6(1)(f) GDPR).
 
+### 2. Functional Cookie (Locale Preference)
+
+- **Name**: `preferred-locale`
+- **Purpose**: Remembers your language preference (English or Spanish) so the correct locale is served on your next visit without requiring a redirect.
+- **Set by**: The site itself (`LocaleProvider` component) when you visit any page.
+- **Expiry**: Session / browser default (no explicit max-age set).
+- **Personal data processed**: None — stores only `"en"` or `"es"`.
+- **Legal basis**: **Legitimate Interest** (Article 6(1)(f) GDPR) — required for consistent language routing.
+
 ### No Analytics, Marketing, or Tracking Cookies
 
 We do not use Google Analytics, marketing trackers, or any third-party advertising cookies.
@@ -34,4 +43,4 @@ Cloudflare Cookies: https://www.cloudflare.com/cookies/
 Cloudflare Privacy: https://www.cloudflare.com/privacypolicy/  
 Formspree Security: https://formspree.io/security/
 
-_Last updated: November 26, 2025_
+_Last updated: May 3, 2026_
