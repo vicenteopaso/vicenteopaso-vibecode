@@ -130,7 +130,9 @@ export const aboutPageComponents: Components = {
   ),
   li: ({ children, ...props }) => (
     <li className="flex gap-2 items-baseline" {...props}>
-      <span className="font-mono text-[color:var(--v3-accent)] shrink-0">→</span>
+      <span className="font-mono text-[color:var(--v3-accent)] shrink-0">
+        →
+      </span>
       <span>{children}</span>
     </li>
   ),
@@ -160,7 +162,9 @@ export const introComponents: Components = {
   ),
   li: ({ children, ...props }) => (
     <li className="flex gap-2 items-baseline" {...props}>
-      <span className="font-mono text-[color:var(--v3-accent)] shrink-0">→</span>
+      <span className="font-mono text-[color:var(--v3-accent)] shrink-0">
+        →
+      </span>
       <span>{children}</span>
     </li>
   ),

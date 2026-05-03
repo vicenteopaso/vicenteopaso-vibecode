@@ -6,20 +6,21 @@ vi.mock("next/script", () => ({
   default: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
 }));
 
-vi.mock("@vercel/analytics/next", () => ({
-  Analytics: () => <div data-testid="analytics" />,
+vi.mock("next/font/google", () => ({
+  Instrument_Serif: () => ({ variable: "font-instrument-serif" }),
+  JetBrains_Mono: () => ({ variable: "font-jetbrains-mono" }),
 }));
 
-vi.mock("@vercel/speed-insights/next", () => ({
-  SpeedInsights: () => <div data-testid="speed-insights" />,
+vi.mock("../../app/components/AnalyticsWrapper", () => ({
+  AnalyticsWrapper: () => <div data-testid="analytics" />,
 }));
 
-vi.mock("../../app/components/Header", () => ({
-  Header: () => <header data-testid="header" />,
+vi.mock("../../app/components/BrutalistNav", () => ({
+  BrutalistNav: () => <header data-testid="header" />,
 }));
 
-vi.mock("../../app/components/Footer", () => ({
-  Footer: () => <footer data-testid="footer" />,
+vi.mock("../../app/components/BrutalistFooter", () => ({
+  BrutalistFooter: () => <footer data-testid="footer" />,
 }));
 
 vi.mock("../../app/components/ThemeProvider", () => ({
@@ -28,8 +29,28 @@ vi.mock("../../app/components/ThemeProvider", () => ({
   ),
 }));
 
+vi.mock("../../app/components/LocaleProvider", () => ({
+  LocaleProvider: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="locale-provider">{children}</div>
+  ),
+}));
+
+vi.mock("../../app/components/GlobalErrorHandler", () => ({
+  GlobalErrorHandler: () => <div data-testid="global-error-handler" />,
+}));
+
+vi.mock("../../app/components/ErrorBoundary", () => ({
+  ErrorBoundary: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="error-boundary">{children}</div>
+  ),
+}));
+
 vi.mock("../../app/components/SeoJsonLd", () => ({
   SeoJsonLd: () => <div data-testid="seo-jsonld" />,
+}));
+
+vi.mock("../../app/components/WebMcpInit", () => ({
+  WebMcpInit: () => <div data-testid="webmcp-init" />,
 }));
 
 import RootLayout from "../../app/layout";
@@ -48,11 +69,14 @@ describe("RootLayout", () => {
     consoleSpy.mockRestore();
 
     expect(screen.getByTestId("theme-provider")).toBeInTheDocument();
+    expect(screen.getByTestId("locale-provider")).toBeInTheDocument();
+    expect(screen.getByTestId("global-error-handler")).toBeInTheDocument();
     expect(screen.getByTestId("header")).toBeInTheDocument();
     expect(screen.getByTestId("footer")).toBeInTheDocument();
+    expect(screen.getByTestId("error-boundary")).toBeInTheDocument();
     expect(screen.getByTestId("seo-jsonld")).toBeInTheDocument();
+    expect(screen.getByTestId("webmcp-init")).toBeInTheDocument();
     expect(screen.getByTestId("analytics")).toBeInTheDocument();
-    expect(screen.getByTestId("speed-insights")).toBeInTheDocument();
 
     const main = document.querySelector("main");
     expect(main).not.toBeNull();

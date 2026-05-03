@@ -72,7 +72,10 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="flex min-h-screen flex-col antialiased" style={{ background: "var(--v3-bg)", color: "var(--v3-fg)" }}>
+      <body
+        className="flex min-h-screen flex-col antialiased"
+        style={{ background: "var(--v3-bg)", color: "var(--v3-fg)" }}
+      >
         <ThemeProvider>
           <LocaleProvider>
             <GlobalErrorHandler />

@@ -19,9 +19,16 @@ export function getSiteData(locale: Locale = "en"): SiteDataJson {
 
 // Non-translatable brand list (proper names)
 export const SITE_BRANDS = [
-  "Nexthink", "EUROCONTROL", "Carlsberg", "Nokia",
-  "General Motors", "NCAA", "Paulson Institute",
-  "Hilton", "Anheuser-Busch", "T-Mobile",
+  "Nexthink",
+  "EUROCONTROL",
+  "Carlsberg",
+  "Nokia",
+  "General Motors",
+  "NCAA",
+  "Paulson Institute",
+  "Hilton",
+  "Anheuser-Busch",
+  "T-Mobile",
 ] as const;
 
 // Legacy exports kept for backwards-compat during migration

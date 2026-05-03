@@ -7,57 +7,54 @@ import {
   waitForStableHeight,
 } from "../utils";
 
-test.describe("Contact Dialog Visual Regression", () => {
-  test("renders contact dialog in light mode", async ({ page }) => {
+test.describe("Contact Section Visual Regression", () => {
+  test("renders contact section in light mode", async ({ page }) => {
     await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    // Click the Contact button in the navigation to open the dialog
-    await page.click('button:has-text("Contact")');
-
-    // Wait for the dialog to be visible
-    const dialog = page.locator('[role="dialog"]');
-    await expect(dialog).toBeVisible();
+    await page.locator("#contact").scrollIntoViewIfNeeded();
     await waitForStableHeight(page);
 
-    // Take screenshot of just the dialog
-    await expect(dialog).toHaveScreenshot("contact-dialog-light.png", {
+    const contactSection = page.locator("#contact");
+    await expect(contactSection).toBeVisible();
+
+    await expect(contactSection).toHaveScreenshot("contact-section-light.png", {
       animations: "disabled",
     });
   });
 
-  test("renders contact dialog in dark mode", async ({ page }) => {
+  test("renders contact section in dark mode", async ({ page }) => {
     await setThemeDark(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    // Click the Contact button to open the dialog
-    await page.click('button:has-text("Contact")');
-
-    const dialog = page.locator('[role="dialog"]');
-    await expect(dialog).toBeVisible();
+    await page.locator("#contact").scrollIntoViewIfNeeded();
     await waitForStableHeight(page);
 
-    await expect(dialog).toHaveScreenshot("contact-dialog-dark.png", {
+    const contactSection = page.locator("#contact");
+    await expect(contactSection).toBeVisible();
+
+    await expect(contactSection).toHaveScreenshot("contact-section-dark.png", {
       animations: "disabled",
     });
   });
 
-  test("renders contact dialog on mobile viewport", async ({ page }) => {
+  test("renders contact section on mobile viewport", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
+    await setThemeLight(page);
     await page.goto("/");
     await waitForHomepage(page);
 
-    // Click the Contact button
-    await page.click('button:has-text("Contact")');
-
-    const dialog = page.locator('[role="dialog"]');
-    await expect(dialog).toBeVisible();
+    await page.locator("#contact").scrollIntoViewIfNeeded();
     await waitForStableHeight(page);
 
-    await expect(dialog).toHaveScreenshot("contact-dialog-mobile.png", {
-      animations: "disabled",
-    });
+    const contactSection = page.locator("#contact");
+    await expect(contactSection).toBeVisible();
+
+    await expect(contactSection).toHaveScreenshot(
+      "contact-section-mobile.png",
+      { animations: "disabled" },
+    );
   });
 });

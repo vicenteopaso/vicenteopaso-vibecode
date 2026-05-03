@@ -28,7 +28,13 @@ export async function generateMetadata({
       title: siteConfig.name,
       description: siteConfig.description,
       siteName: siteConfig.name,
-      images: [{ url: `/${locale}/opengraph-image?v=${ogCacheVersion}`, width: 1200, height: 630 }],
+      images: [
+        {
+          url: `/${locale}/opengraph-image?v=${ogCacheVersion}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -59,71 +65,178 @@ type T = ReturnType<typeof getTranslations>;
 function SecHead({ n, label }: { n: string; label: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.14em" }}>
+      <span
+        style={{
+          ...mono,
+          fontSize: 11,
+          color: "var(--v3-accent)",
+          letterSpacing: "0.14em",
+        }}
+      >
         §{n}
       </span>
-      <span style={{ ...big, fontSize: 18, letterSpacing: "-0.015em" }}>{label}</span>
+      <span style={{ ...big, fontSize: 18, letterSpacing: "-0.015em" }}>
+        {label}
+      </span>
       <span style={{ flex: 1, height: 2, background: "var(--v3-fg)" }} />
     </div>
   );
 }
 
 // ─── A4 Hero: 2-col headline + TOC ───────────────────────────────────────────
-function HeroA4({ locale, t, tocEntries }: {
+function HeroA4({
+  locale,
+  t,
+  tocEntries,
+}: {
   locale: string;
   t: T;
   tocEntries: Array<{ n: string; t: string; s: string }>;
 }) {
   return (
-    <section className="v3-section v3-hero-section" style={{ padding: "64px 32px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div className="v3-hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start" }}>
+    <section
+      className="v3-section v3-hero-section"
+      style={{
+        padding: "64px 32px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <div
+        className="v3-hero-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 64,
+          alignItems: "start",
+        }}
+      >
         {/* Left: headline + sub + CTAs */}
         <div>
-          <div className="v3-hero-label" style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 20 }}>
+          <div
+            className="v3-hero-label"
+            style={{
+              ...mono,
+              fontSize: 11,
+              color: "var(--v3-muted)",
+              letterSpacing: "0.14em",
+              marginBottom: 20,
+            }}
+          >
             {t("hero.label")}
           </div>
-          <h1 className="v3-hero-h1" style={{ ...big, fontSize: 80, lineHeight: 0.92, margin: 0 }}>
-            {t("hero.headline1")}<br />{t("hero.headline2")}<br />
-            <span style={{ color: "var(--v3-accent)" }}>{t("hero.headline3")}</span><br />{t("hero.headline4")}
+          <h1
+            className="v3-hero-h1"
+            style={{ ...big, fontSize: 80, lineHeight: 0.92, margin: 0 }}
+          >
+            {t("hero.headline1")}
+            <br />
+            {t("hero.headline2")}
+            <br />
+            <span style={{ color: "var(--v3-accent)" }}>
+              {t("hero.headline3")}
+            </span>
+            <br />
+            {t("hero.headline4")}
           </h1>
-          <p className="v3-hero-sub" style={{ fontSize: 15, color: "var(--v3-muted)", marginTop: 24, maxWidth: 440, lineHeight: 1.65 }}>
+          <p
+            className="v3-hero-sub"
+            style={{
+              fontSize: 15,
+              color: "var(--v3-muted)",
+              marginTop: 24,
+              maxWidth: 440,
+              lineHeight: 1.65,
+            }}
+          >
             {t("hero.sub")}
           </p>
-          <div className="v3-hero-ctas" style={{ display: "flex", gap: 10, marginTop: 28 }}>
-            <HeroBtn href={`/${locale}/cv`} primary>{t("hero.readCv")}</HeroBtn>
+          <div
+            className="v3-hero-ctas"
+            style={{ display: "flex", gap: 10, marginTop: 28 }}
+          >
+            <HeroBtn href={`/${locale}/cv`} primary>
+              {t("hero.readCv")}
+            </HeroBtn>
             <HeroBtn href="#contact">{t("hero.email")}</HeroBtn>
           </div>
         </div>
 
         {/* Right: TOC */}
         <div>
-          <div style={{ ...mono, fontSize: 11, letterSpacing: "0.18em", color: "var(--v3-muted)", marginBottom: 12 }}>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              color: "var(--v3-muted)",
+              marginBottom: 12,
+            }}
+          >
             {t("hero.contents")}
           </div>
           <div style={{ border: "1px solid var(--v3-rule)" }}>
             {tocEntries.map((entry, i) => (
               <a
                 key={entry.n}
-                href={`#${entry.t.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim().replace(/\s+/g, "-")}`}
+                href={`#${entry.t
+                  .toLowerCase()
+                  .replace(/[^a-z0-9\s]/g, "")
+                  .trim()
+                  .replace(/\s+/g, "-")}`}
                 className="v3-cv-toc-row"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "60px 1fr auto",
                   alignItems: "center",
                   padding: "14px 16px",
-                  borderBottom: i < tocEntries.length - 1 ? "1px solid var(--v3-rule)" : "none",
+                  borderBottom:
+                    i < tocEntries.length - 1
+                      ? "1px solid var(--v3-rule)"
+                      : "none",
                   color: "var(--v3-fg)",
                   textDecoration: "none",
                 }}
               >
-                <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.1em" }}>
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: "var(--v3-accent)",
+                    letterSpacing: "0.1em",
+                  }}
+                >
                   §{entry.n}
                 </span>
                 <span>
-                  <span className="v3-cv-toc-label" style={{ fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em" }}>{entry.t}</span>
-                  <span className="v3-cv-toc-sub" style={{ fontSize: 13, color: "var(--v3-muted)", marginLeft: 12 }}>— {entry.s}</span>
+                  <span
+                    className="v3-cv-toc-label"
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 700,
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {entry.t}
+                  </span>
+                  <span
+                    className="v3-cv-toc-sub"
+                    style={{
+                      fontSize: 13,
+                      color: "var(--v3-muted)",
+                      marginLeft: 12,
+                    }}
+                  >
+                    — {entry.s}
+                  </span>
                 </span>
-                <span style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}>↓</span>
+                <span
+                  style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}
+                >
+                  ↓
+                </span>
               </a>
             ))}
           </div>
@@ -167,8 +280,13 @@ function HeroBtn({
 // ─── Impact 4-stat strip ──────────────────────────────────────────────────────
 function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
   return (
-    <section style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div className="v3-impact-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+    <section
+      style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
+    >
+      <div
+        className="v3-impact-grid"
+        style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}
+      >
         {impact.map((x, i) => (
           <div
             key={i}
@@ -177,10 +295,27 @@ function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
               borderRight: i < 3 ? "1px solid var(--v3-rule)" : "none",
             }}
           >
-            <div className="v3-impact-stat" style={{ ...big, fontSize: 56, color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)", lineHeight: 1 }}>
+            <div
+              className="v3-impact-stat"
+              style={{
+                ...big,
+                fontSize: 56,
+                color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)",
+                lineHeight: 1,
+              }}
+            >
               {x.k}
             </div>
-            <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", marginTop: 10, lineHeight: 1.5, letterSpacing: "0.02em" }}>
+            <div
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-muted)",
+                marginTop: 10,
+                lineHeight: 1.5,
+                letterSpacing: "0.02em",
+              }}
+            >
               {x.v}
             </div>
           </div>
@@ -191,22 +326,61 @@ function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
 }
 
 // ─── §01 TL;DR ───────────────────────────────────────────────────────────────
-function TlDrSection({ t, tldr, tldrLabels }: {
+function TlDrSection({
+  t,
+  tldr,
+  tldrLabels,
+}: {
   t: T;
   tldr: readonly string[];
   tldrLabels: readonly string[];
 }) {
   return (
-    <section id="tl-dr" style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div className="v3-tldr-grid" style={{ display: "grid", gridTemplateColumns: "260px 1fr", ...rule1 }}>
+    <section
+      id="tl-dr"
+      style={{ ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
+    >
+      <div
+        className="v3-tldr-grid"
+        style={{ display: "grid", gridTemplateColumns: "260px 1fr", ...rule1 }}
+      >
         {/* Inverted sidebar */}
-        <div className="v3-tldr-sidebar" style={{ background: "var(--v3-fg)", color: "var(--v3-bg)", padding: "32px 24px" }}>
-          <div style={{ ...mono, fontSize: 11, opacity: 0.6, letterSpacing: "0.18em" }}>§01</div>
+        <div
+          className="v3-tldr-sidebar"
+          style={{
+            background: "var(--v3-fg)",
+            color: "var(--v3-bg)",
+            padding: "32px 24px",
+          }}
+        >
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              opacity: 0.6,
+              letterSpacing: "0.18em",
+            }}
+          >
+            §01
+          </div>
           <div style={{ ...big, fontSize: 48, lineHeight: 0.95, marginTop: 8 }}>
             TL;<span style={{ color: "var(--v3-accent)" }}>DR</span>
           </div>
-          <div style={{ ...mono, fontSize: 11, opacity: 0.55, letterSpacing: "0.06em", marginTop: 14, lineHeight: 1.7 }}>
-            {t("tldr.subtitle1")}<br />{t("tldr.subtitle2")}<br />{t("tldr.subtitle3")}
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              opacity: 0.55,
+              letterSpacing: "0.06em",
+              marginTop: 14,
+              lineHeight: 1.7,
+            }}
+          >
+            {t("tldr.subtitle1")}
+            <br />
+            {t("tldr.subtitle2")}
+            <br />
+            {t("tldr.subtitle3")}
           </div>
         </div>
 
@@ -215,22 +389,47 @@ function TlDrSection({ t, tldr, tldrLabels }: {
           {tldr.map((item, i) => (
             <li
               key={i}
-              className="v3-tldr-item" style={{
+              className="v3-tldr-item"
+              style={{
                 display: "grid",
                 gridTemplateColumns: "56px 1fr 80px",
                 alignItems: "baseline",
                 padding: "18px 24px",
-                borderBottom: i < tldr.length - 1 ? "1px solid var(--v3-rule)" : "none",
+                borderBottom:
+                  i < tldr.length - 1 ? "1px solid var(--v3-rule)" : "none",
                 gap: 16,
               }}
             >
-              <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.1em" }}>
+              <span
+                style={{
+                  ...mono,
+                  fontSize: 11,
+                  color: "var(--v3-accent)",
+                  letterSpacing: "0.1em",
+                }}
+              >
                 0{i + 1} —
               </span>
-              <span style={{ fontSize: 19, letterSpacing: "-0.01em", lineHeight: 1.4, fontWeight: 500 }}>
+              <span
+                style={{
+                  fontSize: 19,
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1.4,
+                  fontWeight: 500,
+                }}
+              >
                 {item}
               </span>
-              <span className="v3-tldr-label" style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em", textAlign: "right" as const }}>
+              <span
+                className="v3-tldr-label"
+                style={{
+                  ...mono,
+                  fontSize: 10,
+                  color: "var(--v3-muted)",
+                  letterSpacing: "0.14em",
+                  textAlign: "right" as const,
+                }}
+              >
                 {tldrLabels[i]}
               </span>
             </li>
@@ -242,23 +441,76 @@ function TlDrSection({ t, tldr, tldrLabels }: {
 }
 
 // ─── §02 What I Do ───────────────────────────────────────────────────────────
-function FocusStrip({ t, focus }: {
+function FocusStrip({
+  t,
+  focus,
+}: {
   t: T;
   focus: Array<{ h: string; b: string }>;
 }) {
   return (
-    <section id="what-i-do" className="v3-section" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+    <section
+      id="what-i-do"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
       <SecHead n="02" label={t("section.whatIDo")} />
-      <div className="v3-focus-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0, marginTop: 24, border: "1px solid var(--v3-rule)" }}>
+      <div
+        className="v3-focus-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gap: 0,
+          marginTop: 24,
+          border: "1px solid var(--v3-rule)",
+        }}
+      >
         {focus.map((f, i) => (
-          <div key={i} className="v3-focus-item" style={{ padding: "20px 18px", borderRight: i < 4 ? "1px solid var(--v3-rule)" : "none" }}>
-            <div style={{ ...mono, fontSize: 10, color: "var(--v3-accent)", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div
+            key={i}
+            className="v3-focus-item"
+            style={{
+              padding: "20px 18px",
+              borderRight: i < 4 ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <div
+              style={{
+                ...mono,
+                fontSize: 10,
+                color: "var(--v3-accent)",
+                letterSpacing: "0.14em",
+                marginBottom: 8,
+              }}
+            >
               0{i + 1}
             </div>
-            <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.015em", marginBottom: 8, lineHeight: 1.2 }}>
+            <div
+              style={{
+                fontSize: 15,
+                fontWeight: 700,
+                letterSpacing: "-0.015em",
+                marginBottom: 8,
+                lineHeight: 1.2,
+              }}
+            >
               {f.h}
             </div>
-            <div style={{ fontSize: 12.5, color: "var(--v3-muted)", lineHeight: 1.55 }}>{f.b}</div>
+            <div
+              style={{
+                fontSize: 12.5,
+                color: "var(--v3-muted)",
+                lineHeight: 1.55,
+              }}
+            >
+              {f.b}
+            </div>
           </div>
         ))}
       </div>
@@ -282,9 +534,27 @@ function fmtDate(d?: string, nowLabel?: string): string {
   return d.replace(/-(\d{2})$/, ".$1");
 }
 
-function ExperienceTable({ work, locale, t }: { work: WorkEntry[]; locale: string; t: T }) {
+function ExperienceTable({
+  work,
+  locale,
+  t,
+}: {
+  work: WorkEntry[];
+  locale: string;
+  t: T;
+}) {
   return (
-    <section id="experience" className="v3-section" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+    <section
+      id="experience"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
       <SecHead n="03" label={t("section.whereWorked")} />
       <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
         <div
@@ -303,7 +573,9 @@ function ExperienceTable({ work, locale, t }: { work: WorkEntry[]; locale: strin
           <span>{t("exp.colDates")}</span>
           <span>{t("exp.colRole")}</span>
           <span className="v3-exp-loc">{t("exp.colLocation")}</span>
-          <span className="v3-exp-read" style={{ textAlign: "right" as const }}>→</span>
+          <span className="v3-exp-read" style={{ textAlign: "right" as const }}>
+            →
+          </span>
         </div>
         {work.map((company, ci) =>
           company.positions.map((role, ri) => {
@@ -313,7 +585,8 @@ function ExperienceTable({ work, locale, t }: { work: WorkEntry[]; locale: strin
             return (
               <div
                 key={`${ci}-${ri}`}
-                className="v3-exp-row" style={{
+                className="v3-exp-row"
+                style={{
                   display: "grid",
                   gridTemplateColumns: "90px 1fr 200px 80px",
                   padding: "14px 16px",
@@ -324,25 +597,44 @@ function ExperienceTable({ work, locale, t }: { work: WorkEntry[]; locale: strin
                   alignItems: "center",
                 }}
               >
-                <span style={{ ...mono, fontSize: 11, color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)" }}>
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)",
+                  }}
+                >
                   {dateStr}
                 </span>
                 <span style={{ fontSize: 14 }}>
                   <span style={{ fontWeight: 600 }}>{role.position}</span>
-                  <span style={{ color: "var(--v3-muted)" }}> · {company.company}</span>
+                  <span style={{ color: "var(--v3-muted)" }}>
+                    {" "}
+                    · {company.company}
+                  </span>
                 </span>
-                <span className="v3-exp-loc" style={{ ...mono, fontSize: 11, color: "var(--v3-muted)" }}>
+                <span
+                  className="v3-exp-loc"
+                  style={{ ...mono, fontSize: 11, color: "var(--v3-muted)" }}
+                >
                   {company.location ?? ""}
                 </span>
                 <a
                   href={`/${locale}/cv#cv-experience`}
-                  style={{ ...mono, fontSize: 11, color: "var(--v3-fg)", textDecoration: "none", textAlign: "right" as const, letterSpacing: "0.1em" }}
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: "var(--v3-fg)",
+                    textDecoration: "none",
+                    textAlign: "right" as const,
+                    letterSpacing: "0.1em",
+                  }}
                 >
                   {t("exp.read")}
                 </a>
               </div>
             );
-          })
+          }),
         )}
       </div>
     </section>
@@ -363,10 +655,25 @@ function BrandsStrip({ t }: { t: T }) {
         width: "100%",
       }}
     >
-      <div style={{ ...mono, fontSize: 10, letterSpacing: "0.18em", opacity: 0.6, marginBottom: 16 }}>
+      <div
+        style={{
+          ...mono,
+          fontSize: 10,
+          letterSpacing: "0.18em",
+          opacity: 0.6,
+          marginBottom: 16,
+        }}
+      >
         {t("brands.header")}
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "8px 28px", alignItems: "baseline" }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap" as const,
+          gap: "8px 28px",
+          alignItems: "baseline",
+        }}
+      >
         {SITE_BRANDS.map((b) => (
           <span key={b} style={{ ...big, fontSize: 32 }}>
             {b}
@@ -382,7 +689,17 @@ type SkillGroup = { name: string; level?: string; keywords?: string[] };
 
 function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
   return (
-    <section id="tech-tools" className="v3-section" style={{ padding: "48px 32px", ...rule2, maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+    <section
+      id="tech-tools"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
       <SecHead n="04" label={t("section.techTools")} />
       <div
         className="v3-stack-grid"
@@ -406,15 +723,44 @@ function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
                   : "none",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-              <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em" }}>{g.name}</span>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                marginBottom: 10,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {g.name}
+              </span>
               {g.level && (
-                <span style={{ ...mono, fontSize: 9, color: "var(--v3-accent)", letterSpacing: "0.14em" }}>
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 9,
+                    color: "var(--v3-accent)",
+                    letterSpacing: "0.14em",
+                  }}
+                >
                   {g.level.toUpperCase()}
                 </span>
               )}
             </div>
-            <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", lineHeight: 1.75 }}>
+            <div
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-muted)",
+                lineHeight: 1.75,
+              }}
+            >
               {(g.keywords ?? []).join(" · ")}
             </div>
           </div>
@@ -427,21 +773,77 @@ function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
 // ─── §05 Contact ──────────────────────────────────────────────────────────────
 function ContactBlock({ t }: { t: T }) {
   return (
-    <section id="contact" className="v3-section" style={{ padding: "56px 32px", maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
-      <div className="v3-contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
+    <section
+      id="contact"
+      className="v3-section"
+      style={{
+        padding: "56px 32px",
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <div
+        className="v3-contact-grid"
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}
+      >
         {/* Left: info */}
         <div>
           <SecHead n="05" label={t("section.getInTouch")} />
-          <h2 style={{ ...big, fontSize: 64, lineHeight: 0.95, margin: "16px 0" }}>
-            {t("contact.headline")}<br /> <span style={{ color: "var(--v3-accent)" }}>{t("contact.headlineAccent")}</span>.
+          <h2
+            style={{ ...big, fontSize: 64, lineHeight: 0.95, margin: "16px 0" }}
+          >
+            {t("contact.headline")}
+            <br />{" "}
+            <span style={{ color: "var(--v3-accent)" }}>
+              {t("contact.headlineAccent")}
+            </span>
+            .
           </h2>
-          <p style={{ fontSize: 14, color: "var(--v3-muted)", maxWidth: 380, lineHeight: 1.7, margin: 0 }}>
+          <p
+            style={{
+              fontSize: 14,
+              color: "var(--v3-muted)",
+              maxWidth: 380,
+              lineHeight: 1.7,
+              margin: 0,
+            }}
+          >
             {t("contact.description")}
           </p>
-          <div style={{ ...mono, fontSize: 11, marginTop: 24, lineHeight: 1.9, display: "flex", flexDirection: "column" as const, gap: 0 }}>
-            <a href="mailto:vicente@opa.so" style={{ color: "var(--v3-muted)", textDecoration: "none" }}>{t("contact.email")}</a>
-            <a href="https://linkedin.com/in/vicenteopaso" target="_blank" rel="noreferrer" style={{ color: "var(--v3-muted)", textDecoration: "none" }}>{t("contact.linkedin")}</a>
-            <a href="https://github.com/vicenteopaso" target="_blank" rel="noreferrer" style={{ color: "var(--v3-muted)", textDecoration: "none" }}>{t("contact.github")}</a>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              marginTop: 24,
+              lineHeight: 1.9,
+              display: "flex",
+              flexDirection: "column" as const,
+              gap: 0,
+            }}
+          >
+            <a
+              href="mailto:vicente@opa.so"
+              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
+            >
+              {t("contact.email")}
+            </a>
+            <a
+              href="https://linkedin.com/in/vicenteopaso"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
+            >
+              {t("contact.linkedin")}
+            </a>
+            <a
+              href="https://github.com/vicenteopaso"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
+            >
+              {t("contact.github")}
+            </a>
           </div>
         </div>
 
@@ -489,10 +891,16 @@ export default async function HomePage({ params }: PageProps) {
     <div className="v3-page">
       <HeroA4 locale={locale} t={t} tocEntries={siteData.landingToc} />
       <ImpactStrip impact={siteData.impact} />
-      <TlDrSection t={t} tldr={siteData.tldr} tldrLabels={siteData.tldrLabels} />
+      <TlDrSection
+        t={t}
+        tldr={siteData.tldr}
+        tldrLabels={siteData.tldrLabels}
+      />
       <FocusStrip t={t} focus={siteData.focus} />
       <ExperienceTable work={work} locale={locale} t={t} />
-      <div style={{ display: "none" }}><BrandsStrip t={t} /></div>
+      <div style={{ display: "none" }}>
+        <BrandsStrip t={t} />
+      </div>
       <StackGrid skills={skills} t={t} />
       <ContactBlock t={t} />
     </div>

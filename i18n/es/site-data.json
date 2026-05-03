@@ -8,16 +8,34 @@
   ],
   "tldrLabels": ["QUIÉN", "OFICIO", "ENTREGO", "ESCALO", "EXTRA"],
   "focus": [
-    { "h": "Arquitectura Frontend", "b": "Ecosistemas React / Next.js componibles construidos para entrega global." },
-    { "h": "Sistemas de Diseño & UI", "b": "Librerías de componentes, tokens, accesibilidad, consistencia multi-plataforma." },
-    { "h": "Experiencia de Desarrollador", "b": "Automatización CI/CD, guardrails de calidad de código, onboarding, tooling." },
-    { "h": "Liderazgo en Ingeniería", "b": "Equipos distribuidos, estrategia, alineando producto, diseño e ingeniería." },
-    { "h": "Rendimiento, A11y & SEO", "b": "Core Web Vitals, edge delivery, WCAG 2.1, SEO técnico." }
+    {
+      "h": "Arquitectura Frontend",
+      "b": "Ecosistemas React / Next.js componibles construidos para entrega global."
+    },
+    {
+      "h": "Sistemas de Diseño & UI",
+      "b": "Librerías de componentes, tokens, accesibilidad, consistencia multi-plataforma."
+    },
+    {
+      "h": "Experiencia de Desarrollador",
+      "b": "Automatización CI/CD, guardrails de calidad de código, onboarding, tooling."
+    },
+    {
+      "h": "Liderazgo en Ingeniería",
+      "b": "Equipos distribuidos, estrategia, alineando producto, diseño e ingeniería."
+    },
+    {
+      "h": "Rendimiento, A11y & SEO",
+      "b": "Core Web Vitals, edge delivery, WCAG 2.1, SEO técnico."
+    }
   ],
   "impact": [
     { "k": "25%", "v": "Mejora en Core Web Vitals en 6 mercados" },
     { "k": "40%", "v": "Reducción de fricción en releases vía CI/CD" },
-    { "k": "€1B+", "v": "Facturación anual en plataformas que he arquitectado" },
+    {
+      "k": "€1B+",
+      "v": "Facturación anual en plataformas que he arquitectado"
+    },
     { "k": "15y+", "v": "Entregando en la web — y 10 años en telco antes" }
   ],
   "landingToc": [
@@ -30,7 +48,11 @@
   "cvToc": [
     { "n": "01", "t": "RESUMEN", "s": "TL;DR + puntos clave" },
     { "n": "02", "t": "EXPERIENCIA", "s": "8 roles · 15 años en la web" },
-    { "n": "03", "t": "HABILIDADES", "s": "Lenguajes · frameworks · herramientas" },
+    {
+      "n": "03",
+      "t": "HABILIDADES",
+      "s": "Lenguajes · frameworks · herramientas"
+    },
     { "n": "04", "t": "FORMACIÓN", "s": "Educación e idiomas" },
     { "n": "05", "t": "PUBLICACIONES", "s": "Escritura seleccionada" },
     { "n": "06", "t": "REFERENCIAS", "s": "Lo que dicen de mí" }

@@ -357,12 +357,7 @@
     {
       "name": "JavaScript",
       "level": "Experto",
-      "keywords": [
-        "TypeScript",
-        "Node.js",
-        "ECMAScript",
-        "Micro Frontends"
-      ]
+      "keywords": ["TypeScript", "Node.js", "ECMAScript", "Micro Frontends"]
     },
     {
       "name": "Desarrollo Frontend",
@@ -409,13 +404,7 @@
     {
       "name": "AWS",
       "level": "Avanzado",
-      "keywords": [
-        "S3",
-        "CloudFront",
-        "Lambda",
-        "CloudWatch",
-        "Amplify"
-      ]
+      "keywords": ["S3", "CloudFront", "Lambda", "CloudWatch", "Amplify"]
     },
     {
       "name": "GitHub",
@@ -442,21 +431,12 @@
     {
       "name": "CSS",
       "level": "Experto",
-      "keywords": [
-        "Tailwind CSS",
-        "Sass",
-        "Less",
-        "CSS-in-JS"
-      ]
+      "keywords": ["Tailwind CSS", "Sass", "Less", "CSS-in-JS"]
     },
     {
       "name": "Pruebas & Testing",
       "level": "Básico",
-      "keywords": [
-        "Jest",
-        "Cypress",
-        "React Testing Library"
-      ]
+      "keywords": ["Jest", "Cypress", "React Testing Library"]
     }
   ],
   "education": [
@@ -529,13 +509,7 @@
     },
     {
       "name": "Crypto",
-      "keywords": [
-        "Bitcoin",
-        "Ethereum",
-        "NFT",
-        "BCube",
-        "Web3"
-      ]
+      "keywords": ["Bitcoin", "Ethereum", "NFT", "BCube", "Web3"]
     }
   ],
   "references": [

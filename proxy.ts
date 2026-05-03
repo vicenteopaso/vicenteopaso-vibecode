@@ -33,7 +33,7 @@ const defaultLocale: Locale = "en";
  */
 function detectLocale(req: NextRequest): Locale {
   // 1. Stored preference cookie
-  const cookieLocale = req.cookies.get("preferred-locale")?.value;
+  const cookieLocale = req.cookies?.get("preferred-locale")?.value;
   if (cookieLocale && (locales as readonly string[]).includes(cookieLocale)) {
     return cookieLocale as Locale;
   }
@@ -44,7 +44,10 @@ function detectLocale(req: NextRequest): Locale {
     .split(",")
     .map((item) => {
       const [lang, q] = item.trim().split(";q=");
-      return { lang: (lang ?? "").trim().toLowerCase().slice(0, 2), q: parseFloat(q ?? "1") };
+      return {
+        lang: (lang ?? "").trim().toLowerCase().slice(0, 2),
+        q: parseFloat(q ?? "1"),
+      };
     })
     .sort((a, b) => b.q - a.q)
     .map(({ lang }) => lang);
@@ -98,7 +101,8 @@ export function proxy(req: NextRequest) {
   // Detect locale and redirect
   const targetLocale = detectLocale(req);
   const url = req.nextUrl.clone();
-  url.pathname = pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
+  url.pathname =
+    pathname === "/" ? `/${targetLocale}` : `/${targetLocale}${pathname}`;
   return NextResponse.redirect(url, { status: 307 });
 }
 

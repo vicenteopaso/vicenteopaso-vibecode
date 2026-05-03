@@ -28,7 +28,7 @@ describe("i18n infrastructure", () => {
       const t = result.current;
 
       expect(t("nav.cv")).toBe("CV");
-      expect(t("nav.contact")).toBe("Contact");
+      expect(t("nav.contact")).toBe("CONTACT");
     });
 
     it("should return translation for valid Spanish key when locale is es", async () => {
@@ -205,7 +205,7 @@ describe("i18n infrastructure", () => {
     it("should return translation function for English", () => {
       const t = getTranslations("en");
       expect(t("nav.cv")).toBe("CV");
-      expect(t("nav.contact")).toBe("Contact");
+      expect(t("nav.contact")).toBe("CONTACT");
     });
 
     it("should return translation function for Spanish", () => {

@@ -16,11 +16,15 @@ export function BrutalistNav() {
   const [mounted, setMounted] = useState(false);
   const t = useTranslations();
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const displayTheme = !mounted
     ? "dark"
-    : (resolvedTheme === "light" || resolvedTheme === "dark" ? resolvedTheme : "dark");
+    : resolvedTheme === "light" || resolvedTheme === "dark"
+      ? resolvedTheme
+      : "dark";
 
   const toggleTheme = () =>
     setTheme(displayTheme === "dark" ? "light" : "dark");
@@ -39,7 +43,7 @@ export function BrutalistNav() {
 
   const navLinks = [
     { label: t("nav.about"), href: `/${locale}` },
-    { label: t("nav.cv"),    href: `/${locale}/cv` },
+    { label: t("nav.cv"), href: `/${locale}/cv` },
     { label: t("nav.contact"), href: `/${locale}#contact` },
   ];
 
@@ -69,76 +73,101 @@ export function BrutalistNav() {
   return (
     <header style={s.root}>
       <div style={s.inner} className="v3-nav-inner">
-      {/* Brand */}
-      <div style={{ display: "flex", gap: 20, color: "var(--v3-muted)", alignItems: "center" }}>
-        <a
-          href={`/${locale}`}
-          style={{ color: "var(--v3-fg)", fontWeight: 600, textDecoration: "none" }}
+        {/* Brand */}
+        <div
+          style={{
+            display: "flex",
+            gap: 20,
+            color: "var(--v3-muted)",
+            alignItems: "center",
+          }}
         >
-          {t("nav.brand")}
-        </a>
-        <span className="v3-nav-meta">{t("nav.version")}</span>
-        <span className="v3-nav-meta">—</span>
-        <span className="v3-nav-meta" style={{ color: "var(--v3-accent)" }}>{t("nav.location")}</span>
-      </div>
-
-      {/* Primary nav */}
-      <nav className="v3-nav-links" style={{ display: "flex", gap: 24, color: "var(--v3-muted)" }}>
-        {navLinks.map((l) => (
           <a
-            key={l.label}
-            href={l.href}
+            href={`/${locale}`}
             style={{
-              color: isActive(l.href) ? "var(--v3-fg)" : "inherit",
+              color: "var(--v3-fg)",
+              fontWeight: 600,
               textDecoration: "none",
-              fontWeight: isActive(l.href) ? 600 : 400,
-              borderBottom: isActive(l.href) ? "2px solid var(--v3-accent)" : "none",
-              paddingBottom: 2,
             }}
           >
-            {l.label}
+            {t("nav.brand")}
           </a>
-        ))}
-      </nav>
+          <span className="v3-nav-meta">{t("nav.version")}</span>
+          <span className="v3-nav-meta">—</span>
+          <span className="v3-nav-meta" style={{ color: "var(--v3-accent)" }}>
+            {t("nav.location")}
+          </span>
+        </div>
 
-      {/* Right controls */}
-      <div style={{ display: "flex", gap: 10, alignItems: "center", color: "var(--v3-muted)" }}>
-        <button
-          type="button"
-          onClick={switchLocale}
-          style={{
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "var(--f-mono)",
-            fontSize: 11,
-            letterSpacing: "0.12em",
-            color: "var(--v3-muted)",
-            padding: 0,
-          }}
-          aria-label={t("nav.switchLanguage")}
+        {/* Primary nav */}
+        <nav
+          className="v3-nav-links"
+          style={{ display: "flex", gap: 24, color: "var(--v3-muted)" }}
         >
-          {locale === "en" ? t("language.es") : t("language.en")}
-        </button>
-        <span>·</span>
-        <button
-          type="button"
-          onClick={toggleTheme}
+          {navLinks.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              style={{
+                color: isActive(l.href) ? "var(--v3-fg)" : "inherit",
+                textDecoration: "none",
+                fontWeight: isActive(l.href) ? 600 : 400,
+                borderBottom: isActive(l.href)
+                  ? "2px solid var(--v3-accent)"
+                  : "none",
+                paddingBottom: 2,
+              }}
+            >
+              {l.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* Right controls */}
+        <div
           style={{
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "var(--f-mono)",
-            fontSize: 14,
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
             color: "var(--v3-muted)",
-            padding: 0,
-            lineHeight: 1,
           }}
-          aria-label={t("nav.themeToggle")}
         >
-          {displayTheme === "dark" ? "☼" : "☾"}
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={switchLocale}
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "var(--f-mono)",
+              fontSize: 11,
+              letterSpacing: "0.12em",
+              color: "var(--v3-muted)",
+              padding: 0,
+            }}
+            aria-label={t("nav.switchLanguage")}
+          >
+            {locale === "en" ? t("language.es") : t("language.en")}
+          </button>
+          <span>·</span>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "var(--f-mono)",
+              fontSize: 14,
+              color: "var(--v3-muted)",
+              padding: 0,
+              lineHeight: 1,
+            }}
+            aria-label={t("nav.themeToggle")}
+          >
+            {displayTheme === "dark" ? "☼" : "☾"}
+          </button>
+        </div>
       </div>
     </header>
   );

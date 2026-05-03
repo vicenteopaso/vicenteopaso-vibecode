@@ -36,7 +36,13 @@ export async function generateMetadata({
       title: `${siteConfig.name} · CV`,
       description,
       siteName: siteConfig.name,
-      images: [{ url: `/${locale}/cv/opengraph-image?v=${ogCacheVersion}`, width: 1200, height: 630 }],
+      images: [
+        {
+          url: `/${locale}/cv/opengraph-image?v=${ogCacheVersion}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -104,10 +110,19 @@ type T = ReturnType<typeof getTranslations>;
 function SecHead({ n, label }: { n: string; label: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.14em" }}>
+      <span
+        style={{
+          ...mono,
+          fontSize: 11,
+          color: "var(--v3-accent)",
+          letterSpacing: "0.14em",
+        }}
+      >
         §{n}
       </span>
-      <span style={{ ...big, fontSize: 18, letterSpacing: "-0.015em" }}>{label}</span>
+      <span style={{ ...big, fontSize: 18, letterSpacing: "-0.015em" }}>
+        {label}
+      </span>
       <span style={{ flex: 1, height: 2, background: "var(--v3-fg)" }} />
     </div>
   );
@@ -126,7 +141,17 @@ function parseRefName(raw: string): { name: string; role: string } {
 }
 
 // ─── CV Masthead ───────────────────────────────────────────────────────────────
-function CvMasthead({ name, label, locale, t }: { name: string; label: string; locale: string; t: T }) {
+function CvMasthead({
+  name,
+  label,
+  locale,
+  t,
+}: {
+  name: string;
+  label: string;
+  locale: string;
+  t: T;
+}) {
   const meta = [
     [t("cv.metaLocation"), t("cv.metaLocationValue")],
     [t("cv.metaAvailability"), t("cv.metaAvailabilityValue")],
@@ -136,31 +161,81 @@ function CvMasthead({ name, label, locale, t }: { name: string; label: string; l
   ] as const;
 
   return (
-    <section className="v3-cv-masthead-section" style={{ padding: "20px 32px 32px", ...rule2 }}>
-      <div className="v3-cv-masthead-grid" style={{ display: "grid", gridTemplateColumns: "1fr 180px", gap: 32, alignItems: "start" }}>
+    <section
+      className="v3-cv-masthead-section"
+      style={{ padding: "20px 32px 32px", ...rule2 }}
+    >
+      <div
+        className="v3-cv-masthead-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 180px",
+          gap: 32,
+          alignItems: "start",
+        }}
+      >
         {/* Headline */}
         <div>
-          <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 18 }}>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              color: "var(--v3-muted)",
+              letterSpacing: "0.14em",
+              marginBottom: 18,
+            }}
+          >
             {t("cv.header")}
           </div>
-          <h1 className="v3-cv-h1" style={{ ...big, fontSize: 72, lineHeight: 0.9, margin: 0 }}>
-            {name.split(" ")[0]}<br />
-            <span style={{ color: "var(--v3-accent)" }}>{name.split(" ").slice(1).join(" ")}</span>.
+          <h1
+            className="v3-cv-h1"
+            style={{ ...big, fontSize: 72, lineHeight: 0.9, margin: 0 }}
+          >
+            {name.split(" ")[0]}
+            <br />
+            <span style={{ color: "var(--v3-accent)" }}>
+              {name.split(" ").slice(1).join(" ")}
+            </span>
+            .
           </h1>
-          <div style={{ fontSize: 16, fontWeight: 500, marginTop: 18, letterSpacing: "-0.005em" }}>
+          <div
+            style={{
+              fontSize: 16,
+              fontWeight: 500,
+              marginTop: 18,
+              letterSpacing: "-0.005em",
+            }}
+          >
             {label}
           </div>
-          <div style={{ fontSize: 14, color: "var(--v3-muted)", marginTop: 10, maxWidth: 440, lineHeight: 1.65 }}>
+          <div
+            style={{
+              fontSize: 14,
+              color: "var(--v3-muted)",
+              marginTop: 10,
+              maxWidth: 440,
+              lineHeight: 1.65,
+            }}
+          >
             {t("cv.subtitle1")} {t("cv.subtitle2")}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
-            <CvBtn href={`/${locale}/cv`} primary>{t("cv.downloadPdf")}</CvBtn>
+            <CvBtn href={`/${locale}/cv`} primary>
+              {t("cv.downloadPdf")}
+            </CvBtn>
             <CvBtn href="#contact">{t("cv.emailCta")}</CvBtn>
           </div>
         </div>
 
         {/* Portrait */}
-        <div className="v3-cv-portrait" style={{ aspectRatio: "4 / 5", position: "relative", overflow: "hidden" }}>
+        <div
+          className="v3-cv-portrait"
+          style={{
+            aspectRatio: "4 / 5",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
           <Image
             src="/assets/images/profile-red-transparent.png"
             alt="Vicente Opaso"
@@ -173,11 +248,48 @@ function CvMasthead({ name, label, locale, t }: { name: string; label: string; l
       </div>
 
       {/* Meta row */}
-      <div className="v3-cv-meta-row" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0, marginTop: 32, paddingTop: 18, borderTop: "1px solid var(--v3-rule)" }}>
+      <div
+        className="v3-cv-meta-row"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          gap: 0,
+          marginTop: 32,
+          paddingTop: 18,
+          borderTop: "1px solid var(--v3-rule)",
+        }}
+      >
         {meta.map(([k, v], i) => (
-          <div key={k} style={{ paddingLeft: i > 0 ? 14 : 0, borderLeft: i > 0 ? "1px solid var(--v3-rule)" : "none" }}>
-            <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.14em", marginBottom: 6 }}>{k}</div>
-            <div style={{ fontSize: 13, fontWeight: 500, color: k === t("cv.metaAvailability") ? "var(--v3-accent)" : "inherit" }}>{v}</div>
+          <div
+            key={k}
+            style={{
+              paddingLeft: i > 0 ? 14 : 0,
+              borderLeft: i > 0 ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <div
+              style={{
+                ...mono,
+                fontSize: 10,
+                color: "var(--v3-muted)",
+                letterSpacing: "0.14em",
+                marginBottom: 6,
+              }}
+            >
+              {k}
+            </div>
+            <div
+              style={{
+                fontSize: 13,
+                fontWeight: 500,
+                color:
+                  k === t("cv.metaAvailability")
+                    ? "var(--v3-accent)"
+                    : "inherit",
+              }}
+            >
+              {v}
+            </div>
           </div>
         ))}
       </div>
@@ -185,7 +297,15 @@ function CvMasthead({ name, label, locale, t }: { name: string; label: string; l
   );
 }
 
-function CvBtn({ children, primary, href }: { children: React.ReactNode; primary?: boolean; href: string }) {
+function CvBtn({
+  children,
+  primary,
+  href,
+}: {
+  children: React.ReactNode;
+  primary?: boolean;
+  href: string;
+}) {
   return (
     <a
       href={href}
@@ -209,34 +329,82 @@ function CvBtn({ children, primary, href }: { children: React.ReactNode; primary
 }
 
 // ─── TOC ───────────────────────────────────────────────────────────────────────
-function CvToc({ t, tocEntries }: { t: T; tocEntries: Array<{ n: string; t: string; s: string }> }) {
+function CvToc({
+  t,
+  tocEntries,
+}: {
+  t: T;
+  tocEntries: Array<{ n: string; t: string; s: string }>;
+}) {
   return (
     <section style={{ padding: "32px 32px", ...rule2 }}>
-      <div style={{ ...mono, fontSize: 11, letterSpacing: "0.18em", color: "var(--v3-muted)", marginBottom: 12 }}>
+      <div
+        style={{
+          ...mono,
+          fontSize: 11,
+          letterSpacing: "0.18em",
+          color: "var(--v3-muted)",
+          marginBottom: 12,
+        }}
+      >
         {t("cv.contents")}
       </div>
       <div style={{ border: "1px solid var(--v3-rule)" }}>
         {tocEntries.map((entry, i) => (
           <a
             key={entry.n}
-            href={`#cv-${entry.t.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim().replace(/\s+/g, "-")}`}
+            href={`#cv-${entry.t
+              .toLowerCase()
+              .replace(/[^a-z0-9\s]/g, "")
+              .trim()
+              .replace(/\s+/g, "-")}`}
             className="v3-cv-toc-row"
             style={{
               display: "grid",
               gridTemplateColumns: "60px 1fr auto",
               alignItems: "center",
               padding: "14px 16px",
-              borderBottom: i < tocEntries.length - 1 ? "1px solid var(--v3-rule)" : "none",
+              borderBottom:
+                i < tocEntries.length - 1 ? "1px solid var(--v3-rule)" : "none",
               color: "var(--v3-fg)",
               textDecoration: "none",
             }}
           >
-            <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.1em" }}>§{entry.n}</span>
-            <span>
-              <span className="v3-cv-toc-label" style={{ fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em" }}>{entry.t}</span>
-              <span className="v3-cv-toc-sub" style={{ fontSize: 13, color: "var(--v3-muted)", marginLeft: 12 }}>— {entry.s}</span>
+            <span
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-accent)",
+                letterSpacing: "0.1em",
+              }}
+            >
+              §{entry.n}
             </span>
-            <span style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}>↓</span>
+            <span>
+              <span
+                className="v3-cv-toc-label"
+                style={{
+                  fontSize: 16,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {entry.t}
+              </span>
+              <span
+                className="v3-cv-toc-sub"
+                style={{
+                  fontSize: 13,
+                  color: "var(--v3-muted)",
+                  marginLeft: 12,
+                }}
+              >
+                — {entry.s}
+              </span>
+            </span>
+            <span style={{ ...mono, fontSize: 14, color: "var(--v3-muted)" }}>
+              ↓
+            </span>
           </a>
         ))}
       </div>
@@ -248,11 +416,40 @@ function CvToc({ t, tocEntries }: { t: T; tocEntries: Array<{ n: string; t: stri
 function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
   return (
     <section style={{ ...rule2 }}>
-      <div className="v3-impact-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+      <div
+        className="v3-impact-grid"
+        style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}
+      >
         {impact.map((x, i) => (
-          <div key={i} style={{ padding: "32px 24px", borderRight: i < 3 ? "1px solid var(--v3-rule)" : "none" }}>
-            <div style={{ ...big, fontSize: 56, color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)", lineHeight: 1 }}>{x.k}</div>
-            <div style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", marginTop: 10, lineHeight: 1.5, letterSpacing: "0.02em" }}>{x.v}</div>
+          <div
+            key={i}
+            style={{
+              padding: "32px 24px",
+              borderRight: i < 3 ? "1px solid var(--v3-rule)" : "none",
+            }}
+          >
+            <div
+              style={{
+                ...big,
+                fontSize: 56,
+                color: i === 0 ? "var(--v3-accent)" : "var(--v3-fg)",
+                lineHeight: 1,
+              }}
+            >
+              {x.k}
+            </div>
+            <div
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-muted)",
+                marginTop: 10,
+                lineHeight: 1.5,
+                letterSpacing: "0.02em",
+              }}
+            >
+              {x.v}
+            </div>
           </div>
         ))}
       </div>
@@ -261,29 +458,88 @@ function ImpactStrip({ impact }: { impact: Array<{ k: string; v: string }> }) {
 }
 
 // ─── §01 Summary ───────────────────────────────────────────────────────────────
-function SummarySection({ summary, t, tldr }: { summary?: string; t: T; tldr: readonly string[] }) {
+function SummarySection({
+  summary,
+  t,
+  tldr,
+}: {
+  summary?: string;
+  t: T;
+  tldr: readonly string[];
+}) {
   return (
     <section id="cv-summary" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="01" label={t("cv.section.summary")} />
-      <div className="v3-cv-summary-grid" style={{ marginTop: 28, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 48px", alignItems: "start" }}>
+      <div
+        className="v3-cv-summary-grid"
+        style={{
+          marginTop: 28,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "0 48px",
+          alignItems: "start",
+        }}
+      >
         {/* Left: prose */}
         <div>
           {summary && (
-            <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--v3-fg)", margin: 0 }}>
+            <p
+              style={{
+                fontSize: 15,
+                lineHeight: 1.8,
+                color: "var(--v3-fg)",
+                margin: 0,
+              }}
+            >
               {stripHtmlLikeDelimiters(summary)}
             </p>
           )}
         </div>
         {/* Right: TL;DR */}
         <div style={{ borderLeft: "2px solid var(--v3-fg)", paddingLeft: 28 }}>
-          <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.18em", marginBottom: 12 }}>
+          <div
+            style={{
+              ...mono,
+              fontSize: 10,
+              color: "var(--v3-muted)",
+              letterSpacing: "0.18em",
+              marginBottom: 12,
+            }}
+          >
             {t("tldr.header")}
           </div>
           <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {tldr.map((item, i) => (
-              <li key={i} style={{ display: "grid", gridTemplateColumns: "28px 1fr", alignItems: "baseline", padding: "7px 0", gap: 8, borderBottom: "1px solid var(--v3-rule)" }}>
-                <span style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.08em" }}>0{i + 1}</span>
-                <span style={{ fontSize: 13.5, letterSpacing: "-0.005em", lineHeight: 1.5 }}>{item}</span>
+              <li
+                key={i}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "28px 1fr",
+                  alignItems: "baseline",
+                  padding: "7px 0",
+                  gap: 8,
+                  borderBottom: "1px solid var(--v3-rule)",
+                }}
+              >
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: "var(--v3-accent)",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span
+                  style={{
+                    fontSize: 13.5,
+                    letterSpacing: "-0.005em",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {item}
+                </span>
               </li>
             ))}
           </ol>
@@ -313,23 +569,72 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
       <SecHead n="02" label={t("cv.section.experience")} />
       <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
         {/* Header row */}
-        <div className="v3-cv-exp-grid-row" style={{ display: "grid", gridTemplateColumns: "100px 1fr 130px", padding: "10px 14px", borderBottom: "1px solid var(--v3-rule)", ...mono, fontSize: 10, letterSpacing: "0.14em", color: "var(--v3-muted)" }}>
+        <div
+          className="v3-cv-exp-grid-row"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "100px 1fr 130px",
+            padding: "10px 14px",
+            borderBottom: "1px solid var(--v3-rule)",
+            ...mono,
+            fontSize: 10,
+            letterSpacing: "0.14em",
+            color: "var(--v3-muted)",
+          }}
+        >
           <span>{t("cv.exp.colYears")}</span>
           <span>{t("cv.exp.colCompany")}</span>
           <span className="v3-cv-exp-loc">{t("cv.exp.colLocation")}</span>
         </div>
 
         {work.map((company, ci) => (
-          <div key={ci} style={{ borderBottom: ci < work.length - 1 ? "2px solid var(--v3-fg)" : "none" }}>
+          <div
+            key={ci}
+            style={{
+              borderBottom:
+                ci < work.length - 1 ? "2px solid var(--v3-fg)" : "none",
+            }}
+          >
             {/* Company row */}
-            <div className="v3-cv-exp-grid-row" style={{ display: "grid", gridTemplateColumns: "100px 1fr 130px", padding: "14px 14px 10px", alignItems: "baseline", gap: 12, borderBottom: "1px solid var(--v3-rule)" }}>
-              <span style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.06em" }}>
-                {company.positions[company.positions.length - 1]?.startDate?.slice(0, 4) ?? ""}
+            <div
+              className="v3-cv-exp-grid-row"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "100px 1fr 130px",
+                padding: "14px 14px 10px",
+                alignItems: "baseline",
+                gap: 12,
+                borderBottom: "1px solid var(--v3-rule)",
+              }}
+            >
+              <span
+                style={{
+                  ...mono,
+                  fontSize: 10.5,
+                  color: "var(--v3-muted)",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {company.positions[
+                  company.positions.length - 1
+                ]?.startDate?.slice(0, 4) ?? ""}
                 {" – "}
-                {company.positions[0]?.endDate ? company.positions[0].endDate.slice(0, 4) : t("exp.now")}
+                {company.positions[0]?.endDate
+                  ? company.positions[0].endDate.slice(0, 4)
+                  : t("exp.now")}
               </span>
-              <span style={{ ...big, fontSize: 22, letterSpacing: "-0.02em" }}>{company.company}</span>
-              <span className="v3-cv-exp-loc" style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.06em" }}>
+              <span style={{ ...big, fontSize: 22, letterSpacing: "-0.02em" }}>
+                {company.company}
+              </span>
+              <span
+                className="v3-cv-exp-loc"
+                style={{
+                  ...mono,
+                  fontSize: 10.5,
+                  color: "var(--v3-muted)",
+                  letterSpacing: "0.06em",
+                }}
+              >
                 {(company.location ?? "").toUpperCase()}
               </span>
             </div>
@@ -337,7 +642,7 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
             {company.positions.map((role, ri) => {
               const isCurrent = !role.endDate;
               const highlights = (role.highlights ?? []).map((h) =>
-                typeof h === "string" ? h : h.content
+                typeof h === "string" ? h : h.content,
               );
               return (
                 <div
@@ -348,34 +653,95 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
                     gridTemplateColumns: "100px 1fr 130px",
                     padding: "14px 14px",
                     gap: 12,
-                    borderBottom: ri < company.positions.length - 1 ? "1px dashed var(--v3-rule)" : "none",
+                    borderBottom:
+                      ri < company.positions.length - 1
+                        ? "1px dashed var(--v3-rule)"
+                        : "none",
                   }}
                 >
-                  <div style={{ ...mono, fontSize: 10, color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)", letterSpacing: "0.04em", lineHeight: 1.55 }}>
-                    {role.startDate ?? ""}{"\n→\n"}{role.endDate ?? "Present"}
-                    {isCurrent && <div style={{ marginTop: 4 }}>{t("cv.exp.current")}</div>}
+                  <div
+                    style={{
+                      ...mono,
+                      fontSize: 10,
+                      color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)",
+                      letterSpacing: "0.04em",
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    {role.startDate ?? ""}
+                    {"\n→\n"}
+                    {role.endDate ?? "Present"}
+                    {isCurrent && (
+                      <div style={{ marginTop: 4 }}>{t("cv.exp.current")}</div>
+                    )}
                   </div>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", marginBottom: 4 }}>{role.position}</div>
+                    <div
+                      style={{
+                        fontSize: 15,
+                        fontWeight: 700,
+                        letterSpacing: "-0.01em",
+                        marginBottom: 4,
+                      }}
+                    >
+                      {role.position}
+                    </div>
                     {role.summary && (
-                      <div style={{ fontSize: 13.5, color: "var(--v3-muted)", lineHeight: 1.6, marginBottom: highlights.length ? 10 : 0 }}>
+                      <div
+                        style={{
+                          fontSize: 13.5,
+                          color: "var(--v3-muted)",
+                          lineHeight: 1.6,
+                          marginBottom: highlights.length ? 10 : 0,
+                        }}
+                      >
                         {stripHtmlLikeDelimiters(role.summary)}
                       </div>
                     )}
                     {highlights.length > 0 && (
-                      <ul style={{ margin: "6px 0 0", padding: 0, listStyle: "none", display: "grid", gap: 4 }}>
+                      <ul
+                        style={{
+                          margin: "6px 0 0",
+                          padding: 0,
+                          listStyle: "none",
+                          display: "grid",
+                          gap: 4,
+                        }}
+                      >
                         {highlights.map((h, hi) => (
-                          <li key={hi} style={{ display: "grid", gridTemplateColumns: "16px 1fr", gap: 6, fontSize: 13, lineHeight: 1.55 }}>
-                            <span style={{ ...mono, color: "var(--v3-accent)" }}>→</span>
+                          <li
+                            key={hi}
+                            style={{
+                              display: "grid",
+                              gridTemplateColumns: "16px 1fr",
+                              gap: 6,
+                              fontSize: 13,
+                              lineHeight: 1.55,
+                            }}
+                          >
+                            <span
+                              style={{ ...mono, color: "var(--v3-accent)" }}
+                            >
+                              →
+                            </span>
                             <span>{stripHtmlLikeDelimiters(h)}</span>
                           </li>
                         ))}
                       </ul>
                     )}
                     {role.skills && role.skills.length > 0 && (
-                      <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 5, marginTop: 10 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap" as const,
+                          gap: 5,
+                          marginTop: 10,
+                        }}
+                      >
                         {role.skills.map((s) => (
-                          <span key={s} className="v3-chip">{s}</span>
+                          <span key={s} className="v3-chip">
+                            {s}
+                          </span>
                         ))}
                       </div>
                     )}
@@ -392,26 +758,73 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
 }
 
 // ─── §03 Skills ─────────────────────────────────────────────────────────────
-function SkillsSection({ skills, t }: { skills: Array<{ name: string; level?: string; keywords?: string[] }>; t: T }) {
+function SkillsSection({
+  skills,
+  t,
+}: {
+  skills: Array<{ name: string; level?: string; keywords?: string[] }>;
+  t: T;
+}) {
   return (
     <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="03" label={t("cv.section.skills")} />
-      <div className="v3-cv-skills-grid" style={{ marginTop: 24, border: "1px solid var(--v3-rule)", display: "grid", gridTemplateColumns: "repeat(2, 1fr)" }}>
+      <div
+        className="v3-cv-skills-grid"
+        style={{
+          marginTop: 24,
+          border: "1px solid var(--v3-rule)",
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+        }}
+      >
         {skills.map((g, i) => (
           <div
             key={g.name}
             style={{
               padding: "16px 18px",
               borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
-              borderBottom: i < skills.length - (skills.length % 2 === 0 ? 2 : 1) ? "1px solid var(--v3-rule)" : "none",
+              borderBottom:
+                i < skills.length - (skills.length % 2 === 0 ? 2 : 1)
+                  ? "1px solid var(--v3-rule)"
+                  : "none",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-              <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em" }}>{g.name}</span>
-              {g.level && <span style={{ ...mono, fontSize: 9.5, color: "var(--v3-accent)", letterSpacing: "0.14em" }}>{g.level.toUpperCase()}</span>}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                marginBottom: 10,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {g.name}
+              </span>
+              {g.level && (
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 9.5,
+                    color: "var(--v3-accent)",
+                    letterSpacing: "0.14em",
+                  }}
+                >
+                  {g.level.toUpperCase()}
+                </span>
+              )}
             </div>
             <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 5 }}>
-              {(g.keywords ?? []).map((kw) => <span key={kw} className="v3-chip">{kw}</span>)}
+              {(g.keywords ?? []).map((kw) => (
+                <span key={kw} className="v3-chip">
+                  {kw}
+                </span>
+              ))}
             </div>
           </div>
         ))}
@@ -426,26 +839,80 @@ function EducationSection({
   languages,
   t,
 }: {
-  education: Array<{ institution: string; area?: string; studyType?: string; startDate?: string; endDate?: string }>;
+  education: Array<{
+    institution: string;
+    area?: string;
+    studyType?: string;
+    startDate?: string;
+    endDate?: string;
+  }>;
   languages: Array<{ language: string; fluency?: string }>;
   t: T;
 }) {
   return (
     <section id="cv-education" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="04" label={t("cv.section.educationLanguages")} />
-      <div className="v3-cv-edu-grid" style={{ marginTop: 24, display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid var(--v3-rule)" }}>
-        <div style={{ padding: "18px 18px", borderRight: "1px solid var(--v3-rule)" }}>
-          <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.18em", marginBottom: 10 }}>{t("cv.edu.education")}</div>
+      <div
+        className="v3-cv-edu-grid"
+        style={{
+          marginTop: 24,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          border: "1px solid var(--v3-rule)",
+        }}
+      >
+        <div
+          style={{
+            padding: "18px 18px",
+            borderRight: "1px solid var(--v3-rule)",
+          }}
+        >
+          <div
+            style={{
+              ...mono,
+              fontSize: 10,
+              color: "var(--v3-muted)",
+              letterSpacing: "0.18em",
+              marginBottom: 10,
+            }}
+          >
+            {t("cv.edu.education")}
+          </div>
           {education.map((ed, i) => (
-            <div key={i} style={{ marginBottom: i < education.length - 1 ? 16 : 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em" }}>{ed.institution}</div>
+            <div
+              key={i}
+              style={{ marginBottom: i < education.length - 1 ? 16 : 0 }}
+            >
+              <div
+                style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {ed.institution}
+              </div>
               {(ed.studyType || ed.area) && (
-                <div style={{ fontSize: 13, color: "var(--v3-muted)", marginTop: 4 }}>
+                <div
+                  style={{
+                    fontSize: 13,
+                    color: "var(--v3-muted)",
+                    marginTop: 4,
+                  }}
+                >
                   {[ed.studyType, ed.area].filter(Boolean).join(" in ")}
                 </div>
               )}
               {(ed.startDate || ed.endDate) && (
-                <div style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", marginTop: 8, letterSpacing: "0.06em" }}>
+                <div
+                  style={{
+                    ...mono,
+                    fontSize: 10.5,
+                    color: "var(--v3-muted)",
+                    marginTop: 8,
+                    letterSpacing: "0.06em",
+                  }}
+                >
                   {ed.startDate} → {ed.endDate}
                 </div>
               )}
@@ -453,12 +920,41 @@ function EducationSection({
           ))}
         </div>
         <div style={{ padding: "18px 18px" }}>
-          <div style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", letterSpacing: "0.18em", marginBottom: 10 }}>{t("cv.edu.languages")}</div>
+          <div
+            style={{
+              ...mono,
+              fontSize: 10,
+              color: "var(--v3-muted)",
+              letterSpacing: "0.18em",
+              marginBottom: 10,
+            }}
+          >
+            {t("cv.edu.languages")}
+          </div>
           <div style={{ display: "grid", gap: 8 }}>
             {languages.map(({ language, fluency }) => (
-              <div key={language} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: 14 }}>
+              <div
+                key={language}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  fontSize: 14,
+                }}
+              >
                 <span style={{ fontWeight: 600 }}>{language}</span>
-                {fluency && <span style={{ ...mono, fontSize: 10.5, color: "var(--v3-muted)", letterSpacing: "0.08em" }}>{fluency.toUpperCase()}</span>}
+                {fluency && (
+                  <span
+                    style={{
+                      ...mono,
+                      fontSize: 10.5,
+                      color: "var(--v3-muted)",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
+                    {fluency.toUpperCase()}
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -469,7 +965,18 @@ function EducationSection({
 }
 
 // ─── §05 Publications ──────────────────────────────────────────────────────
-function PublicationsSection({ publications, t }: { publications: Array<{ name: string; publisher?: string; releaseDate?: string; url?: string }>; t: T }) {
+function PublicationsSection({
+  publications,
+  t,
+}: {
+  publications: Array<{
+    name: string;
+    publisher?: string;
+    releaseDate?: string;
+    url?: string;
+  }>;
+  t: T;
+}) {
   return (
     <section id="cv-publications" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="05" label={t("cv.section.publications")} />
@@ -489,19 +996,59 @@ function PublicationsSection({ publications, t }: { publications: Array<{ name: 
               alignItems: "baseline",
               textDecoration: "none",
               color: "var(--v3-fg)",
-              borderBottom: i < publications.length - 1 ? "1px solid var(--v3-rule)" : "none",
+              borderBottom:
+                i < publications.length - 1
+                  ? "1px solid var(--v3-rule)"
+                  : "none",
             }}
           >
-            <span className="v3-cv-pub-date" style={{ ...mono, fontSize: 11, color: "var(--v3-muted)", letterSpacing: "0.06em" }}>{pub.releaseDate ?? ""}</span>
+            <span
+              className="v3-cv-pub-date"
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-muted)",
+                letterSpacing: "0.06em",
+              }}
+            >
+              {pub.releaseDate ?? ""}
+            </span>
             <span>
-              <span style={{ fontSize: 14, fontWeight: 500, letterSpacing: "-0.005em" }}>{pub.name}</span>
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  letterSpacing: "-0.005em",
+                }}
+              >
+                {pub.name}
+              </span>
               {pub.publisher && (
-                <span style={{ ...mono, fontSize: 10, color: "var(--v3-muted)", marginLeft: 10, letterSpacing: "0.12em" }}>
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 10,
+                    color: "var(--v3-muted)",
+                    marginLeft: 10,
+                    letterSpacing: "0.12em",
+                  }}
+                >
                   · {pub.publisher.toUpperCase()}
                 </span>
               )}
             </span>
-            <span className="v3-cv-pub-arrow" style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", textAlign: "right" as const, letterSpacing: "0.1em" }}>{t("cv.pub.read")}</span>
+            <span
+              className="v3-cv-pub-arrow"
+              style={{
+                ...mono,
+                fontSize: 11,
+                color: "var(--v3-accent)",
+                textAlign: "right" as const,
+                letterSpacing: "0.1em",
+              }}
+            >
+              {t("cv.pub.read")}
+            </span>
           </a>
         ))}
       </div>
@@ -510,7 +1057,13 @@ function PublicationsSection({ publications, t }: { publications: Array<{ name: 
 }
 
 // ─── §06 References ────────────────────────────────────────────────────────
-function ReferencesSection({ references, t }: { references: Array<{ name: string; reference: string }>; t: T }) {
+function ReferencesSection({
+  references,
+  t,
+}: {
+  references: Array<{ name: string; reference: string }>;
+  t: T;
+}) {
   const refs = references.map((ref) => {
     const { name, role } = parseRefName(ref.name);
     return { name, role, fullText: stripHtmlLikeDelimiters(ref.reference) };
@@ -535,19 +1088,46 @@ function EndCta({ locale, t }: { locale: string; t: T }) {
         borderBottom: "2px solid var(--v3-fg)",
       }}
     >
-      <div className="v3-cv-endcta-grid" style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "end", gap: 24 }}>
+      <div
+        className="v3-cv-endcta-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          alignItems: "end",
+          gap: 24,
+        }}
+      >
         <div>
-          <div style={{ ...mono, fontSize: 11, opacity: 0.55, letterSpacing: "0.18em", marginBottom: 12 }}>
+          <div
+            style={{
+              ...mono,
+              fontSize: 11,
+              opacity: 0.55,
+              letterSpacing: "0.18em",
+              marginBottom: 12,
+            }}
+          >
             {t("cv.endcta.label")}
           </div>
-          <div className="v3-cv-endcta-h" style={{ ...big, fontSize: 56, lineHeight: 0.95 }}>
-            {t("cv.endcta.headline")} <span style={{ color: "var(--v3-accent)" }}>{t("cv.endcta.accent")}</span>.
+          <div
+            className="v3-cv-endcta-h"
+            style={{ ...big, fontSize: 56, lineHeight: 0.95 }}
+          >
+            {t("cv.endcta.headline")}{" "}
+            <span style={{ color: "var(--v3-accent)" }}>
+              {t("cv.endcta.accent")}
+            </span>
+            .
           </div>
-          <div style={{ fontSize: 13, opacity: 0.7, marginTop: 12, maxWidth: 520 }}>
+          <div
+            style={{ fontSize: 13, opacity: 0.7, marginTop: 12, maxWidth: 520 }}
+          >
             {t("cv.endcta.description")}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}>
+        <div
+          style={{ display: "flex", flexDirection: "column" as const, gap: 8 }}
+        >
           <a
             href={`/${locale}#contact`}
             style={{
@@ -629,17 +1209,27 @@ export default async function CVPage({ params }: PageProps) {
     // Degrade gracefully
   }
 
-  const name = (cv.basics?.name ?? (data.name as string) ?? "Vicente Opaso");
-  const label = (cv.basics?.label ?? (data.tagline as string) ?? "Web Engineering Manager · Frontend Architect");
+  const name = cv.basics?.name ?? (data.name as string) ?? "Vicente Opaso";
+  const label =
+    cv.basics?.label ??
+    (data.tagline as string) ??
+    "Web Engineering Manager · Frontend Architect";
 
   return (
-    <div className="v3-page" style={{ maxWidth: MAX_W, margin: "0 auto", width: "100%" }}>
+    <div
+      className="v3-page"
+      style={{ maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
+    >
       <CvMasthead name={name} label={label} locale={locale} t={t} />
       <CvToc t={t} tocEntries={siteData.cvToc} />
       <ImpactStrip impact={siteData.impact} />
       <SummarySection summary={cv.basics?.summary} t={t} tldr={siteData.tldr} />
-      {(cv.work?.length ?? 0) > 0 && <ExperienceSection work={cv.work!} t={t} />}
-      {(cv.skills?.length ?? 0) > 0 && <SkillsSection skills={cv.skills!} t={t} />}
+      {(cv.work?.length ?? 0) > 0 && (
+        <ExperienceSection work={cv.work!} t={t} />
+      )}
+      {(cv.skills?.length ?? 0) > 0 && (
+        <SkillsSection skills={cv.skills!} t={t} />
+      )}
       {((cv.education?.length ?? 0) > 0 || (cv.languages?.length ?? 0) > 0) && (
         <EducationSection
           education={cv.education ?? []}
@@ -647,8 +1237,12 @@ export default async function CVPage({ params }: PageProps) {
           t={t}
         />
       )}
-      {(cv.publications?.length ?? 0) > 0 && <PublicationsSection publications={cv.publications!} t={t} />}
-      {(cv.references?.length ?? 0) > 0 && <ReferencesSection references={cv.references!} t={t} />}
+      {(cv.publications?.length ?? 0) > 0 && (
+        <PublicationsSection publications={cv.publications!} t={t} />
+      )}
+      {(cv.references?.length ?? 0) > 0 && (
+        <ReferencesSection references={cv.references!} t={t} />
+      )}
       <EndCta locale={locale} t={t} />
     </div>
   );

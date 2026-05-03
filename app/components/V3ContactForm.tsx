@@ -7,11 +7,14 @@ import { useTranslations } from "@/lib/i18n";
 declare global {
   interface Window {
     turnstile?: {
-      render: (container: HTMLElement, options: {
-        sitekey: string;
-        callback: (token: string) => void;
-        size?: string;
-      }) => void;
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          callback: (token: string) => void;
+          size?: string;
+        },
+      ) => void;
       reset: () => void;
     };
   }
@@ -78,13 +81,20 @@ export function V3ContactForm() {
     };
 
     if (tryRender()) return;
-    const id = window.setInterval(() => { if (tryRender()) window.clearInterval(id); }, 200);
+    const id = window.setInterval(() => {
+      if (tryRender()) window.clearInterval(id);
+    }, 200);
     return () => window.clearInterval(id);
   }, []);
 
   const reset = useCallback(() => {
-    setName(""); setEmail(""); setSubject(""); setMessage("");
-    setErrorMsg(null); setEmailError(null); setMsgError(null);
+    setName("");
+    setEmail("");
+    setSubject("");
+    setMessage("");
+    setErrorMsg(null);
+    setEmailError(null);
+    setMsgError(null);
     setFormState("idle");
     window.turnstile?.reset();
     setTurnstileToken(null);
@@ -92,17 +102,33 @@ export function V3ContactForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setErrorMsg(null); setEmailError(null); setMsgError(null);
+    setErrorMsg(null);
+    setEmailError(null);
+    setMsgError(null);
 
     const trimEmail = email.trim();
     const trimMsg = message.trim();
     let valid = true;
 
-    if (!trimEmail) { setEmailError(t("form.emailRequired")); valid = false; }
-    else if (!emailRef.current?.validity.valid) { setEmailError(t("form.emailInvalid")); valid = false; }
-    if (!trimMsg) { setMsgError(t("form.messageRequired")); valid = false; }
-    if (!valid) { setErrorMsg(t("form.errorsAbove")); return; }
-    if (!turnstileToken) { setErrorMsg(t("form.verificationRequired")); return; }
+    if (!trimEmail) {
+      setEmailError(t("form.emailRequired"));
+      valid = false;
+    } else if (!emailRef.current?.validity.valid) {
+      setEmailError(t("form.emailInvalid"));
+      valid = false;
+    }
+    if (!trimMsg) {
+      setMsgError(t("form.messageRequired"));
+      valid = false;
+    }
+    if (!valid) {
+      setErrorMsg(t("form.errorsAbove"));
+      return;
+    }
+    if (!turnstileToken) {
+      setErrorMsg(t("form.verificationRequired"));
+      return;
+    }
 
     setFormState("submitting");
     try {
@@ -115,13 +141,17 @@ export function V3ContactForm() {
             name.trim() && `Name: ${name.trim()}`,
             subject.trim() && `Subject: ${subject.trim()}`,
             trimMsg,
-          ].filter(Boolean).join("\n\n"),
+          ]
+            .filter(Boolean)
+            .join("\n\n"),
           turnstileToken,
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => null) as { error?: string } | null;
+        const data = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
         throw new Error(data?.error ?? "Submission failed. Please try again.");
       }
 
@@ -129,7 +159,11 @@ export function V3ContactForm() {
     } catch (err) {
       window.turnstile?.reset();
       setTurnstileToken(null);
-      setErrorMsg(err instanceof Error ? err.message : "Unexpected error. Please try again.");
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "Unexpected error. Please try again.",
+      );
       setFormState("error");
     }
   }
@@ -138,20 +172,31 @@ export function V3ContactForm() {
 
   if (formState === "success") {
     return (
-      <div style={{
-        border: "1px solid var(--v3-rule)",
-        display: "flex",
-        flexDirection: "column" as const,
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 16,
-        padding: "48px 32px",
-        textAlign: "center" as const,
-      }}>
-        <div style={{ ...mono, fontSize: 11, color: "var(--v3-accent)", letterSpacing: "0.18em" }}>
+      <div
+        style={{
+          border: "1px solid var(--v3-rule)",
+          display: "flex",
+          flexDirection: "column" as const,
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 16,
+          padding: "48px 32px",
+          textAlign: "center" as const,
+        }}
+      >
+        <div
+          style={{
+            ...mono,
+            fontSize: 11,
+            color: "var(--v3-accent)",
+            letterSpacing: "0.18em",
+          }}
+        >
           {t("form.successLabel")}
         </div>
-        <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.01em" }}>
+        <div
+          style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.01em" }}
+        >
           {t("form.successMessage")}
         </div>
         <button
@@ -174,14 +219,18 @@ export function V3ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate style={{ display: "grid", gap: 0, border: "1px solid var(--v3-rule)" }}>
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      style={{ display: "grid", gap: 0, border: "1px solid var(--v3-rule)" }}
+    >
       {/* NAME */}
       <label style={labelRowStyle}>
         <span style={labelKeyStyle}>{t("form.name")}</span>
         <input
           name="name"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           disabled={disabled}
           style={inputStyle}
           autoComplete="name"
@@ -189,8 +238,18 @@ export function V3ContactForm() {
       </label>
 
       {/* EMAIL */}
-      <label style={{ ...labelRowStyle, ...(emailError ? { borderColor: "var(--v3-accent)" } : {}) }}>
-        <span style={{ ...labelKeyStyle, ...(emailError ? { color: "var(--v3-accent)" } : {}) }}>
+      <label
+        style={{
+          ...labelRowStyle,
+          ...(emailError ? { borderColor: "var(--v3-accent)" } : {}),
+        }}
+      >
+        <span
+          style={{
+            ...labelKeyStyle,
+            ...(emailError ? { color: "var(--v3-accent)" } : {}),
+          }}
+        >
           {t("form.email")} {emailError ? `— ${emailError}` : "*"}
         </span>
         <input
@@ -198,10 +257,13 @@ export function V3ContactForm() {
           type="email"
           name="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           disabled={disabled}
           required
-          style={{ ...inputStyle, ...(emailError ? { color: "var(--v3-accent)" } : {}) }}
+          style={{
+            ...inputStyle,
+            ...(emailError ? { color: "var(--v3-accent)" } : {}),
+          }}
           autoComplete="email"
         />
       </label>
@@ -212,42 +274,86 @@ export function V3ContactForm() {
         <input
           name="subject"
           value={subject}
-          onChange={e => setSubject(e.target.value)}
+          onChange={(e) => setSubject(e.target.value)}
           disabled={disabled}
           style={inputStyle}
         />
       </label>
 
       {/* MESSAGE */}
-      <label style={{ ...labelRowStyle, alignItems: "start", ...(msgError ? { borderColor: "var(--v3-accent)" } : {}) }}>
-        <span style={{ ...labelKeyStyle, paddingTop: 14, paddingBottom: 14, ...(msgError ? { color: "var(--v3-accent)" } : {}) }}>
+      <label
+        style={{
+          ...labelRowStyle,
+          alignItems: "start",
+          ...(msgError ? { borderColor: "var(--v3-accent)" } : {}),
+        }}
+      >
+        <span
+          style={{
+            ...labelKeyStyle,
+            paddingTop: 14,
+            paddingBottom: 14,
+            ...(msgError ? { color: "var(--v3-accent)" } : {}),
+          }}
+        >
           {t("form.message")} {msgError ? `— ${msgError}` : "*"}
         </span>
         <textarea
           name="message"
           value={message}
-          onChange={e => setMessage(e.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
           disabled={disabled}
           rows={5}
-          style={{ ...inputStyle, borderLeft: "1px solid var(--v3-rule)", resize: "none", paddingTop: 14 }}
+          style={{
+            ...inputStyle,
+            borderLeft: "1px solid var(--v3-rule)",
+            resize: "none",
+            paddingTop: 14,
+          }}
         />
       </label>
 
       {/* Turnstile */}
-      <div style={{ borderBottom: "1px solid var(--v3-rule)", padding: "12px 16px" }}>
+      <div
+        style={{
+          borderBottom: "1px solid var(--v3-rule)",
+          padding: "12px 16px",
+        }}
+      >
         <div ref={turnstileRef} style={{ minHeight: 65 }} />
       </div>
 
       {/* Footer: error + submit */}
-      <div style={{ padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-        <span style={{ ...mono, fontSize: 10, color: errorMsg ? "var(--v3-accent)" : "var(--v3-muted)", letterSpacing: "0.1em", flex: 1 }}>
+      <div
+        style={{
+          padding: "12px 16px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        <span
+          role="status"
+          aria-live="polite"
+          style={{
+            ...mono,
+            fontSize: 10,
+            color: errorMsg ? "var(--v3-accent)" : "var(--v3-muted)",
+            letterSpacing: "0.1em",
+            flex: 1,
+          }}
+        >
           {errorMsg ?? t("form.footer")}
         </span>
         <button
           type="submit"
           disabled={disabled || !turnstileToken}
           style={{
-            background: disabled || !turnstileToken ? "var(--v3-muted)" : "var(--v3-accent)",
+            background:
+              disabled || !turnstileToken
+                ? "var(--v3-muted)"
+                : "var(--v3-accent)",
             color: "#fff",
             border: "none",
             padding: "10px 18px",

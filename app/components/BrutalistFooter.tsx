@@ -9,11 +9,14 @@ export function BrutalistFooter() {
   const year = new Date().getFullYear();
 
   const footerLinks = [
-    { labelKey: "footer.privacyPolicy" as const,       href: "/privacy-policy" },
-    { labelKey: "footer.cookiePolicy" as const,         href: "/cookie-policy" },
-    { labelKey: "footer.accessibility" as const,        href: "/accessibility" },
-    { labelKey: "footer.technicalGovernance" as const,  href: "/technical-governance" },
-    { labelKey: "footer.techStack" as const,            href: "/tech-stack" },
+    { labelKey: "footer.privacyPolicy" as const, href: "/privacy-policy" },
+    { labelKey: "footer.cookiePolicy" as const, href: "/cookie-policy" },
+    { labelKey: "footer.accessibility" as const, href: "/accessibility" },
+    {
+      labelKey: "footer.technicalGovernance" as const,
+      href: "/technical-governance",
+    },
+    { labelKey: "footer.techStack" as const, href: "/tech-stack" },
   ];
 
   return (
@@ -25,7 +28,16 @@ export function BrutalistFooter() {
         borderTop: "2px solid var(--v3-fg)",
       }}
     >
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "24px 32px 28px", display: "grid", gap: 14, width: "100%" }}>
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: "0 auto",
+          padding: "24px 32px 28px",
+          display: "grid",
+          gap: 14,
+          width: "100%",
+        }}
+      >
         <div
           style={{
             fontSize: 10,
@@ -68,7 +80,15 @@ export function BrutalistFooter() {
                 {t(l.labelKey)}
               </a>
               {i < footerLinks.length - 1 && (
-                <span style={{ fontSize: 10.5, color: "var(--v3-muted)", fontFamily: "var(--f-mono)" }}>|</span>
+                <span
+                  style={{
+                    fontSize: 10.5,
+                    color: "var(--v3-muted)",
+                    fontFamily: "var(--f-mono)",
+                  }}
+                >
+                  |
+                </span>
               )}
             </React.Fragment>
           ))}

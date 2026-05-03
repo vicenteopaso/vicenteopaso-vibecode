@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "vibecode-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "port": 3000,
+      "cwd": "/Users/vicenteopaso/Documents/Documents - Francisca\u2019s MacBook Air/Repositories/vicenteopaso/vicenteopaso-vibecode"
+    }
+  ]
+}

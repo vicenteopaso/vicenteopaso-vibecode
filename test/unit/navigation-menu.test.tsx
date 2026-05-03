@@ -88,7 +88,7 @@ describe("NavigationMenu", () => {
 
     expect(screen.getByRole("link", { name: "CV" })).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: "Contact" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "CONTACT" })).toBeInTheDocument();
   });
 
   it("renders theme toggle button with accessible label", () => {

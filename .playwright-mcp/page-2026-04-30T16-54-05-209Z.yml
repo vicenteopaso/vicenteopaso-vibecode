@@ -1,0 +1,327 @@
+- generic [active] [ref=e1]:
+    - link "Skip to main content":
+        - /url: "#main-content"
+    - banner [ref=e2]:
+        - generic [ref=e3]:
+            - link "OPA.SO" [ref=e5] [cursor=pointer]:
+                - /url: /en
+            - navigation [ref=e6]:
+                - link "ABOUT" [ref=e7] [cursor=pointer]:
+                    - /url: /en
+                - link "CV" [ref=e8] [cursor=pointer]:
+                    - /url: /en/cv
+                - link "CONTACT" [ref=e9] [cursor=pointer]:
+                    - /url: "#contact"
+            - generic [ref=e10]:
+                - button "Switch language" [ref=e11] [cursor=pointer]: ES
+                - generic [ref=e12]: ·
+                - button "Toggle theme" [ref=e13] [cursor=pointer]: ☼
+    - main [ref=e14]:
+        - generic [ref=e15]:
+            - generic [ref=e17]:
+                - generic [ref=e18]:
+                    - generic [ref=e19]: ◈ VICENTE OPASO
+                    - heading "Frontend architecture. Engineering leadership." [level=1] [ref=e20]:
+                        - text: Frontend
+                        - text: architecture.
+                        - text: Engineering
+                        - text: leadership.
+                    - paragraph [ref=e21]: 15+ years shipping composable web platforms, design systems, and the teams behind them. Málaga, ES · Remote-EU.
+                    - generic [ref=e22]:
+                        - link "READ CV ↗" [ref=e23] [cursor=pointer]:
+                            - /url: /en/cv
+                        - link "VICENTE@OPA.SO" [ref=e24] [cursor=pointer]:
+                            - /url: "#contact"
+                - generic [ref=e25]:
+                    - generic [ref=e26]: CONTENTS ————
+                    - generic [ref=e27]:
+                        - link "§01 TL;DR— The 5-point version ↓" [ref=e28] [cursor=pointer]:
+                            - /url: "#tldr"
+                            - generic [ref=e29]: §01
+                            - generic [ref=e30]:
+                                - text: TL;DR
+                                - generic [ref=e31]: — The 5-point version
+                            - generic [ref=e32]: ↓
+                        - link "§02 WHAT I DO— Five areas of focus ↓" [ref=e33] [cursor=pointer]:
+                            - /url: "#what-i-do"
+                            - generic [ref=e34]: §02
+                            - generic [ref=e35]:
+                                - text: WHAT I DO
+                                - generic [ref=e36]: — Five areas of focus
+                            - generic [ref=e37]: ↓
+                        - link "§03 EXPERIENCE— 25 years · 8 roles ↓" [ref=e38] [cursor=pointer]:
+                            - /url: "#experience"
+                            - generic [ref=e39]: §03
+                            - generic [ref=e40]:
+                                - text: EXPERIENCE
+                                - generic [ref=e41]: — 25 years · 8 roles
+                            - generic [ref=e42]: ↓
+                        - link "§04 TECH & TOOLS— The current stack ↓" [ref=e43] [cursor=pointer]:
+                            - /url: "#tech-tools"
+                            - generic [ref=e44]: §04
+                            - generic [ref=e45]:
+                                - text: TECH & TOOLS
+                                - generic [ref=e46]: — The current stack
+                            - generic [ref=e47]: ↓
+                        - link "§05 CONTACT— Let's talk ↓" [ref=e48] [cursor=pointer]:
+                            - /url: "#contact"
+                            - generic [ref=e49]: §05
+                            - generic [ref=e50]:
+                                - text: CONTACT
+                                - generic [ref=e51]: — Let's talk
+                            - generic [ref=e52]: ↓
+            - generic [ref=e54]:
+                - generic [ref=e55]:
+                    - generic [ref=e56]: 25%
+                    - generic [ref=e57]: Core Web Vitals improvement across 6 markets
+                - generic [ref=e58]:
+                    - generic [ref=e59]: 40%
+                    - generic [ref=e60]: Reduction in release friction via CI/CD
+                - generic [ref=e61]:
+                    - generic [ref=e62]: €1B+
+                    - generic [ref=e63]: Annual turnover on platforms I architected
+                - generic [ref=e64]:
+                    - generic [ref=e65]: 15y+
+                    - generic [ref=e66]: Shipping on the web — and 10 years in telecom before
+            - generic [ref=e68]:
+                - generic [ref=e69]:
+                    - generic [ref=e70]: §01
+                    - generic [ref=e71]: TL;DR
+                    - generic [ref=e72]:
+                        - text: the short version,
+                        - text: for people who
+                        - text: skim everything.
+                - list [ref=e73]:
+                    - listitem [ref=e74]:
+                        - generic [ref=e75]: 01 —
+                        - generic [ref=e76]: I lead engineering teams and architect frontend platforms.
+                    - listitem [ref=e77]:
+                        - generic [ref=e78]: 02 —
+                        - generic [ref=e79]: I care about composable architecture, design systems, and developer experience.
+                    - listitem [ref=e80]:
+                        - generic [ref=e81]: 03 —
+                        - generic [ref=e82]: I ship accessible, performant, globally-localized products.
+                    - listitem [ref=e83]:
+                        - generic [ref=e84]: 04 —
+                        - generic [ref=e85]: I scale Communities of Practice and mentor distributed teams.
+                    - listitem [ref=e86]:
+                        - generic [ref=e87]: 05 —
+                        - generic [ref=e88]: I am, very likely, the only Frontend Architect you will meet who was also an RF engineer at Nokia.
+            - generic [ref=e89]:
+                - generic [ref=e90]:
+                    - generic [ref=e91]: §02
+                    - generic [ref=e92]: WHAT I DO
+                - generic [ref=e94]:
+                    - generic [ref=e95]:
+                        - generic [ref=e96]: "01"
+                        - generic [ref=e97]: Frontend Architecture
+                        - generic [ref=e98]: Composable React / Next.js ecosystems built for global delivery.
+                    - generic [ref=e99]:
+                        - generic [ref=e100]: "02"
+                        - generic [ref=e101]: Design Systems & UI Governance
+                        - generic [ref=e102]: Component libraries, tokens, accessibility, multi-surface consistency.
+                    - generic [ref=e103]:
+                        - generic [ref=e104]: "03"
+                        - generic [ref=e105]: Developer Experience
+                        - generic [ref=e106]: CI/CD automation, code-quality guardrails, onboarding, tooling.
+                    - generic [ref=e107]:
+                        - generic [ref=e108]: "04"
+                        - generic [ref=e109]: Engineering Leadership
+                        - generic [ref=e110]: Distributed teams, strategy, aligning product, design and engineering.
+                    - generic [ref=e111]:
+                        - generic [ref=e112]: "05"
+                        - generic [ref=e113]: Performance, A11y & SEO
+                        - generic [ref=e114]: Core Web Vitals, edge delivery, WCAG 2.1, technical SEO.
+            - generic [ref=e115]:
+                - generic [ref=e116]:
+                    - generic [ref=e117]: §03
+                    - generic [ref=e118]: WHERE I'VE WORKED
+                - generic [ref=e120]:
+                    - generic [ref=e121]:
+                        - generic [ref=e122]: DATES
+                        - generic [ref=e123]: ROLE · COMPANY
+                    - generic [ref=e124]:
+                        - generic [ref=e125]: 2025.07 – 2025.11
+                        - generic [ref=e126]:
+                            - text: Manager of Web Engineering
+                            - generic [ref=e127]: · Nexthink
+                        - link "READ ↗" [ref=e128] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e129]:
+                        - generic [ref=e130]: 2025.02 – 2025.07
+                        - generic [ref=e131]:
+                            - text: Technical Application Owner (User Domain)
+                            - generic [ref=e132]: · EUROCONTROL
+                        - link "READ ↗" [ref=e133] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e134]:
+                        - generic [ref=e135]: 2022.12 – 2024.12
+                        - generic [ref=e136]:
+                            - text: Frontend Solutions Architect
+                            - generic [ref=e137]: · Carlsberg Group
+                        - link "READ ↗" [ref=e138] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e139]:
+                        - generic [ref=e140]: 2022.12 – 2024.07
+                        - generic [ref=e141]:
+                            - text: Solutions Architect – Digital Marketing & Consumer Tech
+                            - generic [ref=e142]: · Carlsberg Group
+                        - link "READ ↗" [ref=e143] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e144]:
+                        - generic [ref=e145]: 2021.01 – 2022.12
+                        - generic [ref=e146]:
+                            - text: Lead Developer & Architect – Malty Design System
+                            - generic [ref=e147]: · Carlsberg Group
+                        - link "READ ↗" [ref=e148] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e149]:
+                        - generic [ref=e150]: 2021.03 – 2022.12
+                        - generic [ref=e151]:
+                            - text: Principal Frontend Developer
+                            - generic [ref=e152]: · Carlsberg Group
+                        - link "READ ↗" [ref=e153] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e154]:
+                        - generic [ref=e155]: 2020.01 – 2021.03
+                        - generic [ref=e156]:
+                            - text: Lead Frontend Developer
+                            - generic [ref=e157]: · Carlsberg Group
+                        - link "READ ↗" [ref=e158] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e159]:
+                        - generic [ref=e160]: 2012.03 – 2019.06
+                        - generic [ref=e161]:
+                            - text: Co-founder & Principal
+                            - generic [ref=e162]: · Greygoo
+                        - link "READ ↗" [ref=e163] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e164]:
+                        - generic [ref=e165]: 2018.12 – 2019.06
+                        - generic [ref=e166]:
+                            - text: Senior Frontend Developer
+                            - generic [ref=e167]: · Opaso LLC
+                        - link "READ ↗" [ref=e168] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e169]:
+                        - generic [ref=e170]: 2018.06 – 2018.11
+                        - generic [ref=e171]:
+                            - text: A/B Testing Developer
+                            - generic [ref=e172]: · Cro Metrics
+                        - link "READ ↗" [ref=e173] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e174]:
+                        - generic [ref=e175]: 2011.04 – 2012.04
+                        - generic [ref=e176]:
+                            - text: Frontend Developer
+                            - generic [ref=e177]: · Upshot Agency
+                        - link "READ ↗" [ref=e178] [cursor=pointer]:
+                            - /url: /en/cv#experience
+                    - generic [ref=e179]:
+                        - generic [ref=e180]: 2001.10 – 2011.03
+                        - generic [ref=e181]:
+                            - text: Contracting Engineer
+                            - generic [ref=e182]: · Nokia Networks
+                        - link "READ ↗" [ref=e183] [cursor=pointer]:
+                            - /url: /en/cv#experience
+            - generic [ref=e184]:
+                - generic [ref=e185]:
+                    - generic [ref=e186]: §04
+                    - generic [ref=e187]: TECH & TOOLS
+                - generic [ref=e189]:
+                    - generic [ref=e190]:
+                        - generic [ref=e191]:
+                            - generic [ref=e192]: JavaScript
+                            - generic [ref=e193]: MASTER
+                        - generic [ref=e194]: TypeScript · Node.js · ECMAScript · Micro Frontends
+                    - generic [ref=e195]:
+                        - generic [ref=e196]:
+                            - generic [ref=e197]: Frontend Development
+                            - generic [ref=e198]: MASTER
+                        - generic [ref=e199]: React · Next.js · Angular · React Native · Gatsby · Progressive Web Apps · SPA · Server-Side Rendering · Static Site Generation · Headless CMS · GraphQL · REST · Service Workers
+                    - generic [ref=e200]:
+                        - generic [ref=e201]:
+                            - generic [ref=e202]: Design Systems
+                            - generic [ref=e203]: MASTER
+                        - generic [ref=e204]: Figma · Storybook · Design Tokens · Inner-sourcing · Governance
+                    - generic [ref=e205]:
+                        - generic [ref=e206]:
+                            - generic [ref=e207]: Developer Experience
+                            - generic [ref=e208]: MASTER
+                        - generic [ref=e209]: CI/CD Optimization · GitHub Actions · CodeQL · Onboarding Automation · Tooling Workflows · DX Strategy
+                    - generic [ref=e210]:
+                        - generic [ref=e211]:
+                            - generic [ref=e212]: AWS
+                            - generic [ref=e213]: ADVANCED
+                        - generic [ref=e214]: S3 · CloudFront · Lambda · CloudWatch · Amplify
+                    - generic [ref=e215]:
+                        - generic [ref=e216]:
+                            - generic [ref=e217]: GitHub
+                            - generic [ref=e218]: ADVANCED
+                        - generic [ref=e219]: GitHub Actions · Pages · Packages · GHAS · Branch Protections
+                    - generic [ref=e220]:
+                        - generic [ref=e221]:
+                            - generic [ref=e222]: HTML
+                            - generic [ref=e223]: MASTER
+                        - generic [ref=e224]: HTML5 · Web Components · HTML Modules · Canvas · Semantic HTML
+                    - generic [ref=e225]:
+                        - generic [ref=e226]:
+                            - generic [ref=e227]: CSS
+                            - generic [ref=e228]: MASTER
+                        - generic [ref=e229]: Tailwind CSS · Sass · Less · CSS-in-JS
+                    - generic [ref=e230]:
+                        - generic [ref=e231]:
+                            - generic [ref=e232]: Testing
+                            - generic [ref=e233]: BASIC
+                        - generic [ref=e234]: Jest · Cypress · React Testing Library
+            - generic [ref=e236]:
+                - generic [ref=e237]:
+                    - generic [ref=e238]:
+                        - generic [ref=e239]: §05
+                        - generic [ref=e240]: GET IN TOUCH
+                    - heading "Let's talk." [level=2] [ref=e242]:
+                        - text: Let's
+                        - text: talk.
+                    - paragraph [ref=e243]: Best for engineering leadership, frontend architecture, or design system roles in Europe / remote.
+                    - generic [ref=e244]:
+                        - generic [ref=e245]: → vicente@opa.so
+                        - generic [ref=e246]: → linkedin.com/in/vicenteopaso
+                        - generic [ref=e247]: → github.com/vicenteopaso
+                - generic [ref=e248]:
+                    - generic [ref=e249]:
+                        - generic [ref=e250]: NAME
+                        - textbox "NAME" [ref=e251]
+                    - generic [ref=e252]:
+                        - generic [ref=e253]: EMAIL
+                        - textbox "EMAIL" [ref=e254]
+                    - generic [ref=e255]:
+                        - generic [ref=e256]: SUBJECT
+                        - textbox "SUBJECT" [ref=e257]
+                    - generic [ref=e258]:
+                        - generic [ref=e259]: MESSAGE
+                        - textbox "MESSAGE" [ref=e260]
+                    - generic [ref=e261]:
+                        - generic [ref=e262]: TURNSTILE · FORMSPREE
+                        - button "SEND →" [ref=e263] [cursor=pointer]
+    - contentinfo [ref=e264]:
+        - generic [ref=e265]:
+            - generic [ref=e266]:
+                - generic [ref=e267]: © 2026 VICENTE OPASO · DESIGNED AND DEVELOPED WITH AI, SDD, AND ❤
+                - generic [ref=e268]: BUILT WITH SDD ↗
+            - generic [ref=e269]:
+                - link "Privacy Policy" [ref=e270] [cursor=pointer]:
+                    - /url: /privacy-policy
+                - generic [ref=e271]: "|"
+                - link "Cookie Policy" [ref=e272] [cursor=pointer]:
+                    - /url: /cookie-policy
+                - generic [ref=e273]: "|"
+                - link "Accessibility" [ref=e274] [cursor=pointer]:
+                    - /url: /accessibility
+                - generic [ref=e275]: "|"
+                - link "Technical Governance" [ref=e276] [cursor=pointer]:
+                    - /url: /technical-governance
+                - generic [ref=e277]: "|"
+                - link "Tech Stack" [ref=e278] [cursor=pointer]:
+                    - /url: /tech-stack
+    - button "Open Next.js Dev Tools" [ref=e284] [cursor=pointer]:
+        - img [ref=e285]
