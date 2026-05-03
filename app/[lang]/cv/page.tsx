@@ -143,15 +143,7 @@ function parseRefName(raw: string): { name: string; role: string } {
 }
 
 // ─── CV Masthead ───────────────────────────────────────────────────────────────
-function CvMasthead({
-  name,
-  label,
-  t,
-}: {
-  name: string;
-  label: string;
-  t: T;
-}) {
+function CvMasthead({ name, label, t }: { name: string; label: string; t: T }) {
   const meta = [
     [t("cv.metaLocation"), t("cv.metaLocationValue")],
     [t("cv.metaAvailability"), t("cv.metaAvailabilityValue")],
@@ -220,7 +212,11 @@ function CvMasthead({
             {t("cv.subtitle1")} {t("cv.subtitle2")}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
-            <CvBtn href={CV_PDF_PATH} primary download="vicente-opaso-cv-2026.pdf">
+            <CvBtn
+              href={CV_PDF_PATH}
+              primary
+              download="vicente-opaso-cv-2026.pdf"
+            >
               {t("cv.downloadPdf")}
             </CvBtn>
             <CvBtn href="#contact">{t("cv.emailCta")}</CvBtn>
