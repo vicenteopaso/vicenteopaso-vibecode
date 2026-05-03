@@ -318,7 +318,7 @@ export function V3ContactForm() {
           <span
             id="v3-contact-message-error"
             role="alert"
-            style={{ display: "none" }}
+            className="sr-only"
           >
             {msgError}
           </span>
