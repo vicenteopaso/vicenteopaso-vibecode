@@ -133,7 +133,7 @@ export const aboutPageComponents: Components = {
       <span className="font-mono text-[color:var(--v3-accent)] shrink-0">
         →
       </span>
-      <span>{children}</span>
+      <div>{children}</div>
     </li>
   ),
   ol: (props) => (
@@ -165,7 +165,7 @@ export const introComponents: Components = {
       <span className="font-mono text-[color:var(--v3-accent)] shrink-0">
         →
       </span>
-      <span>{children}</span>
+      <div>{children}</div>
     </li>
   ),
   ol: (props) => (

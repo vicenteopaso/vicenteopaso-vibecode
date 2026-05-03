@@ -1,12 +1,14 @@
 import fs from "fs";
-import matter from "gray-matter";
 import type { Metadata } from "next";
+import type { Route } from "next";
+import Link from "next/link";
 import path from "path";
 
 import { V3ContactForm } from "@/app/components/V3ContactForm";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
+import { logWarning } from "@/lib/error-logging";
 import { ogCacheVersion, siteConfig } from "@/lib/seo";
-import { getSiteData, SITE_BRANDS } from "@/lib/site-data";
+import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-static";
 
@@ -252,8 +254,8 @@ function HeroBtn({
   href: string;
 }) {
   return (
-    <a
-      href={href}
+    <Link
+      href={href as Route}
       style={{
         display: "inline-block",
         background: primary ? "var(--v3-accent)" : "transparent",
@@ -269,7 +271,7 @@ function HeroBtn({
       }}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -615,8 +617,8 @@ function ExperienceTable({
                 >
                   {company.location ?? ""}
                 </span>
-                <a
-                  href={`/${locale}/cv#cv-experience`}
+                <Link
+                  href={`/${locale}/cv#cv-experience` as Route}
                   style={{
                     ...mono,
                     fontSize: 11,
@@ -627,54 +629,11 @@ function ExperienceTable({
                   }}
                 >
                   {t("exp.read")}
-                </a>
+                </Link>
               </div>
             );
           }),
         )}
-      </div>
-    </section>
-  );
-}
-
-// ─── Brands inverted strip ────────────────────────────────────────────────────
-function BrandsStrip({ t }: { t: T }) {
-  return (
-    <section
-      style={{
-        padding: "32px 32px",
-        ...rule2,
-        background: "var(--v3-fg)",
-        color: "var(--v3-bg)",
-        maxWidth: MAX_W,
-        margin: "0 auto",
-        width: "100%",
-      }}
-    >
-      <div
-        style={{
-          ...mono,
-          fontSize: 10,
-          letterSpacing: "0.18em",
-          opacity: 0.6,
-          marginBottom: 16,
-        }}
-      >
-        {t("brands.header")}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap" as const,
-          gap: "8px 28px",
-          alignItems: "baseline",
-        }}
-      >
-        {SITE_BRANDS.map((b) => (
-          <span key={b} style={{ ...big, fontSize: 32 }}>
-            {b}
-          </span>
-        ))}
       </div>
     </section>
   );
@@ -862,12 +821,6 @@ export default async function HomePage({ params }: PageProps) {
   const t = getTranslations(locale);
   const siteData = getSiteData(locale);
 
-  // Load about.md for name/tagline
-  const aboutPath = path.join(process.cwd(), "content", locale, "about.md");
-  const aboutContents = fs.readFileSync(aboutPath, "utf8");
-  const { data: aboutData } = matter(aboutContents);
-  void aboutData;
-
   // Load cv.json for work + skills
   let work: WorkEntry[] = [];
   let skills: SkillGroup[] = [];
@@ -879,8 +832,11 @@ export default async function HomePage({ params }: PageProps) {
     };
     work = cv.work ?? [];
     skills = cv.skills ?? [];
-  } catch {
-    // Content not available in this locale — degrade gracefully
+  } catch (err) {
+    logWarning(`Landing page CV JSON load failed for locale "${locale}"`, {
+      component: "HomePage",
+      metadata: { error: err instanceof Error ? err.message : String(err) },
+    });
   }
 
   return (
@@ -894,9 +850,6 @@ export default async function HomePage({ params }: PageProps) {
       />
       <FocusStrip t={t} focus={siteData.focus} />
       <ExperienceTable work={work} locale={locale} t={t} />
-      <div style={{ display: "none" }}>
-        <BrandsStrip t={t} />
-      </div>
       <StackGrid skills={skills} t={t} />
       <ContactBlock t={t} />
     </div>

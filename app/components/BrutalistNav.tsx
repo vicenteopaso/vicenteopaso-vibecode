@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -86,7 +87,7 @@ export function BrutalistNav() {
           }}
         >
           <Link
-            href={`/${locale}`}
+            href={`/${locale}` as Route}
             style={{
               color: "var(--v3-fg)",
               fontWeight: 600,
@@ -110,7 +111,7 @@ export function BrutalistNav() {
           {navLinks.map((l) => (
             <Link
               key={l.label}
-              href={l.href}
+              href={l.href as Route}
               style={{
                 color: isActive(l.href) ? "var(--v3-fg)" : "inherit",
                 textDecoration: "none",

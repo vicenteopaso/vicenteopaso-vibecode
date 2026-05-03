@@ -297,10 +297,15 @@ export function V3ContactForm() {
           {t("form.message")} {msgError ? `— ${msgError}` : "*"}
         </span>
         <textarea
+          id="v3-contact-message"
           name="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           disabled={disabled}
+          required
+          aria-required="true"
+          aria-invalid={!!msgError}
+          aria-describedby={msgError ? "v3-contact-message-error" : undefined}
           rows={5}
           style={{
             ...inputStyle,
@@ -309,6 +314,15 @@ export function V3ContactForm() {
             paddingTop: 14,
           }}
         />
+        {msgError && (
+          <span
+            id="v3-contact-message-error"
+            role="alert"
+            style={{ display: "none" }}
+          >
+            {msgError}
+          </span>
+        )}
       </label>
 
       {/* Turnstile */}

@@ -95,7 +95,15 @@ export function proxy(req: NextRequest) {
   );
 
   if (pathnameHasLocale) {
-    return NextResponse.next();
+    // Forward the active locale as a request header so the root layout can set
+    // the HTML lang attribute server-side (avoids SSR/hydration mismatch).
+    const activeLocale =
+      (locales.find(
+        (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`,
+      ) as Locale | undefined) ?? defaultLocale;
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("x-locale", activeLocale);
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   // Detect locale and redirect

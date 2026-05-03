@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import Link from "next/link";
 import React from "react";
 
@@ -71,7 +72,7 @@ export function BrutalistFooter() {
           {footerLinks.map((l, i) => (
             <React.Fragment key={l.path}>
               <Link
-                href={`/${locale}/${l.path}`}
+                href={`/${locale}/${l.path}` as Route}
                 style={{
                   fontSize: 10.5,
                   color: "var(--v3-accent)",

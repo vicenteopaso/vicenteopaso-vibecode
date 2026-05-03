@@ -2,6 +2,7 @@ import "../styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { headers } from "next/headers";
 import Script from "next/script";
 import React from "react";
 
@@ -61,14 +62,19 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Read the locale forwarded by proxy.ts via the x-locale request header.
+  // This allows SSR to emit the correct <html lang> without a client-side fix.
+  const headersList = await headers();
+  const locale = headersList.get("x-locale") ?? "en";
+
   return (
     <html
-      lang="en"
+      lang={locale}
       suppressHydrationWarning
       className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}
     >
