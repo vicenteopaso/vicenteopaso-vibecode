@@ -177,6 +177,7 @@ function CvRefCard({
           transition: "opacity 0.2s ease, transform 0.22s ease",
           pointerEvents: "none",
         }}
+        aria-hidden={!expanded}
       >
         <CardContent index={index} name={name} role={role} text={fullText} />
       </div>

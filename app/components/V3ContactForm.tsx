@@ -58,6 +58,7 @@ export function V3ContactForm() {
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [formState, setFormState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -138,12 +139,13 @@ export function V3ContactForm() {
         body: JSON.stringify({
           email: trimEmail,
           message: [
-            name.trim() && `Name: ${name.trim()}`,
-            subject.trim() && `Subject: ${subject.trim()}`,
+            name.trim() && `${t("form.name")}: ${name.trim()}`,
+            subject.trim() && `${t("form.subject")}: ${subject.trim()}`,
             trimMsg,
           ]
             .filter(Boolean)
             .join("\n\n"),
+          honeypot,
           turnstileToken,
         }),
       });
@@ -222,6 +224,17 @@ export function V3ContactForm() {
       noValidate
       style={{ display: "grid", gap: 0, border: "1px solid var(--v3-rule)" }}
     >
+      {/* Honeypot — hidden from users, filled only by bots */}
+      <input
+        type="text"
+        name="website"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        style={{ display: "none" }}
+        aria-hidden="true"
+      />
       {/* NAME */}
       <label style={labelRowStyle}>
         <span style={labelKeyStyle}>{t("form.name")}</span>
@@ -315,11 +328,7 @@ export function V3ContactForm() {
           }}
         />
         {msgError && (
-          <span
-            id="v3-contact-message-error"
-            role="alert"
-            className="sr-only"
-          >
+          <span id="v3-contact-message-error" role="alert" className="sr-only">
             {msgError}
           </span>
         )}

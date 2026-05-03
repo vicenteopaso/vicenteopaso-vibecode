@@ -38,11 +38,9 @@ export function BrutalistNav() {
   };
 
   const isActive = (href: string) => {
-    if (!pathname) return false;
-    // Strip fragment for comparison — pathname never includes hash
-    const path = href.split("#")[0];
-    if (!path || path === `/${locale}`) return pathname === `/${locale}`;
-    return pathname.startsWith(path);
+    if (!pathname || href.includes("#")) return false;
+    if (href === `/${locale}`) return pathname === `/${locale}`;
+    return pathname.startsWith(href);
   };
 
   const navLinks = [
