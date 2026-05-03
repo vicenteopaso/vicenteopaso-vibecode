@@ -6,8 +6,8 @@ import path from "path";
 
 import { CvRefsGrid } from "@/app/components/CvRefCard";
 import { CV_PDF_PATH } from "@/app/config/cv";
-import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { logWarning } from "@/lib/error-logging";
+import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
 
@@ -146,12 +146,10 @@ function parseRefName(raw: string): { name: string; role: string } {
 function CvMasthead({
   name,
   label,
-  locale,
   t,
 }: {
   name: string;
   label: string;
-  locale: string;
   t: T;
 }) {
   const meta = [
@@ -1224,7 +1222,7 @@ export default async function CVPage({ params }: PageProps) {
       className="v3-page"
       style={{ maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
     >
-      <CvMasthead name={name} label={label} locale={locale} t={t} />
+      <CvMasthead name={name} label={label} t={t} />
       <CvToc t={t} tocEntries={siteData.cvToc} />
       <ImpactStrip impact={siteData.impact} />
       <SummarySection summary={cv.basics?.summary} t={t} tldr={siteData.tldr} />

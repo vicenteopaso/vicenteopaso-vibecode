@@ -1,5 +1,6 @@
 "use client";
 
+import type { KeyboardEvent } from "react";
 import { useState } from "react";
 
 const mono: React.CSSProperties = { fontFamily: "var(--f-mono)" };
@@ -104,17 +105,23 @@ function CvRefCard({
     onLeave();
   };
   const handleToggle = () => {
-    setExpanded((currentExpanded) => {
-      const nextExpanded = !currentExpanded;
+    const nextExpanded = !expanded;
+    setExpanded(nextExpanded);
 
-      if (nextExpanded) {
-        onEnter();
-      } else {
-        onLeave();
-      }
+    if (nextExpanded) {
+      onEnter();
+    } else {
+      onLeave();
+    }
+  };
 
-      return nextExpanded;
-    });
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    handleToggle();
   };
 
   return (
@@ -126,6 +133,7 @@ function CvRefCard({
       onFocus={handleFocus}
       onBlur={handleBlur}
       onClick={handleToggle}
+      onKeyDown={handleKeyDown}
       style={{
         position: "relative",
         padding: "20px",

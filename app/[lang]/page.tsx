@@ -91,7 +91,7 @@ function HeroA4({
 }: {
   locale: string;
   t: T;
-  tocEntries: Array<{ n: string; t: string; s: string }>;
+  tocEntries: Array<{ n: string; id: string; t: string; s: string }>;
 }) {
   return (
     <section
