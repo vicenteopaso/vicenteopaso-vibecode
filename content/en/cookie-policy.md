@@ -25,7 +25,7 @@ opa.so uses **only one category** of cookie:
 - **Name**: `preferred-locale`
 - **Purpose**: Remembers your language preference (English or Spanish) so the correct locale is served on your next visit without requiring a redirect.
 - **Set by**: The site itself (`LocaleProvider` component) when you visit any page.
-- **Expiry**: Session / browser default (no explicit max-age set).
+- **Expiry**: 1 year (`max-age=31536000`).
 - **Personal data processed**: None — stores only `"en"` or `"es"`.
 - **Legal basis**: **Legitimate Interest** (Article 6(1)(f) GDPR) — required for consistent language routing.
 

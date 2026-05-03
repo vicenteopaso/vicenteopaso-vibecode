@@ -36,6 +36,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(newLocale);
     localStorage.setItem("preferred-locale", newLocale);
     document.cookie = `preferred-locale=${newLocale};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
+    document.documentElement.lang = newLocale;
   };
 
   // Don't render until mounted to avoid hydration mismatch

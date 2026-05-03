@@ -29,16 +29,15 @@ describe("CvRefsGrid", () => {
       "border-bottom: 1px solid var(--v3-rule)",
     );
     expect(cards[0].style.opacity).toBe("1");
-    expect(cards[1].getAttribute("style")).toContain("border-right: medium");
-    expect(cards[1].getAttribute("style")).toContain(
-      "border-bottom: 1px solid var(--v3-rule)",
-    );
-    expect(cards[2].getAttribute("style")).toContain(
-      "border-right: 1px solid var(--v3-rule)",
-    );
-    expect(cards[2].getAttribute("style")).toContain("border-bottom: medium");
-    expect(cards[3].getAttribute("style")).toContain("border-right: medium");
-    expect(cards[3].getAttribute("style")).toContain("border-bottom: medium");
+    // Card 1: right col (no right border), top row (has bottom border)
+    expect(cards[1].getAttribute("style")).not.toContain("border-right: 1px solid");
+    expect(cards[1].getAttribute("style")).toContain("border-bottom: 1px solid var(--v3-rule)");
+    // Card 2: left col (has right border), last row (no bottom border)
+    expect(cards[2].getAttribute("style")).toContain("border-right: 1px solid var(--v3-rule)");
+    expect(cards[2].getAttribute("style")).not.toContain("border-bottom: 1px solid");
+    // Card 3: right col + last row (no right or bottom border)
+    expect(cards[3].getAttribute("style")).not.toContain("border-right: 1px solid");
+    expect(cards[3].getAttribute("style")).not.toContain("border-bottom: 1px solid");
 
     const firstOverlay = cards[0].children[1] as HTMLElement;
     expect(firstOverlay).toHaveStyle({ top: "0px" });
@@ -72,7 +71,7 @@ describe("CvRefsGrid", () => {
     expect((firstCard.children[0] as HTMLElement).style.visibility).toBe(
       "hidden",
     );
-    expect((firstCard.children[1] as HTMLElement)).toHaveStyle({
+    expect(firstCard.children[1] as HTMLElement).toHaveStyle({
       opacity: "1",
       transform: "translateY(0) scale(1)",
     });

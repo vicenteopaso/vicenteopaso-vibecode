@@ -17,8 +17,10 @@ None — reads locale from `LocaleProvider`.
 
 | Label key | Route |
 | --- | --- |
-| `footer.privacy` | `/${locale}/privacy-policy` |
-| `footer.cookie` | `/${locale}/cookie-policy` |
+| `footer.privacyPolicy` | `/${locale}/privacy-policy` |
+| `footer.cookiePolicy` | `/${locale}/cookie-policy` |
+| `footer.accessibility` | `/${locale}/accessibility` |
+| `footer.technicalGovernance` | `/${locale}/technical-governance` |
 | `footer.techStack` | `/${locale}/tech-stack` |
 
 ## Accessibility

@@ -11,7 +11,9 @@ const PORT = Number(process.env.PLAYWRIGHT_PORT ?? process.env.PORT ?? 3100);
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORT}`;
 const WEB_SERVER_COMMAND =
   process.env.PLAYWRIGHT_WEB_SERVER_COMMAND ??
-  `pnpm build && pnpm start --port ${PORT}`;
+  (process.env.CI
+    ? `pnpm start --port ${PORT}`
+    : `pnpm build && pnpm start --port ${PORT}`);
 
 export default defineConfig({
   testMatch: /.*\.(spec|test)\.(ts|tsx)$/,
