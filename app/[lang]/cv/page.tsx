@@ -1223,10 +1223,10 @@ export default async function CVPage({ params }: PageProps) {
       <ImpactStrip impact={siteData.impact} />
       <SummarySection summary={cv.basics?.summary} t={t} tldr={siteData.tldr} />
       {(cv.work?.length ?? 0) > 0 && (
-        <ExperienceSection work={cv.work!} t={t} />
+        <ExperienceSection work={cv.work ?? []} t={t} />
       )}
       {(cv.skills?.length ?? 0) > 0 && (
-        <SkillsSection skills={cv.skills!} t={t} />
+        <SkillsSection skills={cv.skills ?? []} t={t} />
       )}
       {((cv.education?.length ?? 0) > 0 || (cv.languages?.length ?? 0) > 0) && (
         <EducationSection
@@ -1236,10 +1236,10 @@ export default async function CVPage({ params }: PageProps) {
         />
       )}
       {(cv.publications?.length ?? 0) > 0 && (
-        <PublicationsSection publications={cv.publications!} t={t} />
+        <PublicationsSection publications={cv.publications ?? []} t={t} />
       )}
       {(cv.references?.length ?? 0) > 0 && (
-        <ReferencesSection references={cv.references!} t={t} />
+        <ReferencesSection references={cv.references ?? []} t={t} />
       )}
       <EndCta locale={locale} t={t} />
     </div>
