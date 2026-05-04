@@ -391,7 +391,7 @@ export function createCvOgImage(locale: OgLocale = "en") {
       : "Experience, technical leadership, and design systems for ",
     panelHighlight: isEs ? "equipos globales." : "global teams.",
     bottomLeftLabel: isEs ? "SECCIÓN" : "SECTION",
-    bottomLeftValue: isEs ? "Experiencia y skills" : "Experience & skills",
+    bottomLeftValue: isEs ? "Experiencia y habilidades" : "Experience & skills",
     bottomRightLabel: isEs ? "DOCUMENTO" : "DOCUMENT",
     bottomRightValue: isEs ? "● CV activo" : "● Live CV",
   });
