@@ -28,9 +28,15 @@ describe("LocaleProvider and useLocale", () => {
     store = {};
     global.localStorage = {
       getItem: vi.fn((key: string) => store[key] || null),
-      setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-      removeItem: vi.fn((key: string) => { delete store[key]; }),
-      clear: vi.fn(() => { store = {}; }),
+      setItem: vi.fn((key: string, value: string) => {
+        store[key] = value;
+      }),
+      removeItem: vi.fn((key: string) => {
+        delete store[key];
+      }),
+      clear: vi.fn(() => {
+        store = {};
+      }),
       length: 0,
       key: vi.fn(() => null),
     } as unknown as Storage;
@@ -99,7 +105,9 @@ describe("LocaleProvider and useLocale", () => {
         return (
           <div>
             <div data-testid="locale">{locale}</div>
-            <button data-testid="change-btn" onClick={() => setLocale("es")}>Change</button>
+            <button data-testid="change-btn" onClick={() => setLocale("es")}>
+              Change
+            </button>
           </div>
         );
       };
@@ -118,7 +126,10 @@ describe("LocaleProvider and useLocale", () => {
         </LocaleProvider>,
       );
       await waitFor(() => {
-        expect(global.localStorage.setItem).toHaveBeenCalledWith("preferred-locale", "es");
+        expect(global.localStorage.setItem).toHaveBeenCalledWith(
+          "preferred-locale",
+          "es",
+        );
       });
     });
 
@@ -130,7 +141,10 @@ describe("LocaleProvider and useLocale", () => {
       );
       getByTestId("set-locale-btn").click();
       await waitFor(() => {
-        expect(global.localStorage.setItem).toHaveBeenCalledWith("preferred-locale", "es");
+        expect(global.localStorage.setItem).toHaveBeenCalledWith(
+          "preferred-locale",
+          "es",
+        );
       });
     });
   });
@@ -143,7 +157,9 @@ describe("LocaleProvider and useLocale", () => {
         </LocaleProvider>,
       );
       // Children are available immediately — no pre-mounted gate
-      expect(container.querySelector('[data-testid="test-content"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-testid="test-content"]'),
+      ).toBeInTheDocument();
     });
 
     it("should expose correct locale immediately without waiting for effects", () => {
@@ -197,7 +213,10 @@ describe("LocaleProvider and useLocale", () => {
       );
       getByTestId("set-locale-btn").click();
       await waitFor(() => {
-        expect(global.localStorage.setItem).toHaveBeenCalledWith("preferred-locale", "es");
+        expect(global.localStorage.setItem).toHaveBeenCalledWith(
+          "preferred-locale",
+          "es",
+        );
       });
     });
 
@@ -207,8 +226,12 @@ describe("LocaleProvider and useLocale", () => {
         return (
           <div>
             <div data-testid="locale-display">{locale}</div>
-            <button onClick={() => setLocale("es")} data-testid="set-es-btn">Set ES</button>
-            <button onClick={() => setLocale("en")} data-testid="set-en-btn">Set EN</button>
+            <button onClick={() => setLocale("es")} data-testid="set-es-btn">
+              Set ES
+            </button>
+            <button onClick={() => setLocale("en")} data-testid="set-en-btn">
+              Set EN
+            </button>
           </div>
         );
       };
@@ -219,9 +242,13 @@ describe("LocaleProvider and useLocale", () => {
       );
       expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
       getByTestId("set-es-btn").click();
-      await waitFor(() => expect(screen.getByTestId("locale-display")).toHaveTextContent("es"));
+      await waitFor(() =>
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("es"),
+      );
       getByTestId("set-en-btn").click();
-      await waitFor(() => expect(screen.getByTestId("locale-display")).toHaveTextContent("en"));
+      await waitFor(() =>
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("en"),
+      );
     });
 
     it("should ignore invalid locale values", () => {
@@ -241,7 +268,11 @@ describe("LocaleProvider and useLocale", () => {
           <div>
             <div data-testid="locale">{locale}</div>
             <button
-              onClick={() => { setLocale("es"); setLocale("en"); setLocale("es"); }}
+              onClick={() => {
+                setLocale("es");
+                setLocale("en");
+                setLocale("es");
+              }}
               data-testid="rapid-changes"
             >
               Rapid Changes
@@ -255,8 +286,12 @@ describe("LocaleProvider and useLocale", () => {
         </LocaleProvider>,
       );
       expect(screen.getByTestId("locale")).toHaveTextContent("en");
-      act(() => { getByTestId("rapid-changes").click(); });
-      await waitFor(() => expect(screen.getByTestId("locale")).toHaveTextContent("es"));
+      act(() => {
+        getByTestId("rapid-changes").click();
+      });
+      await waitFor(() =>
+        expect(screen.getByTestId("locale")).toHaveTextContent("es"),
+      );
     });
   });
 });

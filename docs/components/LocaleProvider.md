@@ -13,10 +13,10 @@ Client-side locale context provider. Makes the active locale available to all ch
 
 ## Props
 
-| Prop | Type | Description |
-| --- | --- | --- |
+| Prop            | Type           | Description                            |
+| --------------- | -------------- | -------------------------------------- |
 | `initialLocale` | `"en" \| "es"` | Locale from the `[lang]` route segment |
-| `children` | `ReactNode` | Child tree |
+| `children`      | `ReactNode`    | Child tree                             |
 
 ## Hook
 

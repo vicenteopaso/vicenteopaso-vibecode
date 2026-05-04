@@ -8,11 +8,7 @@ import { CvRefsGrid } from "@/app/components/CvRefCard";
 import { CV_PDF_PATH } from "@/app/config/cv";
 import { logWarning } from "@/lib/error-logging";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
-import {
-  getCvDescription,
-  ogCacheVersion,
-  siteConfig,
-} from "@/lib/seo";
+import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-static";
@@ -790,8 +786,7 @@ function SkillsSection({
               borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
               borderBottom:
                 i <
-                sortedSkills.length -
-                  (sortedSkills.length % 2 === 0 ? 2 : 1)
+                sortedSkills.length - (sortedSkills.length % 2 === 0 ? 2 : 1)
                   ? "1px solid var(--v3-rule)"
                   : "none",
             }}

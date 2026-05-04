@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import type { Locale } from "@/lib/i18n";
 import { defaultLocale, locales } from "@/lib/i18n";

@@ -6,22 +6,22 @@ Inline contact form for the v3 brutalist homepage. Renders at the `#contact` sec
 
 ## Fields
 
-| Field | Type | Required | Notes |
-| --- | --- | --- | --- |
-| NAME | text | No | Prepended to message as `NAME: <value>` |
-| EMAIL | email | Yes | HTML5 + Zod validation |
-| SUBJECT | text | No | Prepended to message as `SUBJECT: <value>` |
-| MESSAGE | textarea | Yes | Min 5 chars, max 2000 chars |
-| `website` | hidden | — | Honeypot — bots fill it; humans never see it |
+| Field     | Type     | Required | Notes                                        |
+| --------- | -------- | -------- | -------------------------------------------- |
+| NAME      | text     | No       | Prepended to message as `NAME: <value>`      |
+| EMAIL     | email    | Yes      | HTML5 + Zod validation                       |
+| SUBJECT   | text     | No       | Prepended to message as `SUBJECT: <value>`   |
+| MESSAGE   | textarea | Yes      | Min 5 chars, max 2000 chars                  |
+| `website` | hidden   | —        | Honeypot — bots fill it; humans never see it |
 
 ## Form States
 
-| State | UI |
-| --- | --- |
-| `idle` | Normal editable form |
-| `submitting` | All inputs + button disabled |
-| `success` | Success card with countdown and reset button |
-| `error` | Inline error; inputs re-enabled; Turnstile reset |
+| State        | UI                                               |
+| ------------ | ------------------------------------------------ |
+| `idle`       | Normal editable form                             |
+| `submitting` | All inputs + button disabled                     |
+| `success`    | Success card with countdown and reset button     |
+| `error`      | Inline error; inputs re-enabled; Turnstile reset |
 
 ## Client Validation
 

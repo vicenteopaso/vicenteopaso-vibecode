@@ -232,14 +232,12 @@ describe("CVPage", () => {
     const { container } = render(ui);
 
     const skillTitles = Array.from(
-      container.querySelectorAll("#cv-skills .v3-cv-skills-grid > div > div:first-child span:first-child"),
+      container.querySelectorAll(
+        "#cv-skills .v3-cv-skills-grid > div > div:first-child span:first-child",
+      ),
     ).map((node) => node.textContent?.trim());
 
-    expect(skillTitles).toEqual([
-      "Frontend Development",
-      "GitHub",
-      "Testing",
-    ]);
+    expect(skillTitles).toEqual(["Frontend Development", "GitHub", "Testing"]);
   });
 
   it("handles minimal CV JSON and optional branches", async () => {

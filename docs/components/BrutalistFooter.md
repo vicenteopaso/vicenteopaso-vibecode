@@ -15,13 +15,13 @@ None — reads locale from `LocaleProvider`.
 
 ## Footer Links
 
-| Label key | Route |
-| --- | --- |
-| `footer.privacyPolicy` | `/${locale}/privacy-policy` |
-| `footer.cookiePolicy` | `/${locale}/cookie-policy` |
-| `footer.accessibility` | `/${locale}/accessibility` |
+| Label key                    | Route                             |
+| ---------------------------- | --------------------------------- |
+| `footer.privacyPolicy`       | `/${locale}/privacy-policy`       |
+| `footer.cookiePolicy`        | `/${locale}/cookie-policy`        |
+| `footer.accessibility`       | `/${locale}/accessibility`        |
 | `footer.technicalGovernance` | `/${locale}/technical-governance` |
-| `footer.techStack` | `/${locale}/tech-stack` |
+| `footer.techStack`           | `/${locale}/tech-stack`           |
 
 ## Accessibility
 

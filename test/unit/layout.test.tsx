@@ -53,7 +53,6 @@ vi.mock("../../app/components/WebMcpInit", () => ({
   WebMcpInit: () => <div data-testid="webmcp-init" />,
 }));
 
-
 vi.mock("next/headers", () => ({
   headers: () =>
     Promise.resolve({
@@ -70,7 +69,9 @@ describe("RootLayout", () => {
 
     // RootLayout is an async Server Component; call it directly to get resolved JSX,
     // then render synchronously (JSDOM doesn't support async components natively).
-    const jsx = await RootLayout({ children: <div data-testid="child">Hello world</div> });
+    const jsx = await RootLayout({
+      children: <div data-testid="child">Hello world</div>,
+    });
     render(jsx);
 
     consoleSpy.mockRestore();

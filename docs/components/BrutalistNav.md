@@ -18,10 +18,10 @@ None — reads locale from `LocaleProvider` and pathname from `usePathname()`.
 
 ## Nav Links
 
-| Label key | `href` |
-| --- | --- |
-| `nav.about` | `/${locale}` |
-| `nav.cv` | `/${locale}/cv` |
+| Label key     | `href`               |
+| ------------- | -------------------- |
+| `nav.about`   | `/${locale}`         |
+| `nav.cv`      | `/${locale}/cv`      |
 | `nav.contact` | `/${locale}#contact` |
 
 ## Accessibility

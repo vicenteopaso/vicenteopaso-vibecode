@@ -4,8 +4,6 @@ import { getCvDescription, siteConfig } from "./seo";
 
 type OgLocale = "en" | "es";
 
-type OgVariant = "home" | "cv";
-
 const size = {
   width: 1200,
   height: 630,
@@ -70,7 +68,6 @@ const homeContentByLocale: Record<
 
 function renderBrandedOgImage({
   locale,
-  variant,
   eyebrow,
   titleFirstLine,
   titleSecondLine,
@@ -84,7 +81,6 @@ function renderBrandedOgImage({
   bottomRightValue,
 }: {
   locale: OgLocale;
-  variant: OgVariant;
   eyebrow: string;
   titleFirstLine: string;
   titleSecondLine: string;
@@ -262,7 +258,9 @@ function renderBrandedOgImage({
             }}
           >
             <div style={{ display: "flex", gap: 44 }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+              >
                 <span
                   style={{
                     textTransform: "uppercase",
@@ -277,7 +275,9 @@ function renderBrandedOgImage({
                   {bottomLeftValue}
                 </span>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+              >
                 <span
                   style={{
                     textTransform: "uppercase",
@@ -330,7 +330,9 @@ function renderBrandedOgImage({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <span style={{ color: palette.cream, fontWeight: 700 }}>{siteConfig.domain}</span>
+          <span style={{ color: palette.cream, fontWeight: 700 }}>
+            {siteConfig.domain}
+          </span>
           <span>—</span>
           <span>vicente@opa.so</span>
         </div>
@@ -358,7 +360,6 @@ export function createHomeOgImage(locale: OgLocale = "en") {
 
   return renderBrandedOgImage({
     locale,
-    variant: "home",
     eyebrow: copy.roleLabel,
     titleFirstLine: "Vicente",
     titleSecondLine: "Opaso.",
@@ -379,7 +380,6 @@ export function createCvOgImage(locale: OgLocale = "en") {
 
   return renderBrandedOgImage({
     locale,
-    variant: "cv",
     eyebrow: isEs ? "CURRÍCULUM VITAE × PERFIL" : "CURRICULUM VITAE × PROFILE",
     titleFirstLine: "Vicente",
     titleSecondLine: "Opaso.",
