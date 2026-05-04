@@ -11,7 +11,8 @@ import { useTranslations } from "@/lib/i18n";
 
 import { useLocale } from "./LocaleProvider";
 
-const imageCacheVersion = "2026-05-04";
+const imageCacheVersion =
+  process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "2026-05-04";
 const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
 const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
 
