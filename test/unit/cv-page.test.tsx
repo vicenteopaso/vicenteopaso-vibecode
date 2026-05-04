@@ -194,7 +194,7 @@ describe("CVPage", () => {
     expect(screen.getByText(/Summary HTML/i)).toBeInTheDocument();
   });
 
-  it("sorts skills by keyword count descending", async () => {
+  it("sorts skills by proficiency level then name, not by keyword count", async () => {
     const cvJson = {
       basics: {
         name: "Vicente Opaso",
@@ -205,7 +205,8 @@ describe("CVPage", () => {
         {
           name: "Testing",
           level: "Advanced",
-          keywords: ["Jest"],
+          // More keywords than GitHub (Master) — should still sort after Master skills
+          keywords: ["Jest", "Vitest", "Playwright", "Cypress", "RTL"],
         },
         {
           name: "Frontend Development",
@@ -238,6 +239,7 @@ describe("CVPage", () => {
       ),
     ).map((node) => node.textContent?.trim());
 
+    // Master skills (alphabetical within level) before Advanced, regardless of keyword count
     expect(skillTitles).toEqual(["Frontend Development", "GitHub", "Testing"]);
   });
 

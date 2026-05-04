@@ -767,9 +767,17 @@ function SkillsSection({
   skills: Array<{ name: string; level?: string; keywords?: string[] }>;
   t: T;
 }) {
+  const PROFICIENCY_RANK: Record<string, number> = {
+    master: 0,
+    advanced: 1,
+    intermediate: 2,
+    beginner: 3,
+  };
+
   const sortedSkills = [...skills].sort((a, b) => {
-    const keywordDelta = (b.keywords?.length ?? 0) - (a.keywords?.length ?? 0);
-    if (keywordDelta !== 0) return keywordDelta;
+    const aRank = PROFICIENCY_RANK[a.level?.toLowerCase() ?? ""] ?? 99;
+    const bRank = PROFICIENCY_RANK[b.level?.toLowerCase() ?? ""] ?? 99;
+    if (aRank !== bRank) return aRank - bRank;
     return a.name.localeCompare(b.name);
   });
 
