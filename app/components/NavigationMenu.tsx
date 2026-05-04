@@ -20,10 +20,10 @@ const navLinkBase =
 
 const navLinkActive = "border-[color:var(--accent)]";
 
-const imageCacheVersion =
-  process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "2026-05-04";
-const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
-const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
+const imageCacheVersion = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE;
+const imageCacheSuffix = imageCacheVersion ? `?v=${imageCacheVersion}` : "";
+const DARK_LOGO = `/assets/images/logo_dark.png${imageCacheSuffix}`;
+const LIGHT_LOGO = `/assets/images/logo.png${imageCacheSuffix}`;
 
 export function NavigationMenu() {
   const pathname = usePathname();
