@@ -27,10 +27,11 @@ export function LocaleProvider({
 }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
-  // On mount, persist the server-determined locale to storage/cookie/<html lang>
+  // Keep client locale in sync with the active route locale across App Router navigations.
   useEffect(() => {
+    setLocaleState(initialLocale);
     persistLocale(initialLocale);
-  }, []); // intentional: only persist on mount, not on every initialLocale change
+  }, [initialLocale]);
 
   const setLocale = useCallback((newLocale: Locale) => {
     if (!locales.includes(newLocale)) return;

@@ -193,6 +193,55 @@ describe("CVPage", () => {
     expect(screen.getByText(/Summary HTML/i)).toBeInTheDocument();
   });
 
+  it("sorts skills by keyword count descending", async () => {
+    const cvJson = {
+      basics: {
+        name: "Vicente Opaso",
+      },
+      work: [],
+      education: [],
+      skills: [
+        {
+          name: "Testing",
+          level: "Advanced",
+          keywords: ["Jest"],
+        },
+        {
+          name: "Frontend Development",
+          level: "Master",
+          keywords: ["React", "Next.js", "GraphQL"],
+        },
+        {
+          name: "GitHub",
+          level: "Master",
+          keywords: ["Actions", "Pages"],
+        },
+      ],
+      languages: [],
+      interests: [],
+      publications: [],
+      references: [],
+    };
+
+    mockCvFs({
+      locale: "en",
+      cvJson,
+    });
+
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
+    const { container } = render(ui);
+
+    const skillTitles = Array.from(
+      container.querySelectorAll("#cv-skills .v3-cv-skills-grid > div > div:first-child span:first-child"),
+    ).map((node) => node.textContent?.trim());
+
+    expect(skillTitles).toEqual([
+      "Frontend Development",
+      "GitHub",
+      "Testing",
+    ]);
+  });
+
   it("handles minimal CV JSON and optional branches", async () => {
     const cvJson = {
       basics: {

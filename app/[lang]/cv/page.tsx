@@ -8,7 +8,11 @@ import { CvRefsGrid } from "@/app/components/CvRefCard";
 import { CV_PDF_PATH } from "@/app/config/cv";
 import { logWarning } from "@/lib/error-logging";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
-import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
+import {
+  getCvDescription,
+  ogCacheVersion,
+  siteConfig,
+} from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-static";
@@ -760,6 +764,12 @@ function SkillsSection({
   skills: Array<{ name: string; level?: string; keywords?: string[] }>;
   t: T;
 }) {
+  const sortedSkills = [...skills].sort((a, b) => {
+    const keywordDelta = (b.keywords?.length ?? 0) - (a.keywords?.length ?? 0);
+    if (keywordDelta !== 0) return keywordDelta;
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="03" label={t("cv.section.skills")} />
@@ -772,14 +782,16 @@ function SkillsSection({
           gridTemplateColumns: "repeat(2, 1fr)",
         }}
       >
-        {skills.map((g, i) => (
+        {sortedSkills.map((g, i) => (
           <div
             key={g.name}
             style={{
               padding: "16px 18px",
               borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
               borderBottom:
-                i < skills.length - (skills.length % 2 === 0 ? 2 : 1)
+                i <
+                sortedSkills.length -
+                  (sortedSkills.length % 2 === 0 ? 2 : 1)
                   ? "1px solid var(--v3-rule)"
                   : "none",
             }}

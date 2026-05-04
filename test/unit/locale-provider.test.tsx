@@ -169,9 +169,9 @@ describe("LocaleProvider and useLocale", () => {
           <TestComponent />
         </LocaleProvider>,
       );
-      // initialLocale only sets initial state — rerender alone won't update
-      // (by design; locale changes go through setLocale or full navigation)
-      expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+      await waitFor(() => {
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
+      });
     });
   });
 

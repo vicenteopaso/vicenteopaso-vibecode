@@ -10,10 +10,14 @@ import { useTranslations } from "@/lib/i18n";
 
 import { useLocale } from "./LocaleProvider";
 
+const imageCacheVersion = "2026-05-04";
+const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
+const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
+
 export function BrutalistNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { locale } = useLocale();
+  const { locale, setLocale } = useLocale();
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const t = useTranslations();
@@ -31,9 +35,12 @@ export function BrutalistNav() {
   const toggleTheme = () =>
     setTheme(displayTheme === "dark" ? "light" : "dark");
 
+  const logoSrc = displayTheme === "dark" ? DARK_LOGO : LIGHT_LOGO;
+
   const switchLocale = () => {
     const next = locale === "en" ? "es" : "en";
     const safe = pathname || `/${locale}`;
+    setLocale(next);
     router.push(safe.replace(`/${locale}`, `/${next}`) as `/${string}`);
   };
 
@@ -79,7 +86,7 @@ export function BrutalistNav() {
         <div
           style={{
             display: "flex",
-            gap: 20,
+            gap: 18,
             color: "var(--v3-muted)",
             alignItems: "center",
           }}
@@ -87,12 +94,31 @@ export function BrutalistNav() {
           <Link
             href={`/${locale}` as Route}
             style={{
-              color: "var(--v3-fg)",
-              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              width: 40,
+              height: 40,
               textDecoration: "none",
             }}
+            aria-label={t("nav.brand")}
           >
-            {t("nav.brand")}
+            {mounted ? (
+              <img
+                src={logoSrc}
+                alt=""
+                width={40}
+                height={40}
+                draggable={false}
+                loading="eager"
+                decoding="async"
+                style={{ transform: "translateY(-4px)" }}
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                style={{ display: "block", width: 40, height: 40 }}
+              />
+            )}
           </Link>
           <span className="v3-nav-meta">{t("nav.version")}</span>
           <span className="v3-nav-meta">—</span>

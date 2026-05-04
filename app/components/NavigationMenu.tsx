@@ -20,7 +20,7 @@ const navLinkBase =
 
 const navLinkActive = "border-[color:var(--accent)]";
 
-const imageCacheVersion = "1"; // Increment this when logo images are updated
+const imageCacheVersion = "2026-05-04";
 const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
 const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
 

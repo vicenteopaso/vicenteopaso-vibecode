@@ -408,7 +408,7 @@
     },
     {
       "name": "GitHub",
-      "level": "Advanced",
+      "level": "Master",
       "keywords": [
         "GitHub Actions",
         "Pages",
@@ -435,7 +435,7 @@
     },
     {
       "name": "Testing",
-      "level": "Basic",
+      "level": "Advanced",
       "keywords": ["Jest", "Cypress", "React Testing Library"]
     }
   ],
