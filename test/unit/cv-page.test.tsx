@@ -3,6 +3,7 @@ import fs from "fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import CVPage from "../../app/[lang]/cv/page";
+import { getCvPdfAsset } from "../../app/config/cv";
 
 const realReadFileSync = fs.readFileSync;
 
@@ -422,9 +423,11 @@ describe("CV Page Masthead Actions", () => {
 
     render(ui);
 
+    const { href } = getCvPdfAsset("en");
+
     expect(screen.getByRole("link", { name: /DOWNLOAD PDF/i })).toHaveAttribute(
       "href",
-      expect.stringContaining("/assets/vicente-opaso-cv-2026.pdf"),
+      href,
     );
     expect(
       screen.getAllByRole("link", { name: /VICENTE@OPA\.SO/i })[0],
