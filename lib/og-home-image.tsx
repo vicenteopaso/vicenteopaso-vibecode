@@ -15,6 +15,9 @@ function getDeploymentBaseUrl(): string {
   ) {
     return `https://${vercelUrl}`;
   }
+  if (process.env.NODE_ENV === "development") {
+    return `http://localhost:${process.env.PORT ?? 3000}`;
+  }
   return siteConfig.url;
 }
 

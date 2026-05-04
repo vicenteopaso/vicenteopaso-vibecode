@@ -24,7 +24,7 @@ test("contact form section shows required fields", async ({ page }) => {
 });
 
 test("CV page renders experience section", async ({ page }) => {
-  await page.goto("/en/cv");
+  await page.goto("/en/cv", { waitUntil: "load" });
 
   // EXPERIENCE and SKILLS sections are referenced in the table of contents
   await expect(

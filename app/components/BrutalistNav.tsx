@@ -11,10 +11,10 @@ import { useTranslations } from "@/lib/i18n";
 
 import { useLocale } from "./LocaleProvider";
 
-const imageCacheVersion =
-  process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "2026-05-04";
-const DARK_LOGO = `/assets/images/logo_dark.png?v=${imageCacheVersion}`;
-const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
+const imageCacheVersion = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE;
+const imageCacheSuffix = imageCacheVersion ? `?v=${imageCacheVersion}` : "";
+const DARK_LOGO = `/assets/images/logo_dark.png${imageCacheSuffix}`;
+const LIGHT_LOGO = `/assets/images/logo.png${imageCacheSuffix}`;
 
 export function BrutalistNav() {
   const pathname = usePathname();
@@ -103,21 +103,14 @@ export function BrutalistNav() {
             }}
             aria-label={t("nav.brand")}
           >
-            {mounted ? (
-              <Image
-                src={logoSrc}
-                alt=""
-                width={40}
-                height={40}
-                priority
-                style={{ transform: "translateY(-4px)" }}
-              />
-            ) : (
-              <span
-                aria-hidden="true"
-                style={{ display: "block", width: 40, height: 40 }}
-              />
-            )}
+            <Image
+              src={logoSrc}
+              alt=""
+              width={40}
+              height={40}
+              priority
+              style={{ transform: "translateY(-4px)" }}
+            />
           </Link>
           <span className="v3-nav-meta">{t("nav.version")}</span>
           <span className="v3-nav-meta">—</span>
