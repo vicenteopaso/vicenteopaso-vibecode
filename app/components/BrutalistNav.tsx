@@ -1,6 +1,7 @@
 "use client";
 
 import type { Route } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -103,14 +104,13 @@ export function BrutalistNav() {
             aria-label={t("nav.brand")}
           >
             {mounted ? (
-              <img
+              <Image
                 src={logoSrc}
                 alt=""
                 width={40}
                 height={40}
-                draggable={false}
-                loading="eager"
-                decoding="async"
+                unoptimized
+                priority
                 style={{ transform: "translateY(-4px)" }}
               />
             ) : (

@@ -122,6 +122,7 @@ function renderBrandedOgImage({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- next/image is not available inside next/og ImageResponse markup */}
           <img
             src={ogLogoSrc}
             alt="Opaso logo"
