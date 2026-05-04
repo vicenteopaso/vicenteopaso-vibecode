@@ -62,7 +62,7 @@ jobs:
       - name: Deploy preview
         id: deploy
         run: |
-          url="$(vercel deploy --prebuilt --token="$VERCEL_TOKEN")"
+          url="$(vercel deploy --prebuilt --no-wait --token="$VERCEL_TOKEN")"
           echo "deployment_url=$url" >> "$GITHUB_OUTPUT"
           echo "Preview: $url" >> "$GITHUB_STEP_SUMMARY"
 
@@ -112,6 +112,6 @@ jobs:
       - name: Deploy production
         id: deploy
         run: |
-          url="$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")"
+          url="$(vercel deploy --prebuilt --prod --no-wait --token="$VERCEL_TOKEN")"
           echo "deployment_url=$url" >> "$GITHUB_OUTPUT"
           echo "Production: $url" >> "$GITHUB_STEP_SUMMARY"
