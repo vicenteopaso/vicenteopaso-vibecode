@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.3.0 - 2026-05-03
 
 ### Added
+
 - v3 brutalist UI redesign with full EN/ES i18n
 - New BrutalistNav, BrutalistFooter, V3ContactForm, CvRefCard components
 - Locale-aware SSR via x-locale header
 
 ### Changed
+
 - Landing page and CV page rebuilt with v3 sections and getSiteData()
 - Accept-Language parsing improved (whitespace-tolerant q-value handling)
 

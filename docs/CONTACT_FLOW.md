@@ -95,10 +95,10 @@ Zod schema validates all input:
 
 ## Environment Variables
 
-| Variable                         | Location | Purpose            |
-| -------------------------------- | -------- | ------------------ |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Client   | Turnstile widget site key |
-| `TURNSTILE_SECRET_KEY`           | Server   | Turnstile server-side verification |
+| Variable                         | Location | Purpose                                                        |
+| -------------------------------- | -------- | -------------------------------------------------------------- |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Client   | Turnstile widget site key                                      |
+| `TURNSTILE_SECRET_KEY`           | Server   | Turnstile server-side verification                             |
 | `NEXT_PUBLIC_FORMSPREE_KEY`      | Both     | Formspree form ID (used server-side to build the endpoint URL) |
 
 Formspree endpoint is configured in `app/api/contact/route.ts`.

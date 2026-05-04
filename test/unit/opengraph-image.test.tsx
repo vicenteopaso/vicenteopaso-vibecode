@@ -143,6 +143,9 @@ describe("CV OG image route", () => {
 
     const textContent = findTextContent(element).join(" ");
     expect(textContent).toContain(getCvDescription("en"));
+    expect(textContent).toContain("CURRICULUM VITAE × PROFILE");
+    expect(textContent).toContain("FOCUS");
+    expect(textContent).toContain("Live CV");
   });
 
   it("renders Spanish translations when lang is es", async () => {
@@ -154,9 +157,10 @@ describe("CV OG image route", () => {
     };
 
     const textContent = findTextContent(element).join(" ");
-    expect(textContent).toContain("Currículum Vitae");
-    expect(textContent).toContain("Experiencia");
-    expect(textContent).toContain("Habilidades");
+    expect(textContent).toContain("CURRÍCULUM VITAE × PERFIL");
+    expect(textContent).toContain("ENFOQUE");
+    expect(textContent).toContain("CV activo");
+    expect(textContent).toContain(getCvDescription("es"));
   });
 });
 
@@ -178,9 +182,12 @@ describe("Localized (/[lang]) OG image translations", () => {
     };
 
     const textContent = findTextContent(element).join(" ");
-    expect(textContent).toContain("Design Systems");
-    expect(textContent).toContain("Developer Experience");
-    expect(textContent).toContain("Web Engineering Manager");
+    expect(textContent).toContain("ABOUT");
+    expect(textContent).toContain("TL;DR");
+    expect(textContent).toContain("Open to roles");
+    expect(textContent).toContain(
+      "Web Engineering Manager & Frontend Architect",
+    );
   });
 
   it("renders Spanish translations when lang is es", async () => {
@@ -192,10 +199,12 @@ describe("Localized (/[lang]) OG image translations", () => {
     };
 
     const textContent = findTextContent(element).join(" ");
-    expect(textContent).toContain("Design Systems");
-    expect(textContent).toContain("Experiencia del Desarrollador");
-    expect(textContent).toContain("Gerente de Ingeniería Web");
-    expect(textContent).toContain("Arquitecto Frontend");
+    expect(textContent).toContain("PERFIL");
+    expect(textContent).toContain("RESUMEN");
+    expect(textContent).toContain("Abierto a roles");
+    expect(textContent).toContain(
+      "Gerente de Ingeniería Web y Arquitecto Frontend",
+    );
   });
 });
 
@@ -203,7 +212,6 @@ describe("OG metadata separation", () => {
   it("baseMetadata uses root opengraph-image for homepage", () => {
     const metadata = baseMetadata();
 
-    // Verify the OpenGraph image URL points to the root opengraph-image
     const ogImages = metadata.openGraph?.images;
     expect(ogImages).toBeDefined();
     expect(Array.isArray(ogImages)).toBe(true);
@@ -211,7 +219,6 @@ describe("OG metadata separation", () => {
     expect(firstImage.url).toMatch(/^\/opengraph-image\?v=/);
     expect(firstImage.url).not.toContain("/cv/");
 
-    // Verify Twitter image also uses root opengraph-image
     const twitterImages = metadata.twitter?.images;
     expect(twitterImages).toBeDefined();
     expect(Array.isArray(twitterImages)).toBe(true);

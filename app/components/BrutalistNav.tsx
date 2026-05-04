@@ -1,6 +1,7 @@
 "use client";
 
 import type { Route } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -9,6 +10,11 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "@/lib/i18n";
 
 import { useLocale } from "./LocaleProvider";
+
+const imageCacheVersion = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE;
+const imageCacheSuffix = imageCacheVersion ? `?v=${imageCacheVersion}` : "";
+const DARK_LOGO = `/assets/images/logo_dark.png${imageCacheSuffix}`;
+const LIGHT_LOGO = `/assets/images/logo.png${imageCacheSuffix}`;
 
 export function BrutalistNav() {
   const pathname = usePathname();
@@ -30,6 +36,8 @@ export function BrutalistNav() {
 
   const toggleTheme = () =>
     setTheme(displayTheme === "dark" ? "light" : "dark");
+
+  const logoSrc = displayTheme === "dark" ? DARK_LOGO : LIGHT_LOGO;
 
   const switchLocale = () => {
     const next = locale === "en" ? "es" : "en";
@@ -79,7 +87,7 @@ export function BrutalistNav() {
         <div
           style={{
             display: "flex",
-            gap: 20,
+            gap: 18,
             color: "var(--v3-muted)",
             alignItems: "center",
           }}
@@ -87,12 +95,22 @@ export function BrutalistNav() {
           <Link
             href={`/${locale}` as Route}
             style={{
-              color: "var(--v3-fg)",
-              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              width: 40,
+              height: 40,
               textDecoration: "none",
             }}
+            aria-label={t("nav.brand")}
           >
-            {t("nav.brand")}
+            <Image
+              src={logoSrc}
+              alt=""
+              width={40}
+              height={40}
+              priority
+              style={{ transform: "translateY(-4px)" }}
+            />
           </Link>
           <span className="v3-nav-meta">{t("nav.version")}</span>
           <span className="v3-nav-meta">—</span>

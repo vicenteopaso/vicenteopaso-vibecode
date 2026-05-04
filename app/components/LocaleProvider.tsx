@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import type { Locale } from "@/lib/i18n";
 import { defaultLocale, locales } from "@/lib/i18n";
@@ -26,11 +32,20 @@ export function LocaleProvider({
   children: React.ReactNode;
 }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
+  const [prevInitialLocale, setPrevInitialLocale] =
+    useState<Locale>(initialLocale);
 
-  // On mount, persist the server-determined locale to storage/cookie/<html lang>
+  // Synchronously update locale context when the route locale changes so
+  // consumers see the new locale on the first render after navigation.
+  if (initialLocale !== prevInitialLocale) {
+    setPrevInitialLocale(initialLocale);
+    setLocaleState(initialLocale);
+  }
+
+  // Persist the route locale after navigation.
   useEffect(() => {
     persistLocale(initialLocale);
-  }, []); // intentional: only persist on mount, not on every initialLocale change
+  }, [initialLocale]);
 
   const setLocale = useCallback((newLocale: Locale) => {
     if (!locales.includes(newLocale)) return;

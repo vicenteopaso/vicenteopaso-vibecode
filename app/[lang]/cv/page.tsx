@@ -5,7 +5,7 @@ import Image from "next/image";
 import path from "path";
 
 import { CvRefsGrid } from "@/app/components/CvRefCard";
-import { CV_PDF_PATH } from "@/app/config/cv";
+import { getCvPdfAsset } from "@/app/config/cv";
 import { logWarning } from "@/lib/error-logging";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
@@ -143,7 +143,18 @@ function parseRefName(raw: string): { name: string; role: string } {
 }
 
 // ─── CV Masthead ───────────────────────────────────────────────────────────────
-function CvMasthead({ name, label, t }: { name: string; label: string; t: T }) {
+function CvMasthead({
+  name,
+  label,
+  t,
+  locale,
+}: {
+  name: string;
+  label: string;
+  t: T;
+  locale: "en" | "es";
+}) {
+  const { href: cvPdfHref, downloadName } = getCvPdfAsset(locale);
   const meta = [
     [t("cv.metaLocation"), t("cv.metaLocationValue")],
     [t("cv.metaAvailability"), t("cv.metaAvailabilityValue")],
@@ -212,11 +223,7 @@ function CvMasthead({ name, label, t }: { name: string; label: string; t: T }) {
             {t("cv.subtitle1")} {t("cv.subtitle2")}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
-            <CvBtn
-              href={CV_PDF_PATH}
-              primary
-              download="vicente-opaso-cv-2026.pdf"
-            >
+            <CvBtn href={cvPdfHref} primary download={downloadName}>
               {t("cv.downloadPdf")}
             </CvBtn>
             <CvBtn href="#contact">{t("cv.emailCta")}</CvBtn>
@@ -760,6 +767,20 @@ function SkillsSection({
   skills: Array<{ name: string; level?: string; keywords?: string[] }>;
   t: T;
 }) {
+  const PROFICIENCY_RANK: Record<string, number> = {
+    master: 0,
+    advanced: 1,
+    intermediate: 2,
+    beginner: 3,
+  };
+
+  const sortedSkills = [...skills].sort((a, b) => {
+    const aRank = PROFICIENCY_RANK[a.level?.toLowerCase() ?? ""] ?? 99;
+    const bRank = PROFICIENCY_RANK[b.level?.toLowerCase() ?? ""] ?? 99;
+    if (aRank !== bRank) return aRank - bRank;
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="03" label={t("cv.section.skills")} />
@@ -772,14 +793,15 @@ function SkillsSection({
           gridTemplateColumns: "repeat(2, 1fr)",
         }}
       >
-        {skills.map((g, i) => (
+        {sortedSkills.map((g, i) => (
           <div
             key={g.name}
             style={{
               padding: "16px 18px",
               borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
               borderBottom:
-                i < skills.length - (skills.length % 2 === 0 ? 2 : 1)
+                i <
+                sortedSkills.length - (sortedSkills.length % 2 === 0 ? 2 : 1)
                   ? "1px solid var(--v3-rule)"
                   : "none",
             }}
@@ -1218,7 +1240,7 @@ export default async function CVPage({ params }: PageProps) {
       className="v3-page"
       style={{ maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
     >
-      <CvMasthead name={name} label={label} t={t} />
+      <CvMasthead name={name} label={label} t={t} locale={locale} />
       <CvToc t={t} tocEntries={siteData.cvToc} />
       <ImpactStrip impact={siteData.impact} />
       <SummarySection summary={cv.basics?.summary} t={t} tldr={siteData.tldr} />

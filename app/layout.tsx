@@ -38,6 +38,13 @@ export const metadata: Metadata = baseMetadata({
   icons: {
     icon: [
       {
+        url: `/favicon.svg?v=${iconsCacheVersion}`,
+        type: "image/svg+xml",
+      },
+      {
+        url: `/favicon.ico?v=${iconsCacheVersion}`,
+      },
+      {
         url: `/assets/images/favicon-32x32.png?v=${iconsCacheVersion}`,
         sizes: "32x32",
         type: "image/png",
@@ -47,17 +54,20 @@ export const metadata: Metadata = baseMetadata({
         sizes: "16x16",
         type: "image/png",
       },
-      { url: `/assets/images/favicon.ico?v=${iconsCacheVersion}` },
     ],
-    apple: `/assets/images/apple-touch-icon.png?v=${iconsCacheVersion}`,
-    shortcut: `/assets/images/favicon.ico?v=${iconsCacheVersion}`,
+    apple: `/apple-touch-icon.png?v=${iconsCacheVersion}`,
+    shortcut: `/favicon.ico?v=${iconsCacheVersion}`,
   },
   manifest: "/site.webmanifest",
+  other: {
+    "msapplication-config": "/browserconfig.xml",
+    "msapplication-TileColor": "#0d0c0a",
+  },
 });
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf8f5" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
     { media: "(prefers-color-scheme: dark)", color: "#0d0c0a" },
   ],
 };

@@ -7,7 +7,9 @@ import { expect, type Page, test } from "@playwright/test";
 async function navigateToContactSection(page: Page) {
   await page.goto("/en", { waitUntil: "load" });
   await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
-  await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
+  await page.evaluate(() =>
+    document.querySelector("#contact")?.scrollIntoView(),
+  );
   await expect(page.getByLabel("EMAIL *")).toBeVisible({ timeout: 15000 });
 }
 
@@ -22,7 +24,7 @@ test("contact form section shows required fields", async ({ page }) => {
 });
 
 test("CV page renders experience section", async ({ page }) => {
-  await page.goto("/en/cv");
+  await page.goto("/en/cv", { waitUntil: "load" });
 
   // EXPERIENCE and SKILLS sections are referenced in the table of contents
   await expect(
@@ -40,7 +42,9 @@ test.describe("Contact form - mobile viewport", () => {
   test("contact form is visible on mobile", async ({ page }) => {
     await page.goto("/en", { waitUntil: "load" });
     await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
-    await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
+    await page.evaluate(() =>
+      document.querySelector("#contact")?.scrollIntoView(),
+    );
 
     await expect(page.getByLabel("EMAIL *")).toBeVisible({ timeout: 15000 });
     await expect(page.getByLabel("MESSAGE *")).toBeVisible({ timeout: 15000 });
@@ -54,7 +58,9 @@ test.describe("Contact form - mobile viewport", () => {
   }) => {
     await page.goto("/en", { waitUntil: "load" });
     await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
-    await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
+    await page.evaluate(() =>
+      document.querySelector("#contact")?.scrollIntoView(),
+    );
 
     await expect(page.getByLabel("NAME")).toBeVisible();
     await expect(page.getByLabel("EMAIL *")).toBeVisible();

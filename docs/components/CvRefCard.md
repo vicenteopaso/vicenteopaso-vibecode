@@ -11,24 +11,24 @@ CV references display for the v3 redesign. Replaces the old `ReferencesCarousel`
 
 Renders all reference cards in a 2-column CSS grid (`.v3-cv-refs-grid`). Manages `activeIndex` state to dim non-expanded cards.
 
-| Prop | Type | Description |
-| --- | --- | --- |
+| Prop   | Type                              | Description           |
+| ------ | --------------------------------- | --------------------- |
 | `refs` | `Array<{ name, role, fullText }>` | Parsed reference data |
 
 ### `CvRefCard`
 
 Individual `<button type="button">` card. Expands on hover/focus to show full reference text in an absolutely-positioned overlay.
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `index` | number | Card position (0-based) |
-| `total` | number | Total card count |
-| `name` | string | Referee name |
-| `role` | string | Referee role/title |
-| `fullText` | string | Full reference text (HTML-stripped) |
-| `dimmed` | boolean | Reduces opacity when another card is active |
-| `onEnter` | `() => void` | Called on `mouseenter` / `focus` |
-| `onLeave` | `() => void` | Called on `mouseleave` / `blur` |
+| Prop       | Type         | Description                                 |
+| ---------- | ------------ | ------------------------------------------- |
+| `index`    | number       | Card position (0-based)                     |
+| `total`    | number       | Total card count                            |
+| `name`     | string       | Referee name                                |
+| `role`     | string       | Referee role/title                          |
+| `fullText` | string       | Full reference text (HTML-stripped)         |
+| `dimmed`   | boolean      | Reduces opacity when another card is active |
+| `onEnter`  | `() => void` | Called on `mouseenter` / `focus`            |
+| `onLeave`  | `() => void` | Called on `mouseleave` / `blur`             |
 
 ## Accessibility
 
@@ -38,11 +38,11 @@ Individual `<button type="button">` card. Expands on hover/focus to show full re
 
 ## Selectors
 
-| Purpose | Selector |
-| --- | --- |
-| References section | `#cv-references` |
-| Grid container | `.v3-cv-refs-grid` |
-| Individual cards | `.v3-cv-refs-grid button` |
+| Purpose            | Selector                  |
+| ------------------ | ------------------------- |
+| References section | `#cv-references`          |
+| Grid container     | `.v3-cv-refs-grid`        |
+| Individual cards   | `.v3-cv-refs-grid button` |
 
 ## Visual Testing
 

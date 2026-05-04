@@ -80,7 +80,9 @@ test.describe("Error Handling", () => {
 
     await page.goto("/en", { waitUntil: "load" });
     await expect(page.locator("#contact")).toBeVisible({ timeout: 15000 });
-    await page.evaluate(() => document.querySelector("#contact")?.scrollIntoView());
+    await page.evaluate(() =>
+      document.querySelector("#contact")?.scrollIntoView(),
+    );
     await expect(page.getByLabel("EMAIL *")).toBeVisible({ timeout: 15000 });
   });
 

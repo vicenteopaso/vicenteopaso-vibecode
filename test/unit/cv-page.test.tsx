@@ -3,6 +3,7 @@ import fs from "fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import CVPage from "../../app/[lang]/cv/page";
+import { getCvPdfAsset } from "../../app/config/cv";
 
 const realReadFileSync = fs.readFileSync;
 
@@ -193,6 +194,55 @@ describe("CVPage", () => {
     expect(screen.getByText(/Summary HTML/i)).toBeInTheDocument();
   });
 
+  it("sorts skills by proficiency level then name, not by keyword count", async () => {
+    const cvJson = {
+      basics: {
+        name: "Vicente Opaso",
+      },
+      work: [],
+      education: [],
+      skills: [
+        {
+          name: "Testing",
+          level: "Advanced",
+          // More keywords than GitHub (Master) — should still sort after Master skills
+          keywords: ["Jest", "Vitest", "Playwright", "Cypress", "RTL"],
+        },
+        {
+          name: "Frontend Development",
+          level: "Master",
+          keywords: ["React", "Next.js", "GraphQL"],
+        },
+        {
+          name: "GitHub",
+          level: "Master",
+          keywords: ["Actions", "Pages"],
+        },
+      ],
+      languages: [],
+      interests: [],
+      publications: [],
+      references: [],
+    };
+
+    mockCvFs({
+      locale: "en",
+      cvJson,
+    });
+
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
+    const { container } = render(ui);
+
+    const skillTitles = Array.from(
+      container.querySelectorAll(
+        "#cv-skills .v3-cv-skills-grid > div > div:first-child span:first-child",
+      ),
+    ).map((node) => node.textContent?.trim());
+
+    // Master skills (alphabetical within level) before Advanced, regardless of keyword count
+    expect(skillTitles).toEqual(["Frontend Development", "GitHub", "Testing"]);
+  });
+
   it("handles minimal CV JSON and optional branches", async () => {
     const cvJson = {
       basics: {
@@ -375,9 +425,11 @@ describe("CV Page Masthead Actions", () => {
 
     render(ui);
 
+    const { href } = getCvPdfAsset("en");
+
     expect(screen.getByRole("link", { name: /DOWNLOAD PDF/i })).toHaveAttribute(
       "href",
-      expect.stringContaining("/assets/vicente-opaso-cv-2026.pdf"),
+      href,
     );
     expect(
       screen.getAllByRole("link", { name: /VICENTE@OPA\.SO/i })[0],
