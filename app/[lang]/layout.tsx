@@ -1,5 +1,5 @@
-import React from "react";
 import type { Metadata } from "next";
+import React from "react";
 
 import { getLocaleFromParams } from "@/lib/i18n";
 
