@@ -2,10 +2,7 @@ import type { Locale } from "@/lib/i18n";
 
 const pdfCacheVersion = process.env.NEXT_PUBLIC_PDF_CACHE_DATE ?? "1";
 
-const CV_PDF_BY_LOCALE: Record<
-  Locale,
-  { path: string; filename: string }
-> = {
+const CV_PDF_BY_LOCALE: Record<Locale, { path: string; filename: string }> = {
   en: {
     path: "/assets/vicente-opaso-cv-en-v5.2g.pdf",
     filename: "vicente-opaso-cv-en-v5.2g.pdf",
