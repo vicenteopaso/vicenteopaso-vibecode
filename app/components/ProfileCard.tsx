@@ -223,7 +223,7 @@ export function ProfileCard({
                   href={cvPdfHref}
                   download={downloadName}
                   className="hidden shrink-0 items-center gap-1.5 btn-primary text-xs sm:inline-flex no-underline hover:no-underline"
-                  aria-label="Download CV (PDF)"
+                  aria-label={t("cv.downloadLabel")}
                 >
                   <DownloadIcon className="h-4 w-4" />
                   <span>{t("cv.downloadLabel")}</span>
@@ -362,8 +362,8 @@ export function ProfileCard({
                         href={cvPdfHref}
                         download={downloadName}
                         className="hidden aspect-square h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex"
-                        aria-label="Download CV (PDF)"
-                        title="Download CV (PDF)"
+                        aria-label={t("cv.downloadLabel")}
+                        title={t("cv.downloadLabel")}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

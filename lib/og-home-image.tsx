@@ -4,6 +4,27 @@ import { getCvDescription, siteConfig } from "./seo";
 
 type OgLocale = "en" | "es";
 
+/** Returns the base URL for the current deployment, falling back to the production domain.
+ *  Only uses VERCEL_URL if it resolves to a vercel.app subdomain or the production domain,
+ *  to prevent URL injection in the unlikely event the env var is tampered with. */
+function getDeploymentBaseUrl(): string {
+  const vercelUrl = process.env.VERCEL_URL;
+  if (
+    vercelUrl &&
+    (vercelUrl.endsWith(".vercel.app") || vercelUrl === siteConfig.domain)
+  ) {
+    return `https://${vercelUrl}`;
+  }
+  return siteConfig.url;
+}
+
+/** Returns a versioned logo URL that resolves to the current deployment's asset, not the production domain. */
+function getLogoUrl(): string {
+  const base = getDeploymentBaseUrl();
+  const version = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "1";
+  return `${base}/assets/images/logo_dark.png?v=${version}`;
+}
+
 const size = {
   width: 1200,
   height: 630,
@@ -124,7 +145,7 @@ function renderBrandedOgImage({
         <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- next/image is not available inside next/og ImageResponse markup */}
           <img
-            src={`${siteConfig.url}/assets/images/logo_dark.png`}
+            src={getLogoUrl()}
             alt="Opaso logo"
             width={46}
             height={46}
