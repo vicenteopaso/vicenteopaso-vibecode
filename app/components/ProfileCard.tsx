@@ -340,7 +340,7 @@ export function ProfileCard({
                           href={cvPdfHref}
                           download={downloadName}
                           className="btn-primary inline-flex items-center gap-1.5 text-xs font-semibold no-underline hover:!no-underline"
-                          aria-label="Download CV (PDF)"
+                          aria-label={t("cv.downloadLabel")}
                         >
                           <DownloadIcon className="h-4 w-4" />
                           <span>{t("cv.downloadLabel")}</span>
