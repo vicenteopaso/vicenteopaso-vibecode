@@ -18,7 +18,7 @@ const LIGHT_LOGO = `/assets/images/logo.png?v=${imageCacheVersion}`;
 export function BrutalistNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { locale, setLocale } = useLocale();
+  const { locale } = useLocale();
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const t = useTranslations();
@@ -41,7 +41,6 @@ export function BrutalistNav() {
   const switchLocale = () => {
     const next = locale === "en" ? "es" : "en";
     const safe = pathname || `/${locale}`;
-    setLocale(next);
     router.push(safe.replace(`/${locale}`, `/${next}`) as `/${string}`);
   };
 
@@ -109,7 +108,6 @@ export function BrutalistNav() {
                 alt=""
                 width={40}
                 height={40}
-                unoptimized
                 priority
                 style={{ transform: "translateY(-4px)" }}
               />

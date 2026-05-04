@@ -32,10 +32,18 @@ export function LocaleProvider({
   children: React.ReactNode;
 }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
+  const [prevInitialLocale, setPrevInitialLocale] =
+    useState<Locale>(initialLocale);
 
-  // Keep client locale in sync with the active route locale across App Router navigations.
-  useEffect(() => {
+  // Synchronously update locale context when the route locale changes so
+  // consumers see the new locale on the first render after navigation.
+  if (initialLocale !== prevInitialLocale) {
+    setPrevInitialLocale(initialLocale);
     setLocaleState(initialLocale);
+  }
+
+  // Persist the route locale after navigation.
+  useEffect(() => {
     persistLocale(initialLocale);
   }, [initialLocale]);
 
