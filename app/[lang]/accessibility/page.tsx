@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import path from "path";
 import ReactMarkdown from "react-markdown";
 
+import { ContentPageShell } from "@/app/components/ContentPageShell";
 import { getLocaleFromParams } from "@/lib/i18n";
 
 import { markdownComponents } from "../../../lib/markdown-components";
@@ -51,20 +52,22 @@ export default async function AccessibilityPage({ params }: PageProps) {
     "Accessibility Statement";
 
   return (
-    <article className="section-card space-y-6">
-      <header>
-        <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
-          {title}
-        </h1>
-        {data.description && (
-          <p className="mt-2 text-base text-[color:var(--text-muted)]">
-            {data.description as string}
-          </p>
-        )}
-      </header>
-      <div className="prose prose-sm max-w-none sm:prose-base">
-        <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
-      </div>
-    </article>
+    <ContentPageShell>
+      <article className="section-card space-y-6">
+        <header>
+          <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
+            {title}
+          </h1>
+          {data.description && (
+            <p className="mt-2 text-base text-[color:var(--text-muted)]">
+              {data.description as string}
+            </p>
+          )}
+        </header>
+        <div className="prose prose-sm max-w-none sm:prose-base">
+          <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+        </div>
+      </article>
+    </ContentPageShell>
   );
 }

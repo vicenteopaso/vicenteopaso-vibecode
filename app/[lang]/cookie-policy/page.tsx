@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import path from "path";
 import ReactMarkdown from "react-markdown";
 
+import { ContentPageShell } from "@/app/components/ContentPageShell";
 import { getLocaleFromParams } from "@/lib/i18n";
 
 import { markdownComponents } from "../../../lib/markdown-components";
@@ -49,15 +50,17 @@ export default async function CookiePolicyPage({ params }: PageProps) {
     (data.title as string) || (data.name as string) || "Cookie Policy";
 
   return (
-    <article className="section-card space-y-4">
-      <header>
-        <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
-          {title}
-        </h1>
-      </header>
-      <div className="prose prose-invert prose-sm max-w-none sm:prose-base">
-        <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
-      </div>
-    </article>
+    <ContentPageShell>
+      <article className="section-card space-y-4">
+        <header>
+          <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
+            {title}
+          </h1>
+        </header>
+        <div className="prose prose-invert prose-sm max-w-none sm:prose-base">
+          <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+        </div>
+      </article>
+    </ContentPageShell>
   );
 }

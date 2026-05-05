@@ -1,4 +1,5 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
+import { usePathname } from "next/navigation";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { LocaleProvider, useLocale } from "../../app/components/LocaleProvider";
@@ -26,6 +27,7 @@ describe("LocaleProvider and useLocale", () => {
 
   beforeEach(() => {
     store = {};
+    vi.mocked(usePathname).mockReturnValue("/en");
     global.localStorage = {
       getItem: vi.fn((key: string) => store[key] || null),
       setItem: vi.fn((key: string, value: string) => {
@@ -71,6 +73,7 @@ describe("LocaleProvider and useLocale", () => {
     });
 
     it("should initialize with es locale from prop", () => {
+      vi.mocked(usePathname).mockReturnValue("/es");
       render(
         <LocaleProvider initialLocale="es">
           <TestComponent />
@@ -163,6 +166,7 @@ describe("LocaleProvider and useLocale", () => {
     });
 
     it("should expose correct locale immediately without waiting for effects", () => {
+      vi.mocked(usePathname).mockReturnValue("/es");
       render(
         <LocaleProvider initialLocale="es">
           <TestComponent />
@@ -185,6 +189,26 @@ describe("LocaleProvider and useLocale", () => {
           <TestComponent />
         </LocaleProvider>,
       );
+      expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+    });
+
+    it("should sync locale from pathname after client-side navigation", async () => {
+      const mockUsePathname = vi.mocked(usePathname);
+      const { rerender } = render(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+
+      mockUsePathname.mockReturnValue("/es/cv");
+      rerender(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
       await waitFor(() => {
         expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
       });

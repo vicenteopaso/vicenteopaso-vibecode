@@ -184,6 +184,15 @@ describe("proxy (middleware)", () => {
   });
 
   describe("Non-root path handling", () => {
+    it("should leave /cv/download as the default English download route", () => {
+      const req = createMockRequest("/cv/download", "es-ES,es;q=0.9");
+      const response = proxy(req);
+
+      expect(response).toBeInstanceOf(NextResponse);
+      expect((response as NextResponse).status).not.toBe(307);
+      expect((response as NextResponse).headers.get("location")).toBeNull();
+    });
+
     it("should redirect Spanish browsers from /cv to /es/cv", () => {
       const req = createMockRequest("/cv", "es-ES,es;q=0.9");
       const response = proxy(req);

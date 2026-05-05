@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 import { useTranslations } from "@/lib/i18n";
 
-import { getCvPdfAsset } from "../config/cv";
+import { getCvDownloadFilename, getCvDownloadPath } from "../config/cv";
 import { DownloadIcon } from "./icons";
 import { useLocale } from "./LocaleProvider";
 
@@ -118,8 +118,9 @@ export function ProfileCard({
 }: ProfileCardProps) {
   const { resolvedTheme } = useTheme();
   const { locale } = useLocale();
-  const { href: cvPdfHref, downloadName } = getCvPdfAsset(locale);
   const t = useTranslations();
+  const cvDownloadPath = getCvDownloadPath(locale);
+  const cvDownloadFilename = getCvDownloadFilename(locale);
   const [hasImageError, setHasImageError] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -220,10 +221,10 @@ export function ProfileCard({
               </h1>
               {showDownloadIcon && (
                 <a
-                  href={cvPdfHref}
-                  download={downloadName}
+                  href={cvDownloadPath}
+                  download={cvDownloadFilename}
                   className="hidden shrink-0 items-center gap-1.5 btn-primary text-xs sm:inline-flex no-underline hover:no-underline"
-                  aria-label={t("cv.downloadLabel")}
+                  aria-label="Download CV (PDF)"
                 >
                   <DownloadIcon className="h-4 w-4" />
                   <span>{t("cv.downloadLabel")}</span>
@@ -273,8 +274,8 @@ export function ProfileCard({
                       {t("cv.readLabel")}
                     </Link>
                     <a
-                      href={cvPdfHref}
-                      download={downloadName}
+                      href={cvDownloadPath}
+                      download={cvDownloadFilename}
                       className="btn-outline flex-1 no-underline hover:!no-underline hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
                     >
                       {t("cv.downloadLabel")}
@@ -291,8 +292,8 @@ export function ProfileCard({
                     {t("cv.readLabel")}
                   </Link>
                   <a
-                    href={cvPdfHref}
-                    download={downloadName}
+                    href={cvDownloadPath}
+                    download={cvDownloadFilename}
                     className="btn-outline no-underline hover:!no-underline hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)]"
                   >
                     {t("cv.downloadLabel")}
@@ -337,10 +338,10 @@ export function ProfileCard({
                     {showDownloadIcon && (
                       <div className="flex w-full justify-center py-3 sm:hidden">
                         <a
-                          href={cvPdfHref}
-                          download={downloadName}
+                          href={cvDownloadPath}
+                          download={cvDownloadFilename}
                           className="btn-primary inline-flex items-center gap-1.5 text-xs font-semibold no-underline hover:!no-underline"
-                          aria-label={t("cv.downloadLabel")}
+                          aria-label="Download CV (PDF)"
                         >
                           <DownloadIcon className="h-4 w-4" />
                           <span>{t("cv.downloadLabel")}</span>
@@ -359,11 +360,11 @@ export function ProfileCard({
                     <SocialIcons />
                     {showDownloadIcon && (
                       <a
-                        href={cvPdfHref}
-                        download={downloadName}
+                        href={cvDownloadPath}
+                        download={cvDownloadFilename}
                         className="hidden aspect-square h-8 w-8 items-center justify-center rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-surface)] text-[color:var(--text-primary)] shadow-sm transition-colors hover:border-[color:var(--link-hover)] hover:text-[color:var(--link-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 sm:inline-flex"
-                        aria-label={t("cv.downloadLabel")}
-                        title={t("cv.downloadLabel")}
+                        aria-label="Download CV (PDF)"
+                        title="Download CV (PDF)"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

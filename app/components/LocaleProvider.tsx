@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams, usePathname } from "next/navigation";
 import React, {
   createContext,
   useCallback,
@@ -24,6 +25,13 @@ function persistLocale(locale: Locale) {
   document.documentElement.lang = locale;
 }
 
+function getLocaleFromPathname(pathname: string | null): Locale | null {
+  const segment = pathname?.split("/").filter(Boolean)[0];
+  return segment && locales.includes(segment as Locale)
+    ? (segment as Locale)
+    : null;
+}
+
 export function LocaleProvider({
   initialLocale = defaultLocale,
   children,
@@ -31,21 +39,30 @@ export function LocaleProvider({
   initialLocale?: Locale;
   children: React.ReactNode;
 }) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale);
-  const [prevInitialLocale, setPrevInitialLocale] =
-    useState<Locale>(initialLocale);
+  const params = useParams<{ lang?: string }>();
+  const pathname = usePathname();
+  const routeLocaleFromParams =
+    params?.lang && locales.includes(params.lang as Locale)
+      ? (params.lang as Locale)
+      : null;
+  const [locale, setLocaleState] = useState<Locale>(
+    routeLocaleFromParams ?? initialLocale,
+  );
 
-  // Synchronously update locale context when the route locale changes so
-  // consumers see the new locale on the first render after navigation.
-  if (initialLocale !== prevInitialLocale) {
-    setPrevInitialLocale(initialLocale);
-    setLocaleState(initialLocale);
-  }
-
-  // Persist the route locale after navigation.
+  // On mount, persist the server-determined locale to storage/cookie/<html lang>
   useEffect(() => {
-    persistLocale(initialLocale);
-  }, [initialLocale]);
+    persistLocale(routeLocaleFromParams ?? initialLocale);
+  }, [initialLocale, routeLocaleFromParams]);
+
+  useEffect(() => {
+    const routeLocale = getLocaleFromPathname(pathname);
+    if (!routeLocale) return;
+    setLocaleState((currentLocale) => {
+      if (currentLocale === routeLocale) return currentLocale;
+      persistLocale(routeLocale);
+      return routeLocale;
+    });
+  }, [pathname]);
 
   const setLocale = useCallback((newLocale: Locale) => {
     if (!locales.includes(newLocale)) return;

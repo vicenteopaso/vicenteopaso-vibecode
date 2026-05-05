@@ -4,8 +4,16 @@ import type { Locale } from "../../../lib/i18n/locales";
 import { locales } from "../../../lib/i18n/locales";
 
 const icons = [
-  { src: "/png/light-bg/icon-light-bg-192.png", sizes: "192x192", type: "image/png" },
-  { src: "/png/light-bg/icon-light-bg-512.png", sizes: "512x512", type: "image/png" },
+  {
+    src: "/png/light-bg/icon-light-bg-192.png",
+    sizes: "192x192",
+    type: "image/png",
+  },
+  {
+    src: "/png/light-bg/icon-light-bg-512.png",
+    sizes: "512x512",
+    type: "image/png",
+  },
   {
     src: "/maskable/maskable-512-light.png",
     sizes: "512x512",
