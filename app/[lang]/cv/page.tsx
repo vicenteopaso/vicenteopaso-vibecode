@@ -780,7 +780,10 @@ function SkillsSection({
   t: T;
 }) {
   const sortedSkills = [...skills]
-    .map((s) => ({ ...s, _rank: PROFICIENCY_RANK[s.level?.toLowerCase() ?? ""] ?? 99 }))
+    .map((s) => ({
+      ...s,
+      _rank: PROFICIENCY_RANK[s.level?.toLowerCase() ?? ""] ?? 99,
+    }))
     .sort((a, b) => {
       if (a._rank !== b._rank) return a._rank - b._rank;
       return a.name.localeCompare(b.name);
@@ -805,7 +808,8 @@ function SkillsSection({
               padding: "16px 18px",
               borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
               borderBottom:
-                i < sortedSkills.length - (sortedSkills.length % 2 === 0 ? 2 : 1)
+                i <
+                sortedSkills.length - (sortedSkills.length % 2 === 0 ? 2 : 1)
                   ? "1px solid var(--v3-rule)"
                   : "none",
             }}

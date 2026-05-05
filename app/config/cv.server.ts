@@ -28,7 +28,10 @@ function safePdfBasename(value: string): string {
   return basename;
 }
 
-function resolveConfiguredFilename(envValue: string | undefined, fallback: string): string {
+function resolveConfiguredFilename(
+  envValue: string | undefined,
+  fallback: string,
+): string {
   if (!envValue) return fallback;
   try {
     return safePdfBasename(envValue);
@@ -38,8 +41,14 @@ function resolveConfiguredFilename(envValue: string | undefined, fallback: strin
 }
 
 const configuredCvPdfFiles: Partial<Record<Locale, string>> = {
-  en: resolveConfiguredFilename(process.env.CV_PDF_FILE_EN, defaultCvPdfFiles.en),
-  es: resolveConfiguredFilename(process.env.CV_PDF_FILE_ES, defaultCvPdfFiles.es),
+  en: resolveConfiguredFilename(
+    process.env.CV_PDF_FILE_EN,
+    defaultCvPdfFiles.en,
+  ),
+  es: resolveConfiguredFilename(
+    process.env.CV_PDF_FILE_ES,
+    defaultCvPdfFiles.es,
+  ),
 };
 
 function isPdf(filename: string): boolean {
@@ -97,7 +106,9 @@ async function findConfiguredFile(locale: Locale): Promise<string | null> {
 
   const resolvedBase = path.resolve(PUBLIC_ASSETS_DIR);
   const absolutePath = path.resolve(PUBLIC_ASSETS_DIR, configuredFile);
-  const baseWithSep = resolvedBase.endsWith(path.sep) ? resolvedBase : resolvedBase + path.sep;
+  const baseWithSep = resolvedBase.endsWith(path.sep)
+    ? resolvedBase
+    : resolvedBase + path.sep;
   if (!absolutePath.startsWith(baseWithSep)) {
     return null;
   }
@@ -118,38 +129,57 @@ async function findLocaleSpecificFile(locale: Locale): Promise<string | null> {
   return null;
 }
 
-export async function resolveCvPdfAsset(
-  locale: Locale,
-): Promise<{ absolutePath: string; fileName: string; resolvedLocale: Locale } | null> {
+export async function resolveCvPdfAsset(locale: Locale): Promise<{
+  absolutePath: string;
+  fileName: string;
+  resolvedLocale: Locale;
+} | null> {
   // Try the requested locale, then fall back to the default locale.
   // Track which locale the resolved file actually belongs to so the download
   // filename always matches the file being served.
 
-  let fileName: string | null = null;
-  let resolvedLocale: Locale = locale;
-
-  fileName = await findConfiguredFile(locale);
-  if (!fileName && locale !== defaultLocale) {
-    fileName = await findConfiguredFile(defaultLocale);
-    if (fileName) resolvedLocale = defaultLocale;
+  const configuredFile = await findConfiguredFile(locale);
+  if (configuredFile) {
+    return {
+      absolutePath: path.join(PUBLIC_ASSETS_DIR, configuredFile),
+      fileName: configuredFile,
+      resolvedLocale: locale,
+    };
   }
 
-  if (!fileName) {
-    fileName = await findLocaleSpecificFile(locale);
-    if (fileName) resolvedLocale = locale;
-    else if (locale !== defaultLocale) {
-      fileName = await findLocaleSpecificFile(defaultLocale);
-      if (fileName) resolvedLocale = defaultLocale;
+  if (locale !== defaultLocale) {
+    const defaultConfiguredFile = await findConfiguredFile(defaultLocale);
+    if (defaultConfiguredFile) {
+      return {
+        absolutePath: path.join(PUBLIC_ASSETS_DIR, defaultConfiguredFile),
+        fileName: defaultConfiguredFile,
+        resolvedLocale: defaultLocale,
+      };
     }
   }
 
-  if (!fileName) return null;
+  const localeSpecificFile = await findLocaleSpecificFile(locale);
+  if (localeSpecificFile) {
+    return {
+      absolutePath: path.join(PUBLIC_ASSETS_DIR, localeSpecificFile),
+      fileName: localeSpecificFile,
+      resolvedLocale: locale,
+    };
+  }
 
-  return {
-    absolutePath: path.join(PUBLIC_ASSETS_DIR, fileName),
-    fileName,
-    resolvedLocale,
-  };
+  if (locale !== defaultLocale) {
+    const defaultLocaleSpecificFile =
+      await findLocaleSpecificFile(defaultLocale);
+    if (defaultLocaleSpecificFile) {
+      return {
+        absolutePath: path.join(PUBLIC_ASSETS_DIR, defaultLocaleSpecificFile),
+        fileName: defaultLocaleSpecificFile,
+        resolvedLocale: defaultLocale,
+      };
+    }
+  }
+
+  return null;
 }
 
 export async function createCvPdfDownloadResponse(
