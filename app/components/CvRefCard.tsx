@@ -121,6 +121,8 @@ function CvRefCard({
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    // Ignore events that bubbled up from interactive children (e.g. the link)
+    if (event.target !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       setClickExpanded((prev) => !prev);

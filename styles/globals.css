@@ -787,9 +787,11 @@ body {
 .v3-contact-link:hover {
   color: var(--v3-accent-text) !important;
 }
+.v3-contact-link span:last-child {
+  transition: transform 0.15s ease;
+}
 .v3-contact-link:hover span:last-child {
   transform: translate(2px, -2px);
-  transition: transform 0.15s ease;
 }
 
 /* ── v3 CV Mobile ────────────────────────────────────────────────────────── */
