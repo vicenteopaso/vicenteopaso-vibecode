@@ -346,6 +346,48 @@ describe("CVPage", () => {
       ),
     ).toBeInTheDocument();
   });
+
+  it("renders skills sorted by proficiency rank then alphabetically", async () => {
+    const cvJson = {
+      basics: { name: "Test User" },
+      skills: [
+        { name: "Zsh", level: "Beginner" },
+        { name: "TypeScript", level: "Master" },
+        { name: "React", level: "Advanced" },
+        { name: "Go", level: "Intermediate" },
+        { name: "Rust", level: "Advanced" },
+        { name: "Node.js", level: "Master" },
+      ],
+    };
+
+    mockCvFs({ locale: "en", meta: { name: "Test" }, cvJson });
+
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
+    render(ui);
+
+    const skillNames = screen
+      .getAllByText(/TypeScript|Node\.js|React|Rust|Go|Zsh/)
+      .map((el) => el.textContent);
+
+    // master level before advanced, advanced before intermediate, intermediate before beginner
+    const tsIdx = skillNames.indexOf("TypeScript");
+    const nodeIdx = skillNames.indexOf("Node.js");
+    const reactIdx = skillNames.indexOf("React");
+    const rustIdx = skillNames.indexOf("Rust");
+    const goIdx = skillNames.indexOf("Go");
+    const zshIdx = skillNames.indexOf("Zsh");
+
+    // Both Master-level skills should appear before Advanced-level skills
+    expect(Math.max(tsIdx, nodeIdx)).toBeLessThan(Math.min(reactIdx, rustIdx));
+    // Both Advanced-level skills should appear before Intermediate
+    expect(Math.max(reactIdx, rustIdx)).toBeLessThan(goIdx);
+    // Intermediate before Beginner
+    expect(goIdx).toBeLessThan(zshIdx);
+    // Within Master: Node.js < TypeScript (alphabetical)
+    expect(nodeIdx).toBeLessThan(tsIdx);
+    // Within Advanced: React < Rust (alphabetical)
+    expect(reactIdx).toBeLessThan(rustIdx);
+  });
 });
 
 describe("CV Page Masthead Actions", () => {

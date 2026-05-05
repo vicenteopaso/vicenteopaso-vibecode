@@ -207,7 +207,7 @@ describe("LocaleProvider and useLocale", () => {
       expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
     });
 
-    it("should update when rerendered with different initialLocale prop", async () => {
+    it("should not update locale when rerendered with different initialLocale prop (initialLocale is mount-only)", async () => {
       const { rerender } = render(
         <LocaleProvider initialLocale="en">
           <TestComponent />

@@ -120,23 +120,35 @@ async function findLocaleSpecificFile(locale: Locale): Promise<string | null> {
 
 export async function resolveCvPdfAsset(
   locale: Locale,
-): Promise<{ absolutePath: string; fileName: string } | null> {
-  const configuredFile =
-    (await findConfiguredFile(locale)) ??
-    (locale !== defaultLocale ? await findConfiguredFile(defaultLocale) : null);
+): Promise<{ absolutePath: string; fileName: string; resolvedLocale: Locale } | null> {
+  // Try the requested locale, then fall back to the default locale.
+  // Track which locale the resolved file actually belongs to so the download
+  // filename always matches the file being served.
 
-  const discoveredFile =
-    (await findLocaleSpecificFile(locale)) ??
-    (locale !== defaultLocale
-      ? await findLocaleSpecificFile(defaultLocale)
-      : null);
+  let fileName: string | null = null;
+  let resolvedLocale: Locale = locale;
 
-  const fileName = configuredFile ?? discoveredFile;
+  fileName = await findConfiguredFile(locale);
+  if (!fileName && locale !== defaultLocale) {
+    fileName = await findConfiguredFile(defaultLocale);
+    if (fileName) resolvedLocale = defaultLocale;
+  }
+
+  if (!fileName) {
+    fileName = await findLocaleSpecificFile(locale);
+    if (fileName) resolvedLocale = locale;
+    else if (locale !== defaultLocale) {
+      fileName = await findLocaleSpecificFile(defaultLocale);
+      if (fileName) resolvedLocale = defaultLocale;
+    }
+  }
+
   if (!fileName) return null;
 
   return {
     absolutePath: path.join(PUBLIC_ASSETS_DIR, fileName),
     fileName,
+    resolvedLocale,
   };
 }
 
@@ -145,7 +157,13 @@ export async function createCvPdfDownloadResponse(
 ): Promise<Response> {
   const asset = await resolveCvPdfAsset(locale);
   if (!asset) {
-    return new Response("CV PDF not found", { status: 404 });
+    return new Response("CV PDF not found", {
+      status: 404,
+      headers: {
+        "X-Robots-Tag": "noindex",
+        "Cache-Control": "no-store",
+      },
+    });
   }
 
   const body = await readFile(asset.absolutePath);
@@ -154,7 +172,7 @@ export async function createCvPdfDownloadResponse(
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${getCvDownloadFilename(locale)}"`,
+      "Content-Disposition": `attachment; filename="${getCvDownloadFilename(asset.resolvedLocale)}"`,
       "Cache-Control": `public, max-age=${ONE_DAY_SECONDS}, s-maxage=31536000, stale-while-revalidate=60`,
       "X-Robots-Tag": "noindex",
     },
