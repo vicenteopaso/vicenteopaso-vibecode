@@ -60,7 +60,7 @@ test.describe("References Grid Card Visual Regression", () => {
     await page.goto("/cv");
     await waitForCVPage(page);
 
-    const firstCard = page.locator(`${REFS_GRID_SELECTOR} button`).first();
+    const firstCard = page.locator(`${REFS_GRID_SELECTOR} [role="button"]`).first();
     await expect(firstCard).toBeVisible();
 
     await expect(firstCard).toHaveScreenshot("references-carousel-dots.png", {
