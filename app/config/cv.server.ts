@@ -17,7 +17,12 @@ const defaultCvPdfFiles: Record<Locale, string> = {
 
 function safePdfBasename(value: string): string {
   const basename = path.basename(value);
-  if (basename !== value || basename.includes("..") || basename.includes("/")) {
+  if (
+    basename !== value ||
+    basename.includes("..") ||
+    basename.includes("/") ||
+    basename.includes("\\")
+  ) {
     throw new Error(`Invalid CV PDF filename from environment: ${value}`);
   }
   return basename;
@@ -90,8 +95,9 @@ async function findConfiguredFile(locale: Locale): Promise<string | null> {
   const configuredFile = configuredCvPdfFiles[locale];
   if (!configuredFile) return null;
 
-  const absolutePath = path.join(PUBLIC_ASSETS_DIR, configuredFile);
-  if (!absolutePath.startsWith(PUBLIC_ASSETS_DIR + path.sep) && absolutePath !== PUBLIC_ASSETS_DIR) {
+  const resolvedBase = path.resolve(PUBLIC_ASSETS_DIR);
+  const absolutePath = path.resolve(PUBLIC_ASSETS_DIR, configuredFile);
+  if (!absolutePath.startsWith(resolvedBase + path.sep)) {
     return null;
   }
   return (await fileExists(absolutePath)) ? configuredFile : null;
