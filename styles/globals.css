@@ -785,7 +785,7 @@ body {
 }
 
 .v3-contact-link:hover {
-  color: var(--v3-accent) !important;
+  color: var(--v3-accent-text) !important;
 }
 .v3-contact-link:hover span:last-child {
   transform: translate(2px, -2px);

@@ -112,7 +112,13 @@ function CvRefCard({
   const truncated = fullText.slice(0, 220) + "\u2026";
 
   const handleClick = () => setClickExpanded((prev) => !prev);
-  const handleBlur = () => { setClickExpanded(false); onLeave(); };
+  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    // Only collapse when focus leaves the card entirely (not moving to the link inside)
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setClickExpanded(false);
+      onLeave();
+    }
+  };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
