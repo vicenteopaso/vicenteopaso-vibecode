@@ -120,6 +120,25 @@ describe("CvRefsGrid", () => {
     expect(card).toHaveAttribute("aria-expanded", "false");
   });
 
+
+  it("renders referee name as a link when href is provided, and link click does not toggle card", () => {
+    render(<CvRefsGrid refs={refs} />);
+
+    // First ref has href — name should be a link
+    const link = screen.getByRole("link", { name: "Ada Lovelace" });
+    expect(link).toHaveAttribute("href", "https://example.com/ada");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(link).toHaveAttribute("target", "_blank");
+
+    // Second ref has no href — name should be plain text, not a link
+    expect(screen.queryByRole("link", { name: "Grace Hopper" })).toBeNull();
+
+    // Clicking the link should not toggle the card (stopPropagation)
+    const card = screen.getAllByRole("button")[0];
+    expect(card).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(link);
+    expect(card).toHaveAttribute("aria-expanded", "false");
+  });
   it("ignores unrelated keyboard input", () => {
     render(<CvRefsGrid refs={refs} />);
 
