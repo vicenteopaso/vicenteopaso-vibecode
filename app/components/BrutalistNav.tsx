@@ -114,7 +114,7 @@ export function BrutalistNav() {
           </Link>
           <span className="v3-nav-meta">{t("nav.version")}</span>
           <span className="v3-nav-meta">—</span>
-          <span className="v3-nav-meta" style={{ color: "var(--v3-accent)" }}>
+          <span className="v3-nav-meta" style={{ color: "var(--v3-accent-text)" }}>
             {t("nav.location")}
           </span>
         </div>
@@ -166,7 +166,7 @@ export function BrutalistNav() {
               color: "var(--v3-muted)",
               padding: 0,
             }}
-            aria-label={t("nav.switchLanguage")}
+            aria-label={`${t("nav.switchLanguage")}: ${locale === "en" ? t("language.es") : t("language.en")}`}
           >
             {locale === "en" ? t("language.es") : t("language.en")}
           </button>

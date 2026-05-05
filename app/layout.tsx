@@ -105,7 +105,9 @@ export default async function RootLayout({
             />
             <Script
               id="webmcp-polyfill"
-              src="https://unpkg.com/@mcp-b/global@latest/dist/index.iife.js"
+              src="https://unpkg.com/@mcp-b/global@2.2.0/dist/index.iife.js"
+              integrity="sha384-jyZCmImLqKAc1cMBR6ywp/DUtANftm05MVpAvhlBYCmr+H/7W8IUP5FjRdEf6X41"
+              crossOrigin="anonymous"
               strategy="afterInteractive"
             />
             <SeoJsonLd />

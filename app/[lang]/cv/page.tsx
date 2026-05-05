@@ -117,7 +117,7 @@ function SecHead({ n, label }: { n: string; label: string }) {
         style={{
           ...mono,
           fontSize: 11,
-          color: "var(--v3-accent)",
+          color: "var(--v3-accent-text)",
           letterSpacing: "0.14em",
         }}
       >
@@ -136,11 +136,24 @@ function stripHtml(html: string): string {
   return html.replace(/[<>]/g, "");
 }
 
-/** Parse "Name | Role" reference name strings */
-function parseRefName(raw: string): { name: string; role: string } {
-  const clean = stripHtml(raw);
-  const parts = clean.split("|").map((p) => p.trim());
-  return { name: parts[0] ?? clean, role: parts[1] ?? "" };
+/** Parse "Name | Role" reference name strings, extracting href if present */
+function parseRefName(raw: string): {
+  name: string;
+  role: string;
+  href?: string;
+} {
+  const hrefMatch = raw.match(/href=['"]([^'"]+)['"]/);
+  const rawHref = hrefMatch?.[1];
+  const href =
+    rawHref && /^https?:\/\//i.test(rawHref) ? rawHref : undefined;
+  const textMatch = raw.match(/>([^<]+)<\/a>/);
+  const anchorText = textMatch?.[1]?.trim();
+  const pipeIdx = raw.indexOf("|");
+  const role = pipeIdx >= 0 ? raw.substring(pipeIdx + 1).trim() : "";
+  const name =
+    anchorText ??
+    stripHtml(pipeIdx >= 0 ? raw.substring(0, pipeIdx) : raw).trim();
+  return { name, role, href };
 }
 
 // ─── CV Masthead ───────────────────────────────────────────────────────────────
@@ -250,6 +263,7 @@ function CvMasthead({
             fill
             style={{ objectFit: "cover", objectPosition: "center top" }}
             priority
+            fetchPriority="high"
             sizes="(max-width: 768px) 100vw, 340px"
           />
         </div>
@@ -1090,8 +1104,13 @@ function ReferencesSection({
   t: T;
 }) {
   const refs = references.map((ref) => {
-    const { name, role } = parseRefName(ref.name);
-    return { name, role, fullText: stripHtmlLikeDelimiters(ref.reference) };
+    const { name, role, href } = parseRefName(ref.name);
+    return {
+      name,
+      role,
+      href,
+      fullText: stripHtmlLikeDelimiters(ref.reference),
+    };
   });
   return (
     <section id="cv-references" style={{ padding: "48px 32px", ...rule2 }}>

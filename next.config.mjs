@@ -13,7 +13,7 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       // Scripts: Next.js, Cloudflare Turnstile, inline Next/scripts
-      "script-src 'self' https://challenges.cloudflare.com 'unsafe-inline'",
+      "script-src 'self' https://challenges.cloudflare.com https://unpkg.com 'unsafe-inline'",
       // Styles from self + inline (for Next.js style tags and Tailwind)
       "style-src 'self' 'unsafe-inline'",
       // Images from this origin or inlined as data URIs

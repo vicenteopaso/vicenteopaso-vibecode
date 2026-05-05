@@ -9,7 +9,7 @@ const longText =
   );
 
 const refs = [
-  { name: "Ada Lovelace", role: "Staff Engineer", fullText: longText },
+  { name: "Ada Lovelace", role: "Staff Engineer", href: "https://example.com/ada", fullText: longText },
   { name: "Grace Hopper", role: "Architect", fullText: longText },
   { name: "Margaret Hamilton", role: "Director", fullText: longText },
   { name: "Katherine Johnson", role: "VP Engineering", fullText: longText },
@@ -88,7 +88,8 @@ describe("CvRefsGrid", () => {
       transform: "translateY(0) scale(1)",
     });
 
-    fireEvent.mouseLeave(firstCard);
+    // Collapse happens when mouse leaves the grid, not individual cards
+    fireEvent.mouseLeave(firstCard.closest('[class*="v3-cv-refs"]') ?? firstCard.parentElement!);
     expect(firstCard).toHaveAttribute("aria-expanded", "false");
     expect(secondCard).toHaveStyle({ opacity: "1" });
 
@@ -119,6 +120,25 @@ describe("CvRefsGrid", () => {
     expect(card).toHaveAttribute("aria-expanded", "false");
   });
 
+
+  it("renders referee name as a link when href is provided, and link click does not toggle card", () => {
+    render(<CvRefsGrid refs={refs} />);
+
+    // First ref has href — name should be a link
+    const link = screen.getByRole("link", { name: "Ada Lovelace" });
+    expect(link).toHaveAttribute("href", "https://example.com/ada");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(link).toHaveAttribute("target", "_blank");
+
+    // Second ref has no href — name should be plain text, not a link
+    expect(screen.queryByRole("link", { name: "Grace Hopper" })).toBeNull();
+
+    // Clicking the link should not toggle the card (stopPropagation)
+    const card = screen.getAllByRole("button")[0];
+    expect(card).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(link);
+    expect(card).toHaveAttribute("aria-expanded", "false");
+  });
   it("ignores unrelated keyboard input", () => {
     render(<CvRefsGrid refs={refs} />);
 

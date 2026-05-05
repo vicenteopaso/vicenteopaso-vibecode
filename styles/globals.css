@@ -569,6 +569,7 @@ body {
   --v3-rule: #e3ded4;
   --v3-elevated: #efeadf;
   --v3-accent: #b91c1c;
+  --v3-accent-text: #b91c1c;
   --v3-sec: #1d4ed8;
 }
 
@@ -581,6 +582,7 @@ body {
   --v3-rule: #26231e;
   --v3-elevated: #1a1814;
   --v3-accent: #b91c1c;
+  --v3-accent-text: #ef4444;
   --v3-sec: #1d4ed8;
 }
 
@@ -740,10 +742,11 @@ body {
     border-bottom: none !important;
   }
 
-  /* Experience table: 2-col, hide location + read */
+  /* Experience table: 2-col, hide location+read */
   .v3-exp-header,
   .v3-exp-row {
-    grid-template-columns: 76px 1fr !important;
+    grid-template-columns: auto 1fr !important;
+    column-gap: 16px !important;
   }
   .v3-exp-loc,
   .v3-exp-read {
@@ -781,6 +784,16 @@ body {
   }
 }
 
+.v3-contact-link:hover {
+  color: var(--v3-accent-text) !important;
+}
+.v3-contact-link span:last-child {
+  transition: transform 0.15s ease;
+}
+.v3-contact-link:hover span:last-child {
+  transform: translate(2px, -2px);
+}
+
 /* ── v3 CV Mobile ────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   /* Section padding: all CV sections */
@@ -799,12 +812,9 @@ body {
     gap: 16px !important;
   }
   .v3-cv-portrait {
-    height: 340px !important;
-    min-height: 340px !important;
-    aspect-ratio: auto !important;
-  }
-  .v3-cv-portrait img {
-    object-position: center top !important;
+    width: 280px !important;
+    height: 350px !important;
+    margin: 0 auto !important;
   }
   .v3-cv-h1 {
     font-size: 48px !important;
