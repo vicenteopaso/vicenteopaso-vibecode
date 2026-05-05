@@ -779,12 +779,12 @@ function SkillsSection({
   skills: Array<{ name: string; level?: string; keywords?: string[] }>;
   t: T;
 }) {
-  const sortedSkills = [...skills].sort((a, b) => {
-    const aRank = PROFICIENCY_RANK[a.level?.toLowerCase() ?? ""] ?? 99;
-    const bRank = PROFICIENCY_RANK[b.level?.toLowerCase() ?? ""] ?? 99;
-    if (aRank !== bRank) return aRank - bRank;
-    return a.name.localeCompare(b.name);
-  });
+  const sortedSkills = [...skills]
+    .map((s) => ({ ...s, _rank: PROFICIENCY_RANK[s.level?.toLowerCase() ?? ""] ?? 99 }))
+    .sort((a, b) => {
+      if (a._rank !== b._rank) return a._rank - b._rank;
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>

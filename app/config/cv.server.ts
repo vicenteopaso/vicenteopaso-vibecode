@@ -63,8 +63,8 @@ function includesLocaleToken(filename: string, locale: Locale): boolean {
 
   if (normalized === locale) return true;
 
-  // Strip extension to also match e.g. "cv_en.pdf" → strip ".pdf" → "cv_en"
-  const withoutExt = normalized.replace(/\.[^.]+$/, "");
+  // Use path.parse to reliably strip extension (handles multiple dots e.g. cv.backup.pdf)
+  const withoutExt = path.parse(normalized).name;
 
   return separators.some(
     (separator) =>
@@ -97,7 +97,8 @@ async function findConfiguredFile(locale: Locale): Promise<string | null> {
 
   const resolvedBase = path.resolve(PUBLIC_ASSETS_DIR);
   const absolutePath = path.resolve(PUBLIC_ASSETS_DIR, configuredFile);
-  if (!absolutePath.startsWith(resolvedBase + path.sep)) {
+  const baseWithSep = resolvedBase.endsWith(path.sep) ? resolvedBase : resolvedBase + path.sep;
+  if (!absolutePath.startsWith(baseWithSep)) {
     return null;
   }
   return (await fileExists(absolutePath)) ? configuredFile : null;
