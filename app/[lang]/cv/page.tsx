@@ -5,8 +5,9 @@ import Image from "next/image";
 import path from "path";
 
 import { CvRefsGrid } from "@/app/components/CvRefCard";
-import { getCvPdfAsset } from "@/app/config/cv";
+import { getCvDownloadFilename, getCvDownloadPath } from "@/app/config/cv";
 import { logWarning } from "@/lib/error-logging";
+import type { Locale } from "@/lib/i18n";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
 import { getCvDescription, ogCacheVersion, siteConfig } from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
@@ -146,15 +147,15 @@ function parseRefName(raw: string): { name: string; role: string } {
 function CvMasthead({
   name,
   label,
+  lang,
   t,
-  locale,
 }: {
   name: string;
   label: string;
+  lang: Locale;
   t: T;
-  locale: "en" | "es";
 }) {
-  const { href: cvPdfHref, downloadName } = getCvPdfAsset(locale);
+  const cvDownloadPath = getCvDownloadPath(lang);
   const meta = [
     [t("cv.metaLocation"), t("cv.metaLocationValue")],
     [t("cv.metaAvailability"), t("cv.metaAvailabilityValue")],
@@ -223,7 +224,11 @@ function CvMasthead({
             {t("cv.subtitle1")} {t("cv.subtitle2")}
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 22 }}>
-            <CvBtn href={cvPdfHref} primary download={downloadName}>
+            <CvBtn
+              href={cvDownloadPath}
+              primary
+              download={getCvDownloadFilename(lang)}
+            >
               {t("cv.downloadPdf")}
             </CvBtn>
             <CvBtn href="#contact">{t("cv.emailCta")}</CvBtn>
@@ -760,6 +765,13 @@ function ExperienceSection({ work, t }: { work: WorkEntry[]; t: T }) {
 }
 
 // ─── §03 Skills ─────────────────────────────────────────────────────────────
+const PROFICIENCY_RANK: Record<string, number> = {
+  master: 0,
+  advanced: 1,
+  intermediate: 2,
+  beginner: 3,
+};
+
 function SkillsSection({
   skills,
   t,
@@ -767,19 +779,15 @@ function SkillsSection({
   skills: Array<{ name: string; level?: string; keywords?: string[] }>;
   t: T;
 }) {
-  const PROFICIENCY_RANK: Record<string, number> = {
-    master: 0,
-    advanced: 1,
-    intermediate: 2,
-    beginner: 3,
-  };
-
-  const sortedSkills = [...skills].sort((a, b) => {
-    const aRank = PROFICIENCY_RANK[a.level?.toLowerCase() ?? ""] ?? 99;
-    const bRank = PROFICIENCY_RANK[b.level?.toLowerCase() ?? ""] ?? 99;
-    if (aRank !== bRank) return aRank - bRank;
-    return a.name.localeCompare(b.name);
-  });
+  const sortedSkills = [...skills]
+    .map((s) => ({
+      ...s,
+      _rank: PROFICIENCY_RANK[s.level?.toLowerCase() ?? ""] ?? 99,
+    }))
+    .sort((a, b) => {
+      if (a._rank !== b._rank) return a._rank - b._rank;
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>
@@ -1240,7 +1248,7 @@ export default async function CVPage({ params }: PageProps) {
       className="v3-page"
       style={{ maxWidth: MAX_W, margin: "0 auto", width: "100%" }}
     >
-      <CvMasthead name={name} label={label} t={t} locale={locale} />
+      <CvMasthead name={name} label={label} lang={locale} t={t} />
       <CvToc t={t} tocEntries={siteData.cvToc} />
       <ImpactStrip impact={siteData.impact} />
       <SummarySection summary={cv.basics?.summary} t={t} tldr={siteData.tldr} />

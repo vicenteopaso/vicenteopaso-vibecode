@@ -92,14 +92,30 @@ export const markdownComponents: Components = {
       {children}
     </strong>
   ),
-  code: ({ children, ...props }) => (
-    <code
-      className="rounded-sm bg-[color:var(--code-bg)] px-1 py-0.5 font-mono text-xs text-[color:var(--code-text)]"
+  pre: ({ children, ...props }) => (
+    <pre
+      className="mb-4 overflow-x-auto rounded-md border border-[color:var(--v3-rule)] bg-[color:var(--code-bg)] p-4 text-[color:var(--code-text)] shadow-none"
       {...props}
     >
       {children}
-    </code>
+    </pre>
   ),
+  code: ({ children, className, ...props }) =>
+    className ? (
+      <code
+        className="bg-transparent p-0 font-mono text-[0.8rem] text-[color:var(--code-text)]"
+        {...props}
+      >
+        {children}
+      </code>
+    ) : (
+      <code
+        className="rounded-sm bg-[color:var(--code-bg)] px-1 py-0.5 font-mono text-xs text-[color:var(--code-text)]"
+        {...props}
+      >
+        {children}
+      </code>
+    ),
 };
 
 /**

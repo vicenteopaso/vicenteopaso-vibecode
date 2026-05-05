@@ -121,8 +121,8 @@
 
   /* Form placeholders & code */
   --placeholder-color: #6b7280; /* slate-500 - higher contrast than default placeholder */
-  --code-bg: rgba(15, 23, 42, 0.7); /* slate-900/70 */
-  --code-text: #f9fafb; /* slate-50 */
+  --code-bg: #ebe4d8;
+  --code-text: #171411;
 
   /* Borders (light theme) */
   --border-subtle: #e2e8f0; /* slate-200 */
@@ -164,6 +164,8 @@
   /* Borders (dark theme) */
   --border-subtle: rgba(148, 163, 184, 0.3);
   --border-strong: rgba(148, 163, 184, 0.6);
+  --code-bg: #201d18;
+  --code-text: #f6f1e7;
 }
 
 html {

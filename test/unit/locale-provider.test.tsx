@@ -1,4 +1,5 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
+import { useParams, usePathname } from "next/navigation";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { LocaleProvider, useLocale } from "../../app/components/LocaleProvider";
@@ -26,6 +27,8 @@ describe("LocaleProvider and useLocale", () => {
 
   beforeEach(() => {
     store = {};
+    vi.mocked(usePathname).mockReturnValue("/en");
+    vi.mocked(useParams).mockReturnValue({ lang: "en" });
     global.localStorage = {
       getItem: vi.fn((key: string) => store[key] || null),
       setItem: vi.fn((key: string, value: string) => {
@@ -71,12 +74,40 @@ describe("LocaleProvider and useLocale", () => {
     });
 
     it("should initialize with es locale from prop", () => {
+      vi.mocked(usePathname).mockReturnValue("/es");
+      vi.mocked(useParams).mockReturnValue({ lang: "es" });
       render(
         <LocaleProvider initialLocale="es">
           <TestComponent />
         </LocaleProvider>,
       );
       expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
+    });
+
+    it("should prefer a valid locale route param over the initial locale", () => {
+      vi.mocked(usePathname).mockReturnValue("/es");
+      vi.mocked(useParams).mockReturnValue({ lang: "es" });
+
+      render(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
+    });
+
+    it("should ignore an invalid locale route param and keep the initial locale", () => {
+      vi.mocked(usePathname).mockReturnValue("/fr");
+      vi.mocked(useParams).mockReturnValue({ lang: "fr" });
+
+      render(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
     });
   });
 
@@ -120,6 +151,8 @@ describe("LocaleProvider and useLocale", () => {
 
   describe("localStorage synchronization", () => {
     it("should save locale to localStorage on mount", async () => {
+      vi.mocked(usePathname).mockReturnValue("/es");
+      vi.mocked(useParams).mockReturnValue({ lang: "es" });
       render(
         <LocaleProvider initialLocale="es">
           <TestComponent />
@@ -163,6 +196,8 @@ describe("LocaleProvider and useLocale", () => {
     });
 
     it("should expose correct locale immediately without waiting for effects", () => {
+      vi.mocked(usePathname).mockReturnValue("/es");
+      vi.mocked(useParams).mockReturnValue({ lang: "es" });
       render(
         <LocaleProvider initialLocale="es">
           <TestComponent />
@@ -172,7 +207,7 @@ describe("LocaleProvider and useLocale", () => {
       expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
     });
 
-    it("should update when rerendered with different initialLocale prop", async () => {
+    it("should not update locale when rerendered with different initialLocale prop (initialLocale is mount-only)", async () => {
       const { rerender } = render(
         <LocaleProvider initialLocale="en">
           <TestComponent />
@@ -185,8 +220,51 @@ describe("LocaleProvider and useLocale", () => {
           <TestComponent />
         </LocaleProvider>,
       );
+      expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+    });
+
+    it("should sync locale from pathname after client-side navigation", async () => {
+      const mockUsePathname = vi.mocked(usePathname);
+      const { rerender } = render(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
+
+      mockUsePathname.mockReturnValue("/es/cv");
+      rerender(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
       await waitFor(() => {
         expect(screen.getByTestId("locale-display")).toHaveTextContent("es");
+      });
+    });
+
+    it("should ignore pathname changes that do not include a supported locale", async () => {
+      const mockUsePathname = vi.mocked(usePathname);
+      const mockUseParams = vi.mocked(useParams);
+      const { rerender } = render(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      mockUsePathname.mockReturnValue("/contact");
+      mockUseParams.mockReturnValue({});
+
+      rerender(
+        <LocaleProvider initialLocale="en">
+          <TestComponent />
+        </LocaleProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
       });
     });
   });
@@ -251,13 +329,36 @@ describe("LocaleProvider and useLocale", () => {
       );
     });
 
-    it("should ignore invalid locale values", () => {
-      render(
+    it("should ignore invalid locale values", async () => {
+      const InvalidLocaleComponent = () => {
+        const { locale, setLocale } = useLocale();
+        return (
+          <div>
+            <div data-testid="locale-display">{locale}</div>
+            <button
+              data-testid="set-invalid-btn"
+              onClick={() => setLocale("fr" as never)}
+            >
+              Set invalid
+            </button>
+          </div>
+        );
+      };
+
+      const { getByTestId } = render(
         <LocaleProvider initialLocale="en">
-          <TestComponent />
+          <InvalidLocaleComponent />
         </LocaleProvider>,
       );
-      // setLocale validates against locales array — invalid values are no-ops
+
+      getByTestId("set-invalid-btn").click();
+
+      await waitFor(() => {
+        expect(global.localStorage.setItem).not.toHaveBeenCalledWith(
+          "preferred-locale",
+          "fr",
+        );
+      });
       expect(screen.getByTestId("locale-display")).toHaveTextContent("en");
     });
 

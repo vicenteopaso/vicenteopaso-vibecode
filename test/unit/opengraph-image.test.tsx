@@ -38,6 +38,7 @@ import UnlocalizedOgImage, {
   contentType as unlocalizedContentType,
   size as unlocalizedSize,
 } from "../../app/opengraph-image";
+import { createHomeOgImage, getDefaultOgLocale } from "../../lib/og-home-image";
 import { baseMetadata, getCvDescription, siteConfig } from "../../lib/seo";
 
 // Helper function to traverse React element tree and extract text content
@@ -56,6 +57,42 @@ function findTextContent(el: React.ReactElement | string): string[] {
     return findTextContent(children as React.ReactElement);
   }
   return [];
+}
+
+function findElementsByType(
+  el: React.ReactElement | string,
+  type: string,
+): React.ReactElement[] {
+  if (typeof el === "string" || !el?.props) return [];
+
+  const matches = el.type === type ? [el] : [];
+  const children = (el.props as { children?: React.ReactNode }).children;
+
+  if (Array.isArray(children)) {
+    return matches.concat(
+      children.flatMap((child) =>
+        typeof child === "object" && child !== null
+          ? findElementsByType(child as React.ReactElement, type)
+          : [],
+      ),
+    );
+  }
+
+  if (typeof children === "object" && children !== null) {
+    return matches.concat(
+      findElementsByType(children as React.ReactElement, type),
+    );
+  }
+
+  return matches;
+}
+
+function findImageElements(
+  el: React.ReactElement | string,
+): Array<React.ReactElement<{ src?: string }>> {
+  return findElementsByType(el, "img") as Array<
+    React.ReactElement<{ src?: string }>
+  >;
 }
 
 describe("Unlocalized (root) OG image route", () => {
@@ -204,6 +241,82 @@ describe("Localized (/[lang]) OG image translations", () => {
     expect(textContent).toContain("Abierto a roles");
     expect(textContent).toContain(
       "Gerente de Ingeniería Web y Arquitecto Frontend",
+    );
+  });
+});
+
+describe("OG image helpers", () => {
+  beforeEach(() => {
+    mockInstances.length = 0;
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it("returns en as the default OG locale", () => {
+    expect(getDefaultOgLocale()).toBe("en");
+  });
+
+  it("uses a trusted Vercel deployment URL for the logo asset", () => {
+    vi.stubEnv("VERCEL_URL", "preview-123.vercel.app");
+    vi.stubEnv("NEXT_PUBLIC_IMAGES_CACHE_DATE", "20260505");
+    createHomeOgImage("en");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const imageElements = findImageElements(element);
+    const logo = imageElements[0];
+
+    expect(logo?.props.src).toBe(
+      "https://preview-123.vercel.app/assets/images/logo_dark.png?v=20260505",
+    );
+  });
+
+  it("accepts the production domain from VERCEL_URL", () => {
+    vi.stubEnv("VERCEL_URL", siteConfig.domain);
+    createHomeOgImage("en");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const imageElements = findImageElements(element);
+    const logo = imageElements[0];
+
+    expect(logo?.props.src).toBe(
+      `https://${siteConfig.domain}/assets/images/logo_dark.png?v=1`,
+    );
+  });
+
+  it("uses localhost assets in development when no trusted deployment URL exists", () => {
+    vi.unstubAllEnvs();
+    vi.stubEnv("NODE_ENV", "development");
+    vi.stubEnv("PORT", "4321");
+    vi.stubEnv("VERCEL_URL", "");
+    createHomeOgImage("en");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const imageElements = findImageElements(element);
+    const logo = imageElements[0];
+
+    expect(logo?.props.src).toBe(
+      "http://localhost:4321/assets/images/logo_dark.png?v=1",
+    );
+  });
+
+  it("falls back to the default development port when PORT is unset", () => {
+    vi.unstubAllEnvs();
+    vi.stubEnv("NODE_ENV", "development");
+    createHomeOgImage("en");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const imageElements = findImageElements(element);
+    const logo = imageElements[0];
+
+    expect(logo?.props.src).toBe(
+      "http://localhost:3000/assets/images/logo_dark.png?v=1",
     );
   });
 });

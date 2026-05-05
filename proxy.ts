@@ -71,6 +71,10 @@ function detectLocale(req: NextRequest): Locale {
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  if (pathname === "/cv/download") {
+    return NextResponse.next();
+  }
+
   // Redirect localized sitemap requests to root sitemap
   if (
     pathname === "/en/sitemap.xml" ||

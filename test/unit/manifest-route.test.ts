@@ -6,9 +6,7 @@ vi.mock("next/server", () => ({
 
 async function createGetHandler() {
   vi.resetModules();
-  const mod = await import(
-    "../../app/[lang]/manifest.webmanifest/route"
-  );
+  const mod = await import("../../app/[lang]/manifest.webmanifest/route");
   return mod.GET as (
     req: Request,
     ctx: { params: Promise<{ lang: string }> },
