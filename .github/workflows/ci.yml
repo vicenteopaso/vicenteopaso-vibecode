@@ -210,8 +210,20 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - name: Install Playwright
-        run: npx playwright install --with-deps
+        run: |
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" = "true" ]; then
+            npx playwright install-deps
+          else
+            npx playwright install --with-deps
+          fi
 
       - name: Playwright E2E tests (with web server)
         run: pnpm test:e2e

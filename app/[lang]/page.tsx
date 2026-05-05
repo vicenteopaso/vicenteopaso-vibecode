@@ -559,7 +559,7 @@ function ExperienceTable({
           className="v3-exp-header"
           style={{
             display: "grid",
-            gridTemplateColumns: "90px 1fr 200px 80px",
+            gridTemplateColumns: "130px 1fr 200px 80px",
             padding: "10px 16px",
             borderBottom: "1px solid var(--v3-rule)",
             ...mono,
@@ -586,7 +586,7 @@ function ExperienceTable({
                 className="v3-exp-row"
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "90px 1fr 200px 80px",
+                  gridTemplateColumns: "130px 1fr 200px 80px",
                   padding: "14px 16px",
                   borderBottom:
                     ci < work.length - 1 || ri < company.positions.length - 1
