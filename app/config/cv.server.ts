@@ -15,9 +15,26 @@ const defaultCvPdfFiles: Record<Locale, string> = {
   es: "Vicente-Opaso_CV_ES.pdf",
 };
 
+function safePdfBasename(value: string): string {
+  const basename = path.basename(value);
+  if (basename !== value || basename.includes("..") || basename.includes("/")) {
+    throw new Error(`Invalid CV PDF filename from environment: ${value}`);
+  }
+  return basename;
+}
+
+function resolveConfiguredFilename(envValue: string | undefined, fallback: string): string {
+  if (!envValue) return fallback;
+  try {
+    return safePdfBasename(envValue);
+  } catch {
+    return fallback;
+  }
+}
+
 const configuredCvPdfFiles: Partial<Record<Locale, string>> = {
-  en: process.env.CV_PDF_FILE_EN ?? defaultCvPdfFiles.en,
-  es: process.env.CV_PDF_FILE_ES ?? defaultCvPdfFiles.es,
+  en: resolveConfiguredFilename(process.env.CV_PDF_FILE_EN, defaultCvPdfFiles.en),
+  es: resolveConfiguredFilename(process.env.CV_PDF_FILE_ES, defaultCvPdfFiles.es),
 };
 
 function isPdf(filename: string): boolean {
@@ -41,8 +58,14 @@ function includesLocaleToken(filename: string, locale: Locale): boolean {
 
   if (normalized === locale) return true;
 
+  // Strip extension to also match e.g. "cv_en.pdf" → strip ".pdf" → "cv_en"
+  const withoutExt = normalized.replace(/\.[^.]+$/, "");
+
   return separators.some(
     (separator) =>
+      withoutExt.startsWith(`${locale}${separator}`) ||
+      withoutExt.endsWith(`${separator}${locale}`) ||
+      withoutExt.includes(`${separator}${locale}${separator}`) ||
       normalized.startsWith(`${locale}${separator}`) ||
       normalized.endsWith(`${separator}${locale}`) ||
       normalized.includes(`${separator}${locale}${separator}`),
@@ -68,6 +91,9 @@ async function findConfiguredFile(locale: Locale): Promise<string | null> {
   if (!configuredFile) return null;
 
   const absolutePath = path.join(PUBLIC_ASSETS_DIR, configuredFile);
+  if (!absolutePath.startsWith(PUBLIC_ASSETS_DIR + path.sep) && absolutePath !== PUBLIC_ASSETS_DIR) {
+    return null;
+  }
   return (await fileExists(absolutePath)) ? configuredFile : null;
 }
 

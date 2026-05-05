@@ -772,6 +772,20 @@ function SkillsSection({
   skills: Array<{ name: string; level?: string; keywords?: string[] }>;
   t: T;
 }) {
+  const PROFICIENCY_RANK: Record<string, number> = {
+    master: 0,
+    advanced: 1,
+    intermediate: 2,
+    beginner: 3,
+  };
+
+  const sortedSkills = [...skills].sort((a, b) => {
+    const aRank = PROFICIENCY_RANK[a.level?.toLowerCase() ?? ""] ?? 99;
+    const bRank = PROFICIENCY_RANK[b.level?.toLowerCase() ?? ""] ?? 99;
+    if (aRank !== bRank) return aRank - bRank;
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <section id="cv-skills" style={{ padding: "48px 32px", ...rule2 }}>
       <SecHead n="03" label={t("cv.section.skills")} />
@@ -784,14 +798,14 @@ function SkillsSection({
           gridTemplateColumns: "repeat(2, 1fr)",
         }}
       >
-        {skills.map((g, i) => (
+        {sortedSkills.map((g, i) => (
           <div
             key={g.name}
             style={{
               padding: "16px 18px",
               borderRight: i % 2 === 0 ? "1px solid var(--v3-rule)" : "none",
               borderBottom:
-                i < skills.length - (skills.length % 2 === 0 ? 2 : 1)
+                i < sortedSkills.length - (sortedSkills.length % 2 === 0 ? 2 : 1)
                   ? "1px solid var(--v3-rule)"
                   : "none",
             }}
