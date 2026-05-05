@@ -202,7 +202,7 @@ function HeroA4({
                   style={{
                     ...mono,
                     fontSize: 11,
-                    color: "var(--v3-accent)",
+                    color: "var(--v3-accent-text)",
                     letterSpacing: "0.1em",
                   }}
                 >
@@ -223,7 +223,7 @@ function HeroA4({
                     className="v3-cv-toc-sub"
                     style={{
                       fontSize: 13,
-                      color: "var(--v3-muted)",
+                      color: "var(--v3-fg)",
                       marginLeft: 12,
                     }}
                   >
@@ -410,10 +410,10 @@ function TlDrSection({
               </span>
               <span
                 style={{
-                  fontSize: 19,
+                  fontSize: 16,
                   letterSpacing: "-0.01em",
-                  lineHeight: 1.4,
-                  fontWeight: 500,
+                  lineHeight: 1.5,
+                  fontWeight: 400,
                 }}
               >
                 {item}
@@ -600,6 +600,8 @@ function ExperienceTable({
                     ...mono,
                     fontSize: 11,
                     color: isCurrent ? "var(--v3-accent)" : "var(--v3-muted)",
+                    whiteSpace: "nowrap",
+                    paddingRight: 16,
                   }}
                 >
                   {dateStr}
@@ -619,6 +621,7 @@ function ExperienceTable({
                 </span>
                 <Link
                   href={`/${locale}/cv#cv-experience` as Route}
+                  className="v3-exp-read"
                   style={{
                     ...mono,
                     fontSize: 11,
@@ -768,37 +771,38 @@ function ContactBlock({ t }: { t: T }) {
           </p>
           <div
             style={{
-              ...mono,
-              fontSize: 11,
-              marginTop: 24,
-              lineHeight: 1.9,
-              display: "flex",
-              flexDirection: "column" as const,
-              gap: 0,
+              marginTop: 28,
+              borderTop: "1px solid var(--v3-rule)",
             }}
           >
-            <a
-              href="mailto:vicente@opa.so"
-              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
-            >
-              {t("contact.email")}
-            </a>
-            <a
-              href="https://linkedin.com/in/vicenteopaso"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
-            >
-              {t("contact.linkedin")}
-            </a>
-            <a
-              href="https://github.com/vicenteopaso"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "var(--v3-muted)", textDecoration: "none" }}
-            >
-              {t("contact.github")}
-            </a>
+            {([
+              { href: "mailto:vicente@opa.so", label: t("contact.email"), external: false },
+              { href: "https://linkedin.com/in/vicenteopaso", label: t("contact.linkedin"), external: true },
+              { href: "https://github.com/vicenteopaso", label: t("contact.github"), external: true },
+            ] as const).map(({ href, label, external }) => (
+              <a
+                key={href}
+                href={href}
+                {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+                className="v3-contact-link"
+                style={{
+                  ...mono,
+                  fontSize: 11,
+                  letterSpacing: "0.08em",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "13px 0",
+                  borderBottom: "1px solid var(--v3-rule)",
+                  color: "var(--v3-fg)",
+                  textDecoration: "none",
+                  minHeight: 44,
+                }}
+              >
+                <span>{label}</span>
+                <span style={{ color: "var(--v3-accent)", fontSize: 14 }}>↗</span>
+              </a>
+            ))}
           </div>
         </div>
 

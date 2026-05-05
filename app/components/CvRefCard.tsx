@@ -10,6 +10,7 @@ interface Ref {
   total: number;
   name: string;
   role: string;
+  href?: string;
   fullText: string;
 }
 
@@ -17,11 +18,13 @@ function CardContent({
   index,
   name,
   role,
+  href,
   text,
 }: {
   index: number;
   name: string;
   role: string;
+  href?: string;
   text: string;
 }) {
   return (
@@ -51,7 +54,17 @@ function CardContent({
         <div
           style={{ fontSize: 13, fontWeight: 700, letterSpacing: "-0.005em" }}
         >
-          {name}
+          {href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 3 }}
+            >
+              {name}
+            </a>
+          ) : name}
         </div>
         <div
           style={{
@@ -74,65 +87,34 @@ function CvRefCard({
   total,
   name,
   role,
+  href,
   fullText,
+  expanded,
   dimmed,
   onEnter,
-  onLeave,
 }: Ref & {
+  expanded: boolean;
   dimmed: boolean;
   onEnter: () => void;
-  onLeave: () => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const isEvenCol = index % 2 === 0;
   const isLastRow = index >= total - 2;
   const truncated = fullText.slice(0, 220) + "\u2026";
 
-  const handleEnter = () => {
-    setExpanded(true);
-    onEnter();
-  };
-  const handleLeave = () => {
-    setExpanded(false);
-    onLeave();
-  };
-  const handleFocus = () => {
-    setExpanded(true);
-    onEnter();
-  };
-  const handleBlur = () => {
-    setExpanded(false);
-    onLeave();
-  };
-  const handleToggle = () => {
-    const nextExpanded = !expanded;
-    setExpanded(nextExpanded);
-
-    if (nextExpanded) {
-      onEnter();
-    } else {
-      onLeave();
-    }
-  };
-
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key !== "Enter" && event.key !== " ") {
-      return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onEnter();
     }
-
-    event.preventDefault();
-    handleToggle();
   };
 
   return (
     <button
       type="button"
       aria-expanded={expanded}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      onClick={handleToggle}
+      onMouseEnter={onEnter}
+      onFocus={onEnter}
+      onClick={onEnter}
       onKeyDown={handleKeyDown}
       style={{
         position: "relative",
@@ -157,10 +139,10 @@ function CvRefCard({
         aria-hidden={expanded ? true : undefined}
         style={{ visibility: expanded ? "hidden" : "visible" }}
       >
-        <CardContent index={index} name={name} role={role} text={truncated} />
+        <CardContent index={index} name={name} role={role} href={href} text={truncated} />
       </div>
 
-      {/* Expanded overlay — floats above without affecting layout */}
+      {/* Expanded overlay — pointer-events:auto when expanded so links are clickable */}
       <div
         style={{
           position: "absolute",
@@ -178,18 +160,18 @@ function CvRefCard({
               ? "translateY(6px) scale(0.99)"
               : "translateY(-6px) scale(0.99)",
           transition: "opacity 0.2s ease, transform 0.22s ease",
-          pointerEvents: "none",
+          pointerEvents: expanded ? "auto" : "none",
         }}
         aria-hidden={expanded ? undefined : true}
       >
-        <CardContent index={index} name={name} role={role} text={fullText} />
+        <CardContent index={index} name={name} role={role} href={href} text={fullText} />
       </div>
     </button>
   );
 }
 
 interface CvRefsGridProps {
-  refs: Array<{ name: string; role: string; fullText: string }>;
+  refs: Array<{ name: string; role: string; href?: string; fullText: string }>;
 }
 
 export function CvRefsGrid({ refs }: CvRefsGridProps) {
@@ -205,6 +187,8 @@ export function CvRefsGrid({ refs }: CvRefsGridProps) {
         gridTemplateColumns: "1fr 1fr",
         border: "1px solid var(--v3-rule)",
       }}
+      // Only collapse when mouse leaves the entire grid, not individual cards
+      onMouseLeave={() => setActiveIndex(null)}
     >
       {refs.map((ref, i) => (
         <CvRefCard
@@ -213,10 +197,11 @@ export function CvRefsGrid({ refs }: CvRefsGridProps) {
           total={total}
           name={ref.name}
           role={ref.role}
+          href={ref.href}
           fullText={ref.fullText}
+          expanded={activeIndex === i}
           dimmed={activeIndex !== null && activeIndex !== i}
           onEnter={() => setActiveIndex(i)}
-          onLeave={() => setActiveIndex(null)}
         />
       ))}
     </div>
