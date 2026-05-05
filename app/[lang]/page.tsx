@@ -775,15 +775,29 @@ function ContactBlock({ t }: { t: T }) {
               borderTop: "1px solid var(--v3-rule)",
             }}
           >
-            {([
-              { href: "mailto:vicente@opa.so", label: t("contact.email"), external: false },
-              { href: "https://linkedin.com/in/vicenteopaso", label: t("contact.linkedin"), external: true },
-              { href: "https://github.com/vicenteopaso", label: t("contact.github"), external: true },
-            ] as const).map(({ href, label, external }) => (
+            {(
+              [
+                {
+                  href: "mailto:vicente@opa.so",
+                  label: t("contact.email"),
+                  external: false,
+                },
+                {
+                  href: "https://linkedin.com/in/vicenteopaso",
+                  label: t("contact.linkedin"),
+                  external: true,
+                },
+                {
+                  href: "https://github.com/vicenteopaso",
+                  label: t("contact.github"),
+                  external: true,
+                },
+              ] as const
+            ).map(({ href, label, external }) => (
               <a
                 key={href}
                 href={href}
-                {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="v3-contact-link"
                 style={{
                   ...mono,
@@ -800,7 +814,9 @@ function ContactBlock({ t }: { t: T }) {
                 }}
               >
                 <span>{label}</span>
-                <span style={{ color: "var(--v3-accent)", fontSize: 14 }}>↗</span>
+                <span aria-hidden="true" style={{ color: "var(--v3-accent)", fontSize: 14 }}>
+                  ↗
+                </span>
               </a>
             ))}
           </div>

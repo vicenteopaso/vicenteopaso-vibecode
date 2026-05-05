@@ -58,7 +58,7 @@ function CardContent({
             <a
               href={href}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               style={{
                 color: "inherit",
@@ -114,7 +114,7 @@ function CvRefCard({
   const handleClick = () => setClickExpanded((prev) => !prev);
   const handleBlur = () => { setClickExpanded(false); onLeave(); };
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       setClickExpanded((prev) => !prev);
@@ -122,8 +122,9 @@ function CvRefCard({
   };
 
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       aria-expanded={expanded}
       onMouseEnter={onEnter}
       onFocus={onEnter}
@@ -192,7 +193,7 @@ function CvRefCard({
           text={fullText}
         />
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -213,8 +214,13 @@ export function CvRefsGrid({ refs }: CvRefsGridProps) {
         gridTemplateColumns: "1fr 1fr",
         border: "1px solid var(--v3-rule)",
       }}
-      // Only collapse when mouse leaves the entire grid, not individual cards
+      // Collapse on mouse-leave or when keyboard focus leaves the grid entirely
       onMouseLeave={() => setActiveIndex(null)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setActiveIndex(null);
+        }
+      }}
     >
       {refs.map((ref, i) => (
         <CvRefCard

@@ -137,14 +137,22 @@ function stripHtml(html: string): string {
 }
 
 /** Parse "Name | Role" reference name strings, extracting href if present */
-function parseRefName(raw: string): { name: string; role: string; href?: string } {
+function parseRefName(raw: string): {
+  name: string;
+  role: string;
+  href?: string;
+} {
   const hrefMatch = raw.match(/href=['"]([^'"]+)['"]/);
-  const href = hrefMatch?.[1];
+  const rawHref = hrefMatch?.[1];
+  const href =
+    rawHref && /^https?:\/\//i.test(rawHref) ? rawHref : undefined;
   const textMatch = raw.match(/>([^<]+)<\/a>/);
   const anchorText = textMatch?.[1]?.trim();
   const pipeIdx = raw.indexOf("|");
   const role = pipeIdx >= 0 ? raw.substring(pipeIdx + 1).trim() : "";
-  const name = anchorText ?? stripHtml(pipeIdx >= 0 ? raw.substring(0, pipeIdx) : raw).trim();
+  const name =
+    anchorText ??
+    stripHtml(pipeIdx >= 0 ? raw.substring(0, pipeIdx) : raw).trim();
   return { name, role, href };
 }
 
@@ -1097,7 +1105,12 @@ function ReferencesSection({
 }) {
   const refs = references.map((ref) => {
     const { name, role, href } = parseRefName(ref.name);
-    return { name, role, href, fullText: stripHtmlLikeDelimiters(ref.reference) };
+    return {
+      name,
+      role,
+      href,
+      fullText: stripHtmlLikeDelimiters(ref.reference),
+    };
   });
   return (
     <section id="cv-references" style={{ padding: "48px 32px", ...rule2 }}>
