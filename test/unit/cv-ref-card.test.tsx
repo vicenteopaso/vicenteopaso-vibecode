@@ -9,7 +9,7 @@ const longText =
   );
 
 const refs = [
-  { name: "Ada Lovelace", role: "Staff Engineer", fullText: longText },
+  { name: "Ada Lovelace", role: "Staff Engineer", href: "https://example.com/ada", fullText: longText },
   { name: "Grace Hopper", role: "Architect", fullText: longText },
   { name: "Margaret Hamilton", role: "Director", fullText: longText },
   { name: "Katherine Johnson", role: "VP Engineering", fullText: longText },
@@ -88,7 +88,8 @@ describe("CvRefsGrid", () => {
       transform: "translateY(0) scale(1)",
     });
 
-    fireEvent.mouseLeave(firstCard);
+    // Collapse happens when mouse leaves the grid, not individual cards
+    fireEvent.mouseLeave(firstCard.closest('[class*="v3-cv-refs"]') ?? firstCard.parentElement!);
     expect(firstCard).toHaveAttribute("aria-expanded", "false");
     expect(secondCard).toHaveStyle({ opacity: "1" });
 

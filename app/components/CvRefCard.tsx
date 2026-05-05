@@ -60,11 +60,17 @@ function CardContent({
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 3 }}
+              style={{
+                color: "inherit",
+                textDecoration: "underline",
+                textUnderlineOffset: 3,
+              }}
             >
               {name}
             </a>
-          ) : name}
+          ) : (
+            name
+          )}
         </div>
         <div
           style={{
@@ -89,22 +95,29 @@ function CvRefCard({
   role,
   href,
   fullText,
-  expanded,
+  hovered,
   dimmed,
   onEnter,
+  onLeave,
 }: Ref & {
-  expanded: boolean;
+  hovered: boolean;
   dimmed: boolean;
   onEnter: () => void;
+  onLeave: () => void;
 }) {
+  const [clickExpanded, setClickExpanded] = useState(false);
+  const expanded = hovered || clickExpanded;
   const isEvenCol = index % 2 === 0;
   const isLastRow = index >= total - 2;
   const truncated = fullText.slice(0, 220) + "\u2026";
 
+  const handleClick = () => setClickExpanded((prev) => !prev);
+  const handleBlur = () => { setClickExpanded(false); onLeave(); };
+
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      onEnter();
+      setClickExpanded((prev) => !prev);
     }
   };
 
@@ -114,7 +127,8 @@ function CvRefCard({
       aria-expanded={expanded}
       onMouseEnter={onEnter}
       onFocus={onEnter}
-      onClick={onEnter}
+      onBlur={handleBlur}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
       style={{
         position: "relative",
@@ -139,7 +153,13 @@ function CvRefCard({
         aria-hidden={expanded ? true : undefined}
         style={{ visibility: expanded ? "hidden" : "visible" }}
       >
-        <CardContent index={index} name={name} role={role} href={href} text={truncated} />
+        <CardContent
+          index={index}
+          name={name}
+          role={role}
+          href={href}
+          text={truncated}
+        />
       </div>
 
       {/* Expanded overlay — pointer-events:auto when expanded so links are clickable */}
@@ -164,7 +184,13 @@ function CvRefCard({
         }}
         aria-hidden={expanded ? undefined : true}
       >
-        <CardContent index={index} name={name} role={role} href={href} text={fullText} />
+        <CardContent
+          index={index}
+          name={name}
+          role={role}
+          href={href}
+          text={fullText}
+        />
       </div>
     </button>
   );
@@ -199,9 +225,10 @@ export function CvRefsGrid({ refs }: CvRefsGridProps) {
           role={ref.role}
           href={ref.href}
           fullText={ref.fullText}
-          expanded={activeIndex === i}
+          hovered={activeIndex === i}
           dimmed={activeIndex !== null && activeIndex !== i}
           onEnter={() => setActiveIndex(i)}
+          onLeave={() => setActiveIndex(null)}
         />
       ))}
     </div>
