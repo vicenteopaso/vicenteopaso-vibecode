@@ -63,7 +63,9 @@ export default async function TechnicalGovernancePage({ params }: PageProps) {
           )}
         </header>
         <div className="prose prose-sm max-w-none sm:prose-base">
-          <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+          <ReactMarkdown components={markdownComponents}>
+            {content}
+          </ReactMarkdown>
         </div>
       </article>
     </ContentPageShell>

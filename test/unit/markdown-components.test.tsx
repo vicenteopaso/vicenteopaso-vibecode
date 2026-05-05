@@ -77,6 +77,24 @@ describe("markdownComponents", () => {
     expect(hr).not.toBeNull();
     expect(hr).toHaveClass("border-[color:var(--border-subtle)]");
   });
+
+  it("renders fenced code blocks with the dedicated pre/code styling", () => {
+    const markdown = ["```ts", "const value = 42;", "```"].join("\n");
+
+    const { container } = render(
+      <ReactMarkdown components={markdownComponents}>{markdown}</ReactMarkdown>,
+    );
+
+    const pre = container.querySelector("pre");
+    expect(pre).not.toBeNull();
+    expect(pre).toHaveClass("overflow-x-auto");
+    expect(pre).toHaveClass("bg-[color:var(--code-bg)]");
+
+    const code = pre?.querySelector("code");
+    expect(code).not.toBeNull();
+    expect(code).toHaveClass("bg-transparent");
+    expect(code).not.toHaveClass("rounded-sm");
+  });
 });
 
 describe("aboutPageComponents", () => {
@@ -108,6 +126,21 @@ describe("aboutPageComponents", () => {
     const ordered = container.querySelector("ol");
     expect(ordered).not.toBeNull();
     expect(ordered).toHaveClass("space-y-3");
+  });
+
+  it("keeps markdown h2 elements as h2 with about-page heading styling", () => {
+    render(
+      <ReactMarkdown components={aboutPageComponents}>
+        {"## Primary About Heading"}
+      </ReactMarkdown>,
+    );
+
+    const heading = screen.getByRole("heading", {
+      level: 2,
+      name: /Primary About Heading/i,
+    });
+    expect(heading.tagName).toBe("H2");
+    expect(heading).toHaveClass("text-2xl");
   });
 });
 

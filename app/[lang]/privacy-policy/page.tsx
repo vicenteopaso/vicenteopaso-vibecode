@@ -58,7 +58,9 @@ export default async function PrivacyPolicyPage({ params }: PageProps) {
           </h1>
         </header>
         <div className="prose prose-invert prose-sm max-w-none sm:prose-base">
-          <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+          <ReactMarkdown components={markdownComponents}>
+            {content}
+          </ReactMarkdown>
         </div>
       </article>
     </ContentPageShell>
