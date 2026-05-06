@@ -110,6 +110,7 @@ export default async function RootLayout({
               crossOrigin="anonymous"
               strategy="afterInteractive"
             />
+            <style>{`::selection { background-color: var(--v3-accent); color: #fff; }`}</style>
             <SeoJsonLd />
             <BrutalistNav />
             <ErrorBoundary>

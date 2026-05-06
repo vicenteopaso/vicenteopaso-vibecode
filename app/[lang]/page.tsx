@@ -202,7 +202,7 @@ function HeroA4({
                   style={{
                     ...mono,
                     fontSize: 11,
-                    color: "var(--v3-accent-text)",
+                    color: "var(--v3-accent)",
                     letterSpacing: "0.1em",
                   }}
                 >
