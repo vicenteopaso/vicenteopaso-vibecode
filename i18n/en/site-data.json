@@ -4,9 +4,10 @@
     "I care about composable architecture, design systems, and developer experience.",
     "I ship accessible, performant, globally-localized products.",
     "I scale Communities of Practice and mentor distributed teams.",
-    "I am, very likely, the only Frontend Architect you will meet who was also an RF engineer at Nokia."
+    "I am, very likely, the only Frontend Architect you will meet who was also an RF engineer at Nokia.",
+    "I build things outside of work. An AI job pipeline, a real-time civic data product, and self-hosted infrastructure. Personal engineering is how I stay sharp."
   ],
-  "tldrLabels": ["WHO", "CRAFT", "SHIP", "SCALE", "EXTRA"],
+  "tldrLabels": ["WHO", "CRAFT", "SHIP", "SCALE", "EXTRA", "BUILDS"],
   "focus": [
     {
       "h": "Frontend Architecture",
@@ -27,6 +28,10 @@
     {
       "h": "Performance, A11y & SEO",
       "b": "Core Web Vitals, edge delivery, WCAG 2.1, technical SEO."
+    },
+    {
+      "h": "AI-Native Engineering",
+      "b": "Spec-Driven Development, AI-governed codebases, MCP server architecture, and agentic workflow design."
     }
   ],
   "impact": [
@@ -36,12 +41,12 @@
     { "k": "15y+", "v": "Shipping on the web — and 10 years in telecom before" }
   ],
   "landingToc": [
-    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "The 5-point version" },
+    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "The 6-point version" },
     {
       "n": "02",
       "id": "what-i-do",
       "t": "WHAT I DO",
-      "s": "Five areas of focus"
+      "s": "Six areas of focus"
     },
     {
       "n": "03",
@@ -51,12 +56,64 @@
     },
     {
       "n": "04",
+      "id": "what-i-build",
+      "t": "WHAT I BUILD",
+      "s": "Projects & infrastructure"
+    },
+    {
+      "n": "05",
       "id": "tech-tools",
       "t": "TECH & TOOLS",
       "s": "The current stack"
     },
-    { "n": "05", "id": "contact", "t": "CONTACT", "s": "Let's talk" }
+    { "n": "06", "id": "contact", "t": "CONTACT", "s": "Let's talk" }
   ],
+  "whatIBuild": {
+    "intro": "Outside of work, I build. These are live projects — not side projects I started and abandoned, but systems I run, maintain, and improve. They're where I practice what I write about: AI-native engineering, self-hosted infrastructure, and product thinking end to end.",
+    "projects": [
+      {
+        "title": "This site",
+        "subtitle": "opa.so",
+        "tags": "Next.js · SDD · AI-governed",
+        "body": "Rebuilt from scratch using Spec-Driven Development (SDD): an engineering methodology where governance docs (Constitution, ADRs, AI Guardrails) are written before and alongside code, giving AI tools structured context to maintain architectural integrity. Ships with Lighthouse CI (performance ≥90, accessibility ≥90), Vitest (90% coverage), Playwright E2E, and CodeQL. Every PR — human or AI-generated — goes through the same review workflow.",
+        "links": [
+          { "label": "GitHub", "href": "https://github.com/vicenteopaso/vicenteopaso-vibecode" },
+          { "label": "Technical Governance", "href": "https://opa.so/en/technical-governance" },
+          { "label": "Tech Stack", "href": "https://opa.so/en/tech-stack" }
+        ]
+      },
+      {
+        "title": "AI Job Search Pipeline",
+        "subtitle": "",
+        "tags": "Node.js · Claude API · Linear · Vercel",
+        "body": "A production AI pipeline I built to manage my own job search. Ingests opportunities from 11+ job boards, scores each against my profile using Claude (Anthropic), detects dealbreakers, and routes results into Linear with labels, priority, and match scores. Includes an MCP server so Claude can directly query and act on the pipeline. 660+ opportunities processed to date.",
+        "links": []
+      },
+      {
+        "title": "Trumpxiety",
+        "subtitle": "trumpxiety.com",
+        "tags": "Next.js · Node.js · LLM · PostgreSQL · Civic tech",
+        "body": "A real-time, nonpartisan political anxiety index. Every 6 hours, a scheduled pipeline ingests news from 71 outlets across 3 providers, deduplicates and enriches articles, then uses an LLM to score anxiety across 9 political domains. Scores are confidence-weighted and served via a REST API to a live Next.js dashboard with trend charts, category breakdowns, and source balance metrics. Notable design decisions: fallback scoring tiers for news-desert resilience, pre-computed VADER sentiment signals that reduce LLM token usage ~60–70%, SSRF protection, atomic DB transactions, HMAC-authenticated internal endpoints, and full audit trail. BFF architecture: the frontend never touches the database directly.",
+        "links": [
+          { "label": "trumpxiety.com", "href": "https://trumpxiety.com" }
+        ]
+      },
+      {
+        "title": "Dev Team",
+        "subtitle": "",
+        "tags": "MCP · Node.js · Claude · Codex · BrowserOS",
+        "body": "Developer workflow tool with an MCP (Model Context Protocol) server enabling Claude, GitHub Codex, and BrowserOS to integrate directly with team data and project workflows. Builds the agentic infrastructure layer — the tooling that lets AI agents participate in a team's processes as first-class actors, not just assistants.",
+        "links": []
+      },
+      {
+        "title": "Personal Cloud Infrastructure",
+        "subtitle": "",
+        "tags": "VPS · Nextcloud · Immich · Self-hosted",
+        "body": "Self-hosted Nextcloud (file storage and sync) and Immich (photo management) on a personal VPS. An exercise in operational ownership: not just shipping code, but running the infrastructure it depends on.",
+        "links": []
+      }
+    ]
+  },
   "cvToc": [
     {
       "n": "01",

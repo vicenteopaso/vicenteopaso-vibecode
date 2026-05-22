@@ -4,9 +4,10 @@
     "Me importa la arquitectura componible, los sistemas de diseño y la experiencia de desarrollador.",
     "Entrego productos accesibles, performantes y globalmente localizados.",
     "Escalo Comunidades de Práctica y mentorizo equipos distribuidos.",
-    "Soy, muy probablemente, el único Arquitecto Frontend que conocerás que también fue ingeniero RF en Nokia."
+    "Soy, muy probablemente, el único Arquitecto Frontend que conocerás que también fue ingeniero RF en Nokia.",
+    "Construyo cosas fuera del trabajo. Un pipeline de búsqueda de empleo con IA, un producto de datos cívicos en tiempo real e infraestructura autoalojada. La ingeniería personal es como me mantengo en forma."
   ],
-  "tldrLabels": ["QUIÉN", "OFICIO", "ENTREGO", "ESCALO", "EXTRA"],
+  "tldrLabels": ["QUIÉN", "OFICIO", "ENTREGO", "ESCALO", "EXTRA", "BUILDS"],
   "focus": [
     {
       "h": "Arquitectura Frontend",
@@ -27,6 +28,10 @@
     {
       "h": "Rendimiento, A11y & SEO",
       "b": "Core Web Vitals, edge delivery, WCAG 2.1, SEO técnico."
+    },
+    {
+      "h": "Ingeniería AI-Nativa",
+      "b": "Spec-Driven Development, codebases gobernadas por IA, arquitectura de servidores MCP y diseño de flujos de trabajo agénticos."
     }
   ],
   "impact": [
@@ -39,12 +44,12 @@
     { "k": "15y+", "v": "Entregando en la web — y 10 años en telco antes" }
   ],
   "landingToc": [
-    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "La versión de 5 puntos" },
+    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "La versión de 6 puntos" },
     {
       "n": "02",
       "id": "what-i-do",
       "t": "QUÉ HAGO",
-      "s": "Cinco áreas de enfoque"
+      "s": "Seis áreas de enfoque"
     },
     {
       "n": "03",
@@ -54,12 +59,64 @@
     },
     {
       "n": "04",
+      "id": "what-i-build",
+      "t": "QUÉ CONSTRUYO",
+      "s": "Proyectos e infraestructura"
+    },
+    {
+      "n": "05",
       "id": "tech-tools",
       "t": "TECH & HERRAMIENTAS",
       "s": "El stack actual"
     },
-    { "n": "05", "id": "contact", "t": "CONTACTO", "s": "Hablemos" }
+    { "n": "06", "id": "contact", "t": "CONTACTO", "s": "Hablemos" }
   ],
+  "whatIBuild": {
+    "intro": "Fuera del trabajo, construyo. Estos son proyectos en vivo — no side projects que empecé y abandoné, sino sistemas que ejecuto, mantengo y mejoro. Es donde practico lo que escribo: ingeniería AI-nativa, infraestructura autoalojada y pensamiento de producto de principio a fin.",
+    "projects": [
+      {
+        "title": "Este sitio",
+        "subtitle": "opa.so",
+        "tags": "Next.js · SDD · AI-governed",
+        "body": "Reconstruido desde cero usando Spec-Driven Development (SDD): una metodología de ingeniería donde los documentos de gobernanza (Constitución, ADRs, AI Guardrails) se escriben antes y junto al código, dando a las herramientas de IA contexto estructurado para mantener la integridad arquitectónica. Incluye Lighthouse CI (rendimiento ≥90, accesibilidad ≥90), Vitest (90% de cobertura), Playwright E2E y CodeQL. Cada PR — humano o generado por IA — pasa por el mismo flujo de revisión.",
+        "links": [
+          { "label": "GitHub", "href": "https://github.com/vicenteopaso/vicenteopaso-vibecode" },
+          { "label": "Gobernanza Técnica", "href": "https://opa.so/es/technical-governance" },
+          { "label": "Tech Stack", "href": "https://opa.so/es/tech-stack" }
+        ]
+      },
+      {
+        "title": "AI Job Search Pipeline",
+        "subtitle": "",
+        "tags": "Node.js · Claude API · Linear · Vercel",
+        "body": "Un pipeline de IA en producción que construí para gestionar mi propia búsqueda de empleo. Ingesta oportunidades de 11+ bolsas de trabajo, puntúa cada una contra mi perfil usando Claude (Anthropic), detecta dealbreakers y enruta los resultados a Linear con etiquetas, prioridad y puntuaciones. Incluye un servidor MCP para que Claude pueda consultar y actuar directamente en el pipeline. Más de 660 oportunidades procesadas hasta la fecha.",
+        "links": []
+      },
+      {
+        "title": "Trumpxiety",
+        "subtitle": "trumpxiety.com",
+        "tags": "Next.js · Node.js · LLM · PostgreSQL · Civic tech",
+        "body": "Un índice de ansiedad política en tiempo real y no partidista. Cada 6 horas, un pipeline programado ingesta noticias de 71 fuentes de 3 proveedores, deduplica y enriquece artículos, luego usa un LLM para puntuar la ansiedad en 9 dominios políticos. Las puntuaciones se ponderan por confianza y se sirven vía API REST a un dashboard Next.js con gráficos de tendencias, desglose por categorías y métricas de balance de fuentes. BFF architecture: el frontend nunca toca la base de datos directamente.",
+        "links": [
+          { "label": "trumpxiety.com", "href": "https://trumpxiety.com" }
+        ]
+      },
+      {
+        "title": "Dev Team",
+        "subtitle": "",
+        "tags": "MCP · Node.js · Claude · Codex · BrowserOS",
+        "body": "Herramienta de flujo de trabajo para desarrolladores con un servidor MCP (Model Context Protocol) que permite a Claude, GitHub Codex y BrowserOS integrarse directamente con datos de equipo y flujos de trabajo de proyectos. Construye la capa de infraestructura agéntica — el tooling que permite a los agentes de IA participar en los procesos de un equipo como actores de primera clase, no solo asistentes.",
+        "links": []
+      },
+      {
+        "title": "Infraestructura Cloud Personal",
+        "subtitle": "",
+        "tags": "VPS · Nextcloud · Immich · Self-hosted",
+        "body": "Nextcloud autoalojado (almacenamiento y sincronización de archivos) e Immich (gestión de fotos) en un VPS personal. Un ejercicio de propiedad operacional: no solo enviar código, sino ejecutar la infraestructura de la que depende.",
+        "links": []
+      }
+    ]
+  },
   "cvToc": [
     {
       "n": "01",
