@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { Route } from "next";
 import Link from "next/link";
 import path from "path";
+import ReactMarkdown from "react-markdown";
 
 import { V3ContactForm } from "@/app/components/V3ContactForm";
 import { logWarning } from "@/lib/error-logging";
@@ -743,16 +744,78 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
 
             {/* Right: body + links */}
             <div style={{ padding: "24px 22px" }}>
-              <p
+              <div
                 style={{
-                  fontSize: 13,
-                  color: "var(--v3-muted)",
-                  lineHeight: 1.65,
-                  margin: project.links.length > 0 ? "0 0 14px" : "0",
+                  marginBottom: project.links.length > 0 ? 14 : 0,
                 }}
               >
-                {project.body}
-              </p>
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => (
+                      <p
+                        style={{
+                          fontSize: 13,
+                          color: "var(--v3-muted)",
+                          lineHeight: 1.65,
+                          margin: "0 0 10px",
+                        }}
+                      >
+                        {children}
+                      </p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul
+                        style={{
+                          listStyle: "none",
+                          padding: 0,
+                          margin: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 10,
+                        }}
+                      >
+                        {children}
+                      </ul>
+                    ),
+                    li: ({ children }) => (
+                      <li
+                        style={{
+                          paddingLeft: 14,
+                          borderLeft: "2px solid var(--v3-rule)",
+                          fontSize: 13,
+                          color: "var(--v3-muted)",
+                          lineHeight: 1.65,
+                        }}
+                      >
+                        {children}
+                      </li>
+                    ),
+                    strong: ({ children }) => (
+                      <strong
+                        style={{
+                          fontWeight: 700,
+                          color: "var(--v3-fg)",
+                        }}
+                      >
+                        {children}
+                      </strong>
+                    ),
+                    code: ({ children }) => (
+                      <code
+                        style={{
+                          fontFamily: "var(--f-mono)",
+                          fontSize: 11,
+                          color: "var(--v3-accent)",
+                        }}
+                      >
+                        {children}
+                      </code>
+                    ),
+                  }}
+                >
+                  {project.body}
+                </ReactMarkdown>
+              </div>
               {project.links.length > 0 && (
                 <div
                   style={{
