@@ -765,22 +765,35 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                     paddingTop: 10,
                   }}
                 >
-                  {project.links.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: "var(--v3-fg)",
-                        textDecoration: "none",
-                        letterSpacing: "0.06em",
-                      }}
-                    >
-                      {link.label}{" "}
-                      <span aria-hidden="true">↗</span>
-                    </a>
-                  ))}
+                  {project.links.map((link) => {
+                    const isInternal = link.href.startsWith("/");
+                    const linkStyle = {
+                      color: "var(--v3-fg)",
+                      textDecoration: "none",
+                      letterSpacing: "0.06em",
+                    };
+                    return isInternal ? (
+                      <Link
+                        key={link.href}
+                        href={link.href as Route}
+                        style={linkStyle}
+                      >
+                        {link.label}{" "}
+                        <span aria-hidden="true">↗</span>
+                      </Link>
+                    ) : (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={linkStyle}
+                      >
+                        {link.label}{" "}
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    );
+                  })}
                 </div>
               )}
             </div>
