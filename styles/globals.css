@@ -658,6 +658,9 @@ body {
 .v3-build-row-left {
   border-right: 1px solid var(--v3-rule);
 }
+.v3-build-bullet::marker {
+  color: var(--v3-accent);
+}
 
 /* ── v3 Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 768px) {

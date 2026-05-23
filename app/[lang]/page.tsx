@@ -777,9 +777,10 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                     ),
                     li: ({ children }) => (
                       <li
+                        className="v3-build-bullet"
                         style={{
                           fontSize: 13,
-                          color: "var(--v3-accent)",
+                          color: "var(--v3-muted)",
                           lineHeight: 1.65,
                         }}
                       >
