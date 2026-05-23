@@ -1,9 +1,8 @@
 import fs from "fs";
+import { ImageResponse } from "next/og";
 import path from "path";
 
-import { ImageResponse } from "next/og";
-
-import { getCvDescription, siteConfig } from "./seo";
+import { getCvDescription, siteConfig } from "@/lib/seo";
 
 type OgLocale = "en" | "es";
 
