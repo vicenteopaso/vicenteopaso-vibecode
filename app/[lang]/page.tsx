@@ -781,11 +781,13 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                       <li
                         style={{
                           fontSize: 13,
-                          color: "var(--v3-muted)",
+                          color: "var(--v3-accent)",
                           lineHeight: 1.65,
                         }}
                       >
-                        {children}
+                        <span style={{ color: "var(--v3-muted)" }}>
+                          {children}
+                        </span>
                       </li>
                     ),
                     strong: ({ children }) => (
