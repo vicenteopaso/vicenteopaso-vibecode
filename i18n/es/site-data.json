@@ -81,8 +81,8 @@
         "body": "Reconstruido desde cero usando Spec-Driven Development (SDD): una metodología de ingeniería donde los documentos de gobernanza (Constitución, ADRs, AI Guardrails) se escriben antes y junto al código, dando a las herramientas de IA contexto estructurado para mantener la integridad arquitectónica. Incluye Lighthouse CI (rendimiento ≥90, accesibilidad ≥90), Vitest (90% de cobertura), Playwright E2E y CodeQL. Cada PR — humano o generado por IA — pasa por el mismo flujo de revisión.",
         "links": [
           { "label": "GitHub", "href": "https://github.com/vicenteopaso/vicenteopaso-vibecode" },
-          { "label": "Gobernanza Técnica", "href": "https://opa.so/es/technical-governance" },
-          { "label": "Tech Stack", "href": "https://opa.so/es/tech-stack" }
+          { "label": "Gobernanza Técnica", "href": "/es/technical-governance" },
+          { "label": "Tech Stack", "href": "/es/tech-stack" }
         ]
       },
       {

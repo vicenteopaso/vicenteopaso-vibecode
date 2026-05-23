@@ -1,6 +1,13 @@
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+// Stub fs so loadInterFont() never touches the real font file.
+// The tests only assert on JSX structure and style values, not on font bytes.
+vi.mock("fs", () => ({
+  default: { readFileSync: vi.fn(() => Buffer.alloc(16)) },
+  readFileSync: vi.fn(() => Buffer.alloc(16)),
+}));
+
 // Create a mock class for ImageResponse using vi.hoisted to avoid hoisting issues
 const { MockImageResponse, mockInstances } = vi.hoisted(() => {
   const mockInstances: Array<{

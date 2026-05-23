@@ -23,7 +23,7 @@ function getDeploymentBaseUrl(): string {
   return siteConfig.url;
 }
 
-/** Cached Inter 800 Latin font — loaded once at module init, reused across all OG renders. */
+/** Cached Inter 800 Latin font — lazy-loaded on first call, then cached at module level across all OG renders. */
 let _interFontCache: ArrayBuffer | null = null;
 
 /** Loads Inter 800 Latin static font for use in Satori/ImageResponse. Variable fonts are unsupported. */
