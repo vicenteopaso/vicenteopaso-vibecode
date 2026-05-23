@@ -766,8 +766,8 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                     ul: ({ children }) => (
                       <ul
                         style={{
-                          listStyle: "none",
-                          padding: 0,
+                          listStyle: "disc",
+                          paddingLeft: 18,
                           margin: 0,
                           display: "flex",
                           flexDirection: "column",
@@ -780,8 +780,6 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                     li: ({ children }) => (
                       <li
                         style={{
-                          paddingLeft: 14,
-                          borderLeft: "2px solid var(--v3-rule)",
                           fontSize: 13,
                           color: "var(--v3-muted)",
                           lineHeight: 1.65,
