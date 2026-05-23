@@ -46,10 +46,10 @@ test.describe("footer links navigate to pages", () => {
   test("Tech Stack link navigates correctly", async ({ page }) => {
     await page.goto("/en", { waitUntil: "domcontentloaded" });
 
-    const techStackLink = page.getByRole("link", {
-      name: "Tech Stack",
-      exact: true,
-    });
+    // Scope to footer to avoid matching the "Tech Stack" link in the WHAT I BUILD section
+    const techStackLink = page
+      .getByRole("contentinfo")
+      .getByRole("link", { name: "Tech Stack", exact: true });
 
     // Get the href and navigate directly
     const href = await techStackLink.getAttribute("href");
