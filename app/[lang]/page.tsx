@@ -692,8 +692,6 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
             key={project.title}
             className="v3-build-row"
             style={{
-              display: "grid",
-              gridTemplateColumns: "280px 1fr",
               borderBottom:
                 i < data.projects.length - 1
                   ? "1px solid var(--v3-rule)"
@@ -702,9 +700,9 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
           >
             {/* Left: title + subtitle + tags */}
             <div
+              className="v3-build-row-left"
               style={{
                 padding: "24px 22px",
-                borderRight: "1px solid var(--v3-rule)",
               }}
             >
               <div
