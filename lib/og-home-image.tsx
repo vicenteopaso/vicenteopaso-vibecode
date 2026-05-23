@@ -23,8 +23,12 @@ function getDeploymentBaseUrl(): string {
   return siteConfig.url;
 }
 
+/** Cached Inter 800 Latin font — loaded once at module init, reused across all OG renders. */
+let _interFontCache: ArrayBuffer | null = null;
+
 /** Loads Inter 800 Latin static font for use in Satori/ImageResponse. Variable fonts are unsupported. */
 function loadInterFont(): ArrayBuffer {
+  if (_interFontCache) return _interFontCache;
   const fontPath = path.join(
     process.cwd(),
     "public/fonts/inter/inter-800-latin.woff",
@@ -32,6 +36,7 @@ function loadInterFont(): ArrayBuffer {
   const buf = fs.readFileSync(fontPath);
   const ab = new ArrayBuffer(buf.length);
   new Uint8Array(ab).set(buf);
+  _interFontCache = ab;
   return ab;
 }
 

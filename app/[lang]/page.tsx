@@ -688,7 +688,7 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
       >
         {data.projects.map((project, i) => (
           <div
-            key={i}
+            key={project.title}
             className="v3-build-row"
             style={{
               display: "grid",
@@ -777,7 +777,8 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                         letterSpacing: "0.06em",
                       }}
                     >
-                      {link.label} ↗
+                      {link.label}{" "}
+                      <span aria-hidden="true">↗</span>
                     </a>
                   ))}
                 </div>
