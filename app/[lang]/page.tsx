@@ -783,9 +783,7 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                           lineHeight: 1.65,
                         }}
                       >
-                        <span style={{ color: "var(--v3-muted)" }}>
-                          {children}
-                        </span>
+                        {children}
                       </li>
                     ),
                     strong: ({ children }) => (
