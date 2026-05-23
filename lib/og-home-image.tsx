@@ -57,8 +57,10 @@ const palette = {
   cream: "#f0ebe1",
   red: "#cf201d",
   muted: "#8f897f",
-  panelRule: "#cfc7bb",
-  panelMuted: "#7d776f",
+  panelRule: "#cfc7bb",       // dark-theme panel divider (on cream bg)
+  panelMuted: "#7d776f",      // dark-theme panel muted text (on cream bg)
+  lightPanelRule: "#3a3530",  // light-theme panel divider (on ink bg)
+  lightPanelMuted: "#8f897f", // light-theme panel muted text (on ink bg) = palette.muted
 };
 
 const homeContentByLocale: Record<
@@ -148,8 +150,8 @@ function renderBrandedOgImage({
   const mutedFg = palette.muted;
   const panelBg = isDark ? palette.cream : palette.ink;
   const panelFg = isDark ? palette.ink : palette.cream;
-  const panelMutedFg = isDark ? palette.panelMuted : "#8f897f";
-  const panelRuleFg = isDark ? palette.panelRule : "#3a3530";
+  const panelMutedFg = isDark ? palette.panelMuted : palette.lightPanelMuted;
+  const panelRuleFg = isDark ? palette.panelRule : palette.lightPanelRule;
 
   const sansFamily =
     '"Arial", "Helvetica Neue", Helvetica, ui-sans-serif, system-ui, sans-serif';

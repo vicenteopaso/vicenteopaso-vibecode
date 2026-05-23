@@ -38,7 +38,11 @@ import UnlocalizedOgImage, {
   contentType as unlocalizedContentType,
   size as unlocalizedSize,
 } from "../../app/opengraph-image";
-import { createHomeOgImage, getDefaultOgLocale } from "../../lib/og-home-image";
+import {
+  createCvOgImage,
+  createHomeOgImage,
+  getDefaultOgLocale,
+} from "../../lib/og-home-image";
 import { baseMetadata, getCvDescription, siteConfig } from "../../lib/seo";
 
 // Helper function to traverse React element tree and extract text content
@@ -318,6 +322,60 @@ describe("OG image helpers", () => {
     expect(logo?.props.src).toBe(
       "http://localhost:3000/assets/images/logo_dark.png?v=1",
     );
+  });
+});
+
+describe("OG image theme support", () => {
+  beforeEach(() => {
+    mockInstances.length = 0;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("dark theme uses ink background and cream foreground", () => {
+    createHomeOgImage("en", "dark");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const rootStyle = (element.props as { style: React.CSSProperties }).style;
+    expect(rootStyle.background).toBe("#0c0b09"); // palette.ink
+    expect(rootStyle.color).toBe("#f0ebe1");       // palette.cream
+  });
+
+  it("light theme uses cream background and ink foreground", () => {
+    createHomeOgImage("en", "light");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const rootStyle = (element.props as { style: React.CSSProperties }).style;
+    expect(rootStyle.background).toBe("#f0ebe1"); // palette.cream
+    expect(rootStyle.color).toBe("#0c0b09");       // palette.ink
+  });
+
+  it("dark theme is the default when no theme is specified", () => {
+    createHomeOgImage("en");
+    createHomeOgImage("en", "dark");
+
+    expect(mockInstances).toHaveLength(2);
+    const defaultStyle = (
+      mockInstances[0] as { element: React.ReactElement }
+    ).element.props as { style: React.CSSProperties };
+    const explicitStyle = (
+      mockInstances[1] as { element: React.ReactElement }
+    ).element.props as { style: React.CSSProperties };
+    expect(defaultStyle.style.background).toBe(explicitStyle.style.background);
+  });
+
+  it("CV OG image respects light theme", () => {
+    createCvOgImage("en", "light");
+
+    expect(mockInstances).toHaveLength(1);
+    const { element } = mockInstances[0] as { element: React.ReactElement };
+    const rootStyle = (element.props as { style: React.CSSProperties }).style;
+    expect(rootStyle.background).toBe("#f0ebe1"); // palette.cream
+    expect(rootStyle.color).toBe("#0c0b09");       // palette.ink
   });
 });
 
