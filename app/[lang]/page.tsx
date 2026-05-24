@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { Route } from "next";
 import Link from "next/link";
 import path from "path";
+import ReactMarkdown from "react-markdown";
 
 import { V3ContactForm } from "@/app/components/V3ContactForm";
 import { logWarning } from "@/lib/error-logging";
@@ -463,7 +464,7 @@ function FocusStrip({
         className="v3-focus-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
+          gridTemplateColumns: "repeat(3, 1fr)",
           gap: 0,
           marginTop: 24,
           border: "1px solid var(--v3-rule)",
@@ -475,7 +476,8 @@ function FocusStrip({
             className="v3-focus-item"
             style={{
               padding: "20px 18px",
-              borderRight: i < 4 ? "1px solid var(--v3-rule)" : "none",
+              borderRight: i % 3 !== 2 ? "1px solid var(--v3-rule)" : "none",
+              borderBottom: i < 3 ? "1px solid var(--v3-rule)" : "none",
             }}
           >
             <div
@@ -642,7 +644,227 @@ function ExperienceTable({
   );
 }
 
-// ─── §04 Tech & Tools ────────────────────────────────────────────────────────
+// ─── §04 What I Build ─────────────────────────────────────────────────────────
+type WhatIBuildProject = {
+  title: string;
+  subtitle: string;
+  tags: string;
+  body: string;
+  links: Array<{ label: string; href: string }>;
+};
+
+type WhatIBuildData = {
+  intro: string;
+  projects: WhatIBuildProject[];
+};
+
+function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
+  return (
+    <section
+      id="what-i-build"
+      className="v3-section"
+      style={{
+        padding: "48px 32px",
+        ...rule2,
+        maxWidth: MAX_W,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      <SecHead n="04" label={t("section.whatIBuild")} />
+      <p
+        style={{
+          fontSize: 14,
+          color: "var(--v3-muted)",
+          maxWidth: 760,
+          lineHeight: 1.7,
+          margin: "20px 0 24px",
+        }}
+      >
+        {data.intro}
+      </p>
+      <div
+        className="v3-build-list"
+        style={{ border: "1px solid var(--v3-rule)" }}
+      >
+        {data.projects.map((project, i) => (
+          <div
+            key={project.title}
+            className="v3-build-row"
+            style={{
+              borderBottom:
+                i < data.projects.length - 1
+                  ? "1px solid var(--v3-rule)"
+                  : "none",
+            }}
+          >
+            {/* Left: title + subtitle + tags */}
+            <div
+              className="v3-build-row-left"
+              style={{
+                padding: "24px 22px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  letterSpacing: "-0.015em",
+                  marginBottom: 4,
+                }}
+              >
+                {project.title}
+              </div>
+              {project.subtitle && (
+                <div
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    color: "var(--v3-muted)",
+                    marginBottom: 10,
+                  }}
+                >
+                  {project.subtitle}
+                </div>
+              )}
+              <div
+                style={{
+                  ...mono,
+                  fontSize: 10,
+                  color: "var(--v3-accent)",
+                  letterSpacing: "0.12em",
+                  lineHeight: 1.7,
+                }}
+              >
+                {project.tags}
+              </div>
+            </div>
+
+            {/* Right: body + links */}
+            <div style={{ padding: "24px 22px" }}>
+              <div
+                style={{
+                  marginBottom: project.links.length > 0 ? 14 : 0,
+                }}
+              >
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => (
+                      <p
+                        style={{
+                          fontSize: 13,
+                          color: "var(--v3-muted)",
+                          lineHeight: 1.65,
+                          margin: "0 0 10px",
+                        }}
+                      >
+                        {children}
+                      </p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul
+                        style={{
+                          listStyle: "disc",
+                          paddingLeft: 18,
+                          margin: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 10,
+                        }}
+                      >
+                        {children}
+                      </ul>
+                    ),
+                    li: ({ children }) => (
+                      <li
+                        className="v3-build-bullet"
+                        style={{
+                          fontSize: 13,
+                          color: "var(--v3-muted)",
+                          lineHeight: 1.65,
+                        }}
+                      >
+                        {children}
+                      </li>
+                    ),
+                    strong: ({ children }) => (
+                      <strong
+                        style={{
+                          fontWeight: 700,
+                          color: "var(--v3-fg)",
+                        }}
+                      >
+                        {children}
+                      </strong>
+                    ),
+                    code: ({ children }) => (
+                      <code
+                        style={{
+                          fontFamily: "var(--f-mono)",
+                          fontSize: 11,
+                          color: "var(--v3-accent)",
+                        }}
+                      >
+                        {children}
+                      </code>
+                    ),
+                  }}
+                >
+                  {project.body}
+                </ReactMarkdown>
+              </div>
+              {project.links.length > 0 && (
+                <div
+                  style={{
+                    ...mono,
+                    fontSize: 11,
+                    display: "flex",
+                    gap: 14,
+                    flexWrap: "wrap" as const,
+                    borderTop: "1px solid var(--v3-rule)",
+                    paddingTop: 10,
+                  }}
+                >
+                  {project.links.map((link) => {
+                    const isInternal = link.href.startsWith("/");
+                    const linkStyle = {
+                      color: "var(--v3-fg)",
+                      textDecoration: "none",
+                      letterSpacing: "0.06em",
+                    };
+                    return isInternal ? (
+                      <Link
+                        key={link.href}
+                        href={link.href as Route}
+                        style={linkStyle}
+                      >
+                        {link.label}{" "}
+                        <span aria-hidden="true">↗</span>
+                      </Link>
+                    ) : (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={linkStyle}
+                      >
+                        {link.label}{" "}
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §05 Tech & Tools ────────────────────────────────────────────────────────
 type SkillGroup = { name: string; level?: string; keywords?: string[] };
 
 function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
@@ -658,7 +880,7 @@ function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
         width: "100%",
       }}
     >
-      <SecHead n="04" label={t("section.techTools")} />
+      <SecHead n="05" label={t("section.techTools")} />
       <div
         className="v3-stack-grid"
         style={{
@@ -728,7 +950,7 @@ function StackGrid({ skills, t }: { skills: SkillGroup[]; t: T }) {
   );
 }
 
-// ─── §05 Contact ──────────────────────────────────────────────────────────────
+// ─── §06 Contact ──────────────────────────────────────────────────────────────
 function ContactBlock({ t }: { t: T }) {
   return (
     <section
@@ -747,7 +969,7 @@ function ContactBlock({ t }: { t: T }) {
       >
         {/* Left: info */}
         <div>
-          <SecHead n="05" label={t("section.getInTouch")} />
+          <SecHead n="06" label={t("section.getInTouch")} />
           <h2
             style={{ ...big, fontSize: 64, lineHeight: 0.95, margin: "16px 0" }}
           >
@@ -870,6 +1092,9 @@ export default async function HomePage({ params }: PageProps) {
       />
       <FocusStrip t={t} focus={siteData.focus} />
       <ExperienceTable work={work} locale={locale} t={t} />
+      {siteData.whatIBuild && (
+        <WhatIBuildSection t={t} data={siteData.whatIBuild} />
+      )}
       <StackGrid skills={skills} t={t} />
       <ContactBlock t={t} />
     </div>

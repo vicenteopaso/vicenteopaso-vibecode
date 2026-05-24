@@ -4,9 +4,17 @@
     "I care about composable architecture, design systems, and developer experience.",
     "I ship accessible, performant, globally-localized products.",
     "I scale Communities of Practice and mentor distributed teams.",
-    "I am, very likely, the only Frontend Architect you will meet who was also an RF engineer at Nokia."
+    "I am, very likely, the only Frontend Architect you will meet who was also an RF engineer at Nokia.",
+    "I build things outside of work. An AI job pipeline, a real-time civic data product, and self-hosted infrastructure. Personal engineering is how I stay sharp."
   ],
-  "tldrLabels": ["WHO", "CRAFT", "SHIP", "SCALE", "EXTRA"],
+  "tldrLabels": [
+    "WHO",
+    "CRAFT",
+    "SHIP",
+    "SCALE",
+    "EXTRA",
+    "BUILDS"
+  ],
   "focus": [
     {
       "h": "Frontend Architecture",
@@ -27,21 +35,42 @@
     {
       "h": "Performance, A11y & SEO",
       "b": "Core Web Vitals, edge delivery, WCAG 2.1, technical SEO."
+    },
+    {
+      "h": "AI-Native Engineering",
+      "b": "Spec-Driven Development, AI-governed codebases, MCP server architecture, and agentic workflow design."
     }
   ],
   "impact": [
-    { "k": "25%", "v": "Core Web Vitals improvement across 6 markets" },
-    { "k": "40%", "v": "Reduction in release friction via CI/CD" },
-    { "k": "€1B+", "v": "Annual turnover on platforms I architected" },
-    { "k": "15y+", "v": "Shipping on the web — and 10 years in telecom before" }
+    {
+      "k": "25%",
+      "v": "Core Web Vitals improvement across 6 markets"
+    },
+    {
+      "k": "40%",
+      "v": "Reduction in release friction via CI/CD"
+    },
+    {
+      "k": "€1B+",
+      "v": "Annual turnover on platforms I architected"
+    },
+    {
+      "k": "15y+",
+      "v": "Shipping on the web — and 10 years in telecom before"
+    }
   ],
   "landingToc": [
-    { "n": "01", "id": "tl-dr", "t": "TL;DR", "s": "The 5-point version" },
+    {
+      "n": "01",
+      "id": "tl-dr",
+      "t": "TL;DR",
+      "s": "The 6-point version"
+    },
     {
       "n": "02",
       "id": "what-i-do",
       "t": "WHAT I DO",
-      "s": "Five areas of focus"
+      "s": "Six areas of focus"
     },
     {
       "n": "03",
@@ -51,12 +80,76 @@
     },
     {
       "n": "04",
+      "id": "what-i-build",
+      "t": "WHAT I BUILD",
+      "s": "Projects & infrastructure"
+    },
+    {
+      "n": "05",
       "id": "tech-tools",
       "t": "TECH & TOOLS",
       "s": "The current stack"
     },
-    { "n": "05", "id": "contact", "t": "CONTACT", "s": "Let's talk" }
+    {
+      "n": "06",
+      "id": "contact",
+      "t": "CONTACT",
+      "s": "Let's talk"
+    }
   ],
+  "whatIBuild": {
+    "intro": "Outside of work, I build. These are live projects — not side projects I started and abandoned, but systems I run, maintain, and improve. They're where I practice what I write about: AI-native engineering, self-hosted infrastructure, and product thinking end to end.",
+    "projects": [
+      {
+        "title": "opa.so",
+        "subtitle": "",
+        "tags": "Next.js · Spec-Driven Development · Vitest · Playwright · Vercel",
+        "body": "- Built spec-first using **Spec-Driven Development (SDD)**: a machine-readable `sdd.yaml` defines the system and a **Constitution** enumerates eleven immutable invariants — cross-layer imports, secrets handling, accessibility minimums, i18n requirements — before any code is written. ADRs record every architecture decision, giving AI tools and human contributors the same structured context to maintain architectural integrity across every contribution.\n- Every PR — human or AI-generated — passes a ten-gate CI pipeline: ESLint (Next.js, TypeScript, accessibility, security rules), strict TypeScript compilation, automated secrets scanning, internal link validation, Vitest unit tests with **90% coverage thresholds** across lines, statements, branches and functions enforced as hard failures, Playwright E2E, Playwright visual regression across light/dark/mobile viewports, CodeQL static analysis, a dependency vulnerability audit, and Lighthouse CI with Performance ≥90, Accessibility ≥90, and SEO ≥95 thresholds.\n- The contact form is a defense-in-depth stack: origin validation → honeypot → per-IP rate limiting → Cloudflare Turnstile server-side token verification → Zod schema validation, in that order, before a message is forwarded to the email backend. Observability runs on Vercel Analytics and Speed Insights for Core Web Vitals, with Sentry capturing client and server errors, session replays, and sampled performance traces.\n- Bilingual (EN/ES) throughout: locale-prefixed App Router routes, per-locale Markdown content files as the single source of truth for all copy, and a DeepL-powered translation workflow so Spanish content stays in sync without manual effort. OG images are generated per-locale via the Next.js `ImageResponse` API.",
+        "links": [
+          {
+            "label": "GitHub",
+            "href": "https://github.com/vicenteopaso/vicenteopaso-vibecode"
+          },
+          {
+            "label": "Technical Governance",
+            "href": "/en/technical-governance"
+          },
+          {
+            "label": "Tech Stack",
+            "href": "/en/tech-stack"
+          }
+        ]
+      },
+      {
+        "title": "AI Job Search Pipeline",
+        "subtitle": "",
+        "tags": "TypeScript · Vercel · Neon Postgres · OpenAI · Linear · GitHub Actions",
+        "body": "- An end-to-end job-discovery pipeline with two ingestion paths feeding the same worker: a scraper that polls configured job boards on a daily GitHub Actions schedule, and a Vercel-hosted REST API (`POST /api/opportunities`) that accepts email-forwarded leads — allowing a Claude Code skill to parse recruiter emails and push structured opportunities directly into the queue without any manual copy-paste.\n- Deduplication is handled via canonical URL normalization (lowercased host, stripped UTM params, fragments, and default ports) combined with a `seen_jobs` ledger in Neon Postgres, so the same role appearing across multiple sources or emails is collapsed to a single record before scoring.\n- Qualified jobs go through a two-stage OpenAI scoring pass: a broad stage-1 filter removes clear mismatches, and a focused stage-2 pass scores borderline candidates in detail. Linear issue priority is derived dynamically from the score distribution of each batch — `MIN_MATCH_SCORE` maps to no priority, the highest qualified score maps to urgent — so the most relevant roles always surface at the top of the board.",
+        "links": []
+      },
+      {
+        "title": "Political Sentiment Index",
+        "subtitle": "",
+        "tags": "TypeScript · Fastify · Next.js 16 · Claude API · PostgreSQL · Recharts",
+        "body": "- A live sentiment barometer built as two decoupled TypeScript services — a **Next.js 16** SSR frontend and a dedicated **Fastify** BFF — intentionally separated so that all business logic, scoring, and database access live behind an explicit, OpenAPI-documented contract that the presentation layer never circumvents.\n- The backend runs a five-stage content pipeline on a six-hour cadence: **Fetch → Normalize → Deduplicate → Synthesize → Write**. Three news sources are queried in parallel via `Promise.allSettled` — GDELT for tone screening, CurrentsAPI for article breadth, and NewsAPI.ai for selective enrichment of articles with pre-scored sentiment. Pre-computing sentiment signals for the majority of articles reduces Claude token consumption by an estimated 60–70% compared to sending raw article text.\n- After normalization into a shared `NormalizedArticle` type (SHA-256 fingerprinted from title + source + publication hour), deduplication runs in two passes — URL stripping, then content fingerprint — resolving conflicts in favour of the article version with the richest metadata. The deduplicated set is dispatched to Claude in a single structured call: Claude assigns per-article relevance weights across nine categories (weights must sum to exactly `1.0`), computes per-category scores on a `0–100` valence scale, calculates **confidence** as the lower of source-agreement ratio and coverage breadth, and emits **disagreement flags** when the majority-side split ratio falls at or below `0.7`.\n- All writes commit inside a single PostgreSQL transaction — pipeline metadata, the score snapshot, all nine category scores with Claude's reasoning strings, disagreement flags, and the full deduplicated article set. The pipeline is idempotent: a unique index on `pipeline_run_id` prevents double-writes on retry, and the retry policy distinguishes transient failures (one automatic retry with 30-second backoff) from permanent ones (invalid API key, schema mismatch), which are logged and left for the next scheduled run.\n- The frontend renders a live dashboard using Next.js App Router with ISR (300-second revalidation window). The trend chart renders as an accessible HTML `<table>` in the initial server HTML, then hydrates into a Recharts visualization; time-window changes are handled by a same-origin route handler that validates parameters and re-fetches from the BFF server-side. Deployed to Vercel via GitHub Actions with Vercel's own Git auto-deployments disabled to prevent double builds; structured logs are shipped to Grafana Loki for operational visibility.",
+        "links": []
+      },
+      {
+        "title": "Dev Team",
+        "subtitle": "",
+        "tags": "Claude API · Node.js · MCP · GitHub Actions · Telegram",
+        "body": "- A fully autonomous software delivery pipeline that takes a feature request — submitted via Telegram `/submit`, a file-based queue, or an MCP tool call — and carries it through requirements decomposition, code generation, pull request creation, CI monitoring, and self-healing on failure, with no human intervention in the happy path.\n- The pipeline is a sequence of specialized AI roles: **Context** indexes the current repo state, **Product Owner** breaks the goal into acceptance-criteria-bearing tasks, **Designer** produces UI/UX guidance and serves as a pre-PR approval gate, **Backend** and **Frontend** write the implementation, **QA** generates tests and review notes, and **Fixer** reads CI failure logs and patches the code until tests pass. Each role is independently retryable with a hard ceiling, receives only task-local context (never the full repo or conversation history), and produces validated JSON against a fixed schema — no prose, no exceptions.\n- The orchestrator writes durable run-memory checkpoints at every milestone so a crashed or rate-limited run resumes from exactly where it left off rather than regenerating work that already succeeded. Self-healing is intentionally guarded: transient failures (network, rate limits, CI flaps) use a short backoff before retrying; repeated failures, blocked roles, or exhausted fixer loops escalate to a human via Telegram.\n- Exposes the entire pipeline as an HTTP MCP server (`submit_task`, `get_status`, `resume_task`), making Dev Team composable: any MCP-compatible client — Claude Code, BrowserOS, or an outer AI agent — can fire a feature request, walk away, and later query the checkpoint memory to see exactly which roles have completed and whether CI has passed.\n- Infrastructure is intentionally minimal and outbound-only: a Node.js worker process runs on a private VPS with no public inbound surface, polling GitHub for CI/PR status and Telegram for operator commands. n8n handles periodic schedule triggers; GitHub Actions is the hard quality gate — a PR is never considered done until CI is green.",
+        "links": []
+      },
+      {
+        "title": "Self-Hosted Cloud Platform",
+        "subtitle": "",
+        "tags": "Docker · Nextcloud · Immich · PostgreSQL · nginx · Python · Wasabi S3",
+        "body": "- Two production services on a single hardened VPS: **Nextcloud** for general file storage and **Immich** for AI-powered photo management, sharing a reverse proxy, fail2ban ruleset, and a Wasabi S3 backend. Immich mounts Nextcloud's storage read-only via WebDAV — a single source of truth for photos, with Immich providing facial recognition, object detection, and smart search on top via a dedicated Python ML container backed by PostgreSQL with the pgvector and vectorchord extensions.\n- Security is defense-in-depth across every layer: containers run with drop-all capabilities and minimal re-grants, `no-new-privileges`, noexec/nosuid tmpfs mounts, memory and CPU limits, and localhost-only port binding. At the network layer, nginx enforces rate-limiting on auth routes, HSTS, OCSP stapling, and modern TLS only. fail2ban monitors nginx access logs and bans IPs after five failed auth attempts within ten minutes. All hardening was driven by a PentestTools assessment with every remediation committed to the repo.\n- A Python duplicate-detection pipeline runs on systemd timers — daily exact-dupe deletion (capped at 200/run), daily high-confidence near-dupe deletion (capped at 50/run), and a weekly near-dupe report with no deletions. The pipeline ships dry-run mode, per-run deletion caps, timestamp-anomaly guards, and JSON/CSV reporting as built-in guardrails against accidental bulk deletion.\n- Automated daily backups ship database dumps and config tarballs to a dedicated S3 prefix, with 7-day local retention and 30-day off-site retention. All services recover automatically on reboot via Docker restart policies and systemd units.",
+        "links": []
+      }
+    ]
+  },
   "cvToc": [
     {
       "n": "01",

@@ -650,6 +650,18 @@ body {
   display: block;
 }
 
+/* ── v3 What I Build ────────────────────────────────────────────────────── */
+.v3-build-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}
+.v3-build-row-left {
+  border-right: 1px solid var(--v3-rule);
+}
+.v3-build-bullet::marker {
+  color: var(--v3-accent);
+}
+
 /* ── v3 Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   /* Nav */
@@ -756,6 +768,15 @@ body {
   /* Tech & Tools grid: 2-col */
   .v3-stack-grid {
     grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* What I Build: stack to single column */
+  .v3-build-row {
+    grid-template-columns: 1fr !important;
+  }
+  .v3-build-row-left {
+    border-right: none !important;
+    border-bottom: 1px solid var(--v3-rule);
   }
 
   /* Contact: stack */

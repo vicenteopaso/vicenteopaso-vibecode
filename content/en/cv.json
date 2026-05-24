@@ -398,7 +398,9 @@
         "CodeQL",
         "Onboarding Automation",
         "Tooling Workflows",
-        "DX Strategy"
+        "DX Strategy",
+        "Spec-Driven Development (SDD)",
+        "MCP Server Architecture"
       ]
     },
     {
@@ -437,6 +439,16 @@
       "name": "Testing",
       "level": "Advanced",
       "keywords": ["Jest", "Cypress", "React Testing Library"]
+    },
+    {
+      "name": "AI & Agentic Engineering",
+      "level": "Advanced",
+      "keywords": ["Anthropic API", "Claude", "Model Context Protocol", "AI Guardrails", "Agentic Workflows"]
+    },
+    {
+      "name": "Infrastructure",
+      "level": "Intermediate",
+      "keywords": ["VPS", "Nextcloud", "Immich", "Self-hosted services"]
     }
   ],
   "education": [

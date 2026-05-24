@@ -1,6 +1,8 @@
+import fs from "fs";
 import { ImageResponse } from "next/og";
+import path from "path";
 
-import { getCvDescription, siteConfig } from "./seo";
+import { getCvDescription, siteConfig } from "@/lib/seo";
 
 type OgLocale = "en" | "es";
 
@@ -21,6 +23,23 @@ function getDeploymentBaseUrl(): string {
   return siteConfig.url;
 }
 
+/** Cached Inter 800 Latin font — lazy-loaded on first call, then cached at module level across all OG renders. */
+let _interFontCache: ArrayBuffer | null = null;
+
+/** Loads Inter 800 Latin static font for use in Satori/ImageResponse. Variable fonts are unsupported. */
+function loadInterFont(): ArrayBuffer {
+  if (_interFontCache) return _interFontCache;
+  const fontPath = path.join(
+    process.cwd(),
+    "public/fonts/inter/inter-800-latin.woff",
+  );
+  const buf = fs.readFileSync(fontPath);
+  const ab = new ArrayBuffer(buf.length);
+  new Uint8Array(ab).set(buf);
+  _interFontCache = ab;
+  return ab;
+}
+
 /** Returns a versioned logo URL that resolves to the current deployment's asset, not the production domain. */
 function getLogoUrl(): string {
   const base = getDeploymentBaseUrl();
@@ -38,8 +57,10 @@ const palette = {
   cream: "#f0ebe1",
   red: "#cf201d",
   muted: "#8f897f",
-  panelRule: "#cfc7bb",
-  panelMuted: "#7d776f",
+  panelRule: "#cfc7bb",       // dark-theme panel divider (on cream bg)
+  panelMuted: "#7d776f",      // dark-theme panel muted text (on cream bg)
+  lightPanelRule: "#3a3530",  // light-theme panel divider (on ink bg)
+  lightPanelMuted: "#8f897f", // light-theme panel muted text (on ink bg) = palette.muted
 };
 
 const homeContentByLocale: Record<
@@ -103,6 +124,7 @@ function renderBrandedOgImage({
   bottomLeftValue,
   bottomRightLabel,
   bottomRightValue,
+  theme = "dark",
 }: {
   locale: OgLocale;
   eyebrow: string;
@@ -116,8 +138,23 @@ function renderBrandedOgImage({
   bottomLeftValue: string;
   bottomRightLabel: string;
   bottomRightValue: string;
+  theme?: "dark" | "light";
 }) {
   const homeCopy = homeContentByLocale[locale];
+  const fontData = loadInterFont();
+
+  const isDark = theme === "dark";
+  const bg = isDark ? palette.ink : palette.cream;
+  const fg = isDark ? palette.cream : palette.ink;
+  const ruleFg = isDark ? palette.cream : palette.ink;
+  const mutedFg = palette.muted;
+  const panelBg = isDark ? palette.cream : palette.ink;
+  const panelFg = isDark ? palette.ink : palette.cream;
+  const panelMutedFg = isDark ? palette.panelMuted : palette.lightPanelMuted;
+  const panelRuleFg = isDark ? palette.panelRule : palette.lightPanelRule;
+
+  const sansFamily =
+    '"Arial", "Helvetica Neue", Helvetica, ui-sans-serif, system-ui, sans-serif';
 
   return new ImageResponse(
     <div
@@ -126,39 +163,42 @@ function renderBrandedOgImage({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: palette.ink,
-        color: palette.cream,
-        fontFamily:
-          '"Arial", "Helvetica Neue", Helvetica, ui-sans-serif, system-ui, sans-serif',
+        background: bg,
+        color: fg,
+        fontFamily: sansFamily,
       }}
     >
+      {/* ── Top nav bar ───────────────────────────────────────────────── */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "28px 32px 18px",
-          borderBottom: `2px solid ${palette.cream}`,
+          padding: "24px 32px 16px",
+          borderBottom: `2px solid ${ruleFg}`,
           textTransform: "uppercase",
           letterSpacing: "0.2em",
-          fontSize: 17,
-          color: palette.muted,
+          fontSize: 16,
+          color: mutedFg,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- next/image is not available inside next/og ImageResponse markup */}
           <img
             src={getLogoUrl()}
             alt="Opaso logo"
-            width={46}
-            height={46}
+            width={44}
+            height={44}
             style={{ display: "flex" }}
           />
           <span>/V2026</span>
           <span>—</span>
-          <span style={{ color: palette.red }}>● MÁLAGA, ES</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 7, color: palette.red }}>
+            <span style={{ width: 8, height: 8, borderRadius: "999px", background: palette.red, display: "flex", flexShrink: 0 }} />
+            MÁLAGA, ES
+          </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <span>{homeCopy.navAbout}</span>
           <span>·</span>
           <span>CV</span>
@@ -167,22 +207,26 @@ function renderBrandedOgImage({
         </div>
       </div>
 
+      {/* ── Main content ──────────────────────────────────────────────── */}
       <div
         style={{
           display: "flex",
           flex: 1,
-          gap: 34,
-          padding: "40px 32px 18px",
+          gap: 32,
+          padding: "24px 32px 20px",
         }}
       >
+        {/* Left: eyebrow + name + subtitle */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
+            justifyContent: "space-between",
             flex: 1,
-            paddingRight: 18,
+            paddingRight: 8,
           }}
         >
+          {/* Eyebrow — anchored to top */}
           <div
             style={{
               display: "flex",
@@ -190,40 +234,54 @@ function renderBrandedOgImage({
               gap: 0,
               textTransform: "uppercase",
               letterSpacing: "0.18em",
-              fontSize: 16,
-              color: palette.muted,
-              marginBottom: 28,
+              fontSize: 15,
             }}
           >
+            <span style={{ color: palette.red }}>§00</span>
+            <span style={{ color: mutedFg }}>&nbsp;—&nbsp;</span>
             <span style={{ color: palette.red }}>{eyebrow}</span>
           </div>
 
+          {/* Name — centered by space-between */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              lineHeight: 0.84,
-              letterSpacing: "-0.06em",
-              fontWeight: 800,
-              marginBottom: 28,
+              letterSpacing: "-0.055em",
             }}
           >
-            <span style={{ fontSize: 118, color: palette.cream }}>
+            <span
+              style={{
+                fontSize: 138,
+                lineHeight: 0.86,
+                color: fg,
+                fontWeight: 800,
+                fontFamily: '"Inter", sans-serif',
+              }}
+            >
               {titleFirstLine}
             </span>
-            <span style={{ fontSize: 126, color: palette.red }}>
+            <span
+              style={{
+                fontSize: 148,
+                lineHeight: 0.9,
+                color: palette.red,
+                fontWeight: 800,
+                fontFamily: '"Inter", sans-serif',
+              }}
+            >
               {titleSecondLine}
             </span>
           </div>
 
+          {/* Subtitle — anchored to bottom */}
           <p
             style={{
               margin: 0,
-              maxWidth: 700,
-              fontSize: 26,
-              lineHeight: 1.4,
-              letterSpacing: "-0.04em",
-              color: palette.cream,
+              fontSize: 20,
+              lineHeight: 1.42,
+              letterSpacing: "-0.02em",
+              color: fg,
               fontWeight: 600,
             }}
           >
@@ -231,26 +289,25 @@ function renderBrandedOgImage({
           </p>
         </div>
 
+        {/* Right: TL;DR panel */}
         <div
           style={{
-            width: 382,
+            width: 380,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
             padding: "22px 22px 20px",
-            background: palette.cream,
-            color: palette.ink,
-            minHeight: 420,
-            marginTop: -2,
+            background: panelBg,
+            color: panelFg,
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <span
               style={{
                 textTransform: "uppercase",
                 letterSpacing: "0.18em",
-                fontSize: 16,
-                color: palette.panelMuted,
+                fontSize: 14,
+                color: panelMutedFg,
               }}
             >
               {panelLabel}
@@ -260,10 +317,10 @@ function renderBrandedOgImage({
                 display: "flex",
                 flexWrap: "wrap",
                 alignItems: "baseline",
-                columnGap: 8,
-                rowGap: 6,
-                fontSize: 26,
-                lineHeight: 1.38,
+                columnGap: 7,
+                rowGap: 4,
+                fontSize: 30,
+                lineHeight: 1.35,
                 letterSpacing: "-0.04em",
                 fontWeight: 600,
               }}
@@ -277,38 +334,38 @@ function renderBrandedOgImage({
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 18,
-              paddingTop: 16,
-              borderTop: `1px solid ${palette.panelRule}`,
+              gap: 14,
+              paddingTop: 14,
+              borderTop: `1px solid ${panelRuleFg}`,
             }}
           >
             <div style={{ display: "flex", gap: 44 }}>
               <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+                style={{ display: "flex", flexDirection: "column", gap: 8 }}
               >
                 <span
                   style={{
                     textTransform: "uppercase",
                     letterSpacing: "0.18em",
-                    fontSize: 14,
-                    color: palette.panelMuted,
+                    fontSize: 13,
+                    color: panelMutedFg,
                   }}
                 >
                   {bottomLeftLabel}
                 </span>
-                <span style={{ fontSize: 18, fontWeight: 700 }}>
+                <span style={{ fontSize: 17, fontWeight: 700 }}>
                   {bottomLeftValue}
                 </span>
               </div>
               <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+                style={{ display: "flex", flexDirection: "column", gap: 8 }}
               >
                 <span
                   style={{
                     textTransform: "uppercase",
                     letterSpacing: "0.18em",
-                    fontSize: 14,
-                    color: palette.panelMuted,
+                    fontSize: 13,
+                    color: panelMutedFg,
                   }}
                 >
                   {bottomRightLabel}
@@ -318,15 +375,15 @@ function renderBrandedOgImage({
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: 700,
                     color: palette.red,
                   }}
                 >
                   <span
                     style={{
-                      width: 10,
-                      height: 10,
+                      width: 9,
+                      height: 9,
                       borderRadius: "999px",
                       background: palette.red,
                     }}
@@ -339,36 +396,38 @@ function renderBrandedOgImage({
         </div>
       </div>
 
+      {/* ── Bottom bar ────────────────────────────────────────────────── */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "18px 32px 22px",
-          borderTop: `2px solid ${palette.cream}`,
+          padding: "16px 32px 20px",
+          borderTop: `2px solid ${ruleFg}`,
           textTransform: "uppercase",
           letterSpacing: "0.18em",
-          fontSize: 15,
-          color: palette.muted,
-          position: "relative",
-          zIndex: 1,
+          fontSize: 14,
+          color: mutedFg,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <span style={{ color: palette.cream, fontWeight: 700 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <span style={{ color: fg, fontWeight: 700 }}>
             {siteConfig.domain}
           </span>
           <span>—</span>
           <span>vicente@opa.so</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <span>EST. 2001</span>
           <span>|</span>
           <span style={{ color: palette.red }}>{homeCopy.editionLabel}</span>
         </div>
       </div>
     </div>,
-    size,
+    {
+      ...size,
+      fonts: [{ name: "Inter", data: fontData, weight: 800, style: "normal" }],
+    },
   );
 }
 
@@ -380,10 +439,11 @@ export function getOgHomeSize() {
   return size;
 }
 
-export function createHomeOgImage(locale: OgLocale = "en") {
-  const copy = homeContentByLocale[locale];
+export type OgTheme = "dark" | "light";
 
-  return renderBrandedOgImage({
+function homeOgArgs(locale: OgLocale) {
+  const copy = homeContentByLocale[locale];
+  return {
     locale,
     eyebrow: copy.roleLabel,
     titleFirstLine: "Vicente",
@@ -396,14 +456,13 @@ export function createHomeOgImage(locale: OgLocale = "en") {
     bottomLeftValue: "Málaga, ES",
     bottomRightLabel: copy.statusLabel,
     bottomRightValue: `● ${copy.status}`,
-  });
+  } as const;
 }
 
-export function createCvOgImage(locale: OgLocale = "en") {
+function cvOgArgs(locale: OgLocale) {
   const description = getCvDescription(locale);
   const isEs = locale === "es";
-
-  return renderBrandedOgImage({
+  return {
     locale,
     eyebrow: isEs ? "CURRÍCULUM VITAE × PERFIL" : "CURRICULUM VITAE × PROFILE",
     titleFirstLine: "Vicente",
@@ -418,5 +477,19 @@ export function createCvOgImage(locale: OgLocale = "en") {
     bottomLeftValue: isEs ? "Experiencia y habilidades" : "Experience & skills",
     bottomRightLabel: isEs ? "DOCUMENTO" : "DOCUMENT",
     bottomRightValue: isEs ? "● CV activo" : "● Live CV",
-  });
+  } as const;
+}
+
+export function createHomeOgImage(
+  locale: OgLocale = "en",
+  theme: OgTheme = "dark",
+) {
+  return renderBrandedOgImage({ ...homeOgArgs(locale), theme });
+}
+
+export function createCvOgImage(
+  locale: OgLocale = "en",
+  theme: OgTheme = "dark",
+) {
+  return renderBrandedOgImage({ ...cvOgArgs(locale), theme });
 }

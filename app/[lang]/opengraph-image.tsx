@@ -1,7 +1,7 @@
 import type { Locale } from "../../lib/i18n/locales";
 import { createHomeOgImage, getOgHomeSize } from "../../lib/og-home-image";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const size = getOgHomeSize();
 
@@ -13,5 +13,5 @@ type Props = {
 
 export default async function Image({ params }: Props) {
   const { lang } = await params;
-  return createHomeOgImage(lang);
+  return createHomeOgImage(lang, "dark");
 }
