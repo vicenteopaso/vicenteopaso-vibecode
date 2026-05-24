@@ -16,6 +16,37 @@ describe("seo utilities", () => {
     expect(metadata.title).toBe("Custom Title");
   });
 
+  it("preserves openGraph images when overriding only title and description", async () => {
+    vi.resetModules();
+    const { baseMetadata } = await import("../../lib/seo");
+    const metadata = baseMetadata({
+      openGraph: {
+        title: "Custom OG Title",
+        description: "Custom OG description",
+      },
+    });
+
+    const images = metadata.openGraph?.images as { url: string }[];
+    expect(images).toBeDefined();
+    expect(images.length).toBeGreaterThan(0);
+    expect(images[0].url).toContain("opengraph-image");
+    expect(metadata.openGraph?.title).toBe("Custom OG Title");
+  });
+
+  it("preserves twitter images when overriding only title", async () => {
+    vi.resetModules();
+    const { baseMetadata } = await import("../../lib/seo");
+    const metadata = baseMetadata({
+      twitter: { title: "Custom Twitter Title" },
+    });
+
+    const images = metadata.twitter?.images as string[];
+    expect(images).toBeDefined();
+    expect(images.length).toBeGreaterThan(0);
+    expect(String(images[0])).toContain("opengraph-image");
+    expect(metadata.twitter?.title).toBe("Custom Twitter Title");
+  });
+
   it("uses default og cache version when env is unset", async () => {
     const originalEnv = process.env.NEXT_PUBLIC_OG_CACHE_DATE;
     delete process.env.NEXT_PUBLIC_OG_CACHE_DATE;
