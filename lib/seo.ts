@@ -54,7 +54,20 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
     },
   };
 
-  return { ...base, ...overrides };
+  const { openGraph: overrideOg, twitter: overrideTwitter, ...restOverrides } = overrides;
+
+  return {
+    ...base,
+    ...restOverrides,
+    openGraph: {
+      ...base.openGraph,
+      ...overrideOg,
+    },
+    twitter: {
+      ...base.twitter,
+      ...overrideTwitter,
+    },
+  };
 }
 
 export function getWebsiteJsonLd() {
