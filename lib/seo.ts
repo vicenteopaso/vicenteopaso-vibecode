@@ -60,12 +60,12 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
     ...base,
     ...restOverrides,
     openGraph: {
-      ...base.openGraph,
-      ...overrideOg,
+      ...(base.openGraph ?? {}),
+      ...(overrideOg ?? {}),
     },
     twitter: {
-      ...base.twitter,
-      ...overrideTwitter,
+      ...(base.twitter ?? {}),
+      ...(overrideTwitter ?? {}),
     },
   };
 }
