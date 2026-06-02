@@ -25,7 +25,8 @@ describe("lib/profile", () => {
   });
 
   it("derives years experience as 0 when work history has no start dates", async () => {
-    vi.spyOn(fs, "readFileSync").mockImplementation((filePath) => {
+    const originalReadFileSync = fs.readFileSync.bind(fs);
+    vi.spyOn(fs, "readFileSync").mockImplementation((filePath, options) => {
       const pathText = String(filePath);
 
       if (pathText.endsWith("/content/en/cv.json")) {
@@ -102,7 +103,10 @@ describe("lib/profile", () => {
         });
       }
 
-      throw new Error(`Unexpected file: ${pathText}`);
+      return originalReadFileSync(
+        filePath as Parameters<typeof fs.readFileSync>[0],
+        options as Parameters<typeof fs.readFileSync>[1],
+      );
     });
 
     const { getCanonicalProfile } = await importProfileModule();
@@ -115,7 +119,8 @@ describe("lib/profile", () => {
   });
 
   it("falls back to cv fluency and then unknown for languages when preferences are missing", async () => {
-    vi.spyOn(fs, "readFileSync").mockImplementation((filePath) => {
+    const originalReadFileSync = fs.readFileSync.bind(fs);
+    vi.spyOn(fs, "readFileSync").mockImplementation((filePath, options) => {
       const pathText = String(filePath);
 
       if (pathText.endsWith("/content/en/cv.json")) {
@@ -208,7 +213,10 @@ describe("lib/profile", () => {
         });
       }
 
-      throw new Error(`Unexpected file: ${pathText}`);
+      return originalReadFileSync(
+        filePath as Parameters<typeof fs.readFileSync>[0],
+        options as Parameters<typeof fs.readFileSync>[1],
+      );
     });
 
     const { getCanonicalProfile } = await importProfileModule();
@@ -233,7 +241,8 @@ describe("lib/profile", () => {
   });
 
   it("logs and rethrows when source data cannot be parsed", async () => {
-    vi.spyOn(fs, "readFileSync").mockImplementation((filePath) => {
+    const originalReadFileSync = fs.readFileSync.bind(fs);
+    vi.spyOn(fs, "readFileSync").mockImplementation((filePath, options) => {
       const pathText = String(filePath);
 
       if (pathText.endsWith("/content/en/cv.json")) {
@@ -244,7 +253,10 @@ describe("lib/profile", () => {
         return "{}";
       }
 
-      throw new Error(`Unexpected file: ${pathText}`);
+      return originalReadFileSync(
+        filePath as Parameters<typeof fs.readFileSync>[0],
+        options as Parameters<typeof fs.readFileSync>[1],
+      );
     });
 
     const { getCanonicalProfile } = await importProfileModule();
