@@ -21,7 +21,7 @@ jobs:
   test-coverage-check:
     name: AI Guardrails - Test Coverage
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
 
     steps:
       - name: Checkout
@@ -50,7 +50,7 @@ jobs:
   pr-template-check:
     name: AI Guardrails - PR Template
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
 
     steps:
       - name: Check PR title and body for governance compliance
@@ -117,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false && github.actor != 'dependabot[bot]'
 
     steps:
       - name: Checkout PR head
@@ -133,7 +133,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version-file: ".nvmrc"
-          cache: ""
 
       - name: Auto-fix package.json version from CHANGELOG.md
         run: |
