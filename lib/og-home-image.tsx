@@ -57,9 +57,9 @@ const palette = {
   cream: "#f0ebe1",
   red: "#cf201d",
   muted: "#8f897f",
-  panelRule: "#cfc7bb",       // dark-theme panel divider (on cream bg)
-  panelMuted: "#7d776f",      // dark-theme panel muted text (on cream bg)
-  lightPanelRule: "#3a3530",  // light-theme panel divider (on ink bg)
+  panelRule: "#cfc7bb", // dark-theme panel divider (on cream bg)
+  panelMuted: "#7d776f", // dark-theme panel muted text (on cream bg)
+  lightPanelRule: "#3a3530", // light-theme panel divider (on ink bg)
   lightPanelMuted: "#8f897f", // light-theme panel muted text (on ink bg) = palette.muted
 };
 
@@ -193,8 +193,24 @@ function renderBrandedOgImage({
           />
           <span>/V2026</span>
           <span>—</span>
-          <span style={{ display: "flex", alignItems: "center", gap: 7, color: palette.red }}>
-            <span style={{ width: 8, height: 8, borderRadius: "999px", background: palette.red, display: "flex", flexShrink: 0 }} />
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              color: palette.red,
+            }}
+          >
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "999px",
+                background: palette.red,
+                display: "flex",
+                flexShrink: 0,
+              }}
+            />
             MÁLAGA, ES
           </span>
         </div>
@@ -340,9 +356,7 @@ function renderBrandedOgImage({
             }}
           >
             <div style={{ display: "flex", gap: 44 }}>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 8 }}
-              >
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 <span
                   style={{
                     textTransform: "uppercase",
@@ -357,9 +371,7 @@ function renderBrandedOgImage({
                   {bottomLeftValue}
                 </span>
               </div>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 8 }}
-              >
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 <span
                   style={{
                     textTransform: "uppercase",

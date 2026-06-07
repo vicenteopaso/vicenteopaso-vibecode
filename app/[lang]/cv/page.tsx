@@ -144,8 +144,7 @@ function parseRefName(raw: string): {
 } {
   const hrefMatch = raw.match(/href=['"]([^'"]+)['"]/);
   const rawHref = hrefMatch?.[1];
-  const href =
-    rawHref && /^https?:\/\//i.test(rawHref) ? rawHref : undefined;
+  const href = rawHref && /^https?:\/\//i.test(rawHref) ? rawHref : undefined;
   const textMatch = raw.match(/>([^<]+)<\/a>/);
   const anchorText = textMatch?.[1]?.trim();
   const pipeIdx = raw.indexOf("|");

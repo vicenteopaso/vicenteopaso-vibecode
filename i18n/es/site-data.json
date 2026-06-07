@@ -7,14 +7,7 @@
     "Soy, muy probablemente, el único Arquitecto Frontend que conocerás que también fue ingeniero RF en Nokia.",
     "Construyo cosas fuera del trabajo. Un pipeline de búsqueda de empleo con IA, un producto de datos cívicos en tiempo real e infraestructura autoalojada. La ingeniería personal es como me mantengo en forma."
   ],
-  "tldrLabels": [
-    "QUIÉN",
-    "OFICIO",
-    "ENTREGO",
-    "ESCALO",
-    "EXTRA",
-    "BUILDS"
-  ],
+  "tldrLabels": ["QUIÉN", "OFICIO", "ENTREGO", "ESCALO", "EXTRA", "BUILDS"],
   "focus": [
     {
       "h": "Arquitectura Frontend",

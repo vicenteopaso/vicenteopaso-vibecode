@@ -443,7 +443,17 @@
     {
       "name": "AI & Agentic Engineering",
       "level": "Advanced",
-      "keywords": ["Anthropic API", "OpenAI API", "Model Context Protocol", "Open-Source LLM Deployment", "Cloud GPU Inference (Modal)", "Qwen 2.5 Coder", "AI Guardrails", "Agentic Workflows", "Multi-Provider Abstraction"]
+      "keywords": [
+        "Anthropic API",
+        "OpenAI API",
+        "Model Context Protocol",
+        "Open-Source LLM Deployment",
+        "Cloud GPU Inference (Modal)",
+        "Qwen 2.5 Coder",
+        "AI Guardrails",
+        "Agentic Workflows",
+        "Multi-Provider Abstraction"
+      ]
     },
     {
       "name": "Infrastructure",

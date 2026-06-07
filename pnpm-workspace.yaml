@@ -1,5 +1,5 @@
 allowBuilds:
-  '@sentry/cli': true
+  "@sentry/cli": true
   contentlayer: true
   esbuild: true
   protobufjs: true

@@ -7,14 +7,7 @@
     "I am, very likely, the only Frontend Architect you will meet who was also an RF engineer at Nokia.",
     "I build things outside of work. An AI job pipeline, a real-time civic data product, and self-hosted infrastructure. Personal engineering is how I stay sharp."
   ],
-  "tldrLabels": [
-    "WHO",
-    "CRAFT",
-    "SHIP",
-    "SCALE",
-    "EXTRA",
-    "BUILDS"
-  ],
+  "tldrLabels": ["WHO", "CRAFT", "SHIP", "SCALE", "EXTRA", "BUILDS"],
   "focus": [
     {
       "h": "Frontend Architecture",

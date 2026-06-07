@@ -441,7 +441,17 @@
     {
       "name": "IA & Ingeniería Agéntica",
       "level": "Avanzado",
-      "keywords": ["Anthropic API", "OpenAI API", "Model Context Protocol", "Despliegue de LLMs Open-Source", "Inferencia en GPU Cloud (Modal)", "Qwen 2.5 Coder", "AI Guardrails", "Flujos de Trabajo Agénticos", "Abstracción Multi-Proveedor"]
+      "keywords": [
+        "Anthropic API",
+        "OpenAI API",
+        "Model Context Protocol",
+        "Despliegue de LLMs Open-Source",
+        "Inferencia en GPU Cloud (Modal)",
+        "Qwen 2.5 Coder",
+        "AI Guardrails",
+        "Flujos de Trabajo Agénticos",
+        "Abstracción Multi-Proveedor"
+      ]
     }
   ],
   "education": [
