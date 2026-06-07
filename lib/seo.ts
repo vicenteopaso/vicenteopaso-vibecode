@@ -54,7 +54,11 @@ export function baseMetadata(overrides: Partial<Metadata> = {}): Metadata {
     },
   };
 
-  const { openGraph: overrideOg, twitter: overrideTwitter, ...restOverrides } = overrides;
+  const {
+    openGraph: overrideOg,
+    twitter: overrideTwitter,
+    ...restOverrides
+  } = overrides;
 
   return {
     ...base,

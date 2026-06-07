@@ -838,8 +838,7 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                         href={link.href as Route}
                         style={linkStyle}
                       >
-                        {link.label}{" "}
-                        <span aria-hidden="true">↗</span>
+                        {link.label} <span aria-hidden="true">↗</span>
                       </Link>
                     ) : (
                       <a
@@ -849,8 +848,7 @@ function WhatIBuildSection({ t, data }: { t: T; data: WhatIBuildData }) {
                         rel="noopener noreferrer"
                         style={linkStyle}
                       >
-                        {link.label}{" "}
-                        <span aria-hidden="true">↗</span>
+                        {link.label} <span aria-hidden="true">↗</span>
                       </a>
                     );
                   })}
@@ -1019,7 +1017,9 @@ function ContactBlock({ t }: { t: T }) {
               <a
                 key={href}
                 href={href}
-                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 className="v3-contact-link"
                 style={{
                   ...mono,
@@ -1036,7 +1036,10 @@ function ContactBlock({ t }: { t: T }) {
                 }}
               >
                 <span>{label}</span>
-                <span aria-hidden="true" style={{ color: "var(--v3-accent)", fontSize: 14 }}>
+                <span
+                  aria-hidden="true"
+                  style={{ color: "var(--v3-accent)", fontSize: 14 }}
+                >
                   ↗
                 </span>
               </a>

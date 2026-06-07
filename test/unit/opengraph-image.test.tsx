@@ -348,7 +348,7 @@ describe("OG image theme support", () => {
     const { element } = mockInstances[0] as { element: React.ReactElement };
     const rootStyle = (element.props as { style: React.CSSProperties }).style;
     expect(rootStyle.background).toBe("#0c0b09"); // palette.ink
-    expect(rootStyle.color).toBe("#f0ebe1");       // palette.cream
+    expect(rootStyle.color).toBe("#f0ebe1"); // palette.cream
   });
 
   it("light theme uses cream background and ink foreground", () => {
@@ -358,7 +358,7 @@ describe("OG image theme support", () => {
     const { element } = mockInstances[0] as { element: React.ReactElement };
     const rootStyle = (element.props as { style: React.CSSProperties }).style;
     expect(rootStyle.background).toBe("#f0ebe1"); // palette.cream
-    expect(rootStyle.color).toBe("#0c0b09");       // palette.ink
+    expect(rootStyle.color).toBe("#0c0b09"); // palette.ink
   });
 
   it("dark theme is the default when no theme is specified", () => {
@@ -366,12 +366,10 @@ describe("OG image theme support", () => {
     createHomeOgImage("en", "dark");
 
     expect(mockInstances).toHaveLength(2);
-    const defaultStyle = (
-      mockInstances[0] as { element: React.ReactElement }
-    ).element.props as { style: React.CSSProperties };
-    const explicitStyle = (
-      mockInstances[1] as { element: React.ReactElement }
-    ).element.props as { style: React.CSSProperties };
+    const defaultStyle = (mockInstances[0] as { element: React.ReactElement })
+      .element.props as { style: React.CSSProperties };
+    const explicitStyle = (mockInstances[1] as { element: React.ReactElement })
+      .element.props as { style: React.CSSProperties };
     expect(defaultStyle.style.background).toBe(explicitStyle.style.background);
   });
 
@@ -382,7 +380,7 @@ describe("OG image theme support", () => {
     const { element } = mockInstances[0] as { element: React.ReactElement };
     const rootStyle = (element.props as { style: React.CSSProperties }).style;
     expect(rootStyle.background).toBe("#f0ebe1"); // palette.cream
-    expect(rootStyle.color).toBe("#0c0b09");       // palette.ink
+    expect(rootStyle.color).toBe("#0c0b09"); // palette.ink
   });
 });
 
