@@ -5,3 +5,9 @@ allowBuilds:
   protobufjs: true
   sharp: true
   unrs-resolver: true
+overrides:
+  esbuild: "0.25.12"
+  estree-util-value-to-estree@<3.3.3: ">=3.3.3"
+  tmp@<0.2.6: ">=0.2.6"
+  postcss@<8.5.10: ">=8.5.10"
+  uuid@<11.1.1: ">=11.1.1"
