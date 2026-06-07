@@ -9,7 +9,9 @@ overrides:
   estree-util-value-to-estree@<3.3.3: '>=3.3.3'
   tmp@<0.2.6: '>=0.2.6'
   postcss@<8.5.10: '>=8.5.10'
-  uuid@<11.1.1: '>=11.1.1'
+  uuid@<11.1.1: 11.1.1
+
+packageExtensionsChecksum: sha256-TPJV6Z4Q+bMg7BYJdKfZXXJ/7Ud/3D0TMrluONUepCE=
 
 importers:
 
@@ -5767,8 +5769,8 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  uuid@14.0.0:
-    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
+  uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
     hasBin: true
 
   uvu@0.5.6:
@@ -6700,7 +6702,7 @@ snapshots:
       open: 7.4.2
       proxy-agent: 6.5.0
       tmp: 0.2.7
-      uuid: 14.0.0
+      uuid: 11.1.1
       yargs: 15.4.1
       yargs-parser: 13.1.2
     transitivePeerDependencies:
@@ -10527,7 +10529,7 @@ snapshots:
       gray-matter: 4.0.3
       remark-frontmatter: 4.0.1
       remark-mdx-frontmatter: 1.1.1
-      uuid: 14.0.0
+      uuid: 11.1.1
       vfile: 5.3.7
     transitivePeerDependencies:
       - supports-color
@@ -12362,7 +12364,7 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  uuid@14.0.0: {}
+  uuid@11.1.1: {}
 
   uvu@0.5.6:
     dependencies:
