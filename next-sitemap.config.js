@@ -22,5 +22,14 @@ module.exports = {
   generateRobotsTxt: false,
   sitemapSize: 5000,
   changefreq: "monthly",
-  exclude: ["/opengraph-image", "/*/opengraph-image", "/twitter-image", "/*/twitter-image", "/icon", "/*/icon", "/apple-icon", "/*/apple-icon"],
+  exclude: [
+    "/opengraph-image",
+    "/*/opengraph-image",
+    "/twitter-image",
+    "/*/twitter-image",
+    "/icon",
+    "/*/icon",
+    "/apple-icon",
+    "/*/apple-icon",
+  ],
 };
