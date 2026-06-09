@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 
 export default function NotFound() {
   return (
-    <main
+    <section
       style={{
         minHeight: "60vh",
         display: "flex",
@@ -25,6 +25,6 @@ export default function NotFound() {
       >
         Go home
       </Link>
-    </main>
+    </section>
   );
 }
