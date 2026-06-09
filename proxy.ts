@@ -7,20 +7,48 @@ import { locales } from "./lib/i18n/locales";
 const SUSPICIOUS_PATTERNS = [
   "/wp-login.php",
   "/wp-admin",
-  "/xmlrpc.php",
   "/wp-content",
   "/wp-includes",
+  "/wp-json",
+  "/wordpress",
+  "/xmlrpc.php",
   "/.env",
   "/.git",
+  "/.aws",
+  "/.ssh",
+  "/.vscode",
+  "/.well-known/security.txt",
   "/admin",
-  "/phpmyadmin",
   "/administrator",
+  "/phpmyadmin",
   "/user/login",
   "/sites/default",
   "/config.php",
   "/typo3",
   "/cgi-bin",
+  "/owa",
+  "/ecp",
+  "/manager",
+  "/solr",
+  "/jenkins",
+  "/console",
+  "/actuator",
+  "/server-status",
+  "/_ignition",
+  "/wlwmanifest.xml",
+  "/sftp-config",
+  "/api/v1",
+  "/blog/wp-",
+  "/2020/",
+  "/2021/",
+  "/2022/",
+  "/2023/",
+  "/2024/",
 ] as const;
+
+// File extensions that are never served by this app — almost always probes.
+const SUSPICIOUS_EXTENSION_RE =
+  /\.(php|aspx?|jsp|cgi|env|bak|backup|old|orig|swp|sql|ya?ml|ini|conf|sh|log|db|sqlite)$/i;
 
 type Locale = (typeof locales)[number];
 const defaultLocale: Locale = "en";
@@ -89,7 +117,10 @@ export function proxy(req: NextRequest) {
     return NextResponse.redirect(url, { status: 301 });
   }
 
-  if (SUSPICIOUS_PATTERNS.some((pattern) => pathname.startsWith(pattern))) {
+  if (
+    SUSPICIOUS_PATTERNS.some((pattern) => pathname.startsWith(pattern)) ||
+    SUSPICIOUS_EXTENSION_RE.test(pathname)
+  ) {
     return new NextResponse(null, { status: 404 });
   }
 
@@ -99,15 +130,7 @@ export function proxy(req: NextRequest) {
   );
 
   if (pathnameHasLocale) {
-    // Forward the active locale as a request header so the root layout can set
-    // the HTML lang attribute server-side (avoids SSR/hydration mismatch).
-    const activeLocale =
-      (locales.find(
-        (l) => pathname.startsWith(`/${l}/`) || pathname === `/${l}`,
-      ) as Locale | undefined) ?? defaultLocale;
-    const requestHeaders = new Headers(req.headers);
-    requestHeaders.set("x-locale", activeLocale);
-    return NextResponse.next({ request: { headers: requestHeaders } });
+    return NextResponse.next();
   }
 
   // Detect locale and redirect

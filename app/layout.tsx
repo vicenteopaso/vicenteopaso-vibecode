@@ -2,7 +2,6 @@ import "../styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
-import { headers } from "next/headers";
 import Script from "next/script";
 import React from "react";
 
@@ -72,28 +71,37 @@ export const viewport: Viewport = {
   ],
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Read the locale forwarded by proxy.ts via the x-locale request header.
-  // This allows SSR to emit the correct <html lang> without a client-side fix.
-  const headersList = await headers();
-  const locale = headersList.get("x-locale") ?? "en";
-
+  // The HTML lang attribute starts at "en" and is corrected before paint by
+  // the inline script below (and again on hydration by LocaleProvider). This
+  // keeps the root layout fully static so /[lang] can be served from cache
+  // instead of invoking a function per request.
   return (
     <html
-      lang={locale}
+      lang="en"
       suppressHydrationWarning
       className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <script
+          // Runs synchronously before paint to set <html lang> from the URL,
+          // so screen readers and the initial paint see the correct language.
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var s=location.pathname.split('/')[1];if(s==='es'){document.documentElement.lang='es';}}catch(e){}})();",
+          }}
+        />
+      </head>
       <body
         className="flex min-h-screen flex-col antialiased"
         style={{ background: "var(--v3-bg)", color: "var(--v3-fg)" }}
       >
         <ThemeProvider>
-          <LocaleProvider initialLocale={locale as "en" | "es"}>
+          <LocaleProvider>
             <GlobalErrorHandler />
             <a href="#main-content" className="skip-link">
               Skip to main content
