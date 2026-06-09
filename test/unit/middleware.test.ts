@@ -405,5 +405,37 @@ describe("proxy (middleware)", () => {
       expect(response).toBeInstanceOf(NextResponse);
       expect((response as NextResponse).status).toBe(404);
     });
+
+    it.each([
+      "/random.php",
+      "/index.aspx",
+      "/site.asp",
+      "/legacy.jsp",
+      "/scan.cgi",
+      "/.env.local",
+      "/db.sql",
+      "/dump.bak",
+      "/copy.backup",
+      "/old.old",
+      "/file.orig",
+      "/.config.swp",
+      "/conf.yaml",
+      "/conf.yml",
+      "/app.ini",
+      "/site.conf",
+      "/script.sh",
+      "/debug.log",
+      "/data.db",
+      "/store.sqlite",
+    ])(
+      "should block probe-style extension path %s with 404",
+      (probePath) => {
+        const req = createMockRequest(probePath);
+        const response = proxy(req);
+
+        expect(response).toBeInstanceOf(NextResponse);
+        expect((response as NextResponse).status).toBe(404);
+      },
+    );
   });
 });

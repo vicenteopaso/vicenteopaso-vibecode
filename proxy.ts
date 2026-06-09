@@ -146,6 +146,12 @@ export function proxy(req: NextRequest) {
  */
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|assets|fonts|sitemap-0.xml|news_sitemap.xml|opengraph-image|.*\\..*|robots.txt|sitemap.xml|site.webmanifest).*)",
+    // Run on everything except internal Next paths, the api tree, and real
+    // static assets. The previous `.*\\..*` exclusion was too broad: it
+    // silently dropped probe paths (.php, .env, .bak, .aspx, ...) before
+    // they ever reached this proxy, so the suspicious-pattern block below
+    // never ran on them. We now exclude only known-safe asset extensions
+    // so probe-style dotted paths fall through to be 404'd here.
+    "/((?!api/|_next/static|_next/image|opengraph-image|.*\\.(?:png|jpe?g|gif|webp|avif|svg|ico|woff2?|ttf|otf|eot|css|js|mjs|map|webmanifest|xml|txt|json|pdf|mp4|webm|mp3|wav)$).*)",
   ],
 };
