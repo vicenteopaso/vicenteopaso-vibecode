@@ -12,6 +12,7 @@ import { ogCacheVersion, siteConfig } from "@/lib/seo";
 import { getSiteData } from "@/lib/site-data";
 
 export const dynamic = "force-static";
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "es" }];
