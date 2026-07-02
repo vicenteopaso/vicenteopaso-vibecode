@@ -16,7 +16,7 @@ jobs:
   update-snapshots:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.ref }}
           token: ${{ secrets.PAT_WORKFLOW_TRIGGER || secrets.GITHUB_TOKEN }}
