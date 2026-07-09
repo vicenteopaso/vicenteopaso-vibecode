@@ -7,6 +7,7 @@ on:
     tags:
       - v*
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,7 +22,7 @@ jobs:
   test-coverage-check:
     name: AI Guardrails - Test Coverage
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
+    if: github.event_name == 'pull_request' && github.event.action != 'edited' && github.event.pull_request.user.login != 'dependabot[bot]'
 
     steps:
       - name: Checkout
@@ -117,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false && github.event.pull_request.user.login != 'dependabot[bot]'
+    if: github.event_name == 'pull_request' && github.event.action != 'edited' && github.event.pull_request.head.repo.fork == false && github.event.pull_request.user.login != 'dependabot[bot]'
 
     steps:
       - name: Checkout PR head
@@ -173,6 +174,7 @@ jobs:
   verify:
     name: Build & Verify
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.event.action != 'edited'
 
     steps:
       - name: Checkout
