@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 declare global {
@@ -74,6 +75,11 @@ describe("ContactDialog", () => {
   });
 
   afterEach(() => {
+    // Guard against tests that vi.useFakeTimers() and fail before reaching
+    // their own vi.useRealTimers() cleanup — a leaked fake clock stalls every
+    // subsequent test's real-time-based waitFor() polling for the full
+    // testTimeout instead of failing fast.
+    vi.useRealTimers();
     vi.restoreAllMocks();
     window.turnstile = undefined;
   });
@@ -271,7 +277,9 @@ describe("ContactDialog", () => {
       fireEvent.click(trigger);
 
       // Wait for Turnstile to initialize
-      await vi.advanceTimersByTimeAsync(300);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(300);
+      });
 
       fillForm();
 
@@ -281,16 +289,31 @@ describe("ContactDialog", () => {
       // Submit the form
       fireEvent.submit(form as HTMLFormElement);
 
+      // Flush the mocked fetch's promise resolution so formState commits to
+      // "success" and the success->countdown effect registers its timer.
+      // This must run inside act() — React's passive-effect flush after the
+      // state update doesn't happen synchronously with a bare fake-timer
+      // advance, so the effect that schedules the countdown transition
+      // never registers without it.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(0);
+      });
+      expect(screen.getByText(/message sent/i)).toBeInTheDocument();
+
       // Advance through the full countdown
       // Start: success -> countdown transition (1000ms) + 10 seconds of countdown
-      await vi.advanceTimersByTimeAsync(1200);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1200);
+      });
 
       // Verify countdown is visible
       expect(screen.getByText(/closing in/i)).toBeInTheDocument();
 
       // Advance through the countdown 1 second at a time (10 iterations + 1 for final close)
       for (let i = 0; i < 11; i++) {
-        await vi.advanceTimersByTimeAsync(1000);
+        await act(async () => {
+          await vi.advanceTimersByTimeAsync(1000);
+        });
       }
 
       // Modal should be closed (dialog should no longer be in the document)
@@ -307,7 +330,9 @@ describe("ContactDialog", () => {
       fireEvent.click(trigger);
 
       // Wait for Turnstile to initialize
-      await vi.advanceTimersByTimeAsync(300);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(300);
+      });
 
       fillForm();
 
@@ -317,15 +342,28 @@ describe("ContactDialog", () => {
       // Submit the form
       fireEvent.submit(form as HTMLFormElement);
 
+      // Flush the mocked fetch's promise resolution so formState commits to
+      // "success" and the success->countdown effect registers its timer.
+      // Must run inside act() — see the identical comment in the
+      // "auto-closes modal" test above for why.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(0);
+      });
+      expect(screen.getByText(/message sent/i)).toBeInTheDocument();
+
       // Advance to countdown state
-      await vi.advanceTimersByTimeAsync(1200);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1200);
+      });
 
       // Verify we're in countdown
       expect(screen.getByText(/closing in/i)).toBeInTheDocument();
 
       // Advance through the countdown 1 second at a time (10 iterations + 1 for final close)
       for (let i = 0; i < 11; i++) {
-        await vi.advanceTimersByTimeAsync(1000);
+        await act(async () => {
+          await vi.advanceTimersByTimeAsync(1000);
+        });
       }
 
       // Modal should be closed
