@@ -193,6 +193,57 @@ describe("CVPage", () => {
     expect(screen.getByText(/Summary HTML/i)).toBeInTheDocument();
   });
 
+  it("renders governance and steering groups when provided", async () => {
+    const cvJson = {
+      basics: {
+        name: "Vicente Opaso",
+      },
+      governance: [
+        {
+          group: "Software Engineering Leadership Team",
+          organization: "Carlsberg Group, Growth Products & Data",
+          summary:
+            "Defined software design standards and architecture direction.",
+        },
+        {
+          group: "Beacon Council",
+        },
+      ],
+      references: [
+        {
+          name: "Reference Person",
+          reference: "Reference text",
+        },
+      ],
+    };
+
+    mockCvFs({
+      locale: "en",
+      cvJson,
+    });
+
+    const ui = await CVPage({ params: Promise.resolve({ lang: "en" }) });
+
+    render(ui);
+
+    expect(
+      screen.getAllByText("GOVERNANCE & STEERING GROUPS").length,
+    ).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByText("Software Engineering Leadership Team"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("CARLSBERG GROUP, GROWTH PRODUCTS & DATA"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Defined software design standards/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Beacon Council")).toBeInTheDocument();
+    expect(screen.getAllByText("Reference Person").length).toBeGreaterThanOrEqual(
+      1,
+    );
+  });
+
   it("handles minimal CV JSON and optional branches", async () => {
     const cvJson = {
       basics: {
