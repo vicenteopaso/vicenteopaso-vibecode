@@ -96,6 +96,11 @@ type CvJson = {
     releaseDate?: string;
     url?: string;
   }>;
+  governance?: Array<{
+    group: string;
+    organization?: string;
+    summary?: string;
+  }>;
 };
 
 // ─── Style helpers ─────────────────────────────────────────────────────────────
@@ -1094,7 +1099,80 @@ function PublicationsSection({
   );
 }
 
-// ─── §06 References ────────────────────────────────────────────────────────
+// ─── §06 Governance & Steering Groups ──────────────────────────────────────
+function GovernanceSection({
+  governance,
+  t,
+}: {
+  governance: Array<{ group: string; organization?: string; summary?: string }>;
+  t: T;
+}) {
+  return (
+    <section id="cv-governance" style={{ padding: "48px 32px", ...rule2 }}>
+      <SecHead n="06" label={t("cv.section.governance")} />
+      <div style={{ marginTop: 24, border: "1px solid var(--v3-rule)" }}>
+        {governance.map((g, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "16px 18px",
+              borderBottom:
+                i < governance.length - 1
+                  ? "1px solid var(--v3-rule)"
+                  : "none",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                flexWrap: "wrap" as const,
+                gap: 8,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {g.group}
+              </span>
+              {g.organization && (
+                <span
+                  style={{
+                    ...mono,
+                    fontSize: 10.5,
+                    color: "var(--v3-muted)",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  {g.organization.toUpperCase()}
+                </span>
+              )}
+            </div>
+            {g.summary && (
+              <div
+                style={{
+                  fontSize: 13.5,
+                  color: "var(--v3-muted)",
+                  lineHeight: 1.6,
+                  marginTop: 8,
+                }}
+              >
+                {stripHtmlLikeDelimiters(g.summary)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── §07 References ────────────────────────────────────────────────────────
 function ReferencesSection({
   references,
   t,
@@ -1113,7 +1191,7 @@ function ReferencesSection({
   });
   return (
     <section id="cv-references" style={{ padding: "48px 32px", ...rule2 }}>
-      <SecHead n="06" label={t("cv.section.references")} />
+      <SecHead n="07" label={t("cv.section.references")} />
       <CvRefsGrid refs={refs} />
     </section>
   );
@@ -1285,6 +1363,9 @@ export default async function CVPage({ params }: PageProps) {
       )}
       {(cv.publications?.length ?? 0) > 0 && (
         <PublicationsSection publications={cv.publications ?? []} t={t} />
+      )}
+      {(cv.governance?.length ?? 0) > 0 && (
+        <GovernanceSection governance={cv.governance ?? []} t={t} />
       )}
       {(cv.references?.length ?? 0) > 0 && (
         <ReferencesSection references={cv.references ?? []} t={t} />

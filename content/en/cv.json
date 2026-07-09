@@ -506,6 +506,18 @@
       "url": "https://www.linkedin.com/pulse/driving-innovation-from-ground-up-power-communities-practice-opaso-3msef/"
     }
   ],
+  "governance": [
+    {
+      "group": "Software Engineering Leadership Team",
+      "organization": "Carlsberg Group, Growth Products & Data",
+      "summary": "Contributed to a steering group defining software design standards, architecture direction, and ways of working across the engineering organization, alongside Architects, Principals, and Leads."
+    },
+    {
+      "group": "Beacon Council",
+      "organization": "Carlsberg Group, Growth Products & Data",
+      "summary": "Participated in a steering group reviewing and approving One-Page Design proposals and architectural decisions across the product portfolio."
+    }
+  ],
   "interests": [
     {
       "name": "Saltwater Aquariums",
