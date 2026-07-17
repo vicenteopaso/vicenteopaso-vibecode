@@ -134,6 +134,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version-file: ".nvmrc"
+          package-manager-cache: false
 
       - name: Auto-fix package.json version from CHANGELOG.md
         run: |
@@ -167,6 +168,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version-file: ".nvmrc"
+          package-manager-cache: false
 
       - name: Check versions are in sync
         run: node scripts/check-version-sync.mjs

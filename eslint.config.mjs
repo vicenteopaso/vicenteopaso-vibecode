@@ -14,6 +14,7 @@ const ignores = [
   "**/.turbo/**",
   "coverage/**",
   ".next-env.d.ts",
+  ".claude/worktrees/**",
 ];
 
 export default [
