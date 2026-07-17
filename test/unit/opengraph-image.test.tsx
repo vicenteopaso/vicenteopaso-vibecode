@@ -270,9 +270,12 @@ describe("OG image helpers", () => {
     expect(getDefaultOgLocale()).toBe("en");
   });
 
-  it("uses a trusted Vercel deployment URL for the logo asset", () => {
-    vi.stubEnv("VERCEL_URL", "preview-123.vercel.app");
-    vi.stubEnv("NEXT_PUBLIC_IMAGES_CACHE_DATE", "20260505");
+  it("inlines the logo as a base64 data URI instead of fetching it over the network", () => {
+    // Regression test: the logo used to be loaded via an absolute URL built
+    // from VERCEL_URL, which always points at the ephemeral per-deployment
+    // hostname (gated behind Vercel deployment protection) rather than the
+    // stable production domain — causing Satori's self-fetch to receive an
+    // HTML auth page instead of image bytes ("Unsupported image type").
     createHomeOgImage("en");
 
     expect(mockInstances).toHaveLength(1);
@@ -280,55 +283,23 @@ describe("OG image helpers", () => {
     const imageElements = findImageElements(element);
     const logo = imageElements[0];
 
-    expect(logo?.props.src).toBe(
-      "https://preview-123.vercel.app/assets/images/logo_dark.png?v=20260505",
-    );
+    expect(logo?.props.src).toMatch(/^data:image\/png;base64,/);
+    expect(logo?.props.src).not.toContain("vercel.app");
+    expect(logo?.props.src).not.toContain("http");
   });
 
-  it("accepts the production domain from VERCEL_URL", () => {
-    vi.stubEnv("VERCEL_URL", siteConfig.domain);
+  it("caches the logo data URI across renders instead of re-reading the file", () => {
+    createHomeOgImage("en");
     createHomeOgImage("en");
 
-    expect(mockInstances).toHaveLength(1);
-    const { element } = mockInstances[0] as { element: React.ReactElement };
-    const imageElements = findImageElements(element);
-    const logo = imageElements[0];
-
-    expect(logo?.props.src).toBe(
-      `https://${siteConfig.domain}/assets/images/logo_dark.png?v=1`,
-    );
-  });
-
-  it("uses localhost assets in development when no trusted deployment URL exists", () => {
-    vi.unstubAllEnvs();
-    vi.stubEnv("NODE_ENV", "development");
-    vi.stubEnv("PORT", "4321");
-    vi.stubEnv("VERCEL_URL", "");
-    createHomeOgImage("en");
-
-    expect(mockInstances).toHaveLength(1);
-    const { element } = mockInstances[0] as { element: React.ReactElement };
-    const imageElements = findImageElements(element);
-    const logo = imageElements[0];
-
-    expect(logo?.props.src).toBe(
-      "http://localhost:4321/assets/images/logo_dark.png?v=1",
-    );
-  });
-
-  it("falls back to the default development port when PORT is unset", () => {
-    vi.unstubAllEnvs();
-    vi.stubEnv("NODE_ENV", "development");
-    createHomeOgImage("en");
-
-    expect(mockInstances).toHaveLength(1);
-    const { element } = mockInstances[0] as { element: React.ReactElement };
-    const imageElements = findImageElements(element);
-    const logo = imageElements[0];
-
-    expect(logo?.props.src).toBe(
-      "http://localhost:3000/assets/images/logo_dark.png?v=1",
-    );
+    expect(mockInstances).toHaveLength(2);
+    const firstLogo = findImageElements(
+      (mockInstances[0] as { element: React.ReactElement }).element,
+    )[0];
+    const secondLogo = findImageElements(
+      (mockInstances[1] as { element: React.ReactElement }).element,
+    )[0];
+    expect(firstLogo?.props.src).toBe(secondLogo?.props.src);
   });
 });
 

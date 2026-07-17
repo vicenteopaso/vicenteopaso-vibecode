@@ -6,23 +6,6 @@ import { getCvDescription, siteConfig } from "@/lib/seo";
 
 type OgLocale = "en" | "es";
 
-/** Returns the base URL for the current deployment, falling back to the production domain.
- *  Only uses VERCEL_URL if it resolves to a vercel.app subdomain or the production domain,
- *  to prevent URL injection in the unlikely event the env var is tampered with. */
-function getDeploymentBaseUrl(): string {
-  const vercelUrl = process.env.VERCEL_URL;
-  if (
-    vercelUrl &&
-    (vercelUrl.endsWith(".vercel.app") || vercelUrl === siteConfig.domain)
-  ) {
-    return `https://${vercelUrl}`;
-  }
-  if (process.env.NODE_ENV === "development") {
-    return `http://localhost:${process.env.PORT ?? 3000}`;
-  }
-  return siteConfig.url;
-}
-
 /** Cached Inter 800 Latin font — lazy-loaded on first call, then cached at module level across all OG renders. */
 let _interFontCache: ArrayBuffer | null = null;
 
@@ -40,11 +23,28 @@ function loadInterFont(): ArrayBuffer {
   return ab;
 }
 
-/** Returns a versioned logo URL that resolves to the current deployment's asset, not the production domain. */
-function getLogoUrl(): string {
-  const base = getDeploymentBaseUrl();
-  const version = process.env.NEXT_PUBLIC_IMAGES_CACHE_DATE ?? "1";
-  return `${base}/assets/images/logo_dark.png?v=${version}`;
+/** Cached logo data URI — lazy-loaded on first call, then cached at module level across all OG renders. */
+let _logoDataUriCache: string | null = null;
+
+/**
+ * Loads the logo as an inline data URI instead of an absolute URL.
+ *
+ * Satori (via next/og's ImageResponse) fetches <img src> over the network,
+ * and VERCEL_URL always points at the ephemeral per-deployment hostname
+ * (never the stable production domain) — which is commonly gated behind
+ * Vercel's deployment protection, so the self-fetch returns an HTML auth
+ * page instead of image bytes. Reading the asset from disk (same pattern
+ * as loadInterFont() above) sidesteps that class of failure entirely.
+ */
+function loadLogoDataUri(): string {
+  if (_logoDataUriCache) return _logoDataUriCache;
+  const logoPath = path.join(
+    process.cwd(),
+    "public/assets/images/logo_dark.png",
+  );
+  const buf = fs.readFileSync(logoPath);
+  _logoDataUriCache = `data:image/png;base64,${buf.toString("base64")}`;
+  return _logoDataUriCache;
 }
 
 const size = {
@@ -185,7 +185,7 @@ function renderBrandedOgImage({
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- next/image is not available inside next/og ImageResponse markup */}
           <img
-            src={getLogoUrl()}
+            src={loadLogoDataUri()}
             alt="Opaso logo"
             width={44}
             height={44}

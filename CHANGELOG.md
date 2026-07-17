@@ -33,6 +33,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sentry client-side initialization was silently skipped in production for
   region-scoped DSNs (`ingest.us/eu/de.sentry.io`) — the DSN validation
   regex only matched the legacy host format
+- OG image generation (`/opengraph-image`, `/cv/opengraph-image`) failed to
+  embed the logo in production ("Unsupported image type: unknown", ~100
+  occurrences/96 users since May) because it fetched the logo over the
+  network from `VERCEL_URL`, which always points at the ephemeral
+  per-deployment hostname rather than the stable production domain; the
+  logo is now inlined as a base64 data URI read from disk, removing the
+  network dependency entirely
 - Contact dialog test suite: fake-timer leak and effect-flush race
 - Release metadata (`package.json`/`CHANGELOG.md`) sync with the `v1.3.2` tag
 - CI: `Version Sync` jobs failed on a cache miss because
