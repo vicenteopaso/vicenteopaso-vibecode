@@ -36,6 +36,7 @@ describe("instrumentation-client Sentry init", () => {
     sentryClientMock.captureRouterTransitionStart.mockClear();
     delete process.env.VITEST;
     delete process.env.NEXT_PUBLIC_SENTRY_DSN;
+    delete process.env.SENTRY_ENVIRONMENT;
   });
 
   afterEach(() => {
@@ -43,6 +44,7 @@ describe("instrumentation-client Sentry init", () => {
     debugSpy.mockRestore();
     delete process.env.NEXT_PUBLIC_SENTRY_DSN;
     delete process.env.VITEST;
+    delete process.env.SENTRY_ENVIRONMENT;
   });
 
   it("exports onRouterTransitionStart hook", async () => {

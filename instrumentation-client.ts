@@ -25,10 +25,11 @@ const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 function isLikelyPublicDSN(dsn: string | undefined): boolean {
   if (!dsn) return false;
   // Public DSNs have a key of 32 hex chars, no colons, and an '@' before the host.
-  // The ingest host may include a region segment (us/eu/de) for data-residency
+  // The ingest host may include a region segment (us/us2/eu/de) for data-residency
   // projects, e.g. https://1234567890abcdef1234567890abcdef@o123456.ingest.de.sentry.io/1234567
+  // Matched case-insensitively since the hex key's casing isn't guaranteed.
   const publicDsnPattern =
-    /^https:\/\/[0-9a-f]{32}@o\d+\.ingest\.(?:us\.|eu\.|de\.)?sentry\.io\/\d+$/;
+    /^https:\/\/[0-9a-f]{32}@o\d+\.ingest\.(?:us2\.|us\.|eu\.|de\.)?sentry\.io\/\d+$/i;
   return publicDsnPattern.test(dsn);
 }
 

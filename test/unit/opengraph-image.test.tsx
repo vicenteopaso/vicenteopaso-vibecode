@@ -288,18 +288,29 @@ describe("OG image helpers", () => {
     expect(logo?.props.src).not.toContain("http");
   });
 
-  it("caches the logo data URI across renders instead of re-reading the file", () => {
-    createHomeOgImage("en");
-    createHomeOgImage("en");
+  it("reads the logo and font from disk only once across multiple renders", async () => {
+    // A same-output assertion wouldn't catch a caching regression here,
+    // since the mocked fs.readFileSync always returns identical bytes
+    // regardless of call count. Assert on read count instead, against a
+    // freshly reset module so this test doesn't inherit cache state
+    // populated by earlier tests in this file.
+    vi.resetModules();
+    const fs = await import("fs");
+    // lib/og-home-image.tsx uses the default import (`import fs from "fs"`),
+    // which the mock above wires to a *separate* vi.fn() from the named
+    // export — asserting on the wrong one always reports zero calls.
+    const readFileSyncMock = vi.mocked(fs.default.readFileSync);
+    readFileSyncMock.mockClear();
 
-    expect(mockInstances).toHaveLength(2);
-    const firstLogo = findImageElements(
-      (mockInstances[0] as { element: React.ReactElement }).element,
-    )[0];
-    const secondLogo = findImageElements(
-      (mockInstances[1] as { element: React.ReactElement }).element,
-    )[0];
-    expect(firstLogo?.props.src).toBe(secondLogo?.props.src);
+    const { createHomeOgImage: freshCreateHomeOgImage } = await import(
+      "../../lib/og-home-image"
+    );
+
+    freshCreateHomeOgImage("en");
+    freshCreateHomeOgImage("en");
+
+    // One read for the font + one for the logo, cached on the second render.
+    expect(readFileSyncMock).toHaveBeenCalledTimes(2);
   });
 });
 
