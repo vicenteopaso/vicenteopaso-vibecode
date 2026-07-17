@@ -5,18 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.3.3] - 2026-05-03
+## [1.4.0] - 2026-07-17
 
 ### Added
 
 - v3 brutalist UI redesign with full EN/ES i18n
 - New BrutalistNav, BrutalistFooter, V3ContactForm, CvRefCard components
-- Locale-aware SSR via x-locale header
+- Governance & Steering Groups section on the CV page
 
 ### Changed
 
 - Landing page and CV page rebuilt with v3 sections and getSiteData()
 - Accept-Language parsing improved (whitespace-tolerant q-value handling)
+- Reduced Vercel Fluid Active CPU usage: middleware short-circuits bot/probe
+  paths before locale work, `/[lang]` unknown locales 404 at the framework
+  level, `/opengraph-image` no longer time-revalidates (invalidation is
+  handled by `NEXT_PUBLIC_OG_CACHE_DATE`), and `app/layout.tsx` no longer
+  forces the `/[lang]` tree dynamic via `headers()` (superseding the
+  request-time `x-locale` header approach)
+- Dependency updates across the stack (Next.js, React, Tailwind CSS,
+  `@sentry/nextjs`, `@opentelemetry/*`, ESLint/TypeScript tooling, and
+  others); TypeScript 7 was evaluated but reverted to 6.0.3 after
+  confirming `@typescript-eslint/typescript-estree` isn't yet compatible
+
+### Fixed
+
+- Sentry client-side initialization was silently skipped in production for
+  region-scoped DSNs (`ingest.us/eu/de.sentry.io`) — the DSN validation
+  regex only matched the legacy host format
+- Contact dialog test suite: fake-timer leak and effect-flush race
+- Release metadata (`package.json`/`CHANGELOG.md`) sync with the `v1.3.2` tag
+- CI: `Version Sync` jobs failed on a cache miss because
+  `actions/setup-node@v5`'s automatic package-manager caching had nothing
+  to save (these jobs never run `pnpm install`); caching is now disabled
+  for them
+
+### Security
+
+- Dismissed Dependabot alert #81 (`@opentelemetry/core` < 2.8.0,
+  CVE-2026-54285) as tolerable risk: the vulnerable dependency is pulled in
+  transitively by the unmaintained `contentlayer` → `@effect-ts/otel`
+  chain, the vulnerable code path (inbound baggage-header parsing) is
+  unreachable in this app, and forcing the patched version breaks
+  `next.config.mjs` at load time. Migrating off `contentlayer` is tracked
+  separately as the real fix.
 
 ## [1.2.2] - 2026-02-02
 
