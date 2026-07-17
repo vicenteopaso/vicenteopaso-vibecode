@@ -20,14 +20,15 @@ if (process.env.NODE_ENV === "test" || process.env.VITEST) {
 // Ensure the DSN is a public client key, not a secret auth token.
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
-// Basic check: Sentry public DSNs look like 'https://<publicKey>@o<orgId>.ingest.sentry.io/<projectId>'
+// Basic check: Sentry public DSNs look like 'https://<publicKey>@o<orgId>.ingest[.<region>].sentry.io/<projectId>'
 // Secret auth tokens are much longer and do not belong in the client bundle.
 function isLikelyPublicDSN(dsn: string | undefined): boolean {
   if (!dsn) return false;
   // Public DSNs have a key of 32 hex chars, no colons, and an '@' before the host.
-  // Example: https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
+  // The ingest host may include a region segment (us/eu/de) for data-residency
+  // projects, e.g. https://1234567890abcdef1234567890abcdef@o123456.ingest.de.sentry.io/1234567
   const publicDsnPattern =
-    /^https:\/\/[0-9a-f]{32}@o\d+\.ingest\.sentry\.io\/\d+$/;
+    /^https:\/\/[0-9a-f]{32}@o\d+\.ingest\.(?:us\.|eu\.|de\.)?sentry\.io\/\d+$/;
   return publicDsnPattern.test(dsn);
 }
 

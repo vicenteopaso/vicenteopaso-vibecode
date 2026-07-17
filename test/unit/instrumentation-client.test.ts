@@ -114,6 +114,19 @@ describe("instrumentation-client Sentry init", () => {
     expect(integrationNames).toContain("ReplayIntegrationMock");
   });
 
+  it("initializes Sentry with a region-scoped DSN (e.g. EU/DE data residency)", async () => {
+    process.env = { ...process.env, NODE_ENV: "production" };
+    process.env.NEXT_PUBLIC_SENTRY_DSN =
+      "https://1234567890abcdef1234567890abcdef@o123456.ingest.de.sentry.io/9999999";
+
+    await importClientInstrumentation();
+    const sentry =
+      (await import("@sentry/nextjs")) as unknown as SentryClientMock;
+    expect(sentry.init).toHaveBeenCalledTimes(1);
+    const initArg = sentry.init.mock.calls[0][0] as InitOptions;
+    expect(initArg.dsn).toBe(process.env.NEXT_PUBLIC_SENTRY_DSN);
+  });
+
   it("prints debug message when VITEST flag is set", async () => {
     process.env = { ...process.env, NODE_ENV: "test" };
     process.env.VITEST = "true";
