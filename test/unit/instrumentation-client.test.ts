@@ -36,6 +36,7 @@ describe("instrumentation-client Sentry init", () => {
     sentryClientMock.captureRouterTransitionStart.mockClear();
     delete process.env.VITEST;
     delete process.env.NEXT_PUBLIC_SENTRY_DSN;
+    delete process.env.SENTRY_ENVIRONMENT;
   });
 
   afterEach(() => {
@@ -43,6 +44,7 @@ describe("instrumentation-client Sentry init", () => {
     debugSpy.mockRestore();
     delete process.env.NEXT_PUBLIC_SENTRY_DSN;
     delete process.env.VITEST;
+    delete process.env.SENTRY_ENVIRONMENT;
   });
 
   it("exports onRouterTransitionStart hook", async () => {
@@ -114,7 +116,20 @@ describe("instrumentation-client Sentry init", () => {
     expect(integrationNames).toContain("ReplayIntegrationMock");
   });
 
-  it("prints debug message when VITEST flag is set", async () => {
+  it("initializes Sentry with a region-scoped DSN (e.g. EU/DE data residency)", async () => {
+    process.env = { ...process.env, NODE_ENV: "production" };
+    process.env.NEXT_PUBLIC_SENTRY_DSN =
+      "https://1234567890abcdef1234567890abcdef@o123456.ingest.de.sentry.io/9999999";
+
+    await importClientInstrumentation();
+    const sentry =
+      (await import("@sentry/nextjs")) as unknown as SentryClientMock;
+    expect(sentry.init).toHaveBeenCalledTimes(1);
+    const initArg = sentry.init.mock.calls[0][0] as InitOptions;
+    expect(initArg.dsn).toBe(process.env.NEXT_PUBLIC_SENTRY_DSN);
+  });
+
+  it("prints debug message when VITEST flag is set and actually skips Sentry.init", async () => {
     process.env = { ...process.env, NODE_ENV: "test" };
     process.env.VITEST = "true";
     process.env.NEXT_PUBLIC_SENTRY_DSN =
@@ -124,5 +139,10 @@ describe("instrumentation-client Sentry init", () => {
     expect(debugSpy).toHaveBeenCalledWith(
       expect.stringContaining("Skipping client init in tests"),
     );
+    // Regression: the "skip in tests" branch used to be a no-op that only
+    // logged, then fell through and still validated/initialized Sentry.
+    const sentry =
+      (await import("@sentry/nextjs")) as unknown as SentryClientMock;
+    expect(sentry.init).not.toHaveBeenCalled();
   });
 });

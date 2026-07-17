@@ -17,6 +17,7 @@ export default defineConfig({
       "test/e2e/**",
       "test/visual/**",
       "next-sitemap.config.*",
+      ".claude/worktrees/**",
     ],
     coverage: {
       provider: "v8",
