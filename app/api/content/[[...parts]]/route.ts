@@ -49,7 +49,12 @@ export async function GET(
       body: content,
     });
   } catch (error) {
-    console.error("Failed to load content", error);
+    logError(error, {
+      component: "api-content-route",
+      action: "GET",
+      metadata: { lang, slug },
+    });
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
