@@ -113,7 +113,7 @@ introduced only where interactivity is required.
 - Content is organized by locale under `content/[locale]/` (e.g., `content/en/about.md`, `content/es/about.md`)
 - `content/[locale]/about.md` contains frontmatter and markdown for the About page
 - `content/[locale]/cv.md` contains frontmatter and a JSON object in the markdown body for the CV
-- Pages under `app/[lang]/` read locale-specific content files at build time using `fs` + `gray-matter` / `JSON.parse`, via the shared `loadContentPage()` helper in `lib/content.ts`, which validates frontmatter (required `name`/`title`/`slug`) with Zod
+- Markdown-backed content pages under `app/[lang]/` (e.g., policies/governance pages and `cv/page.tsx` for CV frontmatter) read locale-specific content files at build time using `fs` + `gray-matter` / `JSON.parse`, via the shared `loadContentPage()` helper in `lib/content.ts`, which validates frontmatter (required `name`/`title`/`slug`) with Zod
 
 **Content Rendering Flow:**
 
