@@ -10,16 +10,6 @@ import * as Sentry from "@sentry/nextjs";
 // Hook to capture router transitions for client-side navigation performance monitoring.
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
 
-// Skip Sentry initialization during unit tests to avoid unnecessary client hooks.
-if (process.env.NODE_ENV === "test" || process.env.VITEST) {
-  // eslint-disable-next-line no-console
-  if (process.env.VITEST)
-    console.debug("[Sentry] Skipping client init in tests.");
-}
-
-// Ensure the DSN is a public client key, not a secret auth token.
-const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
-
 // Basic check: Sentry public DSNs look like 'https://<publicKey>@o<orgId>.ingest[.<region>].sentry.io/<projectId>'
 // Secret auth tokens are much longer and do not belong in the client bundle.
 function isLikelyPublicDSN(dsn: string | undefined): boolean {
@@ -33,33 +23,47 @@ function isLikelyPublicDSN(dsn: string | undefined): boolean {
   return publicDsnPattern.test(dsn);
 }
 
-if (!dsn) {
-  // No DSN provided; skip Sentry init.
-  if (process.env.NODE_ENV !== "production") {
-    // Only warn in non-prod to avoid leaking info in prod.
+const isTestEnv = process.env.NODE_ENV === "test" || Boolean(process.env.VITEST);
+
+if (isTestEnv) {
+  // Actually skip Sentry initialization during unit tests to avoid
+  // unnecessary client hooks, rather than just logging that we would.
+  if (process.env.VITEST) {
+    // eslint-disable-next-line no-console
+    console.debug("[Sentry] Skipping client init in tests.");
+  }
+} else {
+  // Ensure the DSN is a public client key, not a secret auth token.
+  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+  if (!dsn) {
+    // No DSN provided; skip Sentry init.
+    if (process.env.NODE_ENV !== "production") {
+      // Only warn in non-prod to avoid leaking info in prod.
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[Sentry] No NEXT_PUBLIC_SENTRY_DSN provided; client-side error tracking is disabled.",
+      );
+    }
+  } else if (!isLikelyPublicDSN(dsn)) {
+    // DSN does not look like a public client key; warn and skip Sentry init.
     // eslint-disable-next-line no-console
     console.warn(
-      "[Sentry] No NEXT_PUBLIC_SENTRY_DSN provided; client-side error tracking is disabled.",
+      "[Sentry] The DSN provided in NEXT_PUBLIC_SENTRY_DSN does not look like a public client key. " +
+        "Do not expose secret auth tokens in the client bundle. Sentry client initialization skipped.",
     );
+  } else {
+    Sentry.init({
+      dsn,
+      environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV,
+      // Adjust these sample rates based on your traffic and quota.
+      tracesSampleRate: 0.1,
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
+      integrations: (integrations) => [
+        ...integrations,
+        Sentry.replayIntegration(),
+      ],
+    });
   }
-} else if (!isLikelyPublicDSN(dsn)) {
-  // DSN does not look like a public client key; warn and skip Sentry init.
-  // eslint-disable-next-line no-console
-  console.warn(
-    "[Sentry] The DSN provided in NEXT_PUBLIC_SENTRY_DSN does not look like a public client key. " +
-      "Do not expose secret auth tokens in the client bundle. Sentry client initialization skipped.",
-  );
-} else {
-  Sentry.init({
-    dsn,
-    environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV,
-    // Adjust these sample rates based on your traffic and quota.
-    tracesSampleRate: 0.1,
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
-    integrations: (integrations) => [
-      ...integrations,
-      Sentry.replayIntegration(),
-    ],
-  });
 }

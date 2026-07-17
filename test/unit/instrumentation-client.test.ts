@@ -129,7 +129,7 @@ describe("instrumentation-client Sentry init", () => {
     expect(initArg.dsn).toBe(process.env.NEXT_PUBLIC_SENTRY_DSN);
   });
 
-  it("prints debug message when VITEST flag is set", async () => {
+  it("prints debug message when VITEST flag is set and actually skips Sentry.init", async () => {
     process.env = { ...process.env, NODE_ENV: "test" };
     process.env.VITEST = "true";
     process.env.NEXT_PUBLIC_SENTRY_DSN =
@@ -139,5 +139,10 @@ describe("instrumentation-client Sentry init", () => {
     expect(debugSpy).toHaveBeenCalledWith(
       expect.stringContaining("Skipping client init in tests"),
     );
+    // Regression: the "skip in tests" branch used to be a no-op that only
+    // logged, then fell through and still validated/initialized Sentry.
+    const sentry =
+      (await import("@sentry/nextjs")) as unknown as SentryClientMock;
+    expect(sentry.init).not.toHaveBeenCalled();
   });
 });
