@@ -171,7 +171,7 @@ High‑level layout:
   - `tsconfig.json` – Strict TS config with path mapping for `@/*`.
   - `eslint.config.mjs`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
 
-> Note: all content pages (`app/[lang]/page.tsx`, `cv/page.tsx`, and the policy/governance pages) read locale-specific content from the filesystem at build time via `lib/content.ts`'s `loadContentPage()`, which validates frontmatter with Zod. There is no content-layer build step — `content/*.md` is read directly.
+> Note: content pages that read locale-specific markdown from `content/[locale]/` (e.g., `cv/page.tsx` and the policy/governance pages) load files at build time via `lib/content.ts`’s `loadContentPage()`, which validates frontmatter with Zod. There is no content-layer build step — `content/*.md` is read directly.
 
 ---
 

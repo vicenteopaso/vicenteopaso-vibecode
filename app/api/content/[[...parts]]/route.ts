@@ -4,6 +4,7 @@ import path from "path";
 
 import { loadContentPage } from "@/lib/content";
 import { isContentSlug } from "@/lib/content-slugs";
+import { logError } from "@/lib/error-logging";
 import { isValidLocale } from "@/lib/i18n";
 
 export const dynamic = "force-static";
