@@ -35,8 +35,11 @@ export interface ContentPage {
  * fails the build the same way Contentlayer's schema validation used to.
  */
 export function loadContentPage(locale: Locale, slug: string): ContentPage {
-  const relativePath = path.join("content", locale, `${slug}.md`);
-  const filePath = path.join(process.cwd(), relativePath);
+  // POSIX-joined for display in error messages, independent of OS — path.join
+  // would use backslashes on Windows, making error text and consumers that
+  // assert on the path OS-dependent.
+  const relativePath = path.posix.join("content", locale, `${slug}.md`);
+  const filePath = path.join(process.cwd(), "content", locale, `${slug}.md`);
 
   let fileContents: string;
   try {
