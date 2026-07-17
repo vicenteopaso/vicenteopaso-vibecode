@@ -10,7 +10,6 @@ import tseslint from "typescript-eslint";
 const ignores = [
   "**/.next/**",
   "**/node_modules/**",
-  "**/.contentlayer/**",
   "**/.turbo/**",
   "coverage/**",
   ".next-env.d.ts",

@@ -11,8 +11,6 @@ overrides:
   postcss@<8.5.10: '>=8.5.10'
   uuid@<11.1.1: '>=11.1.1'
 
-packageExtensionsChecksum: sha256-TPJV6Z4Q+bMg7BYJdKfZXXJ/7Ud/3D0TMrluONUepCE=
-
 importers:
 
   .:
@@ -10601,7 +10599,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.5
-      postcss: 8.5.17
+      postcss: 8.5.19
       rolldown: 1.1.5
       tinyglobby: 0.2.17
     optionalDependencies:

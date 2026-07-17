@@ -10,7 +10,6 @@ describe("eslint.config.mjs (text-based checks)", () => {
   it("should include ignore patterns", () => {
     expect(configText).toMatch("**/.next/**");
     expect(configText).toMatch("**/node_modules/**");
-    expect(configText).toMatch("**/.contentlayer/**");
     expect(configText).toMatch("**/.turbo/**");
     expect(configText).toMatch("coverage/**");
     expect(configText).toMatch(".next-env.d.ts");

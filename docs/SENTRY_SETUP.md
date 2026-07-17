@@ -239,7 +239,6 @@ warning "@sentry/nextjs > @sentry/opentelemetry@8.55.0" has unmet peer dependenc
 
 - These OpenTelemetry dependencies are now included as dev dependencies
 - Run `pnpm install` to ensure they're installed
-- The warnings from `contentlayer` about older OpenTelemetry versions can be safely ignored
 
 ### High Costs / Quota Exceeded
 

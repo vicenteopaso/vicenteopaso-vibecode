@@ -25,7 +25,7 @@ This document describes the technical architecture of the `vicenteopaso-vibecode
 
 - **Runtime**: Node.js (LTS)
 - **Framework**: Next.js 16 (App Router, RSC)
-- **Content**: Markdown + JSON CV; Contentlayer wraps the Next.js build (`withContentlayer`) and is used for typed content builds
+- **Content**: Markdown + JSON CV, read directly from the filesystem at build time (`fs` + `gray-matter`) and validated against a Zod schema in `lib/content.ts`
 - **Styling**: Tailwind CSS v4 + Radix UI primitives
 - **Deployment**: Vercel
 - **Testing**: Unit (Vitest) + E2E (Playwright)
@@ -55,17 +55,13 @@ graph TB
         Sentry["Sentry<br/>(errors)"]
     end
 
-    BuildTime["Build Time<br/>(Contentlayer optional)"]
-
     Content --> NextJS
     NextJS --> Security
     NextJS --> External
-    Content --> BuildTime
 
     style Vercel fill:#e1f5ff
     style NextJS fill:#fff4e6
     style External fill:#ffe6f0
-    style BuildTime fill:#f0f0f0
 ```
 
 **ASCII representation (for terminals without Mermaid support):**
@@ -98,15 +94,13 @@ graph TB
          │                              │  ├─ Formspree          │
          │                              │  └─ Sentry (errors)    │
          │                              └────────────────────────┘
-         │
-         └──────► Build Time (Contentlayer optional)
 ```
 
 ## High-Level Design
 
 - `app/` — Route segments and layout composition using the App Router
 - `content/` — Markdown source of truth for pages and CV content
-- `lib/` — Shared utilities (SEO, analytics, schema JSON-LD, Contentlayer helpers)
+- `lib/` — Shared utilities (SEO, analytics, schema JSON-LD, content loading/validation)
 - `components/` — Reusable presentational and layout components
 - `styles/` — Global and design token styles
 - `scripts/` — Automation scripts (OG generation, link validation, a11y audits)
@@ -119,8 +113,7 @@ introduced only where interactivity is required.
 - Content is organized by locale under `content/[locale]/` (e.g., `content/en/about.md`, `content/es/about.md`)
 - `content/[locale]/about.md` contains frontmatter and markdown for the About page
 - `content/[locale]/cv.md` contains frontmatter and a JSON object in the markdown body for the CV
-- Pages under `app/[lang]/` read locale-specific content files at build time using `fs` + `gray-matter` / `JSON.parse`
-- Contentlayer wraps the Next.js build via `withContentlayer` in `next.config.mjs`. Markdown files in `content/` remain the source of truth for content
+- Pages under `app/[lang]/` read locale-specific content files at build time using `fs` + `gray-matter` / `JSON.parse`, via the shared `loadContentPage()` helper in `lib/content.ts`, which validates frontmatter (required `name`/`title`/`slug`) with Zod
 
 **Content Rendering Flow:**
 
@@ -453,14 +446,13 @@ pnpm test:e2e         # Run Playwright E2E tests
 
 ```
 1. pnpm install            # Install dependencies
-2. pnpm content            # (Optional) Generate Contentlayer types
-3. pnpm build              # Next.js production build
+2. pnpm build              # Next.js production build
    ├─ Compile TypeScript
    ├─ Generate static pages (SSG)
    ├─ Optimize assets
    ├─ Generate sitemap (next-sitemap)
    └─ Output to .next/
-4. pnpm start              # Production server
+3. pnpm start              # Production server
 ```
 
 ### CI/CD (GitHub Actions → Vercel)

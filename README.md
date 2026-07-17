@@ -52,7 +52,7 @@ The project is optimized for readability, accessibility, and maintainability, wi
   - Markdown files organized by locale (`content/en/`, `content/es/`)
   - About page: `content/[locale]/about.md`
   - CV page: `content/[locale]/cv.md` (markdown + JSON)
-  - Contentlayer integration (`contentlayer.config.ts`, `next-contentlayer`) for structured content
+  - Pages read content from the filesystem at build time via `fs` + `gray-matter`; `lib/content.ts` validates frontmatter (name/title/slug required) with Zod
   - Shared ReactMarkdown components config in `lib/markdown-components.tsx` for consistent typography on policy/governance docs
 - **Forms / backend**:
   - Cloudflare Turnstile for bot protection
@@ -162,17 +162,16 @@ High‑level layout:
   - `rate-limit.ts` – In-memory rate limiting for API routes
 - `styles/globals.css` – Tailwind CSS v4 setup, design tokens, global typography, layout utilities.
 - `scripts/`
-  - `build.mjs` – Contentlayer + Next.js build orchestration.
-  - `clean-local.mjs` – Cleans local artifacts (`.next`, `.turbo`, `.contentlayer`, `.vercel`, coverage, Playwright artifacts, etc.).
+  - `clean-local.mjs` – Cleans local artifacts (`.next`, `.turbo`, `.vercel`, coverage, Playwright artifacts, etc.).
   - `audit-a11y.mjs` – Lightweight, non-blocking accessibility audit (run via the `accessibility.yml` workflow).
   - `validate-links.mjs` – Validates internal markdown links against known app routes (run in the main `ci.yml` workflow).
 - Config:
-  - `next.config.mjs` – Next.js config wrapped in `withContentlayer`.
+  - `next.config.mjs` – Next.js config (Sentry wrapping when configured).
   - `tailwind.config.js` – Tailwind content globs for `app/`, `components/`, and `content/`.
-  - `tsconfig.json` – Strict TS config with path mapping for `@/*` and `contentlayer/generated`.
+  - `tsconfig.json` – Strict TS config with path mapping for `@/*`.
   - `eslint.config.mjs`, `.prettierrc`, `.husky/`, `.github/workflows/*.yml`, etc.
 
-> Note: `app/[lang]/page.tsx` and `app/[lang]/cv/page.tsx` read locale-specific content from the filesystem at build time rather than querying Contentlayer. Any refactor should keep the existing behavior (especially the JSON‑driven CV and its error handling) or migrate fully to Contentlayer with equivalent semantics.
+> Note: all content pages (`app/[lang]/page.tsx`, `cv/page.tsx`, and the policy/governance pages) read locale-specific content from the filesystem at build time via `lib/content.ts`'s `loadContentPage()`, which validates frontmatter with Zod. There is no content-layer build step — `content/*.md` is read directly.
 
 ---
 
@@ -479,16 +478,6 @@ pnpm verify
 - **`reset`** — Cleans build artifacts, caches, and common macOS/iCloud junk files (for example duplicate generated files like `next-env.d 2.ts`), reinstalls dependencies, and rebuilds the project. Use after upgrading dependencies, switching branches with lockfile changes, or when the environment is in an inconsistent state.
 - **`verify`** — Runs the full verification pipeline: install → lint → typecheck → validate:links → test → test:e2e → build. Use before pushing changes to ensure local correctness matches CI expectations. Requires Playwright browsers to be installed (`npx playwright install --with-deps`).
 
-### Content & build
-
-```bash
-# Build Contentlayer output into `.contentlayer/generated`
-pnpm content
-
-# Full content + app build (via custom script)
-node scripts/build.mjs
-```
-
 ### Linting & formatting
 
 ```bash
@@ -577,7 +566,7 @@ npx playwright install --with-deps
 ### Maintenance
 
 ```bash
-# Clean local artifacts (.next, .turbo, .contentlayer, .vercel, coverage, node_modules, etc.)
+# Clean local artifacts (.next, .turbo, .vercel, coverage, node_modules, etc.)
 pnpm clean
 ```
 

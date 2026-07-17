@@ -53,7 +53,6 @@ Copy `.env.example` to `.env.local` for local development.
 | `eslint.config.mjs`      | ESLint configuration           |
 | `vitest.config.ts`       | Unit test configuration        |
 | `playwright.config.ts`   | E2E test configuration         |
-| `contentlayer.config.ts` | Content layer configuration    |
 | `sentry.*.config.ts`     | Sentry SDK configuration       |
 
 ## Governance Files

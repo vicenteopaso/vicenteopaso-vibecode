@@ -31,8 +31,7 @@ Este sitio está construido con un stack moderno y type-safe optimizado para ren
 ## Gestión de Contenido
 
 - **Markdown** — Archivos fuente en el directorio `content/`
-- **Contentlayer** — Capa de contenido tipada (configurada para uso futuro)
-- **gray-matter** — Parsing de frontmatter
+- **gray-matter** — Parsing de frontmatter, validado con un esquema Zod
 - **react-markdown** — Renderizado de Markdown en React
 - **sanitize-html** — Saneamiento HTML para seguridad
 

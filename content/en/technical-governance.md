@@ -52,7 +52,7 @@ Defines the technical architecture including:
 
 - System components and their relationships
 - Technology stack decisions (Next.js, React, Tailwind, etc.)
-- Content architecture (Markdown + Contentlayer)
+- Content architecture (Markdown + Zod-validated frontmatter)
 - Deployment model (Vercel)
 - Key data flows and integrations
 
