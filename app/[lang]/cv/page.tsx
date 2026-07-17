@@ -1,11 +1,11 @@
 import fs from "fs";
-import matter from "gray-matter";
 import type { Metadata } from "next";
 import Image from "next/image";
 import path from "path";
 
 import { CvRefsGrid } from "@/app/components/CvRefCard";
 import { getCvDownloadFilename, getCvDownloadPath } from "@/app/config/cv";
+import { loadContentPage } from "@/lib/content";
 import { logWarning } from "@/lib/error-logging";
 import type { Locale } from "@/lib/i18n";
 import { getLocaleFromParams, getTranslations } from "@/lib/i18n";
@@ -1318,8 +1318,7 @@ export default async function CVPage({ params }: PageProps) {
   const siteData = getSiteData(locale);
 
   // Frontmatter from cv.md (title, name)
-  const metaPath = path.join(process.cwd(), "content", locale, "cv.md");
-  const { data } = matter(fs.readFileSync(metaPath, "utf8"));
+  const { data } = loadContentPage(locale, "cv");
 
   // Structured data from cv.json
   let cv: CvJson = {};
@@ -1333,10 +1332,10 @@ export default async function CVPage({ params }: PageProps) {
     });
   }
 
-  const name = cv.basics?.name ?? (data.name as string) ?? "Vicente Opaso";
+  const name = cv.basics?.name ?? data.name;
   const label =
     cv.basics?.label ??
-    (data.tagline as string) ??
+    data.tagline ??
     "Web Engineering Manager · Frontend Architect";
 
   return (

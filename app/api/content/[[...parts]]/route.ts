@@ -1,8 +1,8 @@
 import fs from "fs";
-import matter from "gray-matter";
 import { NextResponse } from "next/server";
 import path from "path";
 
+import { loadContentPage } from "@/lib/content";
 import { isContentSlug } from "@/lib/content-slugs";
 import { isValidLocale } from "@/lib/i18n";
 
@@ -41,11 +41,10 @@ export async function GET(
   }
 
   try {
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const { data, content } = matter(fileContents);
+    const { data, content } = loadContentPage(lang, slug);
 
     return NextResponse.json({
-      title: (data.title as string) ?? (data.name as string) ?? slug,
+      title: data.title,
       body: content,
     });
   } catch (error) {

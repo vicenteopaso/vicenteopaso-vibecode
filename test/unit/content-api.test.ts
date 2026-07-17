@@ -60,6 +60,7 @@ describe("app/api/content/[slug] GET", () => {
         "---",
         "title: Cookie Policy",
         "name: Not used",
+        "slug: cookie-policy",
         "---",
         "",
         "Body content here.",
@@ -77,11 +78,13 @@ describe("app/api/content/[slug] GET", () => {
     expect(json.body).toContain("Body content here.");
   });
 
-  it("falls back to name then slug for the response title", async () => {
+  it("returns 500 when frontmatter is missing required fields", async () => {
     const GET = await createGetHandler();
 
     vi.spyOn(fs, "existsSync").mockReturnValue(true);
     vi.spyOn(fs, "readFileSync").mockReturnValue(
+      // Missing required `title` and `slug` — the schema should reject this
+      // the same way Contentlayer's required-field validation used to.
       ["---", "name: Friendly name", "---", "", "Body copy."].join("\n"),
     );
 
@@ -90,10 +93,9 @@ describe("app/api/content/[slug] GET", () => {
       { params: Promise.resolve({ parts: ["tech-stack"] }) },
     );
 
-    expect(res.status).toBe(200);
-    const json = (await res.json()) as { title: string; body: string };
-    expect(json.title).toBe("Friendly name");
-    expect(json.body).toContain("Body copy.");
+    expect(res.status).toBe(500);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toBe("Internal server error");
   });
 });
 
@@ -127,9 +129,15 @@ describe("app/api/content/[lang]/[slug] GET", () => {
     const readSpy = vi
       .spyOn(fs, "readFileSync")
       .mockReturnValue(
-        ["---", "title: Tech Stack", "---", "", "Contenido en español."].join(
-          "\n",
-        ),
+        [
+          "---",
+          "title: Tech Stack",
+          "name: Tech Stack",
+          "slug: tech-stack",
+          "---",
+          "",
+          "Contenido en español.",
+        ].join("\n"),
       );
 
     const res = await GET(

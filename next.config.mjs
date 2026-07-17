@@ -1,5 +1,4 @@
 import { withSentryConfig } from "@sentry/nextjs";
-import { withContentlayer } from "next-contentlayer";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -185,5 +184,5 @@ const shouldUseSentry =
     process.env.SENTRY_PROJECT);
 
 export default shouldUseSentry
-  ? withSentryConfig(withContentlayer(nextConfig), sentryWebpackPluginOptions)
-  : withContentlayer(nextConfig);
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  : nextConfig;
