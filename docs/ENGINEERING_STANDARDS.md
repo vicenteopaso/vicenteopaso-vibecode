@@ -23,12 +23,12 @@ This document captures the engineering intent for this repository. It is a **nor
 - Composable architecture built from:
   - Components
   - Layouts
-  - Content models (markdown/Contentlayer today; CMS-ready in the future)
+  - Content models (markdown + Zod-validated frontmatter today; CMS-ready in the future)
   - Utilities/services layer
 
 ### 1.2 Content Architecture
 
-- Content abstraction via markdown + Contentlayer (MD/MDX today, headless CMS-compatible later).
+- Content abstraction via markdown + gray-matter, validated with a Zod schema in `lib/content.ts` (headless CMS-compatible later).
 - Structured content models with clear schemas and versioning.
 - Internationalization-ready (i18n pipeline can be added even if English-only for now).
 

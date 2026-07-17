@@ -1,10 +1,8 @@
-import fs from "fs";
-import matter from "gray-matter";
 import type { Metadata } from "next";
-import path from "path";
 import ReactMarkdown from "react-markdown";
 
 import { ContentPageShell } from "@/app/components/ContentPageShell";
+import { loadContentPage } from "@/lib/content";
 import { getLocaleFromParams } from "@/lib/i18n";
 
 import { markdownComponents } from "../../../lib/markdown-components";
@@ -37,30 +35,18 @@ export default async function AccessibilityPage({ params }: PageProps) {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
 
-  const filePath = path.join(
-    process.cwd(),
-    "content",
-    locale,
-    "accessibility.md",
-  );
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContents);
-
-  const title =
-    (data.title as string) ||
-    (data.name as string) ||
-    "Accessibility Statement";
+  const { data, content } = loadContentPage(locale, "accessibility");
 
   return (
     <ContentPageShell>
       <article className="section-card space-y-6">
         <header>
           <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
-            {title}
+            {data.title}
           </h1>
           {data.description && (
             <p className="mt-2 text-base text-[color:var(--text-muted)]">
-              {data.description as string}
+              {data.description}
             </p>
           )}
         </header>

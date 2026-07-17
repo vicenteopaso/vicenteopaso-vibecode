@@ -19,9 +19,6 @@ const targets = [
   // Next.js and tooling caches
   ".turbo",
 
-  // Contentlayer generated files
-  ".contentlayer",
-
   // Vercel deployment artifacts
   ".vercel",
 

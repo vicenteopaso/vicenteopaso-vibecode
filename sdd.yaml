@@ -23,7 +23,7 @@ stack:
     - radix-ui
   content:
     - markdown + gray-matter
-    - contentlayer-configured
+    - zod-validated frontmatter (lib/content.ts)
   testing:
     unit: vitest + testing-library
     e2e: playwright
@@ -56,6 +56,7 @@ standards:
         markdown: "Shared markdown component maps in lib/markdown-components.tsx."
         seo: "Single source of truth for site config, metadata, and JSON-LD in lib/seo.ts."
       content:
+        loading: "All content pages read via lib/content.ts's loadContentPage(), which validates required frontmatter (name/title/slug) with Zod and throws on invalid content."
         about: "Frontmatter + markdown body in content/about.md."
         cv: "Frontmatter in content/cv.md + structured JSON in content/cv.json."
         i18n: "Locale detection and translations in lib/i18n/; opengraph images support en/es locales."

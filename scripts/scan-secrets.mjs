@@ -89,7 +89,6 @@ const IGNORE_PATTERNS = [
   ".git/",
   "node_modules/",
   ".next/",
-  ".contentlayer/",
   "coverage/",
   "dist/",
   "build/",

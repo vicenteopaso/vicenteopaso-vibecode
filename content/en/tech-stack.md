@@ -31,8 +31,7 @@ This site is built with a modern, type-safe stack optimized for performance, acc
 ## Content Management
 
 - **Markdown** — Content source files in `content/` directory
-- **Contentlayer** — Typed content layer (configured for future use)
-- **gray-matter** — Frontmatter parsing
+- **gray-matter** — Frontmatter parsing, validated against a Zod schema
 - **react-markdown** — Markdown rendering in React
 - **sanitize-html** — HTML sanitization for security
 

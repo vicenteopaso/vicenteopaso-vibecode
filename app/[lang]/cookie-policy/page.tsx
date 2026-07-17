@@ -1,10 +1,8 @@
-import fs from "fs";
-import matter from "gray-matter";
 import type { Metadata } from "next";
-import path from "path";
 import ReactMarkdown from "react-markdown";
 
 import { ContentPageShell } from "@/app/components/ContentPageShell";
+import { loadContentPage } from "@/lib/content";
 import { getLocaleFromParams } from "@/lib/i18n";
 
 import { markdownComponents } from "../../../lib/markdown-components";
@@ -37,24 +35,14 @@ export default async function CookiePolicyPage({ params }: PageProps) {
   const { lang } = await params;
   const locale = getLocaleFromParams({ lang });
 
-  const filePath = path.join(
-    process.cwd(),
-    "content",
-    locale,
-    "cookie-policy.md",
-  );
-  const fileContents = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContents);
-
-  const title =
-    (data.title as string) || (data.name as string) || "Cookie Policy";
+  const { data, content } = loadContentPage(locale, "cookie-policy");
 
   return (
     <ContentPageShell>
       <article className="section-card space-y-4">
         <header>
           <h1 className="text-2xl font-bold text-[color:var(--text-primary)] sm:text-3xl">
-            {title}
+            {data.title}
           </h1>
         </header>
         <div className="prose prose-invert prose-sm max-w-none sm:prose-base">

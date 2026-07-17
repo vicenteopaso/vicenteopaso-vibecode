@@ -29,14 +29,12 @@ export default defineConfig({
         "next.config.*",
         "next-sitemap.config.*",
         "tailwind.config.*",
-        "contentlayer.config.*",
         "lighthouserc.*",
         "**/*.d.ts",
         "**/*.json",
         "**/*.css",
         // Build artifacts and generated content
         ".next/**",
-        ".contentlayer/**",
         "coverage/**",
         // Project scripts and tooling
         "scripts/**",

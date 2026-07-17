@@ -1,9 +1,10 @@
 import fs from "fs";
-import matter from "gray-matter";
 import { NextResponse } from "next/server";
 import path from "path";
 
+import { loadContentPage } from "@/lib/content";
 import { isContentSlug } from "@/lib/content-slugs";
+import { logError } from "@/lib/error-logging";
 import { isValidLocale } from "@/lib/i18n";
 
 export const dynamic = "force-static";
@@ -41,15 +42,19 @@ export async function GET(
   }
 
   try {
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const { data, content } = matter(fileContents);
+    const { data, content } = loadContentPage(lang, slug);
 
     return NextResponse.json({
-      title: (data.title as string) ?? (data.name as string) ?? slug,
+      title: data.title,
       body: content,
     });
   } catch (error) {
-    console.error("Failed to load content", error);
+    logError(error, {
+      component: "api-content-route",
+      action: "GET",
+      metadata: { lang, slug },
+    });
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
