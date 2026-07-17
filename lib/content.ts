@@ -35,8 +35,22 @@ export interface ContentPage {
  * fails the build the same way Contentlayer's schema validation used to.
  */
 export function loadContentPage(locale: Locale, slug: string): ContentPage {
-  const filePath = path.join(process.cwd(), "content", locale, `${slug}.md`);
-  const fileContents = fs.readFileSync(filePath, "utf8");
+  const relativePath = path.join("content", locale, `${slug}.md`);
+  const filePath = path.join(process.cwd(), relativePath);
+
+  let fileContents: string;
+  try {
+    fileContents = fs.readFileSync(filePath, "utf8");
+  } catch (error) {
+    // Node's fs errors (ENOENT/EACCES) embed the absolute filesystem path
+    // in their message; normalize to the repo-relative path instead so we
+    // don't leak local filesystem layout in logs, and keep the message
+    // format consistent with the frontmatter-validation error below.
+    throw new Error(`Failed to read content file ${relativePath}`, {
+      cause: error,
+    });
+  }
+
   const { data, content } = matter(fileContents);
 
   const result = pageFrontmatterSchema.safeParse(data);
@@ -44,9 +58,7 @@ export function loadContentPage(locale: Locale, slug: string): ContentPage {
     const issues = result.error.issues
       .map((issue) => `${issue.path.join(".") || "(root)"} — ${issue.message}`)
       .join("; ");
-    throw new Error(
-      `Invalid frontmatter in content/${locale}/${slug}.md: ${issues}`,
-    );
+    throw new Error(`Invalid frontmatter in ${relativePath}: ${issues}`);
   }
 
   return { data: result.data, content };
