@@ -83,7 +83,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-security": "^4.0.1",
-    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
     "globals": "^17.7.0",
     "husky": "^9.1.7",
     "import-in-the-middle": "^3.3.1",
@@ -94,7 +94,7 @@
     "require-in-the-middle": "^8.0.1",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-radix": "^4.0.2",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.64.0",
     "vitest": "^4.1.10"
   },
