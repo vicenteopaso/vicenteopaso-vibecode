@@ -18,7 +18,10 @@ concurrency:
 jobs:
   preview:
     name: Preview
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     environment: preview
     env:
@@ -33,7 +36,7 @@ jobs:
         run: corepack enable
 
       - name: Set up Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: pnpm
@@ -83,7 +86,7 @@ jobs:
         run: corepack enable
 
       - name: Set up Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: pnpm
